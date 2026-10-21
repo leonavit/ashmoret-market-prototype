@@ -1,0 +1,17 @@
+{
+  "name": "ashmoret-market-prototype",
+  "private": true,
+  "scripts": {
+    "build": "tailwindcss -i ./src/app.css -o ./assets/css/app.css --minify && esbuild js/app.js --bundle --format=iife --outfile=js/app.bundle.js",
+    "prepare-data": "python3 scripts/prepare-assets.py"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.1.14",
+    "esbuild": "^0.28.2",
+    "tailwindcss": "^4.1.14"
+  },
+  "dependencies": {
+    "embla-carousel": "^8.6.0",
+    "gsap": "^3.12.7"
+  }
+}
