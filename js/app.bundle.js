@@ -63,12 +63,12 @@
   };
   var legalSlugs = Object.keys(pages);
   function renderLegal(slug) {
-    const page = pages[slug] || pages.terms;
+    const page2 = pages[slug] || pages.terms;
     return `<article class="wrap max-w-2xl py-12">
-    <h1 class="text-3xl font-extrabold">${page.title}</h1>
-    <p class="mt-2 text-muted">${page.lead}</p>
+    <h1 class="text-3xl font-extrabold">${page2.title}</h1>
+    <p class="mt-2 text-muted">${page2.lead}</p>
     <div class="mt-6 grid gap-4 text-base leading-7">
-      ${page.body.map((paragraph) => `<p>${paragraph}</p>`).join("")}
+      ${page2.body.map((paragraph) => `<p>${paragraph}</p>`).join("")}
     </div>
     <a class="btn mt-8" href="#/">\u05D7\u05D6\u05E8\u05D4 \u05DC\u05D3\u05E3 \u05D4\u05D1\u05D9\u05EA</a>
   </article>`;
@@ -97,6 +97,8 @@
     if (parts[0] === "order" && parts[1]) return { name: "order", id: decodeURIComponent(parts[1]), query };
     if (parts[0] === "login") return { name: "login", query };
     if (parts[0] === "contact") return { name: "contact", query };
+    if (parts[0] === "delivery") return { name: "delivery", query };
+    if (parts[0] === "service") return { name: "service", query };
     if (legalSlugs.includes(parts[0])) return { name: "legal", slug: parts[0], query };
     if (parts[0] === "account" && parts[1] === "details") return { name: "account-details", query };
     if (parts[0] === "account") return { name: "account", query };
@@ -4391,11 +4393,11 @@
     panel.inert = true;
     panel.innerHTML = panelMarkup();
     document.body.append(gear, panel);
-    const toggle = (open2) => {
-      panel.classList.toggle("is-open", open2);
-      panel.inert = !open2;
-      gear.setAttribute("aria-expanded", String(open2));
-      if (open2) panel.querySelector("[data-theme-option]:checked")?.focus();
+    const toggle = (open3) => {
+      panel.classList.toggle("is-open", open3);
+      panel.inert = !open3;
+      gear.setAttribute("aria-expanded", String(open3));
+      if (open3) panel.querySelector("[data-theme-option]:checked")?.focus();
       else gear.focus();
     };
     gear.addEventListener("click", () => toggle(!panel.classList.contains("is-open")));
@@ -5083,9 +5085,9 @@
       return { items: [] };
     }
   }
-  function write(state2) {
-    localStorage.setItem(KEY2, JSON.stringify(state2));
-    listeners.forEach((listener) => listener(state2));
+  function write(state3) {
+    localStorage.setItem(KEY2, JSON.stringify(state3));
+    listeners.forEach((listener) => listener(state3));
   }
   function getCart() {
     return read();
@@ -5095,37 +5097,37 @@
     return () => listeners.delete(listener);
   }
   function addItem(id, qty = 1) {
-    const state2 = read();
-    const row = state2.items.find((item) => item.id === id);
+    const state3 = read();
+    const row = state3.items.find((item) => item.id === id);
     if (row) row.qty += qty;
-    else state2.items.push({ id, qty });
-    write(state2);
+    else state3.items.push({ id, qty });
+    write(state3);
   }
   function setQty(id, qty) {
-    const state2 = read();
-    const row = state2.items.find((item) => item.id === id);
+    const state3 = read();
+    const row = state3.items.find((item) => item.id === id);
     if (!row) return;
     row.qty = Math.max(1, Math.min(99, qty));
-    write(state2);
+    write(state3);
   }
   function removeItem(id) {
-    const state2 = read();
-    state2.items = state2.items.filter((item) => item.id !== id);
-    write(state2);
+    const state3 = read();
+    state3.items = state3.items.filter((item) => item.id !== id);
+    write(state3);
   }
   function clearCart() {
     write({ items: [] });
   }
-  function countItems(state2 = read()) {
-    return state2.items.reduce((sum, item) => sum + item.qty, 0);
+  function countItems(state3 = read()) {
+    return state3.items.reduce((sum, item) => sum + item.qty, 0);
   }
   function lineTotal(item) {
     const commerce = getCommerce(item.id);
     if (!commerce) return 0;
     return commerce.price * item.qty;
   }
-  function subtotal(state2 = read()) {
-    return state2.items.reduce((sum, item) => sum + lineTotal(item), 0);
+  function subtotal(state3 = read()) {
+    return state3.items.reduce((sum, item) => sum + lineTotal(item), 0);
   }
 
   // js/screens/cart.js
@@ -5195,6 +5197,27 @@
   }
 
   // js/screens/checkout.js
+  var lockIcon = `<svg class="pay-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg>`;
+  function luhn(digits) {
+    let sum = 0;
+    [...digits].reverse().forEach((char, index) => {
+      let value = Number(char);
+      if (index % 2) {
+        value *= 2;
+        if (value > 9) value -= 9;
+      }
+      sum += value;
+    });
+    return sum % 10 === 0;
+  }
+  function validExpiry(value) {
+    const match = /^(0[1-9]|1[0-2])\/?(\d{2})$/.exec(value);
+    if (!match) return false;
+    const now = /* @__PURE__ */ new Date();
+    const year = 2e3 + Number(match[2]);
+    const month = Number(match[1]);
+    return year > now.getFullYear() || year === now.getFullYear() && month >= now.getMonth() + 1;
+  }
   function renderCheckout(errors = {}, values = {}) {
     const rows2 = getCart().items.filter((item) => getProduct(item.id) && getCommerce(item.id));
     if (!rows2.length) {
@@ -5208,6 +5231,11 @@
     const field2 = (name, label, type = "text", extra = "") => `<label class="field">
     <span class="text-sm font-semibold">${label}</span>
     <input name="${name}" type="${type}" autocomplete="${extra}" value="${esc(values[name] || "")}" aria-invalid="${errors[name] ? "true" : "false"}" ${errors[name] ? `aria-describedby="${name}-error"` : ""}>
+    ${errors[name] ? `<span id="${name}-error" class="field-error">${esc(errors[name])}</span>` : ""}
+  </label>`;
+    const payField = (name, label, attrs, keep = false) => `<label class="field">
+    <span class="text-sm font-semibold">${label}</span>
+    <input name="${name}" ${attrs} dir="ltr" value="${keep ? esc(values[name] || "") : ""}" aria-invalid="${errors[name] ? "true" : "false"}" ${errors[name] ? `aria-describedby="${name}-error"` : ""}>
     ${errors[name] ? `<span id="${name}-error" class="field-error">${esc(errors[name])}</span>` : ""}
   </label>`;
     return `<article class="wrap checkout-page py-8">
@@ -5230,9 +5258,25 @@
             <textarea name="note">${esc(values.note || "")}</textarea>
           </label>
         </section>
-        <section class="checkout-card is-reserved" aria-label="\u05EA\u05E9\u05DC\u05D5\u05DD \u05D5\u05D6\u05D9\u05D4\u05D5\u05D9">
-          <h2 class="checkout-card-title">\u05EA\u05E9\u05DC\u05D5\u05DD \u05D5\u05D6\u05D9\u05D4\u05D5\u05D9 \u05DC\u05E7\u05D5\u05D7</h2>
-          <p class="text-sm text-muted">\u05D4\u05D4\u05D7\u05DC\u05D8\u05D4 \u05E2\u05DC \u05D0\u05D5\u05E4\u05DF \u05D4\u05D6\u05D9\u05D4\u05D5\u05D9 \u05D5\u05E2\u05DC \u05D0\u05DE\u05E6\u05E2\u05D9 \u05D4\u05EA\u05E9\u05DC\u05D5\u05DD \u05E2\u05D3\u05D9\u05D9\u05DF \u05E4\u05EA\u05D5\u05D7\u05D4. \u05D4\u05D0\u05D6\u05D5\u05E8 \u05D4\u05D6\u05D4 \u05E9\u05DE\u05D5\u05E8 \u05DC\u05D4, \u05D1\u05DC\u05D9 \u05DC\u05D1\u05D7\u05D5\u05E8 \u05E9\u05D9\u05D8\u05D4.</p>
+        <section class="checkout-card" aria-labelledby="checkout-payment-title">
+          <div class="checkout-pay-head">
+            <h2 id="checkout-payment-title" class="checkout-card-title">\u05EA\u05E9\u05DC\u05D5\u05DD \u05D1\u05DB\u05E8\u05D8\u05D9\u05E1 \u05D0\u05E9\u05E8\u05D0\u05D9</h2>
+            <span class="pay-secure">${lockIcon}\u05EA\u05E9\u05DC\u05D5\u05DD \u05DE\u05D0\u05D5\u05D1\u05D8\u05D7 \xB7 Hyp</span>
+          </div>
+          <img class="pay-cards" src="assets/images/payment-methods.png" alt="\u05DB\u05E8\u05D8\u05D9\u05E1\u05D9\u05DD \u05E0\u05EA\u05DE\u05DB\u05D9\u05DD: Visa, CB, American Express, Maestro, Mastercard, PayPal" width="282" height="25">
+          <div class="hyp-frame">
+            <span class="proto-label" aria-hidden="true">\u05D8\u05D5\u05E4\u05E1 Hyp \xB7 \u05D4\u05D3\u05D2\u05DE\u05D4</span>
+            <div class="form-row">
+              ${payField("ccName", "\u05E9\u05DD \u05D1\u05E2\u05DC \u05D4\u05DB\u05E8\u05D8\u05D9\u05E1", `type="text" autocomplete="cc-name"`, true)}
+              ${payField("ccId", "\u05EA\u05E2\u05D5\u05D3\u05EA \u05D6\u05D4\u05D5\u05EA \u05E9\u05DC \u05D1\u05E2\u05DC \u05D4\u05DB\u05E8\u05D8\u05D9\u05E1", `type="text" inputmode="numeric" autocomplete="off" maxlength="9"`)}
+            </div>
+            ${payField("ccNumber", "\u05DE\u05E1\u05E4\u05E8 \u05DB\u05E8\u05D8\u05D9\u05E1", `type="text" inputmode="numeric" autocomplete="cc-number" maxlength="23" placeholder="0000 0000 0000 0000"`)}
+            <div class="form-row">
+              ${payField("ccExp", "\u05EA\u05D5\u05E7\u05E3", `type="text" inputmode="numeric" autocomplete="cc-exp" maxlength="5" placeholder="MM/YY"`, true)}
+              ${payField("ccCvv", "CVV", `type="password" inputmode="numeric" autocomplete="cc-csc" maxlength="4"`)}
+            </div>
+          </div>
+          <p class="text-sm text-muted">\u05D4\u05D3\u05D2\u05DE\u05D4 \u05D1\u05DC\u05D1\u05D3: \u05DC\u05D0 \u05DE\u05EA\u05D1\u05E6\u05E2 \u05D7\u05D9\u05D5\u05D1, \u05D5\u05E4\u05E8\u05D8\u05D9 \u05D4\u05DB\u05E8\u05D8\u05D9\u05E1 \u05DC\u05D0 \u05E0\u05E9\u05DE\u05E8\u05D9\u05DD. \u05DB\u05E8\u05D8\u05D9\u05E1 \u05D1\u05D3\u05D9\u05E7\u05D4: <span dir="ltr">4111 1111 1111 1111</span>.</p>
         </section>
       </div>
       <aside class="checkout-card checkout-summary" aria-labelledby="checkout-summary-title">
@@ -5246,7 +5290,7 @@
           <div><dt>\u05DE\u05D7\u05D9\u05E8 \u05DE\u05E9\u05DC\u05D5\u05D7</dt><dd>${money(deliveryFee)}</dd></div>
           <div class="is-total"><dt>\u05DC\u05EA\u05E9\u05DC\u05D5\u05DD</dt><dd>${money(goods + deliveryFee)}</dd></div>
         </dl>
-        <button class="btn checkout-submit" type="submit">\u05D0\u05D9\u05E9\u05D5\u05E8 \u05D4\u05D4\u05D6\u05DE\u05E0\u05D4, \u05D4\u05D3\u05D2\u05DE\u05D4</button>
+        <button class="btn checkout-submit" type="submit">${lockIcon}\u05EA\u05E9\u05DC\u05D5\u05DD ${money(goods + deliveryFee)} \xB7 \u05D4\u05D3\u05D2\u05DE\u05D4</button>
       </aside>
     </form>
   </article>`;
@@ -5260,6 +5304,12 @@
     if (!String(data.city || "").trim()) errors.city = "\u05E0\u05D0 \u05DC\u05DE\u05DC\u05D0 \u05E2\u05D9\u05E8.";
     if (!String(data.street || "").trim()) errors.street = "\u05E0\u05D0 \u05DC\u05DE\u05DC\u05D0 \u05E8\u05D7\u05D5\u05D1.";
     if (!String(data.house || "").trim()) errors.house = "\u05E0\u05D0 \u05DC\u05DE\u05DC\u05D0 \u05DE\u05E1\u05E4\u05E8 \u05D1\u05D9\u05EA.";
+    const card2 = String(data.ccNumber || "").replace(/\D/g, "");
+    if (String(data.ccName || "").trim().length < 2) errors.ccName = "\u05E0\u05D0 \u05DC\u05DE\u05DC\u05D0 \u05D0\u05EA \u05D4\u05E9\u05DD \u05E9\u05DE\u05D5\u05E4\u05D9\u05E2 \u05E2\u05DC \u05D4\u05DB\u05E8\u05D8\u05D9\u05E1.";
+    if (!/^\d{9}$/.test(String(data.ccId || "").replace(/\D/g, ""))) errors.ccId = "\u05E0\u05D0 \u05DC\u05DE\u05DC\u05D0 \u05EA\u05E2\u05D5\u05D3\u05EA \u05D6\u05D4\u05D5\u05EA \u05D1\u05EA 9 \u05E1\u05E4\u05E8\u05D5\u05EA.";
+    if (card2.length < 12 || card2.length > 19 || !luhn(card2)) errors.ccNumber = "\u05E0\u05D0 \u05DC\u05DE\u05DC\u05D0 \u05DE\u05E1\u05E4\u05E8 \u05DB\u05E8\u05D8\u05D9\u05E1 \u05EA\u05E7\u05D9\u05DF.";
+    if (!validExpiry(String(data.ccExp || "").trim())) errors.ccExp = "\u05E0\u05D0 \u05DC\u05DE\u05DC\u05D0 \u05EA\u05D5\u05E7\u05E3 \u05D1\u05E4\u05D5\u05E8\u05DE\u05D8 MM/YY.";
+    if (!/^\d{3,4}$/.test(String(data.ccCvv || ""))) errors.ccCvv = "\u05E0\u05D0 \u05DC\u05DE\u05DC\u05D0 3 \u05D0\u05D5 4 \u05E1\u05E4\u05E8\u05D5\u05EA.";
     return { data: { ...data, phone }, errors };
   }
 
@@ -6007,8 +6057,8 @@
     const reached = steps.filter(([key]) => timeline[key]).length;
     const current = cancelled ? -1 : reached - 1;
     const items = steps.map(([key, label, svg], index) => {
-      const state2 = index < reached ? index === current && key !== "delivered" ? "current" : "done" : "todo";
-      return `<li class="order-step is-${state2}"${index === current ? ' aria-current="step"' : ""}>
+      const state3 = index < reached ? index === current && key !== "delivered" ? "current" : "done" : "todo";
+      return `<li class="order-step is-${state3}"${index === current ? ' aria-current="step"' : ""}>
       <span class="order-step-icon">${svg}</span>
       <span class="order-step-label">${label}</span>
       <span class="order-step-date">${timeline[key] ? esc(day(timeline[key])) : ""}</span>
@@ -6023,52 +6073,106 @@
 
   // js/screens/account.js
   var savedNotice = false;
-  function frame(active, title, body) {
+  var icon2 = (paths) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths}</svg>`;
+  var icons = {
+    person: icon2(`<circle cx="12" cy="8" r="3.4"></circle><path d="M5 20c1.3-3.2 3.8-4.8 7-4.8s5.7 1.6 7 4.8"></path>`),
+    overview: icon2(`<path d="M4 11.5 12 5l8 6.5"></path><path d="M6 10v9h12v-9"></path>`),
+    orders: icon2(`<path d="M3.5 7.5 12 3l8.5 4.5v9L12 21l-8.5-4.5z"></path><path d="M3.5 7.5 12 12l8.5-4.5M12 12v9"></path>`),
+    details: icon2(`<rect x="4" y="5" width="16" height="14" rx="2"></rect><circle cx="9.5" cy="11" r="2"></circle><path d="M6.5 16c.6-1.4 1.6-2.1 3-2.1s2.4.7 3 2.1M14.5 10h3M14.5 13.5h3"></path>`),
+    club: icon2(`<path d="m12 4 2.4 4.9 5.4.8-3.9 3.8.9 5.3L12 16.3 7.2 18.8l.9-5.3-3.9-3.8 5.4-.8z"></path>`),
+    service: icon2(`<path d="M4 14v-2a8 8 0 0 1 16 0v2"></path><path d="M4 14h3v5H5a1 1 0 0 1-1-1zM20 14h-3v5h2a1 1 0 0 0 1-1z"></path><path d="M17 19c0 1.1-1.8 2-4 2"></path>`),
+    logout: icon2(`<path d="M14 5h4a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1h-4"></path><path d="M10 16l-4-4 4-4M6 12h9"></path>`)
+  };
+  function frame(active, crumb, content) {
     const profile = getProfile();
-    const link = (id, href, label) => `<a class="account-nav-link" href="${href}"${active === id ? ` aria-current="page"` : ""}>${label}</a>`;
-    return `<article class="wrap py-8">
+    const session = getSession();
+    const until = session ? new Date(session.expiresAt).toLocaleTimeString("he-IL", { hour: "2-digit", minute: "2-digit" }) : "";
+    const link = (id, href, label, sub = "") => `<a class="account-menu-link" href="${href}"${active === id ? ` aria-current="page"` : ""}>
+      ${icons[id]}
+      <span>${label}${sub ? `<small>${sub}</small>` : ""}</span>
+    </a>`;
+    return `<article class="wrap account-page py-6">
+    <nav class="account-crumbs" aria-label="\u05DE\u05D9\u05E7\u05D5\u05DD">
+      <a href="#/">\u05D1\u05D9\u05EA</a>
+      <span aria-hidden="true">\u203A</span>
+      ${crumb ? `<a href="#/account">\u05D0\u05D6\u05D5\u05E8 \u05D0\u05D9\u05E9\u05D9</a><span aria-hidden="true">\u203A</span><span aria-current="page">${crumb}</span>` : `<span aria-current="page">\u05D0\u05D6\u05D5\u05E8 \u05D0\u05D9\u05E9\u05D9</span>`}
+    </nav>
     <div class="account-layout">
-      <nav class="account-nav" aria-label="\u05D4\u05D0\u05D6\u05D5\u05E8 \u05D4\u05D0\u05D9\u05E9\u05D9">
-        <p class="font-extrabold">${esc(profile.displayName)}</p>
-        <p class="text-sm text-muted" dir="ltr">${esc(profile.customerId)}</p>
-        ${link("overview", "#/account", "\u05E1\u05E7\u05D9\u05E8\u05D4")}
-        ${link("details", "#/account/details", "\u05E4\u05E8\u05D8\u05D9\u05DD")}
-        ${link("orders", "#/orders", "\u05D4\u05D6\u05DE\u05E0\u05D5\u05EA")}
-        <button class="account-nav-link" type="button" data-logout>\u05D9\u05E6\u05D9\u05D0\u05D4</button>
-      </nav>
-      <div>
-        <p class="text-sm font-bold text-muted">\u05D4\u05D3\u05D2\u05DE\u05D4 \u05D1\u05DC\u05D1\u05D3. \u05D0\u05D9\u05DF \u05DB\u05D0\u05DF \u05D0\u05D9\u05DE\u05D5\u05EA \u05D6\u05D4\u05D5\u05EA.</p>
-        <h1 class="mt-2 text-3xl font-extrabold">${title}</h1>
-        ${body}
-      </div>
+      <aside class="account-side">
+        <div class="account-side-head">
+          <span class="account-avatar">${icons.person}</span>
+          <div class="min-w-0">
+            <p class="account-name">${esc(profile.displayName)}</p>
+            <p class="account-id">\u05DE\u05E1\u05F3 \u05DC\u05E7\u05D5\u05D7 <span dir="ltr">${esc(profile.customerId)}</span></p>
+          </div>
+        </div>
+        <nav class="account-menu" aria-label="\u05D4\u05D0\u05D6\u05D5\u05E8 \u05D4\u05D0\u05D9\u05E9\u05D9">
+          ${link("overview", "#/account", "\u05E1\u05E7\u05D9\u05E8\u05D4")}
+          ${link("orders", "#/orders", "\u05D4\u05D4\u05D6\u05DE\u05E0\u05D5\u05EA \u05E9\u05DC\u05D9")}
+          ${link("details", "#/account/details", "\u05E2\u05D3\u05DB\u05D5\u05DF \u05E4\u05E8\u05D8\u05D9\u05DD", "\u05E4\u05E8\u05D8\u05D9\u05DD \u05D0\u05D9\u05E9\u05D9\u05D9\u05DD, \u05D8\u05DC\u05E4\u05D5\u05DF \u05D5\u05DB\u05EA\u05D5\u05D1\u05EA \u05DC\u05DE\u05E9\u05DC\u05D5\u05D7")}
+          ${link("club", "#/rules-club", "\u05DE\u05D5\u05E2\u05D3\u05D5\u05DF \u05DC\u05E7\u05D5\u05D7\u05D5\u05EA")}
+          ${link("service", "#/service", "\u05E9\u05D9\u05E8\u05D5\u05EA \u05DC\u05E7\u05D5\u05D7\u05D5\u05EA")}
+          <button class="account-menu-link" type="button" data-logout>${icons.logout}<span>\u05D4\u05EA\u05E0\u05EA\u05E7\u05D5\u05EA</span></button>
+        </nav>
+        ${until ? `<p class="account-session">\u05D4\u05D3\u05D2\u05DE\u05D4 \u05D1\u05DC\u05D1\u05D3. \u05D4\u05D4\u05EA\u05D7\u05D1\u05E8\u05D5\u05EA \u05E4\u05E2\u05D9\u05DC\u05D4 \u05E2\u05D3 ${esc(until)}.</p>` : ""}
+      </aside>
+      <div class="account-main">${content}</div>
     </div>
   </article>`;
+  }
+  function page(title, body) {
+    return `<header class="account-main-head">
+    <p class="text-sm font-bold text-muted">\u05D4\u05D3\u05D2\u05DE\u05D4 \u05D1\u05DC\u05D1\u05D3. \u05D0\u05D9\u05DF \u05DB\u05D0\u05DF \u05D0\u05D9\u05DE\u05D5\u05EA \u05D6\u05D4\u05D5\u05EA.</p>
+    <h1 class="mt-1 text-3xl font-extrabold">${title}</h1>
+  </header>
+  ${body}`;
   }
   function when(value) {
     return new Date(value).toLocaleDateString("he-IL", { day: "numeric", month: "long", year: "numeric" });
   }
   function renderAccount() {
     const profile = getProfile();
-    const session = getSession();
-    const until = session ? new Date(session.expiresAt).toLocaleTimeString("he-IL", { hour: "2-digit", minute: "2-digit" }) : "";
-    const recent = demoOrders.slice(0, 2).map((order) => `<li class="flex items-center justify-between gap-3 border-b border-line py-3">
-      <span><a class="font-bold" href="#/orders/${esc(order.id)}">${esc(order.id)}</a><span class="mt-1 block text-sm text-muted">${esc(when(order.createdAt))} \xB7 ${esc(order.status)}</span></span>
-      <span>${money(order.total)}</span>
+    const latest = demoOrders[0];
+    const recent = demoOrders.slice(0, 3).map((order) => `<li class="account-order-row">
+      <span><a class="font-bold" href="#/orders/${esc(order.id)}" dir="ltr">${esc(order.id)}</a><span class="mt-1 block text-sm text-muted">${esc(when(order.createdAt))} \xB7 ${esc(order.status)}</span></span>
+      <span class="font-bold">${money(order.total)}</span>
     </li>`).join("");
-    return frame("overview", "\u05D4\u05D0\u05D6\u05D5\u05E8 \u05D4\u05D0\u05D9\u05E9\u05D9", `
-    <p class="mt-3 text-lg">\u05E9\u05DC\u05D5\u05DD ${esc(profile.displayName)}</p>
-    <dl class="mt-6 grid gap-3 rounded-2xl border border-line p-5 sm:grid-cols-2">
-      <div><dt class="text-sm text-muted">\u05DE\u05D6\u05D4\u05D4 \u05DC\u05E7\u05D5\u05D7</dt><dd class="font-bold" dir="ltr">${esc(profile.customerId)}</dd></div>
-      <div><dt class="text-sm text-muted">\u05D8\u05DC\u05E4\u05D5\u05DF \u05DC\u05D4\u05D3\u05D2\u05DE\u05D4</dt><dd class="font-bold" dir="ltr">${esc(profile.phone)}</dd></div>
-      <div><dt class="text-sm text-muted">\u05DB\u05EA\u05D5\u05D1\u05EA</dt><dd class="font-bold">${esc(profile.street)} ${esc(profile.house)}, ${esc(profile.city)}</dd></div>
-      <div><dt class="text-sm text-muted">\u05EA\u05D5\u05E7\u05E3 \u05D4\u05D4\u05EA\u05D7\u05D1\u05E8\u05D5\u05EA \u05D4\u05DE\u05D3\u05D5\u05DE\u05D4</dt><dd class="font-bold">${esc(until)}</dd></div>
-    </dl>
-    <section class="mt-8" aria-labelledby="recent-orders">
-      <div class="flex items-center justify-between gap-3">
-        <h2 id="recent-orders" class="text-xl font-extrabold">\u05D4\u05D6\u05DE\u05E0\u05D5\u05EA \u05D0\u05D7\u05E8\u05D5\u05E0\u05D5\u05EA</h2>
-        <a class="font-bold" href="#/orders">\u05DC\u05DB\u05DC \u05D4\u05D4\u05D6\u05DE\u05E0\u05D5\u05EA</a>
+    return frame("overview", "", `
+    <section class="account-banner" aria-labelledby="account-title">
+      <span class="proto-label" aria-hidden="true">\u05D1\u05D0\u05E0\u05E8 \u05D0\u05D6\u05D5\u05E8 \u05D0\u05D9\u05E9\u05D9</span>
+      <div>
+        <p class="account-banner-kicker">\u05D4\u05D0\u05D6\u05D5\u05E8 \u05D4\u05D0\u05D9\u05E9\u05D9 \u05E9\u05DC\u05DA</p>
+        <h1 id="account-title" class="account-banner-title">\u05E9\u05DC\u05D5\u05DD ${esc(profile.displayName)}</h1>
+        <p class="account-banner-text">${demoOrders.length} \u05D4\u05D6\u05DE\u05E0\u05D5\u05EA \u05D1\u05D0\u05D6\u05D5\u05E8 \u05D4\u05D0\u05D9\u05E9\u05D9 \xB7 \u05D4\u05D4\u05D6\u05DE\u05E0\u05D4 \u05D4\u05D0\u05D7\u05E8\u05D5\u05E0\u05D4 ${esc(when(latest.createdAt))}</p>
       </div>
-      <ul class="mt-2">${recent}</ul>
+      <span class="account-banner-art" aria-hidden="true"></span>
+    </section>
+    <div class="account-tiles">
+      <section class="account-tile" aria-labelledby="tile-order">
+        <span class="account-tile-art" aria-hidden="true">${icons.orders}</span>
+        <h2 id="tile-order">\u05D4\u05D4\u05D6\u05DE\u05E0\u05D4 \u05D4\u05D0\u05D7\u05E8\u05D5\u05E0\u05D4</h2>
+        <p><span dir="ltr">${esc(latest.id)}</span> \xB7 ${esc(latest.status)}</p>
+        <a class="btn" href="#/orders/${esc(latest.id)}">\u05DC\u05DE\u05E2\u05E7\u05D1 \u05D4\u05D6\u05DE\u05E0\u05D4</a>
+      </section>
+      <section class="account-tile" aria-labelledby="tile-details">
+        <span class="account-tile-art" aria-hidden="true">${icons.details}</span>
+        <h2 id="tile-details">\u05E4\u05E8\u05D8\u05D9\u05DD \u05DC\u05DE\u05E9\u05DC\u05D5\u05D7</h2>
+        <p>${esc(profile.street)} ${esc(profile.house)}, ${esc(profile.city)} \xB7 <span dir="ltr">${esc(profile.phone)}</span></p>
+        <a class="btn btn-line" href="#/account/details">\u05E2\u05D3\u05DB\u05D5\u05DF \u05E4\u05E8\u05D8\u05D9\u05DD</a>
+      </section>
+      <section class="account-tile" aria-labelledby="tile-service">
+        <span class="account-tile-art" aria-hidden="true">${icons.service}</span>
+        <h2 id="tile-service">\u05E9\u05D9\u05E8\u05D5\u05EA \u05DC\u05E7\u05D5\u05D7\u05D5\u05EA</h2>
+        <p>\u05E9\u05D0\u05DC\u05D4 \u05E2\u05DC \u05D4\u05D6\u05DE\u05E0\u05D4 \u05D0\u05D5 \u05DE\u05E9\u05DC\u05D5\u05D7? \u05D0\u05E4\u05E9\u05E8 \u05DC\u05E4\u05E0\u05D5\u05EA \u05D0\u05DC\u05D9\u05E0\u05D5.</p>
+        <a class="btn btn-line" href="#/service">\u05DC\u05E4\u05E0\u05D9\u05D9\u05D4</a>
+      </section>
+    </div>
+    <section class="account-card" aria-labelledby="recent-orders">
+      <div class="account-card-head">
+        <h2 id="recent-orders">\u05D4\u05D6\u05DE\u05E0\u05D5\u05EA \u05D0\u05D7\u05E8\u05D5\u05E0\u05D5\u05EA</h2>
+        <a href="#/orders">\u05DC\u05DB\u05DC \u05D4\u05D4\u05D6\u05DE\u05E0\u05D5\u05EA</a>
+      </div>
+      <ul>${recent}</ul>
     </section>
   `);
   }
@@ -6080,7 +6184,7 @@
   </label>`;
     const notice = savedNotice ? `<p class="auth-success" role="status">\u05D4\u05E4\u05E8\u05D8\u05D9\u05DD \u05E0\u05E9\u05DE\u05E8\u05D5 \u05D1\u05D4\u05D3\u05D2\u05DE\u05D4 \u05D5\u05E2\u05D5\u05D3\u05DB\u05E0\u05D5 \u05D2\u05DD \u05D1\u05E9\u05D0\u05E8 \u05D4\u05D0\u05D6\u05D5\u05E8 \u05D4\u05D0\u05D9\u05E9\u05D9.</p>` : "";
     savedNotice = false;
-    return frame("details", "\u05E4\u05E8\u05D8\u05D9\u05DD", `
+    return frame("details", "\u05E2\u05D3\u05DB\u05D5\u05DF \u05E4\u05E8\u05D8\u05D9\u05DD", page("\u05E2\u05D3\u05DB\u05D5\u05DF \u05E4\u05E8\u05D8\u05D9\u05DD", `
     ${notice}
     <form id="profile-form" class="mt-6 grid max-w-xl gap-4" novalidate>
       <p class="text-sm text-muted">\u05D0\u05DC\u05D4 \u05E4\u05E8\u05D8\u05D9\u05DD \u05D1\u05D3\u05D5\u05D9\u05D9\u05DD \u05E9\u05DC \u05DC\u05E7\u05D5\u05D7 \u05D4\u05D4\u05D3\u05D2\u05DE\u05D4. \u05D4\u05DE\u05D6\u05D4\u05D4 \u05E7\u05D1\u05D5\u05E2.</p>
@@ -6098,7 +6202,7 @@
       <p id="profile-error" class="field-error" role="alert" hidden></p>
       <button class="btn" type="submit">\u05E9\u05DE\u05D9\u05E8\u05EA \u05E4\u05E8\u05D8\u05D9\u05DD</button>
     </form>
-  `);
+  `));
   }
   function renderOrders() {
     const rows2 = demoOrders.map((order) => `<li class="order-card">
@@ -6111,21 +6215,21 @@
       </div>
       ${orderStatus(order)}
     </li>`).join("");
-    return frame("orders", "\u05D4\u05D4\u05D6\u05DE\u05E0\u05D5\u05EA \u05E9\u05DC\u05D9", `
+    return frame("orders", "\u05D4\u05D4\u05D6\u05DE\u05E0\u05D5\u05EA \u05E9\u05DC\u05D9", page("\u05D4\u05D4\u05D6\u05DE\u05E0\u05D5\u05EA \u05E9\u05DC\u05D9", `
     <p class="mt-3 text-muted">\u05E9\u05DC\u05D5\u05E9 \u05D4\u05D6\u05DE\u05E0\u05D5\u05EA \u05E7\u05D1\u05D5\u05E2\u05D5\u05EA \u05DC\u05D4\u05D3\u05D2\u05DE\u05D4. \u05D0\u05D9\u05E9\u05D5\u05E8 \u05E9\u05E0\u05D5\u05E6\u05E8 \u05D1\u05E7\u05D5\u05E4\u05D4 \u05E0\u05E9\u05D0\u05E8 \u05D1\u05DE\u05E1\u05DA \u05D4\u05D0\u05D9\u05E9\u05D5\u05E8 \u05E9\u05DC\u05D5.</p>
     <ul class="mt-4 grid gap-4">${rows2}</ul>
-  `);
+  `));
   }
   function renderOrderDetail(id) {
     const order = getDemoOrder(id);
     if (!order) {
-      return frame("orders", "\u05D4\u05D6\u05DE\u05E0\u05D4", `
+      return frame("orders", "\u05D4\u05D6\u05DE\u05E0\u05D4", page("\u05D4\u05D6\u05DE\u05E0\u05D4", `
       <p class="mt-3 text-muted">\u05D4\u05D4\u05D6\u05DE\u05E0\u05D4 \u05DC\u05D0 \u05E0\u05DE\u05E6\u05D0\u05D4 \u05D1\u05D4\u05D3\u05D2\u05DE\u05D4.</p>
       <a class="btn mt-6" href="#/orders">\u05D7\u05D6\u05E8\u05D4 \u05DC\u05D4\u05D6\u05DE\u05E0\u05D5\u05EA</a>
-    `);
+    `));
     }
     const items = order.items.map((item) => `<li class="flex justify-between gap-3"><span>${esc(item.name)} \xD7 ${item.qty}</span><span>${money(item.price * item.qty)}</span></li>`).join("");
-    return frame("orders", `\u05D4\u05D6\u05DE\u05E0\u05D4 ${esc(order.id)}`, `
+    return frame("orders", `\u05D4\u05D6\u05DE\u05E0\u05D4 ${esc(order.id)}`, page(`\u05D4\u05D6\u05DE\u05E0\u05D4 ${esc(order.id)}`, `
     <p class="mt-3 text-muted">${esc(when(order.createdAt))} \xB7 ${esc(order.status)}</p>
     <section class="order-card mt-6 max-w-3xl">${orderStatus(order)}</section>
     <section class="mt-6 max-w-xl rounded-2xl border border-line p-5">
@@ -6138,7 +6242,7 @@
       </dl>
     </section>
     <a class="btn btn-line mt-6" href="#/orders">\u05D7\u05D6\u05E8\u05D4 \u05DC\u05D4\u05D6\u05DE\u05E0\u05D5\u05EA</a>
-  `);
+  `));
   }
   function bindAccount(rerender) {
     document.addEventListener("submit", (event) => {
@@ -6340,12 +6444,12 @@
     };
     const megaLinks = () => [...body.querySelectorAll("a[href], button:not([disabled])")];
     triggers.forEach((link) => {
-      const open2 = () => openDesktop(link.dataset.megaOpen, link);
-      link.addEventListener("mouseenter", open2);
-      link.addEventListener("focus", open2);
+      const open3 = () => openDesktop(link.dataset.megaOpen, link);
+      link.addEventListener("mouseenter", open3);
+      link.addEventListener("focus", open3);
       link.addEventListener("keydown", (event) => {
         if (event.key !== "Tab" || event.shiftKey) return;
-        open2();
+        open3();
         const first = megaLinks()[0];
         if (!first) return;
         event.preventDefault();
@@ -6377,13 +6481,13 @@
       button.addEventListener("click", () => {
         const id = button.dataset.megaMobile;
         const panel = mobile.querySelector(`[data-mega-mobile-panel="${id}"]`);
-        const open2 = button.getAttribute("aria-expanded") === "true";
+        const open3 = button.getAttribute("aria-expanded") === "true";
         mobile.querySelectorAll("[data-mega-mobile]").forEach((item) => {
           item.setAttribute("aria-expanded", "false");
           const other = mobile.querySelector(`[data-mega-mobile-panel="${item.dataset.megaMobile}"]`);
           if (other) other.hidden = true;
         });
-        if (!open2 && panel) {
+        if (!open3 && panel) {
           panel.innerHTML = megaPanel(id);
           panel.hidden = false;
           button.setAttribute("aria-expanded", "true");
@@ -6436,13 +6540,13 @@
     });
     input.addEventListener("keydown", (event) => {
       const options = [...suggest.querySelectorAll("[role=option]")];
-      const open2 = !suggest.classList.contains("hidden") && options.length > 0;
+      const open3 = !suggest.classList.contains("hidden") && options.length > 0;
       const current = options.findIndex((option) => option.getAttribute("aria-selected") === "true");
       if (event.key === "Escape") {
         setSuggestOpen(false);
         return;
       }
-      if (!open2) return;
+      if (!open3) return;
       if (event.key === "ArrowDown" || event.key === "ArrowUp") {
         event.preventDefault();
         const step = event.key === "ArrowDown" ? 1 : -1;
@@ -6472,9 +6576,9 @@
     updateCartBadge();
     updateAccountSlot();
     function toggleMenu(force) {
-      const open2 = typeof force === "boolean" ? force : !menu.classList.contains("is-open");
-      menu.classList.toggle("is-open", open2);
-      menuOpen.setAttribute("aria-expanded", String(open2));
+      const open3 = typeof force === "boolean" ? force : !menu.classList.contains("is-open");
+      menu.classList.toggle("is-open", open3);
+      menuOpen.setAttribute("aria-expanded", String(open3));
       const gsap = window.gsap;
       if (gsap && !prefersReducedMotion()) {
         gsap.fromTo(menu, { y: -8, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.28, ease: "power2.out" });
@@ -6542,12 +6646,12 @@
       input.removeAttribute("aria-activedescendant");
     }
   }
-  function setSuggestOpen(open2) {
+  function setSuggestOpen(open3) {
     const suggest = document.getElementById("suggest");
     const input = document.getElementById("search-input");
-    suggest.classList.toggle("hidden", !open2);
-    input.setAttribute("aria-expanded", String(open2));
-    if (!open2) input.removeAttribute("aria-activedescendant");
+    suggest.classList.toggle("hidden", !open3);
+    input.setAttribute("aria-expanded", String(open3));
+    if (!open3) input.removeAttribute("aria-activedescendant");
   }
   function closePanels() {
     setSuggestOpen(false);
@@ -6606,7 +6710,7 @@
         <p class="cart-dock-title"><span class="cart-dock-mark">${cartIcon}${count ? `<span class="cart-dock-badge">${count}</span>` : ""}</span><span>\u05D4\u05E1\u05DC \u05E9\u05DC\u05D9</span></p>
         <p class="text-sm text-muted">${countLabel}</p>
       </div>
-      <p class="cart-dock-sum">${count ? money(total) : money(0)}</p>
+      ${count ? `<a class="cart-dock-pay" href="#/checkout"><span>\u05DC\u05EA\u05E9\u05DC\u05D5\u05DD:</span><strong>${money(total)}</strong></a>` : `<span class="cart-dock-pay is-disabled" aria-disabled="true"><span>\u05DC\u05EA\u05E9\u05DC\u05D5\u05DD:</span><strong>${money(0)}</strong></span>`}
     </div>
     ${open ? `<div id="cart-dock-body" class="cart-dock-body">
       ${list}
@@ -6659,42 +6763,78 @@
     placeDock();
   }
 
+  // js/components/toast.js
+  function showToast(message, href) {
+    const region = document.getElementById("toast");
+    const item = document.createElement("div");
+    item.className = "toast pointer-events-auto";
+    item.innerHTML = `<p class="font-semibold">${esc(message)}</p>${href ? `<a class="mt-1 inline-block text-sm font-bold underline underline-offset-2" href="${esc(href)}">\u05DC\u05E1\u05DC \u05D4\u05E7\u05E0\u05D9\u05D5\u05EA</a>` : ""}`;
+    region.appendChild(item);
+    const gsap = window.gsap;
+    if (gsap && !prefersReducedMotion()) {
+      gsap.fromTo(item, { y: 16, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.35, ease: "power2.out" });
+    }
+    window.setTimeout(() => {
+      item.remove();
+    }, 3200);
+  }
+  function confirmAction(message) {
+    const root = document.getElementById("modal-root");
+    root.innerHTML = `<dialog aria-labelledby="confirm-title">
+    <h2 id="confirm-title" class="text-lg font-extrabold">${esc(message)}</h2>
+    <form method="dialog" class="mt-5 flex gap-2">
+      <button class="btn" value="yes">\u05D4\u05E1\u05E8\u05D4</button>
+      <button class="btn btn-line" value="cancel">\u05D1\u05D9\u05D8\u05D5\u05DC</button>
+    </form>
+  </dialog>`;
+    const dialog = root.querySelector("dialog");
+    dialog.showModal();
+    return new Promise((resolve) => {
+      dialog.addEventListener("close", () => {
+        resolve(dialog.returnValue === "yes");
+        root.innerHTML = "";
+      }, { once: true });
+    });
+  }
+
   // js/components/service-dialogs.js
   var LOAD_MS2 = 700;
-  var delivery2 = { city: "", street: "", error: "", result: "", pending: false };
-  var service = { values: {}, errors: {}, sent: false, pending: false };
-  function ensureDialog2(id) {
-    let dialog = document.getElementById(id);
-    if (dialog) return dialog;
-    dialog = document.createElement("dialog");
-    dialog.id = id;
-    dialog.className = "auth-dialog service-dialog";
-    dialog.setAttribute("aria-labelledby", `${id}-title`);
-    dialog.addEventListener("keydown", (event) => {
-      if (event.key === "Escape") {
-        event.preventDefault();
-        dialog.close();
-      }
-    });
-    dialog.addEventListener("click", (event) => {
-      if (event.target === dialog || event.target.closest("[data-service-close]")) dialog.close();
-    });
-    document.body.appendChild(dialog);
-    return dialog;
+  var kinds = {
+    delivery: { title: "\u05DE\u05E9\u05DC\u05D5\u05D7 \u05E2\u05D3 \u05D4\u05D1\u05D9\u05EA", path: "#/delivery", dialogId: "delivery-dialog", focus: "[data-service-focus]" },
+    service: { title: "\u05E9\u05D9\u05E8\u05D5\u05EA \u05DC\u05E7\u05D5\u05D7\u05D5\u05EA", path: "#/service", dialogId: "service-dialog", focus: "select[name='topic']" }
+  };
+  var phoneIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3h2.5l1.2 3.2-1.7 1a12 12 0 0 0 6.8 6.8l1-1.7 3.2 1.2V16a2 2 0 0 1-2.2 2A16 16 0 0 1 6 6.2 2 2 0 0 1 8 4z"></path></svg>`;
+  var whatsappIcon = `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3a9 9 0 0 0-7.8 13.4L3 21l4.7-1.2A9 9 0 1 0 12 3zm0 1.6a7.4 7.4 0 1 1-3.8 13.8l-.3-.2-2.6.7.7-2.5-.2-.3A7.4 7.4 0 0 1 12 4.6zm4.3 10.1c-.2-.1-1.4-.7-1.6-.8-.2-.1-.4-.1-.5.1l-.7.9c-.1.2-.3.2-.5.1a6 6 0 0 1-3-2.6c-.2-.4.2-.4.6-1.2.1-.1 0-.3 0-.4l-.7-1.7c-.2-.4-.4-.4-.5-.4h-.5a.9.9 0 0 0-.6.3 2.6 2.6 0 0 0-.8 1.9 4.5 4.5 0 0 0 1 2.4 10.3 10.3 0 0 0 3.9 3.5c1.5.6 2 .7 2.7.6a2.3 2.3 0 0 0 1.5-1.1 1.9 1.9 0 0 0 .1-1.1c0-.1-.2-.2-.4-.3z"></path></svg>`;
+  var shareIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"></path><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"></path></svg>`;
+  var pageIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg>`;
+  var fresh = {
+    delivery: () => ({ city: "", street: "", error: "", result: "", pending: false }),
+    service: () => ({ values: {}, errors: {}, sent: false, pending: false })
+  };
+  var state2 = { delivery: fresh.delivery(), service: fresh.service() };
+  function serviceTitle(kind) {
+    return kinds[kind]?.title || "";
   }
-  function head(id, title) {
+  function shareButton(kind) {
+    return `<button type="button" class="share-link" data-share-link="${kind}">${shareIcon}<span>\u05E9\u05DC\u05D9\u05D7\u05EA \u05E7\u05D9\u05E9\u05D5\u05E8</span></button>`;
+  }
+  function dialogHead(kind) {
+    const { title, path, dialogId } = kinds[kind];
     return `<div class="auth-dialog-bar">
     <div>
       <p class="text-sm font-bold text-muted">\u05D4\u05D3\u05D2\u05DE\u05D4 \u05D1\u05DC\u05D1\u05D3</p>
-      <h2 id="${id}-title" class="mt-1 text-2xl font-extrabold">${title}</h2>
+      <h2 id="${dialogId}-title" class="mt-1 text-2xl font-extrabold"><a class="service-title-link" href="${path}">${title}${pageIcon}</a></h2>
     </div>
-    <button class="auth-close" type="button" data-service-close aria-label="\u05E1\u05D2\u05D9\u05E8\u05D4">\xD7</button>
+    <div class="service-dialog-actions">
+      ${shareButton(kind)}
+      <button class="auth-close" type="button" data-service-close aria-label="\u05E1\u05D2\u05D9\u05E8\u05D4">\xD7</button>
+    </div>
   </div>`;
   }
-  function deliveryMarkup() {
-    const bad = (name) => delivery2.error && name === "city";
-    return `${head("delivery-dialog", "\u05DE\u05E9\u05DC\u05D5\u05D7 \u05E2\u05D3 \u05D4\u05D1\u05D9\u05EA")}
-  <section class="service-block" aria-labelledby="delivery-terms-title">
+  function deliveryBody() {
+    const delivery2 = state2.delivery;
+    const bad = Boolean(delivery2.error);
+    return `<section class="service-block" aria-labelledby="delivery-terms-title">
     <h3 id="delivery-terms-title" class="font-extrabold">\u05EA\u05E0\u05D0\u05D9 \u05E9\u05D9\u05DC\u05D5\u05D7</h3>
     <ul class="service-list">
       <li>\u05D4\u05D4\u05D6\u05DE\u05E0\u05D4 \u05DE\u05D2\u05D9\u05E2\u05D4 \u05E2\u05D3 \u05D4\u05D3\u05DC\u05EA.</li>
@@ -6703,12 +6843,12 @@
       <li>\u05D0\u05D6\u05D5\u05E8\u05D9 \u05D4\u05D7\u05DC\u05D5\u05E7\u05D4 \u05D5\u05DE\u05D5\u05E2\u05D3\u05D9 \u05D4\u05D0\u05E1\u05E4\u05E7\u05D4 \u05D9\u05E4\u05D5\u05E8\u05E1\u05DE\u05D5 \u05D1\u05D2\u05E8\u05E1\u05D4 \u05D4\u05E4\u05E2\u05D9\u05DC\u05D4.</li>
     </ul>
   </section>
-  <form id="delivery-check" class="mt-5 grid gap-4" novalidate>
+  <form class="mt-5 grid gap-4" data-service-form="delivery" novalidate>
     <h3 class="font-extrabold">\u05D4\u05D0\u05DD \u05DE\u05D2\u05D9\u05E2\u05D9\u05DD \u05D0\u05DC\u05D9\u05DA?</h3>
     <label class="field">
       <span class="text-sm font-semibold">\u05E2\u05D9\u05E8 \u05D0\u05D5 \u05D9\u05D9\u05E9\u05D5\u05D1</span>
-      <input name="city" value="${esc(delivery2.city)}" autocomplete="address-level2" required aria-invalid="${bad("city") ? "true" : "false"}" ${bad("city") ? `aria-describedby="delivery-city-error"` : ""} data-service-focus>
-      ${delivery2.error ? `<span id="delivery-city-error" class="field-error">${esc(delivery2.error)}</span>` : ""}
+      <input name="city" value="${esc(delivery2.city)}" autocomplete="address-level2" required aria-invalid="${bad ? "true" : "false"}" ${bad ? `aria-describedby="delivery-city-error"` : ""} data-service-focus>
+      ${bad ? `<span id="delivery-city-error" class="field-error">${esc(delivery2.error)}</span>` : ""}
     </label>
     <label class="field">
       <span class="text-sm font-semibold">\u05E8\u05D7\u05D5\u05D1 \u05D5\u05DE\u05E1\u05E4\u05E8 \u05D1\u05D9\u05EA</span>
@@ -6718,58 +6858,125 @@
     ${delivery2.result ? `<p class="service-result" role="status">${esc(delivery2.result)}</p>` : ""}
   </form>`;
   }
-  function serviceMarkup() {
+  function serviceBody(inPage) {
+    const service = state2.service;
     const contact = `<ul class="service-contact">
-    <li><a href="tel:03-000-0000"><strong dir="ltr">03-000-0000</strong><small>\u05D8\u05DC\u05E4\u05D5\u05DF \u05E9\u05D9\u05E8\u05D5\u05EA \u05DC\u05E7\u05D5\u05D7\u05D5\u05EA</small></a></li>
-    <li><a href="https://wa.me/97230000000" target="_blank" rel="noopener noreferrer"><strong>\u05D5\u05D5\u05D8\u05E1\u05D0\u05E4</strong><small>\u05E9\u05D9\u05E8\u05D5\u05EA \u05DC\u05E7\u05D5\u05D7\u05D5\u05EA</small></a></li>
+    <li><a href="tel:03-000-0000">
+      <span class="service-contact-icon">${phoneIcon}</span>
+      <span class="service-contact-text"><strong><span dir="ltr">03-000-0000</span></strong><small>\u05D8\u05DC\u05E4\u05D5\u05DF \u05E9\u05D9\u05E8\u05D5\u05EA \u05DC\u05E7\u05D5\u05D7\u05D5\u05EA</small></span>
+    </a></li>
+    <li><a href="https://wa.me/97230000000" target="_blank" rel="noopener noreferrer">
+      <span class="service-contact-icon">${whatsappIcon}</span>
+      <span class="service-contact-text"><strong>\u05D5\u05D5\u05D8\u05E1\u05D0\u05E4</strong><small>\u05E9\u05D9\u05E8\u05D5\u05EA \u05DC\u05E7\u05D5\u05D7\u05D5\u05EA</small></span>
+    </a></li>
   </ul>`;
     if (service.sent) {
-      return `${head("service-dialog", "\u05E9\u05D9\u05E8\u05D5\u05EA \u05DC\u05E7\u05D5\u05D7\u05D5\u05EA")}
-    ${contact}
+      const done = inPage ? `<a class="btn mt-5" href="#/">\u05D7\u05D6\u05E8\u05D4 \u05DC\u05D3\u05E3 \u05D4\u05D1\u05D9\u05EA</a>` : `<button class="btn mt-5" type="button" data-service-close>\u05E1\u05D2\u05D9\u05E8\u05D4</button>`;
+      return `${contact}
     <p class="service-result mt-5" role="status">\u05D4\u05E4\u05E0\u05D9\u05D9\u05D4 \u05E0\u05E9\u05DE\u05E8\u05D4 \u05D1\u05D4\u05D3\u05D2\u05DE\u05D4. \u05DC\u05D0 \u05E0\u05E9\u05DC\u05D7 \u05DE\u05D9\u05D9\u05DC \u05D0\u05DE\u05D9\u05EA\u05D9.</p>
-    <button class="btn mt-5" type="button" data-service-close>\u05E1\u05D2\u05D9\u05E8\u05D4</button>`;
+    ${done}`;
     }
-    return `${head("service-dialog", "\u05E9\u05D9\u05E8\u05D5\u05EA \u05DC\u05E7\u05D5\u05D7\u05D5\u05EA")}
-  ${contact}
-  <form id="service-form" class="mt-5 grid gap-4" novalidate>
+    return `${contact}
+  <form class="mt-5 grid gap-4" data-service-form="service" novalidate>
     <h3 class="font-extrabold">\u05D4\u05E9\u05D0\u05E8\u05EA \u05E4\u05E0\u05D9\u05D9\u05D4</h3>
-    ${contactFields(service, "service-")}
+    ${contactFields(service, inPage ? "service-page-" : "service-")}
     <button class="btn" type="submit" ${service.pending ? "disabled" : ""}>${service.pending ? "\u05E9\u05D5\u05DC\u05D7\u05D9\u05DD\u2026" : "\u05E9\u05DC\u05D9\u05D7\u05EA \u05E4\u05E0\u05D9\u05D9\u05D4"}</button>
   </form>`;
   }
-  function paintDelivery(focus = "[data-service-focus]") {
-    const dialog = ensureDialog2("delivery-dialog");
-    dialog.innerHTML = deliveryMarkup();
-    dialog.querySelector(focus)?.focus();
+  function markup2(kind, inPage) {
+    const body = kind === "delivery" ? deliveryBody() : serviceBody(inPage);
+    return inPage ? body : `${dialogHead(kind)}${body}`;
   }
-  function paintService(focus = "select[name='topic']") {
-    const dialog = ensureDialog2("service-dialog");
-    dialog.innerHTML = serviceMarkup();
-    dialog.querySelector(focus)?.focus();
+  function paint2(root, focus) {
+    root.innerHTML = markup2(root.dataset.serviceRoot, root.dataset.serviceMode === "page");
+    if (focus) root.querySelector(focus)?.focus();
+  }
+  function ensureDialog2(kind) {
+    const { dialogId } = kinds[kind];
+    let dialog = document.getElementById(dialogId);
+    if (dialog) return dialog;
+    dialog = document.createElement("dialog");
+    dialog.id = dialogId;
+    dialog.className = "auth-dialog service-dialog";
+    dialog.dataset.serviceRoot = kind;
+    dialog.dataset.serviceMode = "dialog";
+    dialog.setAttribute("aria-labelledby", `${dialogId}-title`);
+    dialog.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        dialog.close();
+      }
+    });
+    dialog.addEventListener("click", (event) => {
+      if (event.target === dialog || event.target.closest("[data-service-close], a[href^='#/']")) dialog.close();
+    });
+    document.body.appendChild(dialog);
+    return dialog;
+  }
+  function open2(kind) {
+    const page2 = document.querySelector(`[data-service-root="${kind}"][data-service-mode="page"]`);
+    if (page2 && parseHash().name === kind) {
+      page2.querySelector(kinds[kind].focus)?.focus();
+      return;
+    }
+    state2[kind] = fresh[kind]();
+    const dialog = ensureDialog2(kind);
+    paint2(dialog);
+    if (!dialog.open) dialog.showModal();
+    dialog.querySelector(kinds[kind].focus)?.focus();
   }
   function openDelivery() {
-    delivery2 = { city: "", street: "", error: "", result: "", pending: false };
-    paintDelivery();
-    const dialog = document.getElementById("delivery-dialog");
-    if (!dialog.open) dialog.showModal();
-    dialog.querySelector("[data-service-focus]")?.focus();
+    open2("delivery");
   }
   function openService() {
-    service = { values: {}, errors: {}, sent: false, pending: false };
-    paintService();
-    const dialog = document.getElementById("service-dialog");
-    if (!dialog.open) dialog.showModal();
-    dialog.querySelector("select[name='topic']")?.focus();
+    open2("service");
+  }
+  function renderServicePage(kind) {
+    state2[kind] = fresh[kind]();
+    return `<article class="wrap service-page py-10">
+    <div class="service-page-head">
+      <div>
+        <p class="text-sm font-bold text-muted">\u05D4\u05D3\u05D2\u05DE\u05D4 \u05D1\u05DC\u05D1\u05D3</p>
+        <h1 class="mt-1 text-3xl font-extrabold">${kinds[kind].title}</h1>
+      </div>
+      ${shareButton(kind)}
+    </div>
+    <div class="service-page-body" data-service-root="${kind}" data-service-mode="page">${markup2(kind, true)}</div>
+  </article>`;
+  }
+  async function shareLink(kind) {
+    const { title, path } = kinds[kind];
+    const url = `${location.origin}${location.pathname}${path}`;
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: `${title} \xB7 \u05D0\u05E9\u05DE\u05D5\u05E8\u05EA MARKET`, url });
+      } catch {
+      }
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(url);
+      showToast("\u05D4\u05E7\u05D9\u05E9\u05D5\u05E8 \u05D4\u05D5\u05E2\u05EA\u05E7. \u05D0\u05E4\u05E9\u05E8 \u05DC\u05D4\u05D3\u05D1\u05D9\u05E7 \u05D5\u05DC\u05E9\u05DC\u05D5\u05D7 \u05D0\u05D5\u05EA\u05D5.");
+    } catch {
+      window.prompt("\u05D4\u05E2\u05EA\u05E7\u05EA \u05D4\u05E7\u05D9\u05E9\u05D5\u05E8:", url);
+    }
   }
   function bindServiceDialogs() {
     document.addEventListener("click", (event) => {
       if (event.target.closest("[data-open-delivery]")) openDelivery();
       else if (event.target.closest("[data-open-service]")) openService();
+      const share = event.target.closest("[data-share-link]");
+      if (share) shareLink(share.dataset.shareLink);
     });
     document.addEventListener("submit", async (event) => {
       const form = event.target;
-      if (form.id === "delivery-check") {
-        event.preventDefault();
+      const kind = form.dataset?.serviceForm;
+      if (!kind) return;
+      event.preventDefault();
+      const root = form.closest("[data-service-root]");
+      const live = () => root.isConnected && (root.dataset.serviceMode === "page" || root.open);
+      if (kind === "delivery") {
+        const delivery2 = state2.delivery;
         if (delivery2.pending) return;
         const data = new FormData(form);
         delivery2.city = String(data.get("city") || "").trim();
@@ -6777,37 +6984,35 @@
         delivery2.result = "";
         if (delivery2.city.length < 2) {
           delivery2.error = "\u05E0\u05D0 \u05DC\u05DE\u05DC\u05D0 \u05E2\u05D9\u05E8 \u05D0\u05D5 \u05D9\u05D9\u05E9\u05D5\u05D1.";
-          paintDelivery("input[name='city']");
+          paint2(root, "input[name='city']");
           return;
         }
         delivery2.error = "";
         delivery2.pending = true;
-        paintDelivery("button[type='submit']");
+        paint2(root, "button[type='submit']");
         await wait(LOAD_MS2);
-        if (!document.getElementById("delivery-dialog")?.open) return;
+        if (!live()) return;
         delivery2.pending = false;
         const place = delivery2.street ? `${delivery2.street}, ${delivery2.city}` : delivery2.city;
         delivery2.result = `\u05DE\u05D2\u05D9\u05E2\u05D9\u05DD \u05D0\u05DC\u05D9\u05DA! \u05D4\u05DE\u05E9\u05DC\u05D5\u05D7 \u05DC\u05BE${place} \u05D6\u05DE\u05D9\u05DF. \u05D1\u05D4\u05D3\u05D2\u05DE\u05D4 \u05DB\u05DC \u05DB\u05EA\u05D5\u05D1\u05EA \u05DE\u05E7\u05D1\u05DC\u05EA \u05EA\u05E9\u05D5\u05D1\u05D4 \u05D7\u05D9\u05D5\u05D1\u05D9\u05EA.`;
-        paintDelivery("button[type='submit']");
+        paint2(root, "button[type='submit']");
         return;
       }
-      if (form.id === "service-form") {
-        event.preventDefault();
-        if (service.pending) return;
-        const { values, errors } = validateContact(form);
-        service.values = values;
-        service.errors = errors;
-        if (Object.keys(errors).length) {
-          paintService("[aria-invalid='true']");
-          return;
-        }
-        service.pending = true;
-        paintService("button[type='submit']");
-        await wait(LOAD_MS2);
-        if (!document.getElementById("service-dialog")?.open) return;
-        service = { values: {}, errors: {}, sent: true, pending: false };
-        paintService("[data-service-close].btn");
+      const service = state2.service;
+      if (service.pending) return;
+      const { values, errors } = validateContact(form);
+      service.values = values;
+      service.errors = errors;
+      if (Object.keys(errors).length) {
+        paint2(root, "[aria-invalid='true']");
+        return;
       }
+      service.pending = true;
+      paint2(root, "button[type='submit']");
+      await wait(LOAD_MS2);
+      if (!live()) return;
+      state2.service = { values: {}, errors: {}, sent: true, pending: false };
+      paint2(root, ".btn");
     });
   }
 
@@ -6822,7 +7027,7 @@
   var embla = null;
   var timer2 = 0;
   var paused = false;
-  function markup2() {
+  function markup3() {
     return `<div class="wrap pt-6">
     <div class="hero-slider" data-hero-slider>
       <div class="hero-slider-viewport">
@@ -6881,7 +7086,7 @@
     }
     if (embla) return;
     const Embla = window.EmblaCarousel;
-    root.innerHTML = markup2();
+    root.innerHTML = markup3();
     if (!Embla) return;
     const slider = root.querySelector("[data-hero-slider]");
     embla = Embla(slider.querySelector(".hero-slider-viewport"), {
@@ -6927,7 +7132,7 @@
   function field(label, value) {
     return `<p class="product-pop-spec">${esc(label)}: ${esc(value)}</p>`;
   }
-  function markup3(product) {
+  function markup4(product) {
     const commerce = getCommerce(product.id);
     const price = commerce ? `<p class="product-price">${money(commerce.price)}${commerce.compareAt ? `<s>${money(commerce.compareAt)}</s>` : ""}</p>` : `<p class="product-price is-pending">\u05DE\u05D7\u05D9\u05E8 \u05D9\u05E2\u05D5\u05D3\u05DB\u05DF</p>`;
     return `<div class="product-pop-bar">
@@ -6954,45 +7159,11 @@
     const product = getProduct(id);
     if (!product || isElectronicsProduct(product)) return;
     const dialog = ensureDialog3();
-    dialog.innerHTML = markup3(product);
+    dialog.innerHTML = markup4(product);
     dialog.setAttribute("aria-labelledby", "product-pop-title");
     mountProductGalleries(dialog);
     if (!dialog.open) dialog.showModal();
     dialog.querySelector("[data-pop-close]")?.focus();
-  }
-
-  // js/components/toast.js
-  function showToast(message, href) {
-    const region = document.getElementById("toast");
-    const item = document.createElement("div");
-    item.className = "toast pointer-events-auto";
-    item.innerHTML = `<p class="font-semibold">${esc(message)}</p>${href ? `<a class="mt-1 inline-block text-sm font-bold underline underline-offset-2" href="${esc(href)}">\u05DC\u05E1\u05DC \u05D4\u05E7\u05E0\u05D9\u05D5\u05EA</a>` : ""}`;
-    region.appendChild(item);
-    const gsap = window.gsap;
-    if (gsap && !prefersReducedMotion()) {
-      gsap.fromTo(item, { y: 16, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.35, ease: "power2.out" });
-    }
-    window.setTimeout(() => {
-      item.remove();
-    }, 3200);
-  }
-  function confirmAction(message) {
-    const root = document.getElementById("modal-root");
-    root.innerHTML = `<dialog aria-labelledby="confirm-title">
-    <h2 id="confirm-title" class="text-lg font-extrabold">${esc(message)}</h2>
-    <form method="dialog" class="mt-5 flex gap-2">
-      <button class="btn" value="yes">\u05D4\u05E1\u05E8\u05D4</button>
-      <button class="btn btn-line" value="cancel">\u05D1\u05D9\u05D8\u05D5\u05DC</button>
-    </form>
-  </dialog>`;
-    const dialog = root.querySelector("dialog");
-    dialog.showModal();
-    return new Promise((resolve) => {
-      dialog.addEventListener("close", () => {
-        resolve(dialog.returnValue === "yes");
-        root.innerHTML = "";
-      }, { once: true });
-    });
   }
 
   // js/motion.js
@@ -7095,6 +7266,7 @@
     if (route.name === "account-order") return renderOrderDetail(route.id);
     if (route.name === "contact") return renderContact(contactDraft || {});
     if (route.name === "legal") return renderLegal(route.slug);
+    if (route.name === "delivery" || route.name === "service") return renderServicePage(route.name);
     return renderHome();
   }
   function titleFor(route) {
@@ -7112,6 +7284,7 @@
     if (route.name === "orders" || route.name === "account-order") return `\u05D4\u05D6\u05DE\u05E0\u05D5\u05EA \xB7 ${suffix}`;
     if (route.name === "contact") return `\u05D9\u05E6\u05D9\u05E8\u05EA \u05E7\u05E9\u05E8 \xB7 ${suffix}`;
     if (route.name === "legal") return `${legalTitle(route.slug)} \xB7 ${suffix}`;
+    if (route.name === "delivery" || route.name === "service") return `${serviceTitle(route.name)} \xB7 ${suffix}`;
     return suffix;
   }
   document.addEventListener("click", async (event) => {

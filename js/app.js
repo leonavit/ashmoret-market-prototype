@@ -12,7 +12,7 @@ import { legalTitle, renderLegal } from "./screens/legal.js";
 import { bindAccount, renderAccount, renderAccountDetails, renderOrderDetail, renderOrders } from "./screens/account.js";
 import { bindShell, closePanels, renderCategoryNav, setCategoryBand, updateAccountSlot, updateCartBadge } from "./components/shell.js";
 import { mountCartDock, updateCartDock } from "./components/cart-dock.js";
-import { bindServiceDialogs } from "./components/service-dialogs.js";
+import { bindServiceDialogs, renderServicePage, serviceTitle } from "./components/service-dialogs.js";
 import { bindThemeOptions, getTheme } from "./components/theme-options.js";
 import { setHeroSlider } from "./components/hero-slider.js";
 import { mountPromoCarousels } from "./components/promo-carousel.js";
@@ -121,6 +121,7 @@ function view(route) {
   if (route.name === "account-order") return renderOrderDetail(route.id);
   if (route.name === "contact") return renderContact(contactDraft || {});
   if (route.name === "legal") return renderLegal(route.slug);
+  if (route.name === "delivery" || route.name === "service") return renderServicePage(route.name);
   return renderHome();
 }
 
@@ -139,6 +140,7 @@ function titleFor(route) {
   if (route.name === "orders" || route.name === "account-order") return `הזמנות · ${suffix}`;
   if (route.name === "contact") return `יצירת קשר · ${suffix}`;
   if (route.name === "legal") return `${legalTitle(route.slug)} · ${suffix}`;
+  if (route.name === "delivery" || route.name === "service") return `${serviceTitle(route.name)} · ${suffix}`;
   return suffix;
 }
 

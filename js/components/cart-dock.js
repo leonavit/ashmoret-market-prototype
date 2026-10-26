@@ -61,7 +61,9 @@ export function updateCartDock(routeName = parseHash().name) {
         <p class="cart-dock-title"><span class="cart-dock-mark">${cartIcon}${count ? `<span class="cart-dock-badge">${count}</span>` : ""}</span><span>הסל שלי</span></p>
         <p class="text-sm text-muted">${countLabel}</p>
       </div>
-      <p class="cart-dock-sum">${count ? money(total) : money(0)}</p>
+      ${count
+        ? `<a class="cart-dock-pay" href="#/checkout"><span>לתשלום:</span><strong>${money(total)}</strong></a>`
+        : `<span class="cart-dock-pay is-disabled" aria-disabled="true"><span>לתשלום:</span><strong>${money(0)}</strong></span>`}
     </div>
     ${open ? `<div id="cart-dock-body" class="cart-dock-body">
       ${list}

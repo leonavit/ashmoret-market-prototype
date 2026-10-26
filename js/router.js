@@ -20,6 +20,8 @@ export function parseHash() {
   if (parts[0] === "order" && parts[1]) return { name: "order", id: decodeURIComponent(parts[1]), query };
   if (parts[0] === "login") return { name: "login", query };
   if (parts[0] === "contact") return { name: "contact", query };
+  if (parts[0] === "delivery") return { name: "delivery", query };
+  if (parts[0] === "service") return { name: "service", query };
   if (legalSlugs.includes(parts[0])) return { name: "legal", slug: parts[0], query };
   if (parts[0] === "account" && parts[1] === "details") return { name: "account-details", query };
   if (parts[0] === "account") return { name: "account", query };
