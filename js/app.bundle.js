@@ -4075,9 +4075,9 @@
     const { badge, price } = cardParts(product);
     return `<article class="card card-shelf">
     ${productAnchor(product, `class="card-media"`, badge)}
-    <p class="text-xs font-semibold text-muted">${esc(product.brand)}</p>
-    <h3 class="text-sm font-bold leading-5">${productAnchor(product, ``, esc(product.name))}</h3>
-    <p class="text-sm text-muted">${esc(product.weight)} \xB7 ${esc(product.unitsPerPack)} \u05D9\u05D7\u05F3 \u05D1\u05DE\u05D0\u05E8\u05D6</p>
+    <p class="card-brand">${esc(product.brand)}</p>
+    <h3 class="card-name" title="${esc(product.name)}">${productAnchor(product, ``, esc(product.name))}</h3>
+    <p class="card-meta">${esc(product.weight)} \xB7 ${esc(product.unitsPerPack)} \u05D9\u05D7\u05F3 \u05D1\u05DE\u05D0\u05E8\u05D6</p>
     <div class="card-buy">
       ${price}
       ${buyRow(product.id)}
@@ -4088,7 +4088,7 @@
     if (!items.length) {
       return `<p class="rounded-2xl bg-paper px-5 py-10 text-center font-semibold">\u05DC\u05D0 \u05E0\u05DE\u05E6\u05D0\u05D5 \u05DE\u05D5\u05E6\u05E8\u05D9\u05DD \u05DC\u05D4\u05E6\u05D2\u05D4.</p>`;
     }
-    return `<ul class="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">${items.map((product) => `<li>${shelfCard(product)}</li>`).join("")}</ul>`;
+    return `<ul class="grid grid-cols-2 product-grid md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">${items.map((product) => `<li>${shelfCard(product)}</li>`).join("")}</ul>`;
   }
 
   // js/components/carousel.js
@@ -4158,22 +4158,49 @@
     }
     return `<ul class="catalog-grid">${items.map((product) => `<li>${shelfCard(product)}</li>`).join("")}</ul>`;
   }
-  function catalogTabButtons(tabs, attribute) {
+  function tabId(sectionId, slug) {
+    return `${sectionId}-panel-tab-${slug}`;
+  }
+  function catalogTabButtons(tabs, attribute, sectionId) {
     return tabs.map(([slug, name], index) => {
-      const selected = index === 0 ? "true" : "false";
-      return `<button type="button" role="tab" ${attribute}="${esc(slug)}" aria-selected="${selected}">${esc(name)}</button>`;
+      const selected = index === 0;
+      return `<button type="button" role="tab" id="${esc(tabId(sectionId, slug))}" aria-controls="${esc(sectionId)}-panel" ${attribute}="${esc(slug)}" aria-selected="${selected}" tabindex="${selected ? "0" : "-1"}">${esc(name)}</button>`;
     }).join("");
+  }
+  function panelAttrs(sectionId, tabs) {
+    const first = tabs[0]?.[0];
+    const labelledBy = first ? ` aria-labelledby="${esc(tabId(sectionId, first))}"` : "";
+    return `id="${esc(sectionId)}-panel" role="tabpanel"${labelledBy}`;
+  }
+  function selectTab(tabs, tab, panel, focus) {
+    tabs.forEach((item) => {
+      const on = item === tab;
+      item.setAttribute("aria-selected", String(on));
+      item.tabIndex = on ? 0 : -1;
+    });
+    panel.setAttribute("aria-labelledby", tab.id);
+    if (focus) tab.focus();
+  }
+  function bindTabKeys(tablist, tabs, activate) {
+    tablist?.addEventListener("keydown", (event) => {
+      const index = tabs.indexOf(document.activeElement);
+      if (index < 0) return;
+      const keys = { ArrowLeft: index + 1, ArrowRight: index - 1, Home: 0, End: tabs.length - 1 };
+      if (!(event.key in keys)) return;
+      event.preventDefault();
+      activate(tabs[(keys[event.key] + tabs.length) % tabs.length]);
+    });
   }
   function catalogGridSection({ id, title, href, tabs, className = "pb-12" }) {
     const first = tabs[0]?.[0];
     const panel = first ? gridHtml(first) : `<p class="catalog-empty">\u05D0\u05D9\u05DF \u05DE\u05D5\u05E6\u05E8\u05D9\u05DD \u05DC\u05D4\u05E6\u05D2\u05D4 \u05D1\u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D4 \u05D4\u05D6\u05D5.</p>`;
-    const tabList = tabs.length ? `<div class="catalog-tabs" role="tablist" aria-label="\u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D5\u05EA ${esc(title)}">${catalogTabButtons(tabs, "data-catalog-grid-tab")}</div>` : "";
+    const tabList = tabs.length ? `<div class="catalog-tabs" role="tablist" aria-label="\u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D5\u05EA ${esc(title)}">${catalogTabButtons(tabs, "data-catalog-grid-tab", id)}</div>` : "";
     return `<section class="${esc(className)}" data-catalog-grid aria-labelledby="${esc(id)}">
     <div class="catalog-head">
-      <h2 id="${esc(id)}" class="text-2xl font-extrabold"><a href="${esc(href)}"><span class="cat-heart" aria-hidden="true"></span>${esc(title)}</a></h2>
+      <h2 id="${esc(id)}"><a href="${esc(href)}"><span class="cat-heart" aria-hidden="true"></span>${esc(title)}</a></h2>
       ${tabList}
     </div>
-    <div data-catalog-grid-panel>${panel}</div>
+    <div data-catalog-grid-panel ${panelAttrs(id, tabs)}>${panel}</div>
   </section>`;
   }
   function bindCatalogRail(section) {
@@ -4199,29 +4226,31 @@
     };
     section.querySelector("[data-catalog-prev]").addEventListener("click", () => embla2?.scrollPrev());
     section.querySelector("[data-catalog-next]").addEventListener("click", () => embla2?.scrollNext());
-    section.querySelectorAll("[data-catalog-tab]").forEach((button) => {
-      button.addEventListener("click", () => {
-        if (button.getAttribute("aria-selected") === "true") return;
-        section.querySelectorAll("[data-catalog-tab]").forEach((tab) => tab.setAttribute("aria-selected", "false"));
-        button.setAttribute("aria-selected", "true");
-        track.innerHTML = slidesHtml(button.dataset.catalogTab);
-        start2();
-      });
-    });
+    const panel = section.querySelector(".catalog-rail");
+    const tabs = [...section.querySelectorAll("[data-catalog-tab]")];
+    const activate = (button, focus = true) => {
+      const changed = button.getAttribute("aria-selected") !== "true";
+      selectTab(tabs, button, panel, focus);
+      if (!changed) return;
+      track.innerHTML = slidesHtml(button.dataset.catalogTab);
+      start2();
+    };
+    tabs.forEach((button) => button.addEventListener("click", () => activate(button, false)));
+    bindTabKeys(section.querySelector("[role=tablist]"), tabs, activate);
     start2();
   }
   function bindCatalogGrid(grid) {
     if (!grid || grid.dataset.ready === "true") return;
     grid.dataset.ready = "true";
     const panel = grid.querySelector("[data-catalog-grid-panel]");
-    grid.querySelectorAll("[data-catalog-grid-tab]").forEach((button) => {
-      button.addEventListener("click", () => {
-        if (button.getAttribute("aria-selected") === "true") return;
-        grid.querySelectorAll("[data-catalog-grid-tab]").forEach((tab) => tab.setAttribute("aria-selected", "false"));
-        button.setAttribute("aria-selected", "true");
-        panel.innerHTML = gridHtml(button.dataset.catalogGridTab);
-      });
-    });
+    const tabs = [...grid.querySelectorAll("[data-catalog-grid-tab]")];
+    const activate = (button, focus = true) => {
+      const changed = button.getAttribute("aria-selected") !== "true";
+      selectTab(tabs, button, panel, focus);
+      if (changed) panel.innerHTML = gridHtml(button.dataset.catalogGridTab);
+    };
+    tabs.forEach((button) => button.addEventListener("click", () => activate(button, false)));
+    bindTabKeys(grid.querySelector("[role=tablist]"), tabs, activate);
   }
   function mountCatalog(root) {
     root.querySelectorAll("[data-catalog]").forEach(bindCatalogRail);
@@ -4306,7 +4335,10 @@
   }
   function panelMarkup() {
     return `<div class="theme-panel-head">
-    <h2 id="theme-panel-title" class="text-xl font-extrabold">\u05D0\u05E4\u05E9\u05E8\u05D5\u05D9\u05D5\u05EA \u05EA\u05D1\u05E0\u05D9\u05EA</h2>
+    <div>
+      <p class="theme-panel-kicker" lang="en">Prototype controls</p>
+      <h2 id="theme-panel-title" class="text-xl font-extrabold">\u05D0\u05E4\u05E9\u05E8\u05D5\u05D9\u05D5\u05EA \u05EA\u05D1\u05E0\u05D9\u05EA</h2>
+    </div>
     <button class="auth-close" type="button" data-theme-close aria-label="\u05E1\u05D2\u05D9\u05E8\u05EA \u05D0\u05E4\u05E9\u05E8\u05D5\u05D9\u05D5\u05EA \u05D4\u05EA\u05D1\u05E0\u05D9\u05EA">\xD7</button>
   </div>
   <div class="theme-panel-body">
@@ -4349,7 +4381,7 @@
     gear.setAttribute("aria-label", "\u05D0\u05E4\u05E9\u05E8\u05D5\u05D9\u05D5\u05EA \u05EA\u05D1\u05E0\u05D9\u05EA");
     gear.setAttribute("aria-expanded", "false");
     gear.setAttribute("aria-controls", "theme-panel");
-    gear.innerHTML = gearIcon;
+    gear.innerHTML = `${gearIcon}<span class="theme-gear-label" lang="en">Prototype</span>`;
     const panel = document.createElement("aside");
     panel.id = "theme-panel";
     panel.className = "theme-panel";
@@ -4404,18 +4436,19 @@
       const heading = index === 0 ? "h1" : "h2";
       return `<div class="promo-slide" role="group" aria-roledescription="\u05E9\u05E7\u05D5\u05E4\u05D9\u05EA" aria-label="${index + 1} \u05DE\u05EA\u05D5\u05DA ${SLIDES}" ${index === 0 ? "" : 'aria-hidden="true"'}>
       <a href="#/m/tozeret" class="promo-slide-link" ${index === 0 ? "" : 'tabindex="-1"'}>
+        <span class="proto-label" aria-hidden="true">\u05D1\u05D0\u05E0\u05E8 \u05E8\u05D0\u05E9\u05D9 ${index + 1}/${SLIDES}</span>
         <div class="hero-panel relative z-10 p-6 text-ink lg:flex lg:min-h-[520px] lg:items-center" ${index === 0 ? "data-hero-copy" : ""}>
           <div class="max-w-md lg:p-8">
             <${heading} class="text-4xl font-extrabold leading-tight lg:text-5xl">\u05D0\u05D9\u05D9\u05D8\u05DD \u05DE\u05E7\u05D5\u05D3\u05DD</${heading}>
             <p class="mt-3 text-lg text-muted">\u05D0\u05D5\u05E8\u05D6, \u05E7\u05D8\u05E0\u05D9\u05D5\u05EA, \u05E4\u05E1\u05D8\u05D4, \u05E9\u05D9\u05DE\u05D5\u05E8\u05D9\u05DD, \u05E9\u05DE\u05E0\u05D9\u05DD \u05D5\u05EA\u05D1\u05DC\u05D9\u05E0\u05D9\u05DD. \u05E7\u05D8\u05DC\u05D5\u05D2 \u05EA\u05D5\u05E6\u05E8\u05EA, \u05D1\u05DE\u05E7\u05D5\u05DD \u05D0\u05D7\u05D3.</p>
-            <span class="btn btn-line mt-6">\u05D4\u05E0\u05E2\u05D4 \u05DC\u05E4\u05E2\u05D5\u05DC\u05D4</span>
+            <span class="btn mt-6">\u05D4\u05E0\u05E2\u05D4 \u05DC\u05E4\u05E2\u05D5\u05DC\u05D4</span>
           </div>
         </div>
       </a>
     </div>`;
     }).join("");
     const dots = Array.from({ length: SLIDES }, (_, index) => `<button type="button" class="hero-dot" data-promo-dot="${index}" aria-label="\u05E9\u05E7\u05D5\u05E4\u05D9\u05EA ${index + 1} \u05DE\u05EA\u05D5\u05DA ${SLIDES}" ${index === 0 ? 'aria-current="true"' : ""}></button>`).join("");
-    return `<div class="home-block promo-carousel overflow-hidden rounded-[18px] border border-line bg-[#ececec] lg:col-span-2 lg:row-span-2 lg:min-h-[520px]" data-promo-carousel aria-roledescription="\u05E7\u05E8\u05D5\u05E1\u05DC\u05D4" aria-label="\u05D0\u05D9\u05D9\u05D8\u05DE\u05D9\u05DD \u05DE\u05E7\u05D5\u05D3\u05DE\u05D9\u05DD">
+    return `<div class="home-block promo-carousel overflow-hidden rounded-[12px] border border-line bg-surface lg:col-span-2 lg:row-span-2 lg:min-h-[520px]" data-promo-carousel aria-roledescription="\u05E7\u05E8\u05D5\u05E1\u05DC\u05D4" aria-label="\u05D0\u05D9\u05D9\u05D8\u05DE\u05D9\u05DD \u05DE\u05E7\u05D5\u05D3\u05DE\u05D9\u05DD">
     <div class="promo-viewport"><div class="promo-track">${slides2}</div></div>
     <button type="button" class="cat-arrow promo-arrow is-prev" data-promo-prev aria-label="\u05D4\u05E9\u05E7\u05D5\u05E4\u05D9\u05EA \u05D4\u05E7\u05D5\u05D3\u05DE\u05EA">
       <svg viewBox="0 0 24 24" class="size-5" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg>
@@ -4500,18 +4533,18 @@
         title: department.name,
         href: `#/d/${id}`,
         tabs,
-        className: index === 0 ? "py-12" : "pb-12"
+        className: "home-section"
       });
     }).join("");
   }
   function renderHome() {
     const offers = products.filter((product) => getCommerce(product.id)?.compareAt).slice(0, 10);
-    return `<div class="home-page wrap py-6">
-    ${getTheme().hero === "v1" ? heroBlock() : ""}
+    return `<div class="home-page wrap">
+    ${getTheme().hero === "v1" ? `<div class="home-hero">${heroBlock()}</div>` : ""}
 
     ${departmentCatalogs()}
 
-    <section class="pb-12" aria-labelledby="offers-title">
+    <section class="home-section" aria-labelledby="offers-title">
       <div class="catalog-head">
         <h2 id="offers-title" class="text-2xl font-extrabold"><span class="cat-heart" aria-hidden="true"></span>\u05DE\u05D5\u05E6\u05E8\u05D9\u05DD \u05D7\u05D3\u05E9\u05D9\u05DD \u05D1\u05DE\u05D1\u05E6\u05E2</h2>
         <a class="deal-all" href="#/d/offers">\u05DC\u05DB\u05DC \u05D4\u05DE\u05D1\u05E6\u05E2\u05D9\u05DD
@@ -4529,23 +4562,25 @@
     if (title) title.hidden = !visible;
     if (!root) return;
     root.hidden = !visible;
-    root.innerHTML = visible ? `<div class="home-page wrap pt-6">${heroBlock()}</div>` : "";
+    root.innerHTML = visible ? `<div class="home-page wrap home-hero">${heroBlock()}</div>` : "";
   }
   function heroBlock() {
     return `<section class="grid gap-4 lg:grid-cols-3 lg:grid-rows-2" aria-label="\u05DE\u05D1\u05E6\u05E2\u05D9 \u05DB\u05E0\u05D9\u05E1\u05D4">
       ${promoCarousel()}
       <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:contents">
-        <a href="#/c/oils" class="home-block hero-side bg-white lg:col-start-3 lg:row-start-1">
+        <a href="#/c/oils" class="home-block hero-side lg:col-start-3 lg:row-start-1">
+          <span class="proto-label" aria-hidden="true">\u05D1\u05D0\u05E0\u05E8 \u05DE\u05E9\u05E0\u05D9 1/2</span>
           <div>
-            <p class="text-xs font-bold text-pink">\u05E9\u05DE\u05E0\u05D9\u05DD \u05D5\u05E8\u05D8\u05D1\u05D9\u05DD</p>
+            <p class="text-xs font-bold text-muted">\u05E9\u05DE\u05E0\u05D9\u05DD \u05D5\u05E8\u05D8\u05D1\u05D9\u05DD</p>
             <h2 class="mt-1 text-lg font-extrabold leading-tight lg:text-2xl">\u05DE\u05D5\u05E6\u05E8 \u05D0\u05D5 \u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D4 \u05DC\u05E7\u05D9\u05D3\u05D5\u05DD</h2>
             <span class="hero-cta mt-4">\u05D4\u05E0\u05E2\u05D4 \u05DC\u05E4\u05E2\u05D5\u05DC\u05D4</span>
           </div>
           <span class="hero-side-media" aria-hidden="true"></span>
         </a>
-        <a href="#/c/spices" class="home-block hero-side bg-[#f0f0f0] lg:col-start-3 lg:row-start-2">
+        <a href="#/c/spices" class="home-block hero-side lg:col-start-3 lg:row-start-2">
+          <span class="proto-label" aria-hidden="true">\u05D1\u05D0\u05E0\u05E8 \u05DE\u05E9\u05E0\u05D9 2/2</span>
           <div>
-            <p class="text-xs font-bold text-pink">\u05EA\u05D1\u05DC\u05D9\u05E0\u05D9\u05DD</p>
+            <p class="text-xs font-bold text-muted">\u05EA\u05D1\u05DC\u05D9\u05E0\u05D9\u05DD</p>
             <h2 class="mt-1 text-lg font-extrabold leading-tight lg:text-2xl">\u05DE\u05D5\u05E6\u05E8 \u05D0\u05D5 \u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D4 \u05DC\u05E7\u05D9\u05D3\u05D5\u05DD</h2>
             <span class="hero-cta mt-4">\u05D4\u05E0\u05E2\u05D4 \u05DC\u05E4\u05E2\u05D5\u05DC\u05D4</span>
           </div>
@@ -5143,6 +5178,22 @@
   </article>`;
   }
 
+  // js/components/order-lines.js
+  function itemCountLabel(items) {
+    const count = items.reduce((sum, item) => sum + item.qty, 0);
+    return count === 1 ? "\u05E4\u05E8\u05D9\u05D8 \u05D0\u05D7\u05D3" : `${count} \u05E4\u05E8\u05D9\u05D8\u05D9\u05DD`;
+  }
+  function orderLines(items, { scroll = false } = {}) {
+    return `<ul class="order-lines${scroll ? " is-scroll" : ""}">${items.map((item) => `<li class="order-line">
+      <span class="order-line-thumb" aria-hidden="true"></span>
+      <div class="min-w-0">
+        <p class="order-line-name">${esc(item.name)}</p>
+        <p class="order-line-meta">${item.weight ? `${esc(item.weight)} \xB7 ` : ""}${item.qty} \u05D9\u05D7\u05F3</p>
+      </div>
+      <p class="order-line-total">${money(item.total)}</p>
+    </li>`).join("")}</ul>`;
+  }
+
   // js/screens/checkout.js
   function renderCheckout(errors = {}, values = {}) {
     const rows2 = getCart().items.filter((item) => getProduct(item.id) && getCommerce(item.id));
@@ -5150,46 +5201,52 @@
       return `<article class="wrap py-16 text-center"><h1 class="text-3xl font-extrabold">\u05D4\u05E1\u05DC \u05E8\u05D9\u05E7</h1><a class="btn mt-6" href="#/">\u05DC\u05D3\u05E3 \u05D4\u05D1\u05D9\u05EA</a></article>`;
     }
     const goods = subtotal();
+    const lines = rows2.map((item) => {
+      const product = getProduct(item.id);
+      return { name: product.name, weight: product.weight, qty: item.qty, total: getCommerce(item.id).price * item.qty };
+    });
     const field2 = (name, label, type = "text", extra = "") => `<label class="field">
     <span class="text-sm font-semibold">${label}</span>
     <input name="${name}" type="${type}" autocomplete="${extra}" value="${esc(values[name] || "")}" aria-invalid="${errors[name] ? "true" : "false"}" ${errors[name] ? `aria-describedby="${name}-error"` : ""}>
     ${errors[name] ? `<span id="${name}-error" class="field-error">${esc(errors[name])}</span>` : ""}
   </label>`;
-    return `<article class="wrap py-8">
+    return `<article class="wrap checkout-page py-8">
     <h1 class="text-3xl font-extrabold">\u05EA\u05E9\u05DC\u05D5\u05DD</h1>
-    <form id="checkout-form" class="mt-6 grid items-start gap-8 lg:grid-cols-[1fr_320px]" novalidate>
-      <div class="grid gap-4">
-        <h2 class="text-xl font-extrabold">\u05E4\u05E8\u05D8\u05D9 \u05DE\u05E9\u05DC\u05D5\u05D7</h2>
-        ${field2("name", "\u05E9\u05DD \u05DE\u05DC\u05D0", "text", "name")}
-        ${field2("phone", "\u05D8\u05DC\u05E4\u05D5\u05DF", "tel", "tel")}
-        <div class="grid gap-4 sm:grid-cols-2">
-          ${field2("city", "\u05E2\u05D9\u05E8", "text", "address-level2")}
-          ${field2("street", "\u05E8\u05D7\u05D5\u05D1", "text", "address-line1")}
-        </div>
-        ${field2("house", "\u05DE\u05E1\u05E4\u05E8 \u05D1\u05D9\u05EA", "text", "on")}
-        <label class="field">
-          <span class="text-sm font-semibold">\u05D4\u05E2\u05E8\u05D5\u05EA \u05DC\u05E9\u05DC\u05D9\u05D7</span>
-          <textarea name="note">${esc(values.note || "")}</textarea>
-        </label>
-        <section class="rounded-2xl border border-dashed border-line p-4" aria-label="\u05EA\u05E9\u05DC\u05D5\u05DD \u05D5\u05D6\u05D9\u05D4\u05D5\u05D9">
-          <h2 class="font-extrabold">\u05EA\u05E9\u05DC\u05D5\u05DD \u05D5\u05D6\u05D9\u05D4\u05D5\u05D9 \u05DC\u05E7\u05D5\u05D7</h2>
-          <p class="mt-2 text-sm text-muted">\u05D4\u05D4\u05D7\u05DC\u05D8\u05D4 \u05E2\u05DC \u05D0\u05D5\u05E4\u05DF \u05D4\u05D6\u05D9\u05D4\u05D5\u05D9 \u05D5\u05E2\u05DC \u05D0\u05DE\u05E6\u05E2\u05D9 \u05D4\u05EA\u05E9\u05DC\u05D5\u05DD \u05E2\u05D3\u05D9\u05D9\u05DF \u05E4\u05EA\u05D5\u05D7\u05D4. \u05D4\u05D0\u05D6\u05D5\u05E8 \u05D4\u05D6\u05D4 \u05E9\u05DE\u05D5\u05E8 \u05DC\u05D4, \u05D1\u05DC\u05D9 \u05DC\u05D1\u05D7\u05D5\u05E8 \u05E9\u05D9\u05D8\u05D4.</p>
+    <form id="checkout-form" class="checkout-layout mt-6" novalidate>
+      <div class="checkout-main">
+        <section class="checkout-card" aria-labelledby="checkout-delivery-title">
+          <h2 id="checkout-delivery-title" class="checkout-card-title">\u05E4\u05E8\u05D8\u05D9 \u05DE\u05E9\u05DC\u05D5\u05D7</h2>
+          <div class="form-row">
+            ${field2("name", "\u05E9\u05DD \u05DE\u05DC\u05D0", "text", "name")}
+            ${field2("phone", "\u05D8\u05DC\u05E4\u05D5\u05DF", "tel", "tel")}
+          </div>
+          <div class="form-row-address">
+            ${field2("city", "\u05E2\u05D9\u05E8", "text", "address-level2")}
+            ${field2("street", "\u05E8\u05D7\u05D5\u05D1", "text", "address-line1")}
+            ${field2("house", "\u05DE\u05E1\u05E4\u05E8 \u05D1\u05D9\u05EA", "text", "on")}
+          </div>
+          <label class="field">
+            <span class="text-sm font-semibold">\u05D4\u05E2\u05E8\u05D5\u05EA \u05DC\u05E9\u05DC\u05D9\u05D7</span>
+            <textarea name="note">${esc(values.note || "")}</textarea>
+          </label>
+        </section>
+        <section class="checkout-card is-reserved" aria-label="\u05EA\u05E9\u05DC\u05D5\u05DD \u05D5\u05D6\u05D9\u05D4\u05D5\u05D9">
+          <h2 class="checkout-card-title">\u05EA\u05E9\u05DC\u05D5\u05DD \u05D5\u05D6\u05D9\u05D4\u05D5\u05D9 \u05DC\u05E7\u05D5\u05D7</h2>
+          <p class="text-sm text-muted">\u05D4\u05D4\u05D7\u05DC\u05D8\u05D4 \u05E2\u05DC \u05D0\u05D5\u05E4\u05DF \u05D4\u05D6\u05D9\u05D4\u05D5\u05D9 \u05D5\u05E2\u05DC \u05D0\u05DE\u05E6\u05E2\u05D9 \u05D4\u05EA\u05E9\u05DC\u05D5\u05DD \u05E2\u05D3\u05D9\u05D9\u05DF \u05E4\u05EA\u05D5\u05D7\u05D4. \u05D4\u05D0\u05D6\u05D5\u05E8 \u05D4\u05D6\u05D4 \u05E9\u05DE\u05D5\u05E8 \u05DC\u05D4, \u05D1\u05DC\u05D9 \u05DC\u05D1\u05D7\u05D5\u05E8 \u05E9\u05D9\u05D8\u05D4.</p>
         </section>
       </div>
-      <aside class="rounded-2xl bg-paper p-5">
-        <h2 class="font-extrabold">\u05D4\u05D4\u05D6\u05DE\u05E0\u05D4</h2>
-        <ul class="mt-3 grid gap-2 text-sm">
-          ${rows2.map((item) => {
-      const product = getProduct(item.id);
-      return `<li class="flex justify-between gap-3"><span>${esc(product.name)} \xD7 ${item.qty}</span><span>${money(getCommerce(item.id).price * item.qty)}</span></li>`;
-    }).join("")}
-        </ul>
-        <dl class="mt-4 grid gap-2 border-t border-line pt-3 text-sm">
-          <div class="flex justify-between"><dt>\u05DE\u05D5\u05E6\u05E8\u05D9\u05DD</dt><dd>${money(goods)}</dd></div>
-          <div class="flex justify-between"><dt>\u05DE\u05D7\u05D9\u05E8 \u05DE\u05E9\u05DC\u05D5\u05D7</dt><dd>${money(deliveryFee)}</dd></div>
-          <div class="flex justify-between font-extrabold"><dt>\u05DC\u05EA\u05E9\u05DC\u05D5\u05DD</dt><dd>${money(goods + deliveryFee)}</dd></div>
+      <aside class="checkout-card checkout-summary" aria-labelledby="checkout-summary-title">
+        <div class="checkout-summary-head">
+          <h2 id="checkout-summary-title" class="checkout-card-title">\u05D4\u05D4\u05D6\u05DE\u05E0\u05D4</h2>
+          <span>${itemCountLabel(lines)}</span>
+        </div>
+        ${orderLines(lines, { scroll: true })}
+        <dl class="summary-totals">
+          <div><dt>\u05DE\u05D5\u05E6\u05E8\u05D9\u05DD</dt><dd>${money(goods)}</dd></div>
+          <div><dt>\u05DE\u05D7\u05D9\u05E8 \u05DE\u05E9\u05DC\u05D5\u05D7</dt><dd>${money(deliveryFee)}</dd></div>
+          <div class="is-total"><dt>\u05DC\u05EA\u05E9\u05DC\u05D5\u05DD</dt><dd>${money(goods + deliveryFee)}</dd></div>
         </dl>
-        <button class="btn mt-5 w-full" type="submit">\u05D0\u05D9\u05E9\u05D5\u05E8 \u05D4\u05D4\u05D6\u05DE\u05E0\u05D4, \u05D4\u05D3\u05D2\u05DE\u05D4</button>
+        <button class="btn checkout-submit" type="submit">\u05D0\u05D9\u05E9\u05D5\u05E8 \u05D4\u05D4\u05D6\u05DE\u05E0\u05D4, \u05D4\u05D3\u05D2\u05DE\u05D4</button>
       </aside>
     </form>
   </article>`;
@@ -5239,20 +5296,27 @@
     </article>`;
     }
     const when2 = new Date(order.createdAt).toLocaleString("he-IL", { dateStyle: "medium", timeStyle: "short" });
+    const lines = order.items.map((item) => ({
+      name: item.name,
+      weight: getProduct(item.id)?.weight || "",
+      qty: item.qty,
+      total: item.price * item.qty
+    }));
     return `<article class="wrap py-10">
     <p class="font-bold text-pink">\u05D4\u05D4\u05D6\u05DE\u05E0\u05D4 \u05E0\u05E8\u05E9\u05DE\u05D4 \u05D1\u05D4\u05D3\u05D2\u05DE\u05D4</p>
     <h1 class="mt-2 text-4xl font-extrabold">\u05EA\u05D5\u05D3\u05D4, ${esc(order.customer.name)}</h1>
     <p class="mt-2 text-muted">\u05DE\u05E1\u05E4\u05E8 \u05D4\u05D6\u05DE\u05E0\u05D4 <strong dir="ltr">${esc(order.id)}</strong> \xB7 ${esc(when2)}</p>
     <p class="mt-4 max-w-xl">\u05D6\u05D4\u05D5 \u05D0\u05D9\u05E9\u05D5\u05E8 \u05D7\u05D6\u05D5\u05EA\u05D9 \u05D1\u05DC\u05D1\u05D3. \u05DC\u05D0 \u05D1\u05D5\u05E6\u05E2 \u05EA\u05E9\u05DC\u05D5\u05DD, \u05DC\u05D0 \u05D7\u05D5\u05E9\u05D1 \u05DE\u05E9\u05DC\u05D5\u05D7 \u05D0\u05DE\u05D9\u05EA\u05D9, \u05D5\u05DC\u05D0 \u05E0\u05E4\u05EA\u05D7\u05D4 \u05D4\u05D6\u05DE\u05E0\u05D4 \u05D1\u05DE\u05E2\u05E8\u05DB\u05EA.</p>
-    <section class="mt-8 max-w-xl rounded-2xl border border-line p-5" aria-labelledby="order-items">
-      <h2 id="order-items" class="font-extrabold">\u05D4\u05E4\u05E8\u05D9\u05D8\u05D9\u05DD</h2>
-      <ul class="mt-3 grid gap-2 text-sm">
-        ${order.items.map((item) => `<li class="flex justify-between gap-3"><span>${esc(item.name)} \xD7 ${item.qty}</span><span>${money(item.price * item.qty)}</span></li>`).join("")}
-      </ul>
-      <dl class="mt-4 grid gap-2 border-t border-line pt-3 text-sm">
-        <div class="flex justify-between"><dt>\u05DE\u05D5\u05E6\u05E8\u05D9\u05DD</dt><dd>${money(order.subtotal)}</dd></div>
-        <div class="flex justify-between"><dt>\u05DE\u05D7\u05D9\u05E8 \u05DE\u05E9\u05DC\u05D5\u05D7</dt><dd>${money(order.delivery)}</dd></div>
-        <div class="flex justify-between font-extrabold"><dt>\u05E1\u05D4\u05F4\u05DB</dt><dd>${money(order.total)}</dd></div>
+    <section class="checkout-card order-summary-card mt-8" aria-labelledby="order-items">
+      <div class="checkout-summary-head">
+        <h2 id="order-items" class="checkout-card-title">\u05D4\u05E4\u05E8\u05D9\u05D8\u05D9\u05DD</h2>
+        <span>${itemCountLabel(lines)}</span>
+      </div>
+      ${orderLines(lines)}
+      <dl class="summary-totals">
+        <div><dt>\u05DE\u05D5\u05E6\u05E8\u05D9\u05DD</dt><dd>${money(order.subtotal)}</dd></div>
+        <div><dt>\u05DE\u05D7\u05D9\u05E8 \u05DE\u05E9\u05DC\u05D5\u05D7</dt><dd>${money(order.delivery)}</dd></div>
+        <div class="is-total"><dt>\u05E1\u05D4\u05F4\u05DB</dt><dd>${money(order.total)}</dd></div>
       </dl>
       <p class="mt-4 text-sm text-muted">\u05DE\u05E9\u05DC\u05D5\u05D7 \u05D0\u05DC ${esc(order.customer.street)} ${esc(order.customer.house)}, ${esc(order.customer.city)}</p>
     </section>
@@ -6353,25 +6417,43 @@
     const catNext = document.getElementById("cat-next");
     form.addEventListener("submit", (event) => {
       event.preventDefault();
-      suggest.classList.add("hidden");
+      setSuggestOpen(false);
       const q = input.value.trim();
       navigate3(q ? `#/search?q=${encodeURIComponent(q)}` : "#/search");
     });
     input.addEventListener("input", () => {
       const matches = searchProducts(input.value).slice(0, 6);
       if (!input.value.trim() || !matches.length) {
-        suggest.classList.add("hidden");
         suggest.innerHTML = "";
+        setSuggestOpen(false);
         return;
       }
-      suggest.innerHTML = matches.map((product) => `<a role="option" href="#/p/${esc(product.id)}"><span class="font-semibold">${esc(product.name)}</span><span class="text-sm text-muted">${esc(product.weight)}</span></a>`).join("");
-      suggest.classList.remove("hidden");
+      suggest.innerHTML = matches.map((product, index) => `<a role="option" id="suggest-${index}" aria-selected="false" href="#/p/${esc(product.id)}"><span class="font-semibold">${esc(product.name)}</span><span class="text-sm text-muted">${esc(product.weight)}</span></a>`).join("");
+      setSuggestOpen(true);
     });
     document.addEventListener("click", (event) => {
-      if (!slot.contains(event.target)) suggest.classList.add("hidden");
+      if (!slot.contains(event.target)) setSuggestOpen(false);
     });
     input.addEventListener("keydown", (event) => {
-      if (event.key === "Escape") suggest.classList.add("hidden");
+      const options = [...suggest.querySelectorAll("[role=option]")];
+      const open2 = !suggest.classList.contains("hidden") && options.length > 0;
+      const current = options.findIndex((option) => option.getAttribute("aria-selected") === "true");
+      if (event.key === "Escape") {
+        setSuggestOpen(false);
+        return;
+      }
+      if (!open2) return;
+      if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+        event.preventDefault();
+        const step = event.key === "ArrowDown" ? 1 : -1;
+        const next = current < 0 ? step > 0 ? 0 : options.length - 1 : (current + step + options.length) % options.length;
+        setActiveOption(options, next);
+      } else if (event.key === "Enter" && current >= 0) {
+        event.preventDefault();
+        const href = options[current].getAttribute("href");
+        setSuggestOpen(false);
+        navigate3(href);
+      }
     });
     menuOpen.addEventListener("click", () => toggleMenu());
     menu.addEventListener("click", (event) => {
@@ -6449,8 +6531,26 @@
     document.getElementById("cat-prev").disabled = false;
     document.getElementById("cat-next").disabled = false;
   }
+  function setActiveOption(options, index) {
+    const input = document.getElementById("search-input");
+    options.forEach((option, item) => option.setAttribute("aria-selected", String(item === index)));
+    const active = options[index];
+    if (active) {
+      input.setAttribute("aria-activedescendant", active.id);
+      active.scrollIntoView({ block: "nearest" });
+    } else {
+      input.removeAttribute("aria-activedescendant");
+    }
+  }
+  function setSuggestOpen(open2) {
+    const suggest = document.getElementById("suggest");
+    const input = document.getElementById("search-input");
+    suggest.classList.toggle("hidden", !open2);
+    input.setAttribute("aria-expanded", String(open2));
+    if (!open2) input.removeAttribute("aria-activedescendant");
+  }
   function closePanels() {
-    document.getElementById("suggest").classList.add("hidden");
+    setSuggestOpen(false);
     document.getElementById("mobile-menu").classList.remove("is-open");
     document.getElementById("menu-open").setAttribute("aria-expanded", "false");
     closeMega();
@@ -6530,18 +6630,16 @@
   }
   function placeDock() {
     const root = document.getElementById("cart-dock");
-    const bar = root?.querySelector(".cart-dock-bar");
-    if (!root || !bar) return;
-    const rect = bar.getBoundingClientRect();
+    if (!root || root.hidden) return;
+    const rect = root.getBoundingClientRect();
     root.style.setProperty("--dock-fixed-top", `${Math.round(rect.bottom)}px`);
-    root.style.setProperty("--dock-fixed-left", `${Math.round(rect.left)}px`);
-    root.style.setProperty("--dock-fixed-width", `${Math.round(rect.width)}px`);
+    root.style.setProperty("--dock-body-h", `${Math.round(Math.max(160, window.innerHeight - rect.bottom - 12))}px`);
   }
   function mountCartDock() {
     const header = document.querySelector(".site-header");
     const sync = () => placeDock();
     if (header && "ResizeObserver" in window) new ResizeObserver(sync).observe(header);
-    else window.addEventListener("resize", sync);
+    window.addEventListener("resize", sync);
     document.addEventListener("mousedown", (event) => {
       if (event.target.closest("[data-cart-toggle]")) event.preventDefault();
     });
@@ -6731,6 +6829,7 @@
         <div class="hero-slider-track">
           ${slides.map((slide, index) => `<div class="hero-slide" role="group" aria-roledescription="\u05E9\u05E7\u05D5\u05E4\u05D9\u05EA" aria-label="${index + 1} \u05DE\u05EA\u05D5\u05DA ${slides.length}" ${index === 0 ? "" : 'aria-hidden="true"'}>
             <a class="hero-slide-link" href="${slide.href}" style="--slide-tone:${slide.tone}" ${index === 0 ? "" : 'tabindex="-1"'}>
+              <span class="proto-label" aria-hidden="true">\u05D1\u05D0\u05E0\u05E8 \u05DE\u05EA\u05D7\u05DC\u05E3 ${index + 1}/${slides.length}</span>
               <span class="hero-slide-copy">
                 <span class="text-xs font-bold text-muted">${slide.kicker}</span>
                 <span class="hero-slide-title">${slide.title}</span>
@@ -6867,7 +6966,7 @@
     const region = document.getElementById("toast");
     const item = document.createElement("div");
     item.className = "toast pointer-events-auto";
-    item.innerHTML = `<p class="font-semibold">${esc(message)}</p>${href ? `<a class="mt-1 inline-block text-sm font-bold text-pink" href="${esc(href)}">\u05DC\u05E1\u05DC \u05D4\u05E7\u05E0\u05D9\u05D5\u05EA</a>` : ""}`;
+    item.innerHTML = `<p class="font-semibold">${esc(message)}</p>${href ? `<a class="mt-1 inline-block text-sm font-bold underline underline-offset-2" href="${esc(href)}">\u05DC\u05E1\u05DC \u05D4\u05E7\u05E0\u05D9\u05D5\u05EA</a>` : ""}`;
     region.appendChild(item);
     const gsap = window.gsap;
     if (gsap && !prefersReducedMotion()) {

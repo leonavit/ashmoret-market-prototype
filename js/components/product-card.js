@@ -36,9 +36,9 @@ export function shelfCard(product) {
   const { badge, price } = cardParts(product);
   return `<article class="card card-shelf">
     ${productAnchor(product, `class="card-media"`, badge)}
-    <p class="text-xs font-semibold text-muted">${esc(product.brand)}</p>
-    <h3 class="text-sm font-bold leading-5">${productAnchor(product, ``, esc(product.name))}</h3>
-    <p class="text-sm text-muted">${esc(product.weight)} · ${esc(product.unitsPerPack)} יח׳ במארז</p>
+    <p class="card-brand">${esc(product.brand)}</p>
+    <h3 class="card-name" title="${esc(product.name)}">${productAnchor(product, ``, esc(product.name))}</h3>
+    <p class="card-meta">${esc(product.weight)} · ${esc(product.unitsPerPack)} יח׳ במארז</p>
     <div class="card-buy">
       ${price}
       ${buyRow(product.id)}
@@ -67,7 +67,7 @@ export function productGrid(items) {
   if (!items.length) {
     return `<p class="rounded-2xl bg-paper px-5 py-10 text-center font-semibold">לא נמצאו מוצרים להצגה.</p>`;
   }
-  return `<ul class="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">${items
+  return `<ul class="grid grid-cols-2 product-grid md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">${items
     .map((product) => `<li>${shelfCard(product)}</li>`)
     .join("")}</ul>`;
 }

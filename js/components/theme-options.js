@@ -83,7 +83,10 @@ function applyHeader() {
 
 function panelMarkup() {
   return `<div class="theme-panel-head">
-    <h2 id="theme-panel-title" class="text-xl font-extrabold">אפשרויות תבנית</h2>
+    <div>
+      <p class="theme-panel-kicker" lang="en">Prototype controls</p>
+      <h2 id="theme-panel-title" class="text-xl font-extrabold">אפשרויות תבנית</h2>
+    </div>
     <button class="auth-close" type="button" data-theme-close aria-label="סגירת אפשרויות התבנית">×</button>
   </div>
   <div class="theme-panel-body">
@@ -130,7 +133,7 @@ export function bindThemeOptions({ heroChange } = {}) {
   gear.setAttribute("aria-label", "אפשרויות תבנית");
   gear.setAttribute("aria-expanded", "false");
   gear.setAttribute("aria-controls", "theme-panel");
-  gear.innerHTML = gearIcon;
+  gear.innerHTML = `${gearIcon}<span class="theme-gear-label" lang="en">Prototype</span>`;
 
   const panel = document.createElement("aside");
   panel.id = "theme-panel";

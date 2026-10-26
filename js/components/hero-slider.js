@@ -20,6 +20,7 @@ function markup() {
         <div class="hero-slider-track">
           ${slides.map((slide, index) => `<div class="hero-slide" role="group" aria-roledescription="שקופית" aria-label="${index + 1} מתוך ${slides.length}" ${index === 0 ? "" : 'aria-hidden="true"'}>
             <a class="hero-slide-link" href="${slide.href}" style="--slide-tone:${slide.tone}" ${index === 0 ? "" : 'tabindex="-1"'}>
+              <span class="proto-label" aria-hidden="true">באנר מתחלף ${index + 1}/${slides.length}</span>
               <span class="hero-slide-copy">
                 <span class="text-xs font-bold text-muted">${slide.kicker}</span>
                 <span class="hero-slide-title">${slide.title}</span>

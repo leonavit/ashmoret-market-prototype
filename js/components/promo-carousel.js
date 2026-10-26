@@ -10,18 +10,19 @@ export function promoCarousel() {
     const heading = index === 0 ? "h1" : "h2";
     return `<div class="promo-slide" role="group" aria-roledescription="שקופית" aria-label="${index + 1} מתוך ${SLIDES}" ${index === 0 ? "" : 'aria-hidden="true"'}>
       <a href="#/m/tozeret" class="promo-slide-link" ${index === 0 ? "" : 'tabindex="-1"'}>
+        <span class="proto-label" aria-hidden="true">באנר ראשי ${index + 1}/${SLIDES}</span>
         <div class="hero-panel relative z-10 p-6 text-ink lg:flex lg:min-h-[520px] lg:items-center" ${index === 0 ? "data-hero-copy" : ""}>
           <div class="max-w-md lg:p-8">
             <${heading} class="text-4xl font-extrabold leading-tight lg:text-5xl">אייטם מקודם</${heading}>
             <p class="mt-3 text-lg text-muted">אורז, קטניות, פסטה, שימורים, שמנים ותבלינים. קטלוג תוצרת, במקום אחד.</p>
-            <span class="btn btn-line mt-6">הנעה לפעולה</span>
+            <span class="btn mt-6">הנעה לפעולה</span>
           </div>
         </div>
       </a>
     </div>`;
   }).join("");
   const dots = Array.from({ length: SLIDES }, (_, index) => `<button type="button" class="hero-dot" data-promo-dot="${index}" aria-label="שקופית ${index + 1} מתוך ${SLIDES}" ${index === 0 ? 'aria-current="true"' : ""}></button>`).join("");
-  return `<div class="home-block promo-carousel overflow-hidden rounded-[18px] border border-line bg-[#ececec] lg:col-span-2 lg:row-span-2 lg:min-h-[520px]" data-promo-carousel aria-roledescription="קרוסלה" aria-label="אייטמים מקודמים">
+  return `<div class="home-block promo-carousel overflow-hidden rounded-[12px] border border-line bg-surface lg:col-span-2 lg:row-span-2 lg:min-h-[520px]" data-promo-carousel aria-roledescription="קרוסלה" aria-label="אייטמים מקודמים">
     <div class="promo-viewport"><div class="promo-track">${slides}</div></div>
     <button type="button" class="cat-arrow promo-arrow is-prev" data-promo-prev aria-label="השקופית הקודמת">
       <svg viewBox="0 0 24 24" class="size-5" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg>

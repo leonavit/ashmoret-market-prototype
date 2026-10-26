@@ -87,19 +87,17 @@ export function toggleCartDock(force) {
 
 function placeDock() {
   const root = document.getElementById("cart-dock");
-  const bar = root?.querySelector(".cart-dock-bar");
-  if (!root || !bar) return;
-  const rect = bar.getBoundingClientRect();
+  if (!root || root.hidden) return;
+  const rect = root.getBoundingClientRect();
   root.style.setProperty("--dock-fixed-top", `${Math.round(rect.bottom)}px`);
-  root.style.setProperty("--dock-fixed-left", `${Math.round(rect.left)}px`);
-  root.style.setProperty("--dock-fixed-width", `${Math.round(rect.width)}px`);
+  root.style.setProperty("--dock-body-h", `${Math.round(Math.max(160, window.innerHeight - rect.bottom - 12))}px`);
 }
 
 export function mountCartDock() {
   const header = document.querySelector(".site-header");
   const sync = () => placeDock();
   if (header && "ResizeObserver" in window) new ResizeObserver(sync).observe(header);
-  else window.addEventListener("resize", sync);
+  window.addEventListener("resize", sync);
 
   document.addEventListener("mousedown", (event) => {
     if (event.target.closest("[data-cart-toggle]")) event.preventDefault();

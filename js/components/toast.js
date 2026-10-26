@@ -6,7 +6,7 @@ export function showToast(message, href) {
   const item = document.createElement("div");
   item.className = "toast pointer-events-auto";
   item.innerHTML = `<p class="font-semibold">${esc(message)}</p>${
-    href ? `<a class="mt-1 inline-block text-sm font-bold text-pink" href="${esc(href)}">לסל הקניות</a>` : ""
+    href ? `<a class="mt-1 inline-block text-sm font-bold underline underline-offset-2" href="${esc(href)}">לסל הקניות</a>` : ""
   }`;
   region.appendChild(item);
   const gsap = window.gsap;

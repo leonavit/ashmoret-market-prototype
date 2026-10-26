@@ -24,7 +24,7 @@ export function bindShell(navigate) {
 
   form.addEventListener("submit", (event) => {
     event.preventDefault();
-    suggest.classList.add("hidden");
+    setSuggestOpen(false);
     const q = input.value.trim();
     navigate(q ? `#/search?q=${encodeURIComponent(q)}` : "#/search");
   });
@@ -32,22 +32,40 @@ export function bindShell(navigate) {
   input.addEventListener("input", () => {
     const matches = searchProducts(input.value).slice(0, 6);
     if (!input.value.trim() || !matches.length) {
-      suggest.classList.add("hidden");
       suggest.innerHTML = "";
+      setSuggestOpen(false);
       return;
     }
     suggest.innerHTML = matches
-      .map((product) => `<a role="option" href="#/p/${esc(product.id)}"><span class="font-semibold">${esc(product.name)}</span><span class="text-sm text-muted">${esc(product.weight)}</span></a>`)
+      .map((product, index) => `<a role="option" id="suggest-${index}" aria-selected="false" href="#/p/${esc(product.id)}"><span class="font-semibold">${esc(product.name)}</span><span class="text-sm text-muted">${esc(product.weight)}</span></a>`)
       .join("");
-    suggest.classList.remove("hidden");
+    setSuggestOpen(true);
   });
 
   document.addEventListener("click", (event) => {
-    if (!slot.contains(event.target)) suggest.classList.add("hidden");
+    if (!slot.contains(event.target)) setSuggestOpen(false);
   });
 
   input.addEventListener("keydown", (event) => {
-    if (event.key === "Escape") suggest.classList.add("hidden");
+    const options = [...suggest.querySelectorAll("[role=option]")];
+    const open = !suggest.classList.contains("hidden") && options.length > 0;
+    const current = options.findIndex((option) => option.getAttribute("aria-selected") === "true");
+    if (event.key === "Escape") {
+      setSuggestOpen(false);
+      return;
+    }
+    if (!open) return;
+    if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+      event.preventDefault();
+      const step = event.key === "ArrowDown" ? 1 : -1;
+      const next = current < 0 ? (step > 0 ? 0 : options.length - 1) : (current + step + options.length) % options.length;
+      setActiveOption(options, next);
+    } else if (event.key === "Enter" && current >= 0) {
+      event.preventDefault();
+      const href = options[current].getAttribute("href");
+      setSuggestOpen(false);
+      navigate(href);
+    }
   });
 
   menuOpen.addEventListener("click", () => toggleMenu());
@@ -140,8 +158,28 @@ export function renderCategoryNav(activeSlug) {
   document.getElementById("cat-next").disabled = false;
 }
 
+function setActiveOption(options, index) {
+  const input = document.getElementById("search-input");
+  options.forEach((option, item) => option.setAttribute("aria-selected", String(item === index)));
+  const active = options[index];
+  if (active) {
+    input.setAttribute("aria-activedescendant", active.id);
+    active.scrollIntoView({ block: "nearest" });
+  } else {
+    input.removeAttribute("aria-activedescendant");
+  }
+}
+
+function setSuggestOpen(open) {
+  const suggest = document.getElementById("suggest");
+  const input = document.getElementById("search-input");
+  suggest.classList.toggle("hidden", !open);
+  input.setAttribute("aria-expanded", String(open));
+  if (!open) input.removeAttribute("aria-activedescendant");
+}
+
 export function closePanels() {
-  document.getElementById("suggest").classList.add("hidden");
+  setSuggestOpen(false);
   document.getElementById("mobile-menu").classList.remove("is-open");
   document.getElementById("menu-open").setAttribute("aria-expanded", "false");
   closeMega();

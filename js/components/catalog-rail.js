@@ -40,37 +40,68 @@ function gridHtml(slug) {
   return `<ul class="catalog-grid">${items.map((product) => `<li>${shelfCard(product)}</li>`).join("")}</ul>`;
 }
 
-function catalogTabButtons(tabs, attribute) {
+function tabId(sectionId, slug) {
+  return `${sectionId}-panel-tab-${slug}`;
+}
+
+function catalogTabButtons(tabs, attribute, sectionId) {
   return tabs.map(([slug, name], index) => {
-    const selected = index === 0 ? "true" : "false";
-    return `<button type="button" role="tab" ${attribute}="${esc(slug)}" aria-selected="${selected}">${esc(name)}</button>`;
+    const selected = index === 0;
+    return `<button type="button" role="tab" id="${esc(tabId(sectionId, slug))}" aria-controls="${esc(sectionId)}-panel" ${attribute}="${esc(slug)}" aria-selected="${selected}" tabindex="${selected ? "0" : "-1"}">${esc(name)}</button>`;
   }).join("");
+}
+
+function panelAttrs(sectionId, tabs) {
+  const first = tabs[0]?.[0];
+  const labelledBy = first ? ` aria-labelledby="${esc(tabId(sectionId, first))}"` : "";
+  return `id="${esc(sectionId)}-panel" role="tabpanel"${labelledBy}`;
+}
+
+function selectTab(tabs, tab, panel, focus) {
+  tabs.forEach((item) => {
+    const on = item === tab;
+    item.setAttribute("aria-selected", String(on));
+    item.tabIndex = on ? 0 : -1;
+  });
+  panel.setAttribute("aria-labelledby", tab.id);
+  if (focus) tab.focus();
+}
+
+function bindTabKeys(tablist, tabs, activate) {
+  tablist?.addEventListener("keydown", (event) => {
+    const index = tabs.indexOf(document.activeElement);
+    if (index < 0) return;
+    const keys = { ArrowLeft: index + 1, ArrowRight: index - 1, Home: 0, End: tabs.length - 1 };
+    if (!(event.key in keys)) return;
+    event.preventDefault();
+    activate(tabs[(keys[event.key] + tabs.length) % tabs.length]);
+  });
 }
 
 export function catalogGridSection({ id, title, href, tabs, className = "pb-12" }) {
   const first = tabs[0]?.[0];
   const panel = first ? gridHtml(first) : `<p class="catalog-empty">אין מוצרים להצגה בקטגוריה הזו.</p>`;
   const tabList = tabs.length
-    ? `<div class="catalog-tabs" role="tablist" aria-label="קטגוריות ${esc(title)}">${catalogTabButtons(tabs, "data-catalog-grid-tab")}</div>`
+    ? `<div class="catalog-tabs" role="tablist" aria-label="קטגוריות ${esc(title)}">${catalogTabButtons(tabs, "data-catalog-grid-tab", id)}</div>`
     : "";
   return `<section class="${esc(className)}" data-catalog-grid aria-labelledby="${esc(id)}">
     <div class="catalog-head">
-      <h2 id="${esc(id)}" class="text-2xl font-extrabold"><a href="${esc(href)}"><span class="cat-heart" aria-hidden="true"></span>${esc(title)}</a></h2>
+      <h2 id="${esc(id)}"><a href="${esc(href)}"><span class="cat-heart" aria-hidden="true"></span>${esc(title)}</a></h2>
       ${tabList}
     </div>
-    <div data-catalog-grid-panel>${panel}</div>
+    <div data-catalog-grid-panel ${panelAttrs(id, tabs)}>${panel}</div>
   </section>`;
 }
 
 export function catalogSection() {
-  const tabs = catalogTabButtons(catalogTabs, "data-catalog-tab");
+  const tabs = catalogTabButtons(catalogTabs, "data-catalog-tab", "catalog-title");
 
   return `<section class="pb-12" data-catalog aria-labelledby="catalog-title">
     <div class="catalog-head">
-      <h2 id="catalog-title" class="text-2xl font-extrabold">קטלוג מוצרים</h2>
+      <h2 id="catalog-title">קטלוג מוצרים</h2>
       <div class="catalog-tabs" role="tablist" aria-label="קטגוריות הקטלוג">${tabs}</div>
     </div>
-    <div class="catalog-rail">
+    <div class="catalog-rail" ${panelAttrs("catalog-title", catalogTabs)}>
       <button type="button" class="cat-arrow" data-catalog-prev aria-label="הקודם">
         <svg viewBox="0 0 24 24" class="size-5" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg>
       </button>
@@ -109,15 +140,17 @@ function bindCatalogRail(section) {
 
   section.querySelector("[data-catalog-prev]").addEventListener("click", () => embla?.scrollPrev());
   section.querySelector("[data-catalog-next]").addEventListener("click", () => embla?.scrollNext());
-  section.querySelectorAll("[data-catalog-tab]").forEach((button) => {
-    button.addEventListener("click", () => {
-      if (button.getAttribute("aria-selected") === "true") return;
-      section.querySelectorAll("[data-catalog-tab]").forEach((tab) => tab.setAttribute("aria-selected", "false"));
-      button.setAttribute("aria-selected", "true");
-      track.innerHTML = slidesHtml(button.dataset.catalogTab);
-      start();
-    });
-  });
+  const panel = section.querySelector(".catalog-rail");
+  const tabs = [...section.querySelectorAll("[data-catalog-tab]")];
+  const activate = (button, focus = true) => {
+    const changed = button.getAttribute("aria-selected") !== "true";
+    selectTab(tabs, button, panel, focus);
+    if (!changed) return;
+    track.innerHTML = slidesHtml(button.dataset.catalogTab);
+    start();
+  };
+  tabs.forEach((button) => button.addEventListener("click", () => activate(button, false)));
+  bindTabKeys(section.querySelector("[role=tablist]"), tabs, activate);
   start();
 }
 
@@ -125,14 +158,14 @@ function bindCatalogGrid(grid) {
   if (!grid || grid.dataset.ready === "true") return;
   grid.dataset.ready = "true";
   const panel = grid.querySelector("[data-catalog-grid-panel]");
-  grid.querySelectorAll("[data-catalog-grid-tab]").forEach((button) => {
-    button.addEventListener("click", () => {
-      if (button.getAttribute("aria-selected") === "true") return;
-      grid.querySelectorAll("[data-catalog-grid-tab]").forEach((tab) => tab.setAttribute("aria-selected", "false"));
-      button.setAttribute("aria-selected", "true");
-      panel.innerHTML = gridHtml(button.dataset.catalogGridTab);
-    });
-  });
+  const tabs = [...grid.querySelectorAll("[data-catalog-grid-tab]")];
+  const activate = (button, focus = true) => {
+    const changed = button.getAttribute("aria-selected") !== "true";
+    selectTab(tabs, button, panel, focus);
+    if (changed) panel.innerHTML = gridHtml(button.dataset.catalogGridTab);
+  };
+  tabs.forEach((button) => button.addEventListener("click", () => activate(button, false)));
+  bindTabKeys(grid.querySelector("[role=tablist]"), tabs, activate);
 }
 
 export function mountCatalog(root) {

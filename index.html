@@ -4,19 +4,19 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>אשמורת MARKET</title>
-  <meta name="theme-color" content="#f7f7f7">
+  <meta name="theme-color" content="#e9e9e9">
   <link rel="icon" href="assets/images/brand/favicon.png" type="image/png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/app.css?v=20261021e">
+  <link rel="stylesheet" href="assets/css/app.css?v=20261026a">
 </head>
 <body>
   <a class="skip" href="#app">דילוג לתוכן</a>
 
-  <header class="site-header sticky top-0 z-40 border-b border-line bg-[#ececec] text-ink">
-    <div class="border-b border-line bg-white">
-    <div class="wrap flex items-center justify-between gap-3 py-2.5 text-xs text-muted">
+  <header class="site-header sticky top-0 z-40 border-b border-line bg-surface text-ink">
+    <div class="topbar border-b border-line bg-white">
+    <div class="wrap flex items-center justify-between gap-3 py-1.5 text-xs text-muted">
       <div class="topbar-links flex min-w-0 items-center gap-2">
         <button type="button" class="topbar-link" data-open-delivery aria-haspopup="dialog">
           <svg class="topbar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 6.5h11.5v9.5H2z"></path><path d="M13.5 9.5h4.2l3.3 3.6v2.9h-7.5"></path><path d="M15.5 9.5v3.6H21"></path><circle cx="6" cy="17.5" r="1.8"></circle><circle cx="17" cy="17.5" r="1.8"></circle></svg>
@@ -36,12 +36,12 @@
       <div id="account-slot" class="account-slot shrink-0"></div>
     </div>
     </div>
-    <div class="wrap header-bar pb-4 pt-2">
+    <div class="wrap header-bar py-3">
       <a href="#/" class="header-logo shrink-0" lang="en">market</a>
       <div class="search-slot relative min-w-0" id="search-slot">
         <form id="search-form" class="search-form" role="search">
           <label class="sr-only" for="search-input">חיפוש מוצרים</label>
-          <input id="search-input" name="q" type="search" placeholder="מה מחפשים?" autocomplete="off" enterkeyhint="search">
+          <input id="search-input" name="q" type="search" placeholder="מה מחפשים?" autocomplete="off" enterkeyhint="search" role="combobox" aria-autocomplete="list" aria-controls="suggest" aria-expanded="false">
           <button type="submit">
             <svg viewBox="0 0 24 24" class="size-4" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
             חיפוש
@@ -58,7 +58,7 @@
       </div>
     </div>
     <nav class="main-nav hidden lg:block" data-main-nav aria-label="ראשי">
-      <div class="wrap nav-row flex items-center justify-center gap-x-8 text-[1.35rem] font-bold">
+      <div class="wrap nav-row flex items-center justify-center gap-x-8 text-lg font-bold">
         <a class="mega-trigger text-ink" id="mega-trigger-super" href="#/d/super" data-mega-open="super" aria-expanded="false" aria-controls="mega" aria-haspopup="true"><span class="cat-heart" aria-hidden="true"></span>סופר אשמורת <svg class="mega-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></a>
         <a class="mega-trigger text-ink" id="mega-trigger-home" href="#/d/home" data-mega-open="home" aria-expanded="false" aria-controls="mega" aria-haspopup="true"><span class="cat-heart" aria-hidden="true"></span>חד פעמי וכלי בית <svg class="mega-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></a>
         <a class="mega-trigger text-ink" id="mega-trigger-electronics" href="#/d/electronics" data-mega-open="electronics" aria-expanded="false" aria-controls="mega" aria-haspopup="true"><span class="cat-heart" aria-hidden="true"></span>קניון אשמורת <svg class="mega-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></a>
@@ -69,7 +69,7 @@
       </div>
     </nav>
     <div id="mobile-menu" class="mobile-menu border-t border-line bg-white">
-      <nav id="mobile-nav" class="wrap grid gap-1 py-3 text-[1.35rem] font-semibold" aria-label="תפריט"></nav>
+      <nav id="mobile-nav" class="wrap grid gap-1 py-3 text-lg font-semibold" aria-label="תפריט"></nav>
     </div>
   </header>
 
@@ -96,7 +96,7 @@
 
   <main id="app" tabindex="-1"></main>
 
-  <footer class="site-footer mt-8 border-t border-line bg-[#ececec] text-ink">
+  <footer class="site-footer mt-12 border-t border-line bg-surface text-ink">
     <div class="wrap footer-main">
       <div class="footer-brand">
         <img src="assets/images/brand/logo.png" alt="" class="footer-logo">
@@ -176,6 +176,6 @@
 
   <script src="js/vendor/gsap.min.js"></script>
   <script src="js/vendor/embla-carousel.umd.js"></script>
-  <script src="js/app.bundle.js?v=20261021e"></script>
+  <script src="js/app.bundle.js?v=20261026a"></script>
 </body>
 </html>
