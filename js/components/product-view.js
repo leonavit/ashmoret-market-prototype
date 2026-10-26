@@ -64,6 +64,105 @@ function spec(label, value) {
   return `<div><dt>${esc(label)}</dt><dd dir="auto">${esc(value)}</dd></div>`;
 }
 
+export function productBuy(product) {
+  return `<div class="product-buy" data-buy>
+    <div class="product-qty" dir="ltr">
+      <button type="button" data-qty="-1" aria-label="הפחתת כמות">−</button>
+      <input data-qty-input inputmode="numeric" maxlength="2" value="1" aria-label="כמות">
+      <button type="button" data-qty="1" aria-label="הגדלת כמות">+</button>
+    </div>
+    <button type="button" class="product-add" data-add="${esc(product.id)}">הוספה לסל</button>
+  </div>`;
+}
+
+export function productDescription(product) {
+  return `<section class="product-description" aria-labelledby="product-description-title">
+    <h2 id="product-description-title">תיאור</h2>
+    <p>${esc(product.name)} מבית ${esc(product.brand)}, בקטגוריית ${esc(product.categoryName)}.</p>
+  </section>`;
+}
+
+export function productTabs(product) {
+  const tabs = [
+    ["about", "על המוצר", `<dl class="product-specs">
+        ${spec("מקט", product.id)}
+        ${spec("משקל", product.weight)}
+        ${spec("יח׳ במארז", String(product.unitsPerPack))}
+        ${spec("ברקוד", product.barcode)}
+        ${spec("מותג", product.brand)}
+        ${spec("קטגוריה", product.categoryName)}
+        ${spec("עמוד בקטלוג", String(product.catalogPage))}
+      </dl>
+      ${product.manufacturerId === "tozeret" ? `<p><a href="#/m/tozeret">יצרן: תוצרת</a></p>` : ""}`],
+    ["service", "שירות ואחריות", `<div class="product-tab-cols">
+        <div>
+          <h3>שירות לקוחות</h3>
+          <p>טלפון <a href="tel:03-000-0000" dir="ltr">03-000-0000</a> או <a href="https://wa.me/97230000000" target="_blank" rel="noopener noreferrer">ווטסאפ</a>.</p>
+          <button type="button" class="product-tab-link" data-open-service>השארת פנייה</button>
+        </div>
+        <div>
+          <h3>אחריות</h3>
+          <p>תנאי האחריות למוצר יפורסמו בגרסה הפעילה.</p>
+        </div>
+      </div>`],
+    ["delivery", "משלוח ואספקה", `<div class="product-tab-cols">
+        <div>
+          <h3>משלוח עד הבית</h3>
+          <p>ההזמנה מגיעה עד הדלת. מחיר משלוח ${money(deliveryFee)} להזמנה.</p>
+          <button type="button" class="product-tab-link" data-open-delivery>בדיקת כתובת למשלוח</button>
+        </div>
+        <div>
+          <h3>זמני אספקה</h3>
+          <p>משלוחים החל ממחר משעה 8:00 עד 20:00 בערב.</p>
+        </div>
+      </div>`],
+  ];
+  return `<section class="product-tabs" data-product-tabs aria-label="פרטי המוצר">
+    <div class="product-tablist" role="tablist" aria-label="פרטי המוצר">
+      ${tabs.map(([id, label], index) => `<button type="button" role="tab" id="product-tab-${id}" aria-controls="product-panel-${id}" aria-selected="${index === 0}" tabindex="${index === 0 ? "0" : "-1"}" data-product-tab="${id}">${label}</button>`).join("")}
+    </div>
+    ${tabs.map(([id, label, body], index) => `<details class="product-tab${index === 0 ? " is-active" : ""}" data-product-panel="${id}"${index === 0 ? " open" : ""}>
+      <summary>${label}</summary>
+      <div class="product-tab-body" id="product-panel-${id}" role="tabpanel" aria-labelledby="product-tab-${id}">${body}</div>
+    </details>`).join("")}
+  </section>`;
+}
+
+export function mountProductTabs(root = document) {
+  root.querySelectorAll("[data-product-tabs]").forEach((section) => {
+    if (section.dataset.bound) return;
+    section.dataset.bound = "1";
+    const tabs = [...section.querySelectorAll("[data-product-tab]")];
+    const select = (tab, focus = false) => {
+      tabs.forEach((item) => {
+        const on = item === tab;
+        item.setAttribute("aria-selected", String(on));
+        item.tabIndex = on ? 0 : -1;
+        const panel = section.querySelector(`[data-product-panel="${item.dataset.productTab}"]`);
+        panel.classList.toggle("is-active", on);
+        if (on) panel.open = true;
+      });
+      if (focus) tab.focus();
+    };
+    section.addEventListener("click", (event) => {
+      const tab = event.target.closest("[data-product-tab]");
+      if (tab) select(tab);
+    });
+    section.querySelector("[role=tablist]").addEventListener("keydown", (event) => {
+      const index = tabs.indexOf(document.activeElement);
+      if (index < 0) return;
+      const step = { ArrowLeft: 1, ArrowRight: -1 }[event.key];
+      if (step) {
+        event.preventDefault();
+        select(tabs[(index + step + tabs.length) % tabs.length], true);
+      } else if (event.key === "Home" || event.key === "End") {
+        event.preventDefault();
+        select(event.key === "Home" ? tabs[0] : tabs[tabs.length - 1], true);
+      }
+    });
+  });
+}
+
 export function mountProductGalleries(root = document) {
   root.querySelectorAll("[data-product-gallery]").forEach((gallery) => {
     if (gallery.dataset.bound) return;

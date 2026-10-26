@@ -19,7 +19,7 @@ import { mountPromoCarousels } from "./components/promo-carousel.js";
 import { mountCarousels } from "./components/carousel.js";
 import { mountCatalog } from "./components/catalog-rail.js";
 import { openProductPopup } from "./components/product-popup.js";
-import { mountProductGalleries } from "./components/product-view.js";
+import { mountProductGalleries, mountProductTabs } from "./components/product-view.js";
 import { confirmAction, showToast } from "./components/toast.js";
 import { playHero, pulseAdd } from "./motion.js";
 import { addItem, clearCart, getCart, removeItem, setQty, subscribe } from "./state/cart.js";
@@ -91,6 +91,7 @@ function render({ focus = true, scrollTop = false } = {}) {
   mountPromoCarousels(app, document.getElementById("hero-top"));
   mountCatalog(app);
   mountProductGalleries(app);
+  mountProductTabs(app);
   updateAccountSlot();
   updateCartDock(route.name);
   playHero(getTheme().hero === "v3" ? document.getElementById("hero-top") : app);
@@ -179,18 +180,6 @@ document.addEventListener("click", async (event) => {
     const product = getProduct(remove.dataset.remove);
     const yes = await confirmAction(product ? `להסיר את ${product.name} מהסל?` : "להסיר את הפריט מהסל?");
     if (yes) removeItem(remove.dataset.remove);
-    return;
-  }
-
-  const buyNow = event.target.closest("[data-buy-now]");
-  if (buyNow) {
-    const product = getProduct(buyNow.dataset.buyNow);
-    if (!product || !getCommerce(product.id)) return;
-    const input = buyNow.closest("[data-buy]")?.querySelector("[data-qty-input]");
-    const qty = Math.max(1, Math.min(99, Number(input?.value || 1)));
-    addItem(product.id, qty);
-    updateCartBadge(true);
-    navigate("#/checkout");
     return;
   }
 

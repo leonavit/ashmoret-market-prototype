@@ -4863,6 +4863,101 @@
   function spec(label, value) {
     return `<div><dt>${esc(label)}</dt><dd dir="auto">${esc(value)}</dd></div>`;
   }
+  function productBuy(product) {
+    return `<div class="product-buy" data-buy>
+    <div class="product-qty" dir="ltr">
+      <button type="button" data-qty="-1" aria-label="\u05D4\u05E4\u05D7\u05EA\u05EA \u05DB\u05DE\u05D5\u05EA">\u2212</button>
+      <input data-qty-input inputmode="numeric" maxlength="2" value="1" aria-label="\u05DB\u05DE\u05D5\u05EA">
+      <button type="button" data-qty="1" aria-label="\u05D4\u05D2\u05D3\u05DC\u05EA \u05DB\u05DE\u05D5\u05EA">+</button>
+    </div>
+    <button type="button" class="product-add" data-add="${esc(product.id)}">\u05D4\u05D5\u05E1\u05E4\u05D4 \u05DC\u05E1\u05DC</button>
+  </div>`;
+  }
+  function productDescription(product) {
+    return `<section class="product-description" aria-labelledby="product-description-title">
+    <h2 id="product-description-title">\u05EA\u05D9\u05D0\u05D5\u05E8</h2>
+    <p>${esc(product.name)} \u05DE\u05D1\u05D9\u05EA ${esc(product.brand)}, \u05D1\u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D9\u05EA ${esc(product.categoryName)}.</p>
+  </section>`;
+  }
+  function productTabs(product) {
+    const tabs = [
+      ["about", "\u05E2\u05DC \u05D4\u05DE\u05D5\u05E6\u05E8", `<dl class="product-specs">
+        ${spec("\u05DE\u05E7\u05D8", product.id)}
+        ${spec("\u05DE\u05E9\u05E7\u05DC", product.weight)}
+        ${spec("\u05D9\u05D7\u05F3 \u05D1\u05DE\u05D0\u05E8\u05D6", String(product.unitsPerPack))}
+        ${spec("\u05D1\u05E8\u05E7\u05D5\u05D3", product.barcode)}
+        ${spec("\u05DE\u05D5\u05EA\u05D2", product.brand)}
+        ${spec("\u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D4", product.categoryName)}
+        ${spec("\u05E2\u05DE\u05D5\u05D3 \u05D1\u05E7\u05D8\u05DC\u05D5\u05D2", String(product.catalogPage))}
+      </dl>
+      ${product.manufacturerId === "tozeret" ? `<p><a href="#/m/tozeret">\u05D9\u05E6\u05E8\u05DF: \u05EA\u05D5\u05E6\u05E8\u05EA</a></p>` : ""}`],
+      ["service", "\u05E9\u05D9\u05E8\u05D5\u05EA \u05D5\u05D0\u05D7\u05E8\u05D9\u05D5\u05EA", `<div class="product-tab-cols">
+        <div>
+          <h3>\u05E9\u05D9\u05E8\u05D5\u05EA \u05DC\u05E7\u05D5\u05D7\u05D5\u05EA</h3>
+          <p>\u05D8\u05DC\u05E4\u05D5\u05DF <a href="tel:03-000-0000" dir="ltr">03-000-0000</a> \u05D0\u05D5 <a href="https://wa.me/97230000000" target="_blank" rel="noopener noreferrer">\u05D5\u05D5\u05D8\u05E1\u05D0\u05E4</a>.</p>
+          <button type="button" class="product-tab-link" data-open-service>\u05D4\u05E9\u05D0\u05E8\u05EA \u05E4\u05E0\u05D9\u05D9\u05D4</button>
+        </div>
+        <div>
+          <h3>\u05D0\u05D7\u05E8\u05D9\u05D5\u05EA</h3>
+          <p>\u05EA\u05E0\u05D0\u05D9 \u05D4\u05D0\u05D7\u05E8\u05D9\u05D5\u05EA \u05DC\u05DE\u05D5\u05E6\u05E8 \u05D9\u05E4\u05D5\u05E8\u05E1\u05DE\u05D5 \u05D1\u05D2\u05E8\u05E1\u05D4 \u05D4\u05E4\u05E2\u05D9\u05DC\u05D4.</p>
+        </div>
+      </div>`],
+      ["delivery", "\u05DE\u05E9\u05DC\u05D5\u05D7 \u05D5\u05D0\u05E1\u05E4\u05E7\u05D4", `<div class="product-tab-cols">
+        <div>
+          <h3>\u05DE\u05E9\u05DC\u05D5\u05D7 \u05E2\u05D3 \u05D4\u05D1\u05D9\u05EA</h3>
+          <p>\u05D4\u05D4\u05D6\u05DE\u05E0\u05D4 \u05DE\u05D2\u05D9\u05E2\u05D4 \u05E2\u05D3 \u05D4\u05D3\u05DC\u05EA. \u05DE\u05D7\u05D9\u05E8 \u05DE\u05E9\u05DC\u05D5\u05D7 ${money(deliveryFee)} \u05DC\u05D4\u05D6\u05DE\u05E0\u05D4.</p>
+          <button type="button" class="product-tab-link" data-open-delivery>\u05D1\u05D3\u05D9\u05E7\u05EA \u05DB\u05EA\u05D5\u05D1\u05EA \u05DC\u05DE\u05E9\u05DC\u05D5\u05D7</button>
+        </div>
+        <div>
+          <h3>\u05D6\u05DE\u05E0\u05D9 \u05D0\u05E1\u05E4\u05E7\u05D4</h3>
+          <p>\u05DE\u05E9\u05DC\u05D5\u05D7\u05D9\u05DD \u05D4\u05D7\u05DC \u05DE\u05DE\u05D7\u05E8 \u05DE\u05E9\u05E2\u05D4 8:00 \u05E2\u05D3 20:00 \u05D1\u05E2\u05E8\u05D1.</p>
+        </div>
+      </div>`]
+    ];
+    return `<section class="product-tabs" data-product-tabs aria-label="\u05E4\u05E8\u05D8\u05D9 \u05D4\u05DE\u05D5\u05E6\u05E8">
+    <div class="product-tablist" role="tablist" aria-label="\u05E4\u05E8\u05D8\u05D9 \u05D4\u05DE\u05D5\u05E6\u05E8">
+      ${tabs.map(([id, label], index) => `<button type="button" role="tab" id="product-tab-${id}" aria-controls="product-panel-${id}" aria-selected="${index === 0}" tabindex="${index === 0 ? "0" : "-1"}" data-product-tab="${id}">${label}</button>`).join("")}
+    </div>
+    ${tabs.map(([id, label, body], index) => `<details class="product-tab${index === 0 ? " is-active" : ""}" data-product-panel="${id}"${index === 0 ? " open" : ""}>
+      <summary>${label}</summary>
+      <div class="product-tab-body" id="product-panel-${id}" role="tabpanel" aria-labelledby="product-tab-${id}">${body}</div>
+    </details>`).join("")}
+  </section>`;
+  }
+  function mountProductTabs(root = document) {
+    root.querySelectorAll("[data-product-tabs]").forEach((section) => {
+      if (section.dataset.bound) return;
+      section.dataset.bound = "1";
+      const tabs = [...section.querySelectorAll("[data-product-tab]")];
+      const select = (tab, focus = false) => {
+        tabs.forEach((item) => {
+          const on = item === tab;
+          item.setAttribute("aria-selected", String(on));
+          item.tabIndex = on ? 0 : -1;
+          const panel = section.querySelector(`[data-product-panel="${item.dataset.productTab}"]`);
+          panel.classList.toggle("is-active", on);
+          if (on) panel.open = true;
+        });
+        if (focus) tab.focus();
+      };
+      section.addEventListener("click", (event) => {
+        const tab = event.target.closest("[data-product-tab]");
+        if (tab) select(tab);
+      });
+      section.querySelector("[role=tablist]").addEventListener("keydown", (event) => {
+        const index = tabs.indexOf(document.activeElement);
+        if (index < 0) return;
+        const step = { ArrowLeft: 1, ArrowRight: -1 }[event.key];
+        if (step) {
+          event.preventDefault();
+          select(tabs[(index + step + tabs.length) % tabs.length], true);
+        } else if (event.key === "Home" || event.key === "End") {
+          event.preventDefault();
+          select(event.key === "Home" ? tabs[0] : tabs[tabs.length - 1], true);
+        }
+      });
+    });
+  }
   function mountProductGalleries(root = document) {
     root.querySelectorAll("[data-product-gallery]").forEach((gallery) => {
       if (gallery.dataset.bound) return;
@@ -4897,9 +4992,6 @@
 
   // js/screens/product.js
   var sep = `<svg class="product-sep" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg>`;
-  var truck = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M3 7h11v8H3zM14 10h4l3 3v2h-7z"></path><circle cx="7" cy="18" r="1.4"></circle><circle cx="17" cy="18" r="1.4"></circle></svg>`;
-  var tag = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M12 3H5v7l8.5 8.5a2 2 0 0 0 2.8 0l4.2-4.2a2 2 0 0 0 0-2.8z"></path><circle cx="8.5" cy="8.5" r="1.1" fill="currentColor"></circle></svg>`;
-  var phone = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M8 3h8a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"></path><path d="M11 18h2"></path></svg>`;
   function renderProduct(id) {
     const product = getProduct(id);
     if (!product) {
@@ -4924,45 +5016,18 @@
       ${productGallery(product, commerce?.compareAt ? `<span class="sale-badge">\u05DE\u05D1\u05E6\u05E2</span>` : "")}
       <div class="product-info">
         <div class="product-head">
+          <p class="product-brand">${esc(product.brand)}</p>
           <h1>${esc(product.name)}</h1>
           ${price}
-          <p class="product-lead">${esc(product.brand)}. \u05D0\u05E8\u05D9\u05D6\u05D4 \u05E9\u05DC ${esc(product.weight)}, ${esc(String(product.unitsPerPack))} \u05D9\u05D7\u05D9\u05D3\u05D5\u05EA \u05D1\u05DE\u05D0\u05E8\u05D6.</p>
         </div>
-        <div class="product-fields">
-          ${field("\u05DE\u05E9\u05E7\u05DC", product.weight)}
-          ${field("\u05D9\u05D7\u05F3 \u05D1\u05DE\u05D0\u05E8\u05D6", String(product.unitsPerPack))}
-        </div>
-        <div class="product-buy" data-buy>
-          <p class="product-label">\u05DB\u05DE\u05D5\u05EA</p>
-          <div class="product-buy-row">
-            <div class="product-qty" dir="ltr">
-              <button type="button" data-qty="-1" aria-label="\u05D4\u05E4\u05D7\u05EA\u05EA \u05DB\u05DE\u05D5\u05EA">\u2212</button>
-              <input data-qty-input inputmode="numeric" maxlength="2" value="1" aria-label="\u05DB\u05DE\u05D5\u05EA">
-              <button type="button" data-qty="1" aria-label="\u05D4\u05D2\u05D3\u05DC\u05EA \u05DB\u05DE\u05D5\u05EA">+</button>
-            </div>
-            <button type="button" class="product-add" data-add="${esc(product.id)}">\u05D4\u05D5\u05E1\u05E4\u05D4 \u05DC\u05E1\u05DC</button>
-          </div>
-          <button type="button" class="product-now" data-buy-now="${esc(product.id)}">\u05E7\u05E0\u05D9\u05D9\u05D4 \u05E2\u05DB\u05E9\u05D9\u05D5</button>
-        </div>
-        <div class="product-meta">
-          <p><span>\u05DE\u05E7\u05D8</span> <b dir="ltr">${esc(product.id)}</b></p>
-          <p><span>\u05D1\u05E8\u05E7\u05D5\u05D3</span> <b dir="auto">${esc(product.barcode)}</b></p>
-          <p><span>\u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D4</span> <a href="#/c/${esc(product.categorySlug)}">${esc(product.categoryName)}</a></p>
-        </div>
-        <ul class="product-trust">
-          <li>${truck}<span><strong>\u05DE\u05E9\u05DC\u05D5\u05D7 \u05E2\u05D3 \u05D4\u05D1\u05D9\u05EA</strong><span>\u05DE\u05D7\u05D9\u05E8 \u05DE\u05E9\u05DC\u05D5\u05D7 ${money(deliveryFee)}</span></span></li>
-          <li>${tag}<span><strong>\u05DE\u05D7\u05D9\u05E8\u05D9\u05DD \u05DC\u05D4\u05D3\u05D2\u05DE\u05D4</strong><span>\u05D0\u05D9\u05E0\u05D5 \u05DE\u05D7\u05D9\u05E8 \u05E7\u05D8\u05DC\u05D5\u05D2</span></span></li>
-          <li class="is-wide">${phone}<span><strong>\u05E9\u05D9\u05E8\u05D5\u05EA \u05DC\u05E7\u05D5\u05D7\u05D5\u05EA</strong><span dir="ltr">03-000-0000</span></span></li>
-        </ul>
-        ${productFolds(product)}
-        ${previous || following ? `<nav class="product-neighbors" aria-label="\u05DE\u05D5\u05E6\u05E8\u05D9\u05DD \u05E1\u05DE\u05D5\u05DB\u05D9\u05DD">${neighbor(previous, "\u05D4\u05DE\u05D5\u05E6\u05E8 \u05D4\u05E7\u05D5\u05D3\u05DD")}${neighbor(following, "\u05D4\u05DE\u05D5\u05E6\u05E8 \u05D4\u05D1\u05D0")}</nav>` : ""}
+        ${productBuy(product)}
+        ${productDescription(product)}
       </div>
     </div>
+    ${productTabs(product)}
+    ${previous || following ? `<nav class="product-neighbors" aria-label="\u05DE\u05D5\u05E6\u05E8\u05D9\u05DD \u05E1\u05DE\u05D5\u05DB\u05D9\u05DD">${neighbor(previous, "\u05D4\u05DE\u05D5\u05E6\u05E8 \u05D4\u05E7\u05D5\u05D3\u05DD")}${neighbor(following, "\u05D4\u05DE\u05D5\u05E6\u05E8 \u05D4\u05D1\u05D0")}</nav>` : ""}
     ${related.length ? `<section class="product-related" aria-labelledby="related-title"><h2 id="related-title">\u05D0\u05D5\u05DC\u05D9 \u05D9\u05E2\u05E0\u05D9\u05D9\u05DF \u05D0\u05D5\u05EA\u05DA</h2>${carousel(related, "\u05DE\u05D5\u05E6\u05E8\u05D9\u05DD \u05E7\u05E9\u05D5\u05E8\u05D9\u05DD")}</section>` : ""}
   </article>`;
-  }
-  function field(label, value) {
-    return `<div class="product-field"><p>${esc(label)}: ${esc(value)}</p><div class="product-field-box" dir="auto">${esc(value)}</div></div>`;
   }
   function neighbor(product, label) {
     if (!product) return `<span class="product-neighbor is-empty"></span>`;
@@ -5085,7 +5150,7 @@
       return `<article class="wrap py-16 text-center"><h1 class="text-3xl font-extrabold">\u05D4\u05E1\u05DC \u05E8\u05D9\u05E7</h1><a class="btn mt-6" href="#/">\u05DC\u05D3\u05E3 \u05D4\u05D1\u05D9\u05EA</a></article>`;
     }
     const goods = subtotal();
-    const field3 = (name, label, type = "text", extra = "") => `<label class="field">
+    const field2 = (name, label, type = "text", extra = "") => `<label class="field">
     <span class="text-sm font-semibold">${label}</span>
     <input name="${name}" type="${type}" autocomplete="${extra}" value="${esc(values[name] || "")}" aria-invalid="${errors[name] ? "true" : "false"}" ${errors[name] ? `aria-describedby="${name}-error"` : ""}>
     ${errors[name] ? `<span id="${name}-error" class="field-error">${esc(errors[name])}</span>` : ""}
@@ -5095,13 +5160,13 @@
     <form id="checkout-form" class="mt-6 grid items-start gap-8 lg:grid-cols-[1fr_320px]" novalidate>
       <div class="grid gap-4">
         <h2 class="text-xl font-extrabold">\u05E4\u05E8\u05D8\u05D9 \u05DE\u05E9\u05DC\u05D5\u05D7</h2>
-        ${field3("name", "\u05E9\u05DD \u05DE\u05DC\u05D0", "text", "name")}
-        ${field3("phone", "\u05D8\u05DC\u05E4\u05D5\u05DF", "tel", "tel")}
+        ${field2("name", "\u05E9\u05DD \u05DE\u05DC\u05D0", "text", "name")}
+        ${field2("phone", "\u05D8\u05DC\u05E4\u05D5\u05DF", "tel", "tel")}
         <div class="grid gap-4 sm:grid-cols-2">
-          ${field3("city", "\u05E2\u05D9\u05E8", "text", "address-level2")}
-          ${field3("street", "\u05E8\u05D7\u05D5\u05D1", "text", "address-line1")}
+          ${field2("city", "\u05E2\u05D9\u05E8", "text", "address-level2")}
+          ${field2("street", "\u05E8\u05D7\u05D5\u05D1", "text", "address-line1")}
         </div>
-        ${field3("house", "\u05DE\u05E1\u05E4\u05E8 \u05D1\u05D9\u05EA", "text", "on")}
+        ${field2("house", "\u05DE\u05E1\u05E4\u05E8 \u05D1\u05D9\u05EA", "text", "on")}
         <label class="field">
           <span class="text-sm font-semibold">\u05D4\u05E2\u05E8\u05D5\u05EA \u05DC\u05E9\u05DC\u05D9\u05D7</span>
           <textarea name="note">${esc(values.note || "")}</textarea>
@@ -5133,12 +5198,12 @@
     const data = Object.fromEntries(new FormData(form).entries());
     const errors = {};
     if (!String(data.name || "").trim() || String(data.name).trim().length < 2) errors.name = "\u05E0\u05D0 \u05DC\u05DE\u05DC\u05D0 \u05E9\u05DD \u05DE\u05DC\u05D0.";
-    const phone2 = String(data.phone || "").replace(/[^\d]/g, "");
-    if (!/^0\d{8,9}$/.test(phone2)) errors.phone = "\u05E0\u05D0 \u05DC\u05DE\u05DC\u05D0 \u05D8\u05DC\u05E4\u05D5\u05DF \u05D9\u05E9\u05E8\u05D0\u05DC\u05D9.";
+    const phone = String(data.phone || "").replace(/[^\d]/g, "");
+    if (!/^0\d{8,9}$/.test(phone)) errors.phone = "\u05E0\u05D0 \u05DC\u05DE\u05DC\u05D0 \u05D8\u05DC\u05E4\u05D5\u05DF \u05D9\u05E9\u05E8\u05D0\u05DC\u05D9.";
     if (!String(data.city || "").trim()) errors.city = "\u05E0\u05D0 \u05DC\u05DE\u05DC\u05D0 \u05E2\u05D9\u05E8.";
     if (!String(data.street || "").trim()) errors.street = "\u05E0\u05D0 \u05DC\u05DE\u05DC\u05D0 \u05E8\u05D7\u05D5\u05D1.";
     if (!String(data.house || "").trim()) errors.house = "\u05E0\u05D0 \u05DC\u05DE\u05DC\u05D0 \u05DE\u05E1\u05E4\u05E8 \u05D1\u05D9\u05EA.";
-    return { data: { ...data, phone: phone2 }, errors };
+    return { data: { ...data, phone }, errors };
   }
 
   // js/state/orders.js
@@ -5429,9 +5494,9 @@
     if (!name || !host) return email;
     return `${name.slice(0, 2)}***@${host}`;
   }
-  function maskPhone(phone2) {
-    const digits = String(phone2).replace(/\D/g, "");
-    if (digits.length < 7) return phone2;
+  function maskPhone(phone) {
+    const digits = String(phone).replace(/\D/g, "");
+    if (digits.length < 7) return phone;
     return `${digits.slice(0, 3)}-***-${digits.slice(-4)}`;
   }
   function ensureDialog() {
@@ -5545,19 +5610,19 @@
     }
     const data = ui.register;
     const bad = (name) => ui.invalid === name;
-    const field3 = (name, label, value, extra) => `<label class="field">
+    const field2 = (name, label, value, extra) => `<label class="field">
     <span class="text-sm font-semibold"><span class="req" aria-hidden="true">*</span>${label}</span>
     <input name="${name}" value="${esc(value)}" ${extra} aria-invalid="${bad(name) ? "true" : "false"}" ${bad(name) ? "data-auth-focus" : ""}>
   </label>`;
     return `<form id="auth-register" class="mt-5 grid gap-4" novalidate>
     <p class="text-sm text-muted">\u05D4\u05E4\u05E8\u05D8\u05D9\u05DD \u05E0\u05E9\u05DE\u05E8\u05D9\u05DD \u05E8\u05E7 \u05D1\u05D4\u05D3\u05D2\u05DE\u05D4 \u05E9\u05D1\u05D3\u05E4\u05D3\u05E4\u05DF \u05D4\u05D6\u05D4, \u05D0\u05E6\u05DC \u05DC\u05E7\u05D5\u05D7 \u05D4\u05D4\u05D3\u05D2\u05DE\u05D4.</p>
     <div class="grid gap-4 sm:grid-cols-2">
-      ${field3("firstName", "\u05E9\u05DD \u05E4\u05E8\u05D8\u05D9", data.firstName, `autocomplete="given-name" required ${ui.invalid ? "" : "data-auth-focus"}`)}
-      ${field3("lastName", "\u05E9\u05DD \u05DE\u05E9\u05E4\u05D7\u05D4", data.lastName, `autocomplete="family-name" required`)}
+      ${field2("firstName", "\u05E9\u05DD \u05E4\u05E8\u05D8\u05D9", data.firstName, `autocomplete="given-name" required ${ui.invalid ? "" : "data-auth-focus"}`)}
+      ${field2("lastName", "\u05E9\u05DD \u05DE\u05E9\u05E4\u05D7\u05D4", data.lastName, `autocomplete="family-name" required`)}
     </div>
-    ${field3("email", "\u05D3\u05D5\u05D0\u05F4\u05DC", data.email, `type="email" autocomplete="email" dir="ltr" required`)}
-    ${field3("idNumber", "\u05EA\u05E2\u05D5\u05D3\u05EA \u05D6\u05D4\u05D5\u05EA", data.idNumber, `inputmode="numeric" autocomplete="off" dir="ltr" maxlength="9" required`)}
-    ${field3("phone", "\u05D8\u05DC\u05E4\u05D5\u05DF", data.phone, `type="tel" autocomplete="tel" dir="ltr" required`)}
+    ${field2("email", "\u05D3\u05D5\u05D0\u05F4\u05DC", data.email, `type="email" autocomplete="email" dir="ltr" required`)}
+    ${field2("idNumber", "\u05EA\u05E2\u05D5\u05D3\u05EA \u05D6\u05D4\u05D5\u05EA", data.idNumber, `inputmode="numeric" autocomplete="off" dir="ltr" maxlength="9" required`)}
+    ${field2("phone", "\u05D8\u05DC\u05E4\u05D5\u05DF", data.phone, `type="tel" autocomplete="tel" dir="ltr" required`)}
     <label class="auth-check">
       <input type="checkbox" name="privacy" required ${data.privacy ? "checked" : ""} aria-invalid="${bad("privacy") ? "true" : "false"}" ${bad("privacy") ? "data-auth-focus" : ""}>
       <span><span class="req" aria-hidden="true">*</span>\u05E7\u05E8\u05D0\u05EA\u05D9 \u05D0\u05EA \u05DE\u05D3\u05D9\u05E0\u05D9\u05D5\u05EA \u05D4\u05E4\u05E8\u05D8\u05D9\u05D5\u05EA, \u05D0\u05EA \u05EA\u05E0\u05D0\u05D9 \u05D4\u05E9\u05D9\u05DE\u05D5\u05E9 \u05D5\u05D0\u05EA \u05EA\u05E7\u05E0\u05D5\u05DF \u05DE\u05D5\u05E2\u05D3\u05D5\u05DF \u05D4\u05DC\u05E7\u05D5\u05D7\u05D5\u05EA, \u05D5\u05D0\u05E0\u05D9 \u05DE\u05D0\u05E9\u05E8/\u05EA \u05E9\u05D4\u05DE\u05D9\u05D3\u05E2 \u05E9\u05DE\u05E1\u05E8\u05EA\u05D9 \u05D5/\u05D0\u05D5 \u05E9\u05D9\u05D9\u05D0\u05E1\u05E3 \u05D0\u05D5\u05D3\u05D5\u05EA\u05D9\u05D9 \u05D1\u05DE\u05E1\u05D2\u05E8\u05EA \u05DE\u05EA\u05DF \u05D4\u05E9\u05D9\u05E8\u05D5\u05EA\u05D9\u05DD \u05D9\u05D9\u05E9\u05DE\u05E8 \u05D1\u05DE\u05D0\u05D2\u05E8\u05D9 \u05D4\u05DE\u05D9\u05D3\u05E2 \u05E9\u05D1\u05E9\u05DC\u05D9\u05D8\u05EA \u05D0\u05E9\u05DE\u05D5\u05E8\u05EA \u05DE\u05E8\u05E7\u05D8 \u05D5/\u05D0\u05D5 \u05DE\u05D9 \u05DE\u05D8\u05E2\u05DE\u05D4, \u05DC\u05E8\u05D1\u05D5\u05EA \u05E1\u05E4\u05E7\u05D9 \u05E9\u05D9\u05E8\u05D5\u05EA \u05D4\u05E4\u05D5\u05E2\u05DC\u05D9\u05DD \u05E2\u05D1\u05D5\u05E8\u05D4. \u05D4\u05DE\u05D9\u05D3\u05E2 \u05D9\u05E9\u05DE\u05E9 \u05DC\u05E6\u05D5\u05E8\u05DA \u05D6\u05D9\u05D4\u05D5\u05D9, \u05E0\u05D9\u05D4\u05D5\u05DC \u05D4\u05D7\u05E9\u05D1\u05D5\u05DF, \u05D0\u05E1\u05E4\u05E7\u05EA \u05D4\u05D6\u05DE\u05E0\u05D5\u05EA, \u05E9\u05D9\u05E8\u05D5\u05EA \u05DC\u05E7\u05D5\u05D7\u05D5\u05EA, \u05EA\u05E4\u05E2\u05D5\u05DC \u05DE\u05D5\u05E2\u05D3\u05D5\u05DF \u05D4\u05DC\u05E7\u05D5\u05D7\u05D5\u05EA, \u05E2\u05DE\u05D9\u05D3\u05D4 \u05D1\u05D7\u05D5\u05D1\u05D5\u05EA \u05D4\u05D3\u05D9\u05DF \u05D5\u05E9\u05D9\u05E4\u05D5\u05E8 \u05D4\u05E9\u05D9\u05E8\u05D5\u05EA, \u05D5\u05D4\u05DB\u05D5\u05DC \u05D1\u05D4\u05EA\u05D0\u05DD \u05DC\u05DE\u05D3\u05D9\u05E0\u05D9\u05D5\u05EA \u05D4\u05E4\u05E8\u05D8\u05D9\u05D5\u05EA.</span>
@@ -5684,11 +5749,11 @@
       channel.closest(".auth-choice-row")?.querySelector("[data-auth-identity]")?.focus();
     });
     const selectChannelOf = (event) => {
-      const field3 = event.target.closest?.("[data-auth-identity]");
-      if (!field3 || !document.getElementById("auth-dialog")?.contains(field3)) return;
-      const radio = field3.closest(".auth-choice-row")?.querySelector("[data-auth-channel]");
+      const field2 = event.target.closest?.("[data-auth-identity]");
+      if (!field2 || !document.getElementById("auth-dialog")?.contains(field2)) return;
+      const radio = field2.closest(".auth-choice-row")?.querySelector("[data-auth-channel]");
       if (radio && !radio.checked) radio.checked = true;
-      ui.channel = field3.dataset.authIdentity;
+      ui.channel = field2.dataset.authIdentity;
     };
     document.addEventListener("focusin", selectChannelOf);
     document.addEventListener("input", selectChannelOf);
@@ -5803,7 +5868,7 @@
     const id = (name) => `${prefix}${name}`;
     const describe = (name) => errors[name] ? `aria-describedby="${id(name)}-error"` : "";
     const error = (name) => errors[name] ? `<span id="${id(name)}-error" class="field-error">${esc(errors[name])}</span>` : "";
-    const field3 = (name, label, type = "text", extra = "") => `<label class="field">
+    const field2 = (name, label, type = "text", extra = "") => `<label class="field">
     <span class="text-sm font-semibold">${label}</span>
     <input name="${name}" type="${type}" value="${esc(values[name] || "")}" ${extra} aria-invalid="${errors[name] ? "true" : "false"}" ${describe(name)}>
     ${error(name)}
@@ -5816,9 +5881,9 @@
       </select>
       ${error("topic")}
     </label>
-    ${field3("name", "\u05E9\u05DD \u05DE\u05DC\u05D0", "text", `autocomplete="name" required`)}
-    ${field3("phone", "\u05D8\u05DC\u05E4\u05D5\u05DF", "tel", `autocomplete="tel" dir="ltr" required`)}
-    ${field3("email", "\u05D0\u05D9\u05DE\u05D9\u05D9\u05DC", "email", `autocomplete="email" dir="ltr"`)}
+    ${field2("name", "\u05E9\u05DD \u05DE\u05DC\u05D0", "text", `autocomplete="name" required`)}
+    ${field2("phone", "\u05D8\u05DC\u05E4\u05D5\u05DF", "tel", `autocomplete="tel" dir="ltr" required`)}
+    ${field2("email", "\u05D0\u05D9\u05DE\u05D9\u05D9\u05DC", "email", `autocomplete="email" dir="ltr"`)}
     <label class="field">
       <span class="text-sm font-semibold">\u05D4\u05D5\u05D3\u05E2\u05D4</span>
       <textarea name="message" rows="4" required aria-invalid="${errors.message ? "true" : "false"}" ${describe("message")}>${esc(values.message || "")}</textarea>
@@ -5854,11 +5919,11 @@
     const errors = {};
     if (!contactTopics.includes(values.topic)) errors.topic = "\u05E0\u05D0 \u05DC\u05D1\u05D7\u05D5\u05E8 \u05E0\u05D5\u05E9\u05D0 \u05E4\u05E0\u05D9\u05D9\u05D4.";
     if (values.name.length < 2) errors.name = "\u05E0\u05D0 \u05DC\u05DE\u05DC\u05D0 \u05E9\u05DD \u05DE\u05DC\u05D0.";
-    const phone2 = values.phone.replace(/[^\d]/g, "");
-    if (!/^0\d{8,9}$/.test(phone2)) errors.phone = "\u05E0\u05D0 \u05DC\u05DE\u05DC\u05D0 \u05D8\u05DC\u05E4\u05D5\u05DF \u05D9\u05E9\u05E8\u05D0\u05DC\u05D9.";
+    const phone = values.phone.replace(/[^\d]/g, "");
+    if (!/^0\d{8,9}$/.test(phone)) errors.phone = "\u05E0\u05D0 \u05DC\u05DE\u05DC\u05D0 \u05D8\u05DC\u05E4\u05D5\u05DF \u05D9\u05E9\u05E8\u05D0\u05DC\u05D9.";
     if (values.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email)) errors.email = "\u05E0\u05D0 \u05DC\u05DE\u05DC\u05D0 \u05D0\u05D9\u05DE\u05D9\u05D9\u05DC \u05EA\u05E7\u05D9\u05DF.";
     if (values.message.length < 5) errors.message = "\u05E0\u05D0 \u05DC\u05DB\u05EA\u05D5\u05D1 \u05D4\u05D5\u05D3\u05E2\u05D4.";
-    return { values: { ...values, phone: phone2 }, errors };
+    return { values: { ...values, phone }, errors };
   }
 
   // js/components/order-status.js
@@ -5945,7 +6010,7 @@
   }
   function renderAccountDetails() {
     const profile = getProfile();
-    const field3 = (name, label, value, extra = "") => `<label class="field">
+    const field2 = (name, label, value, extra = "") => `<label class="field">
     <span class="text-sm font-semibold">${label}</span>
     <input name="${name}" value="${esc(value)}" ${extra}>
   </label>`;
@@ -5959,13 +6024,13 @@
         <span class="text-sm font-semibold">\u05DE\u05D6\u05D4\u05D4 \u05DC\u05E7\u05D5\u05D7</span>
         <input value="${esc(profile.customerId)}" readonly dir="ltr">
       </label>
-      ${field3("displayName", "\u05E9\u05DD \u05DC\u05EA\u05E6\u05D5\u05D2\u05D4", profile.displayName, `autocomplete="name"`)}
-      ${field3("phone", "\u05D8\u05DC\u05E4\u05D5\u05DF", profile.phone, `type="tel" autocomplete="tel" dir="ltr"`)}
+      ${field2("displayName", "\u05E9\u05DD \u05DC\u05EA\u05E6\u05D5\u05D2\u05D4", profile.displayName, `autocomplete="name"`)}
+      ${field2("phone", "\u05D8\u05DC\u05E4\u05D5\u05DF", profile.phone, `type="tel" autocomplete="tel" dir="ltr"`)}
       <div class="grid gap-4 sm:grid-cols-2">
-        ${field3("city", "\u05E2\u05D9\u05E8", profile.city, `autocomplete="address-level2"`)}
-        ${field3("street", "\u05E8\u05D7\u05D5\u05D1", profile.street, `autocomplete="address-line1"`)}
+        ${field2("city", "\u05E2\u05D9\u05E8", profile.city, `autocomplete="address-level2"`)}
+        ${field2("street", "\u05E8\u05D7\u05D5\u05D1", profile.street, `autocomplete="address-line1"`)}
       </div>
-      ${field3("house", "\u05DE\u05E1\u05E4\u05E8 \u05D1\u05D9\u05EA", profile.house)}
+      ${field2("house", "\u05DE\u05E1\u05E4\u05E8 \u05D1\u05D9\u05EA", profile.house)}
       <p id="profile-error" class="field-error" role="alert" hidden></p>
       <button class="btn" type="submit">\u05E9\u05DE\u05D9\u05E8\u05EA \u05E4\u05E8\u05D8\u05D9\u05DD</button>
     </form>
@@ -6019,14 +6084,14 @@
       const data = Object.fromEntries(new FormData(form).entries());
       const error = form.querySelector("#profile-error");
       const name = String(data.displayName || "").trim();
-      const phone2 = String(data.phone || "").replace(/[^\d]/g, "");
-      if (name.length < 2 || !/^0\d{8,9}$/.test(phone2) || !String(data.city || "").trim() || !String(data.street || "").trim() || !String(data.house || "").trim()) {
+      const phone = String(data.phone || "").replace(/[^\d]/g, "");
+      if (name.length < 2 || !/^0\d{8,9}$/.test(phone) || !String(data.city || "").trim() || !String(data.street || "").trim() || !String(data.house || "").trim()) {
         error.hidden = false;
         error.textContent = "\u05E0\u05D0 \u05DC\u05DE\u05DC\u05D0 \u05E9\u05DD, \u05D8\u05DC\u05E4\u05D5\u05DF \u05D9\u05E9\u05E8\u05D0\u05DC\u05D9, \u05E2\u05D9\u05E8, \u05E8\u05D7\u05D5\u05D1 \u05D5\u05DE\u05E1\u05E4\u05E8 \u05D1\u05D9\u05EA.";
         form.querySelector("input[name='displayName']")?.focus();
         return;
       }
-      saveProfile({ ...data, displayName: name, phone: phone2 });
+      saveProfile({ ...data, displayName: name, phone });
       savedNotice = true;
       rerender({ focus: false });
     });
@@ -6760,7 +6825,7 @@
     document.body.appendChild(dialog);
     return dialog;
   }
-  function field2(label, value) {
+  function field(label, value) {
     return `<p class="product-pop-spec">${esc(label)}: ${esc(value)}</p>`;
   }
   function markup3(product) {
@@ -6778,21 +6843,10 @@
           ${price}
         </div>
         <div class="product-fields">
-          ${field2("\u05DE\u05E9\u05E7\u05DC", product.weight)}
-          ${field2("\u05D9\u05D7\u05F3 \u05D1\u05DE\u05D0\u05E8\u05D6", String(product.unitsPerPack))}
+          ${field("\u05DE\u05E9\u05E7\u05DC", product.weight)}
+          ${field("\u05D9\u05D7\u05F3 \u05D1\u05DE\u05D0\u05E8\u05D6", String(product.unitsPerPack))}
         </div>
-        <div class="product-buy" data-buy>
-          <p class="product-label">\u05DB\u05DE\u05D5\u05EA</p>
-          <div class="product-buy-row">
-            <div class="product-qty" dir="ltr">
-              <button type="button" data-qty="-1" aria-label="\u05D4\u05E4\u05D7\u05EA\u05EA \u05DB\u05DE\u05D5\u05EA">\u2212</button>
-              <input data-qty-input inputmode="numeric" maxlength="2" value="1" aria-label="\u05DB\u05DE\u05D5\u05EA">
-              <button type="button" data-qty="1" aria-label="\u05D4\u05D2\u05D3\u05DC\u05EA \u05DB\u05DE\u05D5\u05EA">+</button>
-            </div>
-            <button type="button" class="product-add" data-add="${esc(product.id)}">\u05D4\u05D5\u05E1\u05E4\u05D4 \u05DC\u05E1\u05DC</button>
-          </div>
-          <button type="button" class="product-now" data-buy-now="${esc(product.id)}">\u05E7\u05E0\u05D9\u05D9\u05D4 \u05E2\u05DB\u05E9\u05D9\u05D5</button>
-        </div>
+        ${productBuy(product)}
         ${productFolds(product, { openDescription: false, shipping: false })}
       </div>
     </div>`;
@@ -6913,6 +6967,7 @@
     mountPromoCarousels(app, document.getElementById("hero-top"));
     mountCatalog(app);
     mountProductGalleries(app);
+    mountProductTabs(app);
     updateAccountSlot();
     updateCartDock(route.name);
     playHero(getTheme().hero === "v3" ? document.getElementById("hero-top") : app);
@@ -6994,17 +7049,6 @@
       const product = getProduct(remove.dataset.remove);
       const yes = await confirmAction(product ? `\u05DC\u05D4\u05E1\u05D9\u05E8 \u05D0\u05EA ${product.name} \u05DE\u05D4\u05E1\u05DC?` : "\u05DC\u05D4\u05E1\u05D9\u05E8 \u05D0\u05EA \u05D4\u05E4\u05E8\u05D9\u05D8 \u05DE\u05D4\u05E1\u05DC?");
       if (yes) removeItem(remove.dataset.remove);
-      return;
-    }
-    const buyNow = event.target.closest("[data-buy-now]");
-    if (buyNow) {
-      const product = getProduct(buyNow.dataset.buyNow);
-      if (!product || !getCommerce(product.id)) return;
-      const input = buyNow.closest("[data-buy]")?.querySelector("[data-qty-input]");
-      const qty = Math.max(1, Math.min(99, Number(input?.value || 1)));
-      addItem(product.id, qty);
-      updateCartBadge(true);
-      navigate2("#/checkout");
       return;
     }
     const add = event.target.closest("[data-add]");

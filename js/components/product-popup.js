@@ -1,7 +1,7 @@
 import { getProduct } from "../data/catalog.js";
 import { getCommerce } from "../data/commerce.js";
 import { isElectronicsProduct } from "../data/departments.js";
-import { mountProductGalleries, productFolds, productGallery } from "./product-view.js";
+import { mountProductGalleries, productBuy, productFolds, productGallery } from "./product-view.js";
 import { esc, money } from "../lib/format.js";
 
 function ensureDialog() {
@@ -41,18 +41,7 @@ function markup(product) {
           ${field("משקל", product.weight)}
           ${field("יח׳ במארז", String(product.unitsPerPack))}
         </div>
-        <div class="product-buy" data-buy>
-          <p class="product-label">כמות</p>
-          <div class="product-buy-row">
-            <div class="product-qty" dir="ltr">
-              <button type="button" data-qty="-1" aria-label="הפחתת כמות">−</button>
-              <input data-qty-input inputmode="numeric" maxlength="2" value="1" aria-label="כמות">
-              <button type="button" data-qty="1" aria-label="הגדלת כמות">+</button>
-            </div>
-            <button type="button" class="product-add" data-add="${esc(product.id)}">הוספה לסל</button>
-          </div>
-          <button type="button" class="product-now" data-buy-now="${esc(product.id)}">קנייה עכשיו</button>
-        </div>
+        ${productBuy(product)}
         ${productFolds(product, { openDescription: false, shipping: false })}
       </div>
     </div>`;
