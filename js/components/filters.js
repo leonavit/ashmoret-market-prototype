@@ -15,10 +15,7 @@ export function applyListing(list, query) {
   return items;
 }
 
-export function listingControls({ brands, categories, query }) {
-  const brandOptions = [`<option value="">כל המותגים</option>`]
-    .concat(brands.map((brand) => `<option value="${esc(brand)}"${query.brand === brand ? " selected" : ""}>${esc(brand)}</option>`))
-    .join("");
+export function listingControls({ categories, query }) {
   const categoryOptions = categories
     ? [`<option value="">כל הקטגוריות</option>`]
         .concat(categories.map((category) => `<option value="${esc(category.slug)}"${query.category === category.slug ? " selected" : ""}>${esc(category.name)}</option>`))
@@ -30,20 +27,26 @@ export function listingControls({ brands, categories, query }) {
     ["price-desc", "מחיר, מהגבוה"],
   ];
 
-  return `<form class="mb-6 grid gap-3 md:grid-cols-4" data-listing-form>
-    ${categories ? `<label class="field"><span class="text-sm font-semibold">קטגוריה</span><select name="category">${categoryOptions}</select></label>` : ""}
-    <label class="field"><span class="text-sm font-semibold">מותג</span><select name="brand">${brandOptions}</select></label>
-    <label class="field"><span class="text-sm font-semibold">מיון</span><select name="sort">${sorts
+  return `<form class="listing-bar" data-listing-form>
+    <div class="listing-filters">
+      ${categories ? `<label class="listing-select"><span>קטגוריה</span><select name="category">${categoryOptions}</select></label>` : ""}
+      <label class="listing-check">
+        <input type="checkbox" name="offers" value="1"${query.offers === "1" ? " checked" : ""}>
+        מבצעים בלבד
+      </label>
+    </div>
+    <label class="listing-select listing-sort"><span>מיון</span><select name="sort">${sorts
       .map(([value, label]) => `<option value="${value}"${(query.sort || "name") === value ? " selected" : ""}>${label}</option>`)
       .join("")}</select></label>
-    <label class="flex items-end gap-2 pb-3 text-sm font-semibold">
-      <input type="checkbox" name="offers" value="1"${query.offers === "1" ? " checked" : ""}>
-      מבצעים בלבד
-    </label>
   </form>`;
 }
 
+function pageSize() {
+  return window.matchMedia("(min-width: 1280px)").matches ? 25 : 24;
+}
+
 export function visibleSlice(items, query) {
-  if (query.all === "1" || items.length <= 24) return { shown: items, more: 0 };
-  return { shown: items.slice(0, 24), more: items.length - 24 };
+  const limit = pageSize();
+  if (query.all === "1" || items.length <= limit) return { shown: items, more: 0 };
+  return { shown: items.slice(0, limit), more: items.length - limit };
 }

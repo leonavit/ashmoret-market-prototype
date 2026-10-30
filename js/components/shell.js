@@ -1,5 +1,5 @@
-import { categories } from "../data/catalog.js";
 import { searchProducts } from "../data/catalog.js";
+import { inSupplierScope, supplierCategories } from "./suppliers.js";
 import { countItems, subscribe } from "../state/cart.js";
 import { esc } from "../lib/format.js";
 import { prefersReducedMotion } from "../lib/format.js";
@@ -30,7 +30,7 @@ export function bindShell(navigate) {
   });
 
   input.addEventListener("input", () => {
-    const matches = searchProducts(input.value).slice(0, 6);
+    const matches = searchProducts(input.value).filter(inSupplierScope).slice(0, 6);
     if (!input.value.trim() || !matches.length) {
       suggest.innerHTML = "";
       setSuggestOpen(false);
@@ -71,7 +71,11 @@ export function bindShell(navigate) {
   menuOpen.addEventListener("click", () => toggleMenu());
 
   menu.addEventListener("click", (event) => {
-    if (event.target.closest("a")) toggleMenu(false);
+    if (event.target.closest("a, [data-menu-close]")) toggleMenu(false);
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && menu.classList.contains("is-open")) toggleMenu(false);
   });
 
   catPrev.addEventListener("click", () => categoryCarousel?.scrollPrev());
@@ -90,12 +94,17 @@ export function bindShell(navigate) {
   updateAccountSlot();
 
   function toggleMenu(force) {
-    const open = typeof force === "boolean" ? force : !menu.classList.contains("is-open");
+    const wasOpen = menu.classList.contains("is-open");
+    const open = typeof force === "boolean" ? force : !wasOpen;
+    const cover = document.documentElement.dataset.mobileMenu === "v2";
     menu.classList.toggle("is-open", open);
     menuOpen.setAttribute("aria-expanded", String(open));
+    document.documentElement.classList.toggle("is-menu-cover", open && cover);
+    if (cover && open) menu.querySelector("[data-menu-close]")?.focus();
+    else if (cover && wasOpen && !open) menuOpen.focus();
     const gsap = window.gsap;
-    if (gsap && !prefersReducedMotion()) {
-      gsap.fromTo(menu, { y: -8, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.28, ease: "power2.out" });
+    if (open && gsap && !prefersReducedMotion()) {
+      gsap.fromTo(menu, { y: cover ? 0 : -8, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: cover ? 0.2 : 0.28, ease: "power2.out" });
     }
   }
 }
@@ -133,7 +142,7 @@ export function renderCategoryNav(activeSlug) {
   const list = document.getElementById("category-nav");
   const viewport = document.getElementById("category-viewport");
   const copies = 4;
-  list.innerHTML = Array.from({ length: copies }, (_, copy) => categories
+  list.innerHTML = Array.from({ length: copies }, (_, copy) => supplierCategories()
     .map((category) => {
       const current = copy === 0 && category.slug === activeSlug ? ' aria-current="page"' : "";
       const clone = copy === 0 ? "" : ' tabindex="-1" aria-hidden="true"';
@@ -182,5 +191,6 @@ export function closePanels() {
   setSuggestOpen(false);
   document.getElementById("mobile-menu").classList.remove("is-open");
   document.getElementById("menu-open").setAttribute("aria-expanded", "false");
+  document.documentElement.classList.remove("is-menu-cover");
   closeMega();
 }

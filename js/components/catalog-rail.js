@@ -1,5 +1,6 @@
 import { productsByCategory } from "../data/catalog.js";
 import { shelfCard } from "./product-card.js";
+import { carousel, mountCarousels } from "./carousel.js";
 import { esc } from "../lib/format.js";
 import { prefersReducedMotion } from "../lib/format.js";
 
@@ -40,6 +41,18 @@ function gridHtml(slug) {
   return `<ul class="catalog-grid">${items.map((product) => `<li>${shelfCard(product)}</li>`).join("")}</ul>`;
 }
 
+function railHtml(slug, label) {
+  const items = productsByCategory(slug);
+  if (!items.length) {
+    return `<p class="catalog-empty">אין מוצרים להצגה בקטגוריה הזו.</p>`;
+  }
+  return carousel(items, label);
+}
+
+function panelHtml(layout, slug, label) {
+  return layout === "rail" ? railHtml(slug, label) : gridHtml(slug);
+}
+
 function tabId(sectionId, slug) {
   return `${sectionId}-panel-tab-${slug}`;
 }
@@ -78,18 +91,18 @@ function bindTabKeys(tablist, tabs, activate) {
   });
 }
 
-export function catalogGridSection({ id, title, href, tabs, className = "pb-12" }) {
+export function catalogGridSection({ id, title, href, tabs, className = "pb-12", layout = "grid", showTabs = true }) {
   const first = tabs[0]?.[0];
-  const panel = first ? gridHtml(first) : `<p class="catalog-empty">אין מוצרים להצגה בקטגוריה הזו.</p>`;
-  const tabList = tabs.length
+  const panel = first ? panelHtml(layout, first, title) : `<p class="catalog-empty">אין מוצרים להצגה בקטגוריה הזו.</p>`;
+  const tabList = showTabs && tabs.length
     ? `<div class="catalog-tabs" role="tablist" aria-label="קטגוריות ${esc(title)}">${catalogTabButtons(tabs, "data-catalog-grid-tab", id)}</div>`
     : "";
-  return `<section class="${esc(className)}" data-catalog-grid aria-labelledby="${esc(id)}">
+  return `<section class="${esc(className)}" data-catalog-grid data-catalog-layout="${esc(layout)}" data-catalog-label="${esc(title)}" aria-labelledby="${esc(id)}">
     <div class="catalog-head">
       <h2 id="${esc(id)}"><a href="${esc(href)}"><span class="cat-heart" aria-hidden="true"></span>${esc(title)}</a></h2>
       ${tabList}
     </div>
-    <div data-catalog-grid-panel ${panelAttrs(id, tabs)}>${panel}</div>
+    <div data-catalog-grid-panel ${showTabs ? panelAttrs(id, tabs) : ""}>${panel}</div>
   </section>`;
 }
 
@@ -162,7 +175,10 @@ function bindCatalogGrid(grid) {
   const activate = (button, focus = true) => {
     const changed = button.getAttribute("aria-selected") !== "true";
     selectTab(tabs, button, panel, focus);
-    if (changed) panel.innerHTML = gridHtml(button.dataset.catalogGridTab);
+    if (!changed) return;
+    const { catalogLayout: layout, catalogLabel: label } = grid.dataset;
+    panel.innerHTML = panelHtml(layout, button.dataset.catalogGridTab, label);
+    if (layout === "rail") mountCarousels(panel);
   };
   tabs.forEach((button) => button.addEventListener("click", () => activate(button, false)));
   bindTabKeys(grid.querySelector("[role=tablist]"), tabs, activate);

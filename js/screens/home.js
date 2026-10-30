@@ -5,8 +5,22 @@ import { carousel } from "../components/carousel.js";
 import { catalogGridSection } from "../components/catalog-rail.js";
 import { getTheme } from "../components/theme-options.js";
 import { promoCarousel } from "../components/promo-carousel.js";
+import { inSupplierScope, isSingleSupplier, supplierCategories } from "../components/suppliers.js";
+
+function supplierCatalog() {
+  return supplierCategories().map((category) => catalogGridSection({
+    id: `cat-${category.slug}-title`,
+    title: category.name,
+    href: `#/c/${category.slug}`,
+    tabs: [[category.slug, category.name]],
+    className: "home-section",
+    layout: getTheme().categories === "v2" ? "rail" : "grid",
+    showTabs: false,
+  })).join("");
+}
 
 function departmentCatalogs() {
+  if (isSingleSupplier()) return supplierCatalog();
   return ["super", "home", "electronics"].map((id, index) => {
     const department = getDepartment(id);
     const tabs = department.slugs
@@ -21,12 +35,13 @@ function departmentCatalogs() {
       href: `#/d/${id}`,
       tabs,
       className: "home-section",
+      layout: getTheme().categories === "v2" ? "rail" : "grid",
     });
   }).join("");
 }
 
 export function renderHome() {
-  const offers = products.filter((product) => getCommerce(product.id)?.compareAt).slice(0, 10);
+  const offers = products.filter((product) => inSupplierScope(product) && getCommerce(product.id)?.compareAt).slice(0, 10);
 
   return `<div class="home-page wrap">
     ${getTheme().hero === "v1" ? `<div class="home-hero">${heroBlock()}</div>` : ""}

@@ -18,11 +18,52 @@ export function showToast(message, href) {
   }, 3200);
 }
 
-export function confirmAction(message) {
+function confirmWithin(container, message) {
+  container.querySelector(".inline-confirm")?.remove();
+  const layer = document.createElement("div");
+  layer.className = "inline-confirm";
+  layer.setAttribute("role", "alertdialog");
+  layer.setAttribute("aria-modal", "true");
+  layer.setAttribute("aria-labelledby", "inline-confirm-title");
+  layer.innerHTML = `<div class="inline-confirm-card">
+    <h2 id="inline-confirm-title" class="text-lg font-extrabold">${esc(message)}</h2>
+    <div class="inline-confirm-actions">
+      <button type="button" class="btn" data-confirm="yes">הסרה</button>
+      <button type="button" class="btn btn-line" data-confirm="cancel">ביטול</button>
+    </div>
+  </div>`;
+  container.appendChild(layer);
+  const buttons = [...layer.querySelectorAll("[data-confirm]")];
+  buttons[0].focus();
+  return new Promise((resolve) => {
+    const done = (answer) => {
+      layer.remove();
+      resolve(answer);
+    };
+    layer.addEventListener("click", (event) => {
+      const button = event.target.closest("[data-confirm]");
+      if (button) done(button.dataset.confirm === "yes");
+      else if (event.target === layer) done(false);
+    });
+    layer.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        event.stopPropagation();
+        done(false);
+      } else if (event.key === "Tab") {
+        event.preventDefault();
+        const next = buttons[(buttons.indexOf(document.activeElement) + 1) % buttons.length];
+        next.focus();
+      }
+    });
+  });
+}
+
+export function confirmAction(message, { within } = {}) {
+  if (within) return confirmWithin(within, message);
   const root = document.getElementById("modal-root");
-  root.innerHTML = `<dialog aria-labelledby="confirm-title">
+  root.innerHTML = `<dialog class="confirm-dialog" aria-labelledby="confirm-title">
     <h2 id="confirm-title" class="text-lg font-extrabold">${esc(message)}</h2>
-    <form method="dialog" class="mt-5 flex gap-2">
+    <form method="dialog" class="inline-confirm-actions mt-5">
       <button class="btn" value="yes">הסרה</button>
       <button class="btn btn-line" value="cancel">ביטול</button>
     </form>

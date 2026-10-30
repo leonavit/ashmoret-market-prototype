@@ -4149,8 +4149,8 @@
       return `<p class="catalog-empty">\u05D0\u05D9\u05DF \u05DE\u05D5\u05E6\u05E8\u05D9\u05DD \u05DC\u05D4\u05E6\u05D2\u05D4 \u05D1\u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D4 \u05D4\u05D6\u05D5.</p>`;
     }
     return loopSlides(items).map(({ product, copy }) => {
-      const hidden = copy === 0 ? "" : ` aria-hidden="true"`;
-      return `<div class="embla__slide"${hidden}>${shelfCard(product)}</div>`;
+      const hidden2 = copy === 0 ? "" : ` aria-hidden="true"`;
+      return `<div class="embla__slide"${hidden2}>${shelfCard(product)}</div>`;
     }).join("");
   }
   function gridHtml(slug) {
@@ -4159,6 +4159,16 @@
       return `<p class="catalog-empty">\u05D0\u05D9\u05DF \u05DE\u05D5\u05E6\u05E8\u05D9\u05DD \u05DC\u05D4\u05E6\u05D2\u05D4 \u05D1\u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D4 \u05D4\u05D6\u05D5.</p>`;
     }
     return `<ul class="catalog-grid">${items.map((product) => `<li>${shelfCard(product)}</li>`).join("")}</ul>`;
+  }
+  function railHtml(slug, label) {
+    const items = productsByCategory(slug);
+    if (!items.length) {
+      return `<p class="catalog-empty">\u05D0\u05D9\u05DF \u05DE\u05D5\u05E6\u05E8\u05D9\u05DD \u05DC\u05D4\u05E6\u05D2\u05D4 \u05D1\u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D4 \u05D4\u05D6\u05D5.</p>`;
+    }
+    return carousel(items, label);
+  }
+  function panelHtml(layout, slug, label) {
+    return layout === "rail" ? railHtml(slug, label) : gridHtml(slug);
   }
   function tabId(sectionId, slug) {
     return `${sectionId}-panel-tab-${slug}`;
@@ -4193,16 +4203,16 @@
       activate(tabs[(keys[event.key] + tabs.length) % tabs.length]);
     });
   }
-  function catalogGridSection({ id, title, href, tabs, className = "pb-12" }) {
+  function catalogGridSection({ id, title, href, tabs, className = "pb-12", layout = "grid", showTabs = true }) {
     const first = tabs[0]?.[0];
-    const panel = first ? gridHtml(first) : `<p class="catalog-empty">\u05D0\u05D9\u05DF \u05DE\u05D5\u05E6\u05E8\u05D9\u05DD \u05DC\u05D4\u05E6\u05D2\u05D4 \u05D1\u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D4 \u05D4\u05D6\u05D5.</p>`;
-    const tabList = tabs.length ? `<div class="catalog-tabs" role="tablist" aria-label="\u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D5\u05EA ${esc(title)}">${catalogTabButtons(tabs, "data-catalog-grid-tab", id)}</div>` : "";
-    return `<section class="${esc(className)}" data-catalog-grid aria-labelledby="${esc(id)}">
+    const panel = first ? panelHtml(layout, first, title) : `<p class="catalog-empty">\u05D0\u05D9\u05DF \u05DE\u05D5\u05E6\u05E8\u05D9\u05DD \u05DC\u05D4\u05E6\u05D2\u05D4 \u05D1\u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D4 \u05D4\u05D6\u05D5.</p>`;
+    const tabList = showTabs && tabs.length ? `<div class="catalog-tabs" role="tablist" aria-label="\u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D5\u05EA ${esc(title)}">${catalogTabButtons(tabs, "data-catalog-grid-tab", id)}</div>` : "";
+    return `<section class="${esc(className)}" data-catalog-grid data-catalog-layout="${esc(layout)}" data-catalog-label="${esc(title)}" aria-labelledby="${esc(id)}">
     <div class="catalog-head">
       <h2 id="${esc(id)}"><a href="${esc(href)}"><span class="cat-heart" aria-hidden="true"></span>${esc(title)}</a></h2>
       ${tabList}
     </div>
-    <div data-catalog-grid-panel ${panelAttrs(id, tabs)}>${panel}</div>
+    <div data-catalog-grid-panel ${showTabs ? panelAttrs(id, tabs) : ""}>${panel}</div>
   </section>`;
   }
   function bindCatalogRail(section) {
@@ -4249,7 +4259,10 @@
     const activate = (button, focus = true) => {
       const changed = button.getAttribute("aria-selected") !== "true";
       selectTab(tabs, button, panel, focus);
-      if (changed) panel.innerHTML = gridHtml(button.dataset.catalogGridTab);
+      if (!changed) return;
+      const { catalogLayout: layout, catalogLabel: label } = grid.dataset;
+      panel.innerHTML = panelHtml(layout, button.dataset.catalogGridTab, label);
+      if (layout === "rail") mountCarousels(panel);
     };
     tabs.forEach((button) => button.addEventListener("click", () => activate(button, false)));
     bindTabKeys(grid.querySelector("[role=tablist]"), tabs, activate);
@@ -4261,9 +4274,18 @@
 
   // js/components/theme-options.js
   var KEY = "ashmoret-theme";
-  var defaults = { header: "v1", hero: "v1", wideHeader: false };
+  var defaults = { header: "v1", hero: "v3", categories: "v2", mobileMenu: "v1", suppliers: "v1", wideHeader: false };
   var desktop = window.matchMedia("(min-width: 1024px)");
   var gearIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle cx="12" cy="12" r="3"></circle></svg>`;
+  var groupIcon = (paths) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths}</svg>`;
+  var groupIcons = {
+    header: groupIcon(`<rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="M3 9h18M6.5 6.5h3M15 6.5h2.5"></path>`),
+    hero: groupIcon(`<rect x="3" y="5" width="18" height="14" rx="2"></rect><circle cx="15.5" cy="9.5" r="1.5"></circle><path d="m3 16 5-4.5 4 3.5 3-2 6 4"></path>`),
+    categories: groupIcon(`<rect x="3" y="4" width="7" height="7" rx="1.5"></rect><rect x="14" y="4" width="7" height="7" rx="1.5"></rect><rect x="3" y="13" width="7" height="7" rx="1.5"></rect><rect x="14" y="13" width="7" height="7" rx="1.5"></rect>`),
+    mobileMenu: groupIcon(`<rect x="6.5" y="2.5" width="11" height="19" rx="2.5"></rect><path d="M9.5 8h5M9.5 11h5M9.5 14h5"></path>`),
+    suppliers: groupIcon(`<path d="M3 9 4.5 4h15L21 9"></path><path d="M4 9v11h16V9"></path><path d="M3 9h18"></path><path d="M9.5 20v-5.5h5V20"></path>`),
+    wideHeader: groupIcon(`<path d="M3 12h18"></path><path d="m7 8-4 4 4 4M17 8l4 4-4 4"></path>`)
+  };
   var groups = [
     {
       name: "header",
@@ -4272,16 +4294,41 @@
         ["v1", "V1 \xB7 \u05D1\u05E8\u05D9\u05E8\u05EA \u05DE\u05D7\u05D3\u05DC", "\u05D7\u05D9\u05E4\u05D5\u05E9 \u05D1\u05D9\u05DF \u05D4\u05DC\u05D5\u05D2\u05D5 \u05DC\u05E1\u05DC, \u05D5\u05EA\u05E4\u05E8\u05D9\u05D8 \u05D4\u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D5\u05EA \u05D1\u05E4\u05E1 \u05E0\u05E4\u05E8\u05D3 \u05DE\u05EA\u05D7\u05EA."],
         ["v2", "V2", "\u05D7\u05D9\u05E4\u05D5\u05E9 \u05D1\u05E4\u05E1 \u05D4\u05E2\u05DC\u05D9\u05D5\u05DF, \u05D5\u05EA\u05E4\u05E8\u05D9\u05D8 \u05D4\u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D5\u05EA \u05E2\u05DD \u05D4\u05DE\u05D2\u05D4\u05BE\u05DE\u05E0\u05D9\u05D5 \u05D1\u05D9\u05DF \u05D4\u05DC\u05D5\u05D2\u05D5 \u05DC\u05E1\u05DC."]
       ],
-      checkbox: ["wideHeader", "Header \u05E8\u05D7\u05D1", "\u05D4\u05DC\u05D5\u05D2\u05D5 \u05E6\u05DE\u05D5\u05D3 \u05DC\u05D9\u05DE\u05D9\u05DF \u05D5\u05D4\u05E1\u05DC \u05DC\u05E9\u05DE\u05D0\u05DC, \u05D1\u05E8\u05D5\u05D7\u05D1 90% \u05DE\u05D4\u05DE\u05E1\u05DA."],
-      note: "V2 \u05DE\u05D5\u05E6\u05D2 \u05D1\u05DE\u05E1\u05DB\u05D9\u05DD \u05E8\u05D7\u05D1\u05D9\u05DD. \u05D1\u05DE\u05D5\u05D1\u05D9\u05D9\u05DC \u05E0\u05E9\u05D0\u05E8 \u05D4\u05EA\u05E4\u05E8\u05D9\u05D8 \u05D4\u05E8\u05D2\u05D9\u05DC."
+      checkbox: ["wideHeader", "Fullwidth", "\u05D4\u05D3\u05E8, \u05E4\u05D5\u05D8\u05E8, \u05E2\u05DE\u05D5\u05D3 \u05D4\u05D1\u05D9\u05EA, \u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D5\u05EA \u05D5\u05DB\u05DC \u05E9\u05D0\u05E8 \u05D4\u05E8\u05D0\u05E4\u05E8\u05D9\u05DD \u05D4\u05E8\u05D0\u05E9\u05D9\u05D9\u05DD \u05D1\u05E8\u05D5\u05D7\u05D1 90% \u05DE\u05D4\u05DE\u05E1\u05DA. \u05E2\u05DE\u05D5\u05D3\u05D9\u05DD \u05E6\u05E8\u05D9\u05DD \u05D1\u05DB\u05D5\u05D5\u05E0\u05D4, \u05DB\u05DE\u05D5 \u05E2\u05DE\u05D5\u05D3 \u05DE\u05D5\u05E6\u05E8 \u05D5\u05EA\u05E9\u05DC\u05D5\u05DD, \u05E0\u05E9\u05D0\u05E8\u05D9\u05DD \u05DB\u05DE\u05D5 \u05E9\u05D4\u05DD."],
+      note: "V2 \u05DE\u05D5\u05E6\u05D2 \u05D1\u05DE\u05E1\u05DB\u05D9\u05DD \u05E8\u05D7\u05D1\u05D9\u05DD. \u05D1\u05DE\u05D5\u05D1\u05D9\u05D9\u05DC \u05E0\u05E9\u05D0\u05E8 \u05D4\u05EA\u05E4\u05E8\u05D9\u05D8 \u05D4\u05E8\u05D2\u05D9\u05DC. \u05E2\u05DD \u05E1\u05E4\u05E7 \u05D0\u05D7\u05D3, \u05EA\u05E4\u05E8\u05D9\u05D8 \u05D4\u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D5\u05EA \u05E0\u05E9\u05D0\u05E8 \u05D1\u05E4\u05E1 \u05E0\u05E4\u05E8\u05D3 \u05DE\u05EA\u05D7\u05EA."
     },
     {
       name: "hero",
       title: "\u05D4\u05D2\u05D3\u05E8\u05D5\u05EA Hero",
       options: [
-        ["v1", "V1 \xB7 \u05D1\u05E8\u05D9\u05E8\u05EA \u05DE\u05D7\u05D3\u05DC", "\u05E7\u05E8\u05D5\u05E1\u05DC\u05EA \u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D5\u05EA, \u05D0\u05D9\u05D9\u05D8\u05DD \u05DE\u05E7\u05D5\u05D3\u05DD \u05D5\u05E9\u05E0\u05D9 \u05DE\u05E7\u05D5\u05D3\u05DE\u05D9\u05DD \u05E7\u05D8\u05E0\u05D9\u05DD \u05D1\u05E6\u05D3."],
+        ["v1", "V1", "\u05E7\u05E8\u05D5\u05E1\u05DC\u05EA \u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D5\u05EA, \u05D0\u05D9\u05D9\u05D8\u05DD \u05DE\u05E7\u05D5\u05D3\u05DD \u05D5\u05E9\u05E0\u05D9 \u05DE\u05E7\u05D5\u05D3\u05DE\u05D9\u05DD \u05E7\u05D8\u05E0\u05D9\u05DD \u05D1\u05E6\u05D3."],
         ["v2", "V2", "\u05E1\u05DC\u05D9\u05D9\u05D3\u05E8 \u05EA\u05DE\u05D5\u05E0\u05D5\u05EA \u05DE\u05EA\u05D7\u05DC\u05E4\u05D5\u05EA \u05E2\u05DD \u05E0\u05E7\u05D5\u05D3\u05D5\u05EA \u05D3\u05E4\u05D3\u05D5\u05E3, \u05D5\u05DE\u05EA\u05D7\u05EA\u05D9\u05D5 \u05E7\u05E8\u05D5\u05E1\u05DC\u05EA \u05D4\u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D5\u05EA."],
-        ["v3", "V3", "\u05E9\u05DC\u05D5\u05E9\u05EA \u05D4\u05D1\u05D0\u05E0\u05E8\u05D9\u05DD \u05DC\u05DE\u05E2\u05DC\u05D4, \u05D5\u05DE\u05EA\u05D7\u05EA\u05D9\u05D4\u05DD \u05E7\u05E8\u05D5\u05E1\u05DC\u05EA \u05D4\u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D5\u05EA \u05E2\u05DD \u05D4\u05DB\u05D5\u05EA\u05E8\u05EA \xAB\u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D5\u05EA \u05E0\u05D1\u05D7\u05E8\u05D5\u05EA\xBB."]
+        ["v3", "V3 \xB7 \u05D1\u05E8\u05D9\u05E8\u05EA \u05DE\u05D7\u05D3\u05DC", "\u05E9\u05DC\u05D5\u05E9\u05EA \u05D4\u05D1\u05D0\u05E0\u05E8\u05D9\u05DD \u05DC\u05DE\u05E2\u05DC\u05D4, \u05D5\u05DE\u05EA\u05D7\u05EA\u05D9\u05D4\u05DD \u05E7\u05E8\u05D5\u05E1\u05DC\u05EA \u05D4\u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D5\u05EA \u05E2\u05DD \u05D4\u05DB\u05D5\u05EA\u05E8\u05EA \xAB\u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D5\u05EA \u05E0\u05D1\u05D7\u05E8\u05D5\u05EA\xBB."]
+      ]
+    },
+    {
+      name: "categories",
+      title: "\u05D4\u05D2\u05D3\u05E8\u05D5\u05EA \u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D5\u05EA \u05D1\u05E2\u05DE\u05D5\u05D3 \u05D4\u05D1\u05D9\u05EA",
+      options: [
+        ["v1", "V1", "\u05D1\u05DC\u05D5\u05E7 \u05DC\u05DB\u05DC \u05DE\u05D7\u05DC\u05E7\u05D4 \u05E2\u05DD \u05D8\u05D0\u05D1\u05D9\u05DD \u05D5\u05E9\u05EA\u05D9 \u05E9\u05D5\u05E8\u05D5\u05EA \u05E9\u05DC \u05DE\u05D5\u05E6\u05E8\u05D9\u05DD."],
+        ["v2", "V2 \xB7 \u05D1\u05E8\u05D9\u05E8\u05EA \u05DE\u05D7\u05D3\u05DC", "\u05E7\u05E8\u05D5\u05E1\u05DC\u05EA \u05DE\u05D5\u05E6\u05E8\u05D9\u05DD \u05DB\u05DE\u05D5 \u05E7\u05E8\u05D5\u05E1\u05DC\u05EA \u05D4\u05DE\u05D1\u05E6\u05E2\u05D9\u05DD. \u05D4\u05D8\u05D0\u05D1\u05D9\u05DD \u05DE\u05D7\u05DC\u05D9\u05E4\u05D9\u05DD \u05D0\u05EA \u05D4\u05DE\u05D5\u05E6\u05E8\u05D9\u05DD \u05D1\u05E7\u05E8\u05D5\u05E1\u05DC\u05D4."]
+      ]
+    },
+    {
+      name: "mobileMenu",
+      title: "\u05D4\u05D2\u05D3\u05E8\u05D5\u05EA \u05EA\u05E4\u05E8\u05D9\u05D8 \u05DE\u05D5\u05D1\u05D9\u05D9\u05DC",
+      options: [
+        ["v1", "V1 \xB7 \u05D1\u05E8\u05D9\u05E8\u05EA \u05DE\u05D7\u05D3\u05DC", "\u05D4\u05EA\u05E4\u05E8\u05D9\u05D8 \u05E0\u05E4\u05EA\u05D7 \u05DE\u05EA\u05D7\u05EA \u05DC\u05D4\u05D3\u05E8."],
+        ["v2", "V2", "\u05D4\u05EA\u05E4\u05E8\u05D9\u05D8 \u05E0\u05E4\u05EA\u05D7 \u05E2\u05DC \u05DB\u05DC \u05D4\u05DE\u05E1\u05DA, \u05E2\u05DD \u05D4\u05DC\u05D5\u05D2\u05D5 \u05D1\u05DE\u05E8\u05DB\u05D6 \u05DC\u05DE\u05E2\u05DC\u05D4 \u05D5\u05DB\u05E4\u05EA\u05D5\u05E8 \u05E1\u05D2\u05D9\u05E8\u05D4 \u05DE\u05D9\u05DE\u05D9\u05DF, \u05D1\u05DE\u05E7\u05D5\u05DD \u05D4\u05D4\u05DE\u05D1\u05D5\u05E8\u05D2\u05E8."]
+      ],
+      note: "\u05D4\u05EA\u05E4\u05E8\u05D9\u05D8 \u05DE\u05D5\u05E6\u05D2 \u05D1\u05DE\u05E1\u05DB\u05D9\u05DD \u05E6\u05E8\u05D9\u05DD \u05DE\u05BE1024 \u05E4\u05D9\u05E7\u05E1\u05DC\u05D9\u05DD."
+    },
+    {
+      name: "suppliers",
+      title: "\u05D4\u05D2\u05D3\u05E8\u05D5\u05EA \u05E1\u05E4\u05E7\u05D9\u05DD",
+      options: [
+        ["v1", "V1 \xB7 \u05D1\u05E8\u05D9\u05E8\u05EA \u05DE\u05D7\u05D3\u05DC", "\u05E8\u05D9\u05D1\u05D5\u05D9 \u05E1\u05E4\u05E7\u05D9\u05DD: \u05E1\u05D5\u05E4\u05E8 \u05D0\u05E9\u05DE\u05D5\u05E8\u05EA, \u05D7\u05D3 \u05E4\u05E2\u05DE\u05D9 \u05D5\u05DB\u05DC\u05D9 \u05D1\u05D9\u05EA, \u05E7\u05E0\u05D9\u05D5\u05DF \u05D0\u05E9\u05DE\u05D5\u05E8\u05EA \u05D5\u05DE\u05D1\u05E6\u05E2\u05D9\u05DD."],
+        ["v2", "V2", "\u05E1\u05E4\u05E7 \u05D0\u05D7\u05D3, \u05EA\u05D5\u05E6\u05E8\u05EA. \u05D4\u05EA\u05E4\u05E8\u05D9\u05D8, \u05E7\u05E8\u05D5\u05E1\u05DC\u05EA \u05D4\u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D5\u05EA \u05D5\u05E2\u05DE\u05D5\u05D3 \u05D4\u05D1\u05D9\u05EA \u05DC\u05E4\u05D9 \u05D4\u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D5\u05EA \u05D1\u05E7\u05D8\u05DC\u05D5\u05D2 \u05EA\u05D5\u05E6\u05E8\u05EA."]
       ]
     }
   ];
@@ -4289,12 +4336,17 @@
   var markers = null;
   var onHeroChange = () => {
   };
+  var onSuppliersChange = () => {
+  };
   function load() {
     try {
       const saved = JSON.parse(localStorage.getItem(KEY) || "{}");
       return {
         header: saved.header === "v2" ? "v2" : "v1",
-        hero: ["v2", "v3"].includes(saved.hero) ? saved.hero : "v1",
+        hero: ["v1", "v2", "v3"].includes(saved.hero) ? saved.hero : defaults.hero,
+        categories: ["v1", "v2"].includes(saved.categories) ? saved.categories : defaults.categories,
+        mobileMenu: saved.mobileMenu === "v2" ? "v2" : defaults.mobileMenu,
+        suppliers: saved.suppliers === "v2" ? "v2" : defaults.suppliers,
         wideHeader: saved.wideHeader === true
       };
     } catch {
@@ -4309,6 +4361,10 @@
   }
   function getTheme() {
     return state;
+  }
+  function applyMobileMenu() {
+    document.documentElement.dataset.mobileMenu = state.mobileMenu;
+    if (state.mobileMenu !== "v2") document.documentElement.classList.remove("is-menu-cover");
   }
   function applyHeader() {
     const search = document.getElementById("search-slot");
@@ -4327,13 +4383,10 @@
     const moved = state.header === "v2" && desktop.matches;
     document.documentElement.dataset.headerLayout = moved ? "v2" : "v1";
     if (tagline) tagline.hidden = moved;
-    if (moved) {
-      topSlot.append(search);
-      tools.before(nav);
-    } else {
-      markers.search.after(search);
-      markers.nav.after(nav);
-    }
+    if (moved) topSlot.append(search);
+    else markers.search.after(search);
+    if (moved && state.suppliers !== "v2") tools.before(nav);
+    else markers.nav.after(nav);
   }
   function panelMarkup() {
     return `<div class="theme-panel-head">
@@ -4345,14 +4398,14 @@
   </div>
   <div class="theme-panel-body">
     ${groups.map((group) => `<fieldset class="theme-group">
-      <legend>${group.title}</legend>
+      <legend><span class="theme-legend-icon">${groupIcons[group.name]}</span>${group.title}</legend>
       ${group.options.map(([value, label, text]) => `<label class="theme-option">
         <input type="radio" name="${group.name}" value="${value}" ${state[group.name] === value ? "checked" : ""} data-theme-option>
         <span><strong>${label}</strong><small>${text}</small></span>
       </label>`).join("")}
       ${group.checkbox ? `<label class="theme-option">
         <input type="checkbox" name="${group.checkbox[0]}" ${state[group.checkbox[0]] ? "checked" : ""} data-theme-toggle>
-        <span><strong>${group.checkbox[1]}</strong><small>${group.checkbox[2]}</small></span>
+        <span><strong class="theme-option-title"><span class="theme-legend-icon">${groupIcons[group.checkbox[0]]}</span>${group.checkbox[1]}</strong><small>${group.checkbox[2]}</small></span>
       </label>` : ""}
       ${group.note ? `<p class="theme-note">${group.note}</p>` : ""}
     </fieldset>`).join("")}
@@ -4372,11 +4425,14 @@
     state = { ...state, [name]: value };
     save();
     syncInputs(panel);
-    if (name === "header" || name === "wideHeader") applyHeader();
-    if (name === "hero") onHeroChange();
+    if (name === "header" || name === "wideHeader" || name === "suppliers") applyHeader();
+    if (name === "hero" || name === "categories") onHeroChange();
+    if (name === "mobileMenu") applyMobileMenu();
+    if (name === "suppliers") onSuppliersChange();
   }
-  function bindThemeOptions({ heroChange } = {}) {
+  function bindThemeOptions({ heroChange, suppliersChange } = {}) {
     onHeroChange = heroChange || onHeroChange;
+    onSuppliersChange = suppliersChange || onSuppliersChange;
     const gear = document.createElement("button");
     gear.type = "button";
     gear.className = "theme-gear";
@@ -4406,6 +4462,9 @@
       if (event.target.closest("[data-theme-reset]")) {
         setOption("header", defaults.header, panel);
         setOption("hero", defaults.hero, panel);
+        setOption("categories", defaults.categories, panel);
+        setOption("mobileMenu", defaults.mobileMenu, panel);
+        setOption("suppliers", defaults.suppliers, panel);
         setOption("wideHeader", defaults.wideHeader, panel);
       }
     });
@@ -4427,6 +4486,7 @@
     });
     desktop.addEventListener("change", applyHeader);
     applyHeader();
+    applyMobileMenu();
   }
 
   // js/components/promo-carousel.js
@@ -4522,8 +4582,32 @@
     roots.filter(Boolean).forEach((root) => root.querySelectorAll("[data-promo-carousel]").forEach(mountOne));
   }
 
+  // js/components/suppliers.js
+  var tozeretSlugs = ["breadcrumbs", "grains", "rice", "pasta", "tortillas", "oils", "spices", "more"];
+  function isSingleSupplier() {
+    return getTheme().suppliers === "v2";
+  }
+  function supplierCategories() {
+    return isSingleSupplier() ? tozeretSlugs.map(getCategory).filter(Boolean) : categories;
+  }
+  function inSupplierScope(product) {
+    return !isSingleSupplier() || tozeretSlugs.includes(product.categorySlug);
+  }
+
   // js/screens/home.js
+  function supplierCatalog() {
+    return supplierCategories().map((category) => catalogGridSection({
+      id: `cat-${category.slug}-title`,
+      title: category.name,
+      href: `#/c/${category.slug}`,
+      tabs: [[category.slug, category.name]],
+      className: "home-section",
+      layout: getTheme().categories === "v2" ? "rail" : "grid",
+      showTabs: false
+    })).join("");
+  }
   function departmentCatalogs() {
+    if (isSingleSupplier()) return supplierCatalog();
     return ["super", "home", "electronics"].map((id, index) => {
       const department = getDepartment(id);
       const tabs = department.slugs.map((slug) => {
@@ -4535,12 +4619,13 @@
         title: department.name,
         href: `#/d/${id}`,
         tabs,
-        className: "home-section"
+        className: "home-section",
+        layout: getTheme().categories === "v2" ? "rail" : "grid"
       });
     }).join("");
   }
   function renderHome() {
-    const offers = products.filter((product) => getCommerce(product.id)?.compareAt).slice(0, 10);
+    const offers = products.filter((product) => inSupplierScope(product) && getCommerce(product.id)?.compareAt).slice(0, 10);
     return `<div class="home-page wrap">
     ${getTheme().hero === "v1" ? `<div class="home-hero">${heroBlock()}</div>` : ""}
 
@@ -4696,33 +4781,34 @@
     });
     return items;
   }
-  function listingControls({ brands, categories: categories2, query }) {
-    const brandOptions = [`<option value="">\u05DB\u05DC \u05D4\u05DE\u05D5\u05EA\u05D2\u05D9\u05DD</option>`].concat(brands.map((brand) => `<option value="${esc(brand)}"${query.brand === brand ? " selected" : ""}>${esc(brand)}</option>`)).join("");
+  function listingControls({ categories: categories2, query }) {
     const categoryOptions = categories2 ? [`<option value="">\u05DB\u05DC \u05D4\u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D5\u05EA</option>`].concat(categories2.map((category) => `<option value="${esc(category.slug)}"${query.category === category.slug ? " selected" : ""}>${esc(category.name)}</option>`)).join("") : "";
     const sorts = [
       ["name", "\u05E9\u05DD"],
       ["price-asc", "\u05DE\u05D7\u05D9\u05E8, \u05DE\u05D4\u05E0\u05DE\u05D5\u05DA"],
       ["price-desc", "\u05DE\u05D7\u05D9\u05E8, \u05DE\u05D4\u05D2\u05D1\u05D5\u05D4"]
     ];
-    return `<form class="mb-6 grid gap-3 md:grid-cols-4" data-listing-form>
-    ${categories2 ? `<label class="field"><span class="text-sm font-semibold">\u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D4</span><select name="category">${categoryOptions}</select></label>` : ""}
-    <label class="field"><span class="text-sm font-semibold">\u05DE\u05D5\u05EA\u05D2</span><select name="brand">${brandOptions}</select></label>
-    <label class="field"><span class="text-sm font-semibold">\u05DE\u05D9\u05D5\u05DF</span><select name="sort">${sorts.map(([value, label]) => `<option value="${value}"${(query.sort || "name") === value ? " selected" : ""}>${label}</option>`).join("")}</select></label>
-    <label class="flex items-end gap-2 pb-3 text-sm font-semibold">
-      <input type="checkbox" name="offers" value="1"${query.offers === "1" ? " checked" : ""}>
-      \u05DE\u05D1\u05E6\u05E2\u05D9\u05DD \u05D1\u05DC\u05D1\u05D3
-    </label>
+    return `<form class="listing-bar" data-listing-form>
+    <div class="listing-filters">
+      ${categories2 ? `<label class="listing-select"><span>\u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D4</span><select name="category">${categoryOptions}</select></label>` : ""}
+      <label class="listing-check">
+        <input type="checkbox" name="offers" value="1"${query.offers === "1" ? " checked" : ""}>
+        \u05DE\u05D1\u05E6\u05E2\u05D9\u05DD \u05D1\u05DC\u05D1\u05D3
+      </label>
+    </div>
+    <label class="listing-select listing-sort"><span>\u05DE\u05D9\u05D5\u05DF</span><select name="sort">${sorts.map(([value, label]) => `<option value="${value}"${(query.sort || "name") === value ? " selected" : ""}>${label}</option>`).join("")}</select></label>
   </form>`;
   }
+  function pageSize() {
+    return window.matchMedia("(min-width: 1280px)").matches ? 25 : 24;
+  }
   function visibleSlice(items, query) {
-    if (query.all === "1" || items.length <= 24) return { shown: items, more: 0 };
-    return { shown: items.slice(0, 24), more: items.length - 24 };
+    const limit = pageSize();
+    if (query.all === "1" || items.length <= limit) return { shown: items, more: 0 };
+    return { shown: items.slice(0, limit), more: items.length - limit };
   }
 
   // js/screens/listing.js
-  function brandsOf(list) {
-    return [...new Set(list.map((product) => product.brand))];
-  }
   function crumbs(items) {
     return `<nav class="mb-4 text-sm text-muted" aria-label="\u05DE\u05D9\u05E7\u05D5\u05DD">${items.map((item, index) => index === items.length - 1 ? `<span aria-current="page">${esc(item.label)}</span>` : `<a class="font-semibold text-blue" href="${esc(item.href)}">${esc(item.label)}</a>`).join('<span aria-hidden="true"> / </span>')}</nav>`;
   }
@@ -4748,7 +4834,7 @@
     <h1 class="text-3xl font-extrabold">${esc(category.name)}</h1>
     <p class="mt-2 text-muted">${items.length} \u05DE\u05D5\u05E6\u05E8\u05D9\u05DD \u05D1\u05E7\u05D8\u05DC\u05D5\u05D2 \u05EA\u05D5\u05E6\u05E8\u05EA</p>
     <div class="mt-6">
-      ${listingControls({ brands: brandsOf(source), categories: null, query })}
+      ${listingControls({ categories: null, query })}
       ${productGrid(view2.shown)}
       ${moreButton(view2.more)}
     </div>
@@ -4786,7 +4872,7 @@
       <section aria-labelledby="maker-grid">
         <h2 id="maker-grid" class="mb-4 text-2xl font-extrabold">\u05D4\u05DE\u05D5\u05E6\u05E8\u05D9\u05DD</h2>
         ${manufacturer.sample ? `<p class="rounded-2xl bg-paper px-5 py-8 font-semibold">\u05DC\u05D9\u05E6\u05E8\u05DF \u05D4\u05D6\u05D4 \u05D0\u05D9\u05DF \u05E7\u05D8\u05DC\u05D5\u05D2. \u05D4\u05EA\u05D1\u05E0\u05D9\u05EA \u05DE\u05D5\u05DB\u05E0\u05D4 \u05DC\u05E0\u05EA\u05D5\u05E0\u05D9\u05DD.</p>` : `
-          ${listingControls({ brands: brandsOf(source), categories, query })}
+          ${listingControls({ categories, query })}
           ${productGrid(view2.shown)}
           ${moreButton(view2.more)}
         `}
@@ -4815,7 +4901,7 @@
     <p class="mt-2 text-muted">${items.length} \u05DE\u05D5\u05E6\u05E8\u05D9\u05DD \u05D1\u05DE\u05D7\u05DC\u05E7\u05D4</p>
     ${chips}
     <div class="mt-6">
-      ${listingControls({ brands: brandsOf(source), categories: null, query })}
+      ${listingControls({ categories: null, query })}
       ${productGrid(view2.shown)}
       ${moreButton(view2.more)}
     </div>
@@ -4823,7 +4909,7 @@
   }
   function renderSearch(query) {
     const text = (query.q || "").trim();
-    const source = text ? searchProducts(text) : products;
+    const source = (text ? searchProducts(text) : products).filter(inSupplierScope);
     const items = applyListing(source, query);
     const view2 = visibleSlice(items, query);
     return `<article class="wrap py-8">
@@ -4831,7 +4917,7 @@
     <h1 class="text-3xl font-extrabold">${text ? `\u05EA\u05D5\u05E6\u05D0\u05D5\u05EA \u05E2\u05D1\u05D5\u05E8 \u201E${esc(text)}\u201D` : "\u05D7\u05D9\u05E4\u05D5\u05E9 \u05D1\u05E7\u05D8\u05DC\u05D5\u05D2"}</h1>
     <p class="mt-2 text-muted">${items.length} \u05DE\u05D5\u05E6\u05E8\u05D9\u05DD</p>
     <div class="mt-6">
-      ${listingControls({ brands: brandsOf(source), categories: null, query })}
+      ${listingControls({ categories: null, query })}
       ${productGrid(view2.shown)}
       ${moreButton(view2.more)}
     </div>
@@ -5198,25 +5284,38 @@
 
   // js/screens/checkout.js
   var lockIcon = `<svg class="pay-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg>`;
-  function luhn(digits) {
-    let sum = 0;
-    [...digits].reverse().forEach((char, index) => {
-      let value = Number(char);
-      if (index % 2) {
-        value *= 2;
-        if (value > 9) value -= 9;
-      }
-      sum += value;
+  var payPrograms = [
+    ["general", "\u05DB\u05DC\u05DC \u05D4\u05DC\u05E7\u05D5\u05D7\u05D5\u05EA"],
+    ["ashmoret", "\u05DE\u05D7\u05D6\u05D9\u05E7\u05D9 \u05DB\u05E8\u05D8\u05D9\u05E1 \u05D0\u05E9\u05E8\u05D0\u05D9 \u05D0\u05E9\u05DE\u05D5\u05E8\u05EA \u05D1\u05DC\u05D1\u05D3"]
+  ];
+  function selectPayTab(tab, focus) {
+    const tabs = [...tab.closest("[role=tablist]").querySelectorAll("[data-pay-tab]")];
+    tabs.forEach((item) => {
+      const on = item === tab;
+      item.setAttribute("aria-selected", String(on));
+      item.tabIndex = on ? 0 : -1;
     });
-    return sum % 10 === 0;
+    const panel = document.getElementById("pay-panel");
+    panel?.setAttribute("aria-labelledby", tab.id);
+    const input = panel?.querySelector("[data-pay-program]");
+    if (input) input.value = tab.dataset.payTab;
+    if (focus) tab.focus();
   }
-  function validExpiry(value) {
-    const match = /^(0[1-9]|1[0-2])\/?(\d{2})$/.exec(value);
-    if (!match) return false;
-    const now = /* @__PURE__ */ new Date();
-    const year = 2e3 + Number(match[2]);
-    const month = Number(match[1]);
-    return year > now.getFullYear() || year === now.getFullYear() && month >= now.getMonth() + 1;
+  function bindCheckout() {
+    document.addEventListener("click", (event) => {
+      const tab = event.target.closest("[data-pay-tab]");
+      if (tab) selectPayTab(tab, false);
+    });
+    document.addEventListener("keydown", (event) => {
+      const tab = event.target.closest?.("[data-pay-tab]");
+      if (!tab) return;
+      const tabs = [...tab.closest("[role=tablist]").querySelectorAll("[data-pay-tab]")];
+      const index = tabs.indexOf(tab);
+      const keys = { ArrowLeft: index + 1, ArrowRight: index - 1, Home: 0, End: tabs.length - 1 };
+      if (!(event.key in keys)) return;
+      event.preventDefault();
+      selectPayTab(tabs[(keys[event.key] + tabs.length) % tabs.length], true);
+    });
   }
   function renderCheckout(errors = {}, values = {}) {
     const rows2 = getCart().items.filter((item) => getProduct(item.id) && getCommerce(item.id));
@@ -5224,6 +5323,7 @@
       return `<article class="wrap py-16 text-center"><h1 class="text-3xl font-extrabold">\u05D4\u05E1\u05DC \u05E8\u05D9\u05E7</h1><a class="btn mt-6" href="#/">\u05DC\u05D3\u05E3 \u05D4\u05D1\u05D9\u05EA</a></article>`;
     }
     const goods = subtotal();
+    const program = payPrograms.some(([id]) => id === values.cardProgram) ? values.cardProgram : payPrograms[0][0];
     const lines = rows2.map((item) => {
       const product = getProduct(item.id);
       return { name: product.name, weight: product.weight, qty: item.qty, total: getCommerce(item.id).price * item.qty };
@@ -5245,11 +5345,14 @@
         <section class="checkout-card" aria-labelledby="checkout-delivery-title">
           <h2 id="checkout-delivery-title" class="checkout-card-title">\u05E4\u05E8\u05D8\u05D9 \u05DE\u05E9\u05DC\u05D5\u05D7</h2>
           <div class="form-row">
-            ${field2("name", "\u05E9\u05DD \u05DE\u05DC\u05D0", "text", "name")}
-            ${field2("phone", "\u05D8\u05DC\u05E4\u05D5\u05DF", "tel", "tel")}
+            ${field2("firstName", "\u05E9\u05DD \u05E4\u05E8\u05D8\u05D9", "text", "given-name")}
+            ${field2("lastName", "\u05E9\u05DD \u05DE\u05E9\u05E4\u05D7\u05D4", "text", "family-name")}
           </div>
-          <div class="form-row-address">
+          <div class="form-row">
+            ${field2("phone", "\u05D8\u05DC\u05E4\u05D5\u05DF", "tel", "tel")}
             ${field2("city", "\u05E2\u05D9\u05E8", "text", "address-level2")}
+          </div>
+          <div class="form-row">
             ${field2("street", "\u05E8\u05D7\u05D5\u05D1", "text", "address-line1")}
             ${field2("house", "\u05DE\u05E1\u05E4\u05E8 \u05D1\u05D9\u05EA", "text", "on")}
           </div>
@@ -5264,19 +5367,25 @@
             <span class="pay-secure">${lockIcon}\u05EA\u05E9\u05DC\u05D5\u05DD \u05DE\u05D0\u05D5\u05D1\u05D8\u05D7 \xB7 Hyp</span>
           </div>
           <img class="pay-cards" src="assets/images/payment-methods.png" alt="\u05DB\u05E8\u05D8\u05D9\u05E1\u05D9\u05DD \u05E0\u05EA\u05DE\u05DB\u05D9\u05DD: Visa, CB, American Express, Maestro, Mastercard, PayPal" width="282" height="25">
-          <div class="hyp-frame">
-            <span class="proto-label" aria-hidden="true">\u05D8\u05D5\u05E4\u05E1 Hyp \xB7 \u05D4\u05D3\u05D2\u05DE\u05D4</span>
-            <div class="form-row">
-              ${payField("ccName", "\u05E9\u05DD \u05D1\u05E2\u05DC \u05D4\u05DB\u05E8\u05D8\u05D9\u05E1", `type="text" autocomplete="cc-name"`, true)}
-              ${payField("ccId", "\u05EA\u05E2\u05D5\u05D3\u05EA \u05D6\u05D4\u05D5\u05EA \u05E9\u05DC \u05D1\u05E2\u05DC \u05D4\u05DB\u05E8\u05D8\u05D9\u05E1", `type="text" inputmode="numeric" autocomplete="off" maxlength="9"`)}
+          <div class="pay-box">
+            <div class="pay-tabs" role="tablist" aria-label="\u05E1\u05D5\u05D2 \u05DC\u05E7\u05D5\u05D7">
+              ${payPrograms.map(([id, label]) => `<button type="button" role="tab" id="pay-tab-${id}" aria-controls="pay-panel" aria-selected="${id === program}" tabindex="${id === program ? "0" : "-1"}" data-pay-tab="${id}">${label}</button>`).join("")}
             </div>
-            ${payField("ccNumber", "\u05DE\u05E1\u05E4\u05E8 \u05DB\u05E8\u05D8\u05D9\u05E1", `type="text" inputmode="numeric" autocomplete="cc-number" maxlength="23" placeholder="0000 0000 0000 0000"`)}
-            <div class="form-row">
-              ${payField("ccExp", "\u05EA\u05D5\u05E7\u05E3", `type="text" inputmode="numeric" autocomplete="cc-exp" maxlength="5" placeholder="MM/YY"`, true)}
-              ${payField("ccCvv", "CVV", `type="password" inputmode="numeric" autocomplete="cc-csc" maxlength="4"`)}
+            <div class="hyp-frame" id="pay-panel" role="tabpanel" aria-labelledby="pay-tab-${program}">
+              <input type="hidden" name="cardProgram" value="${program}" data-pay-program>
+              <span class="proto-label" aria-hidden="true">\u05D8\u05D5\u05E4\u05E1 Hyp \xB7 \u05D4\u05D3\u05D2\u05DE\u05D4</span>
+              <div class="form-row">
+                ${payField("ccName", "\u05E9\u05DD \u05D1\u05E2\u05DC \u05D4\u05DB\u05E8\u05D8\u05D9\u05E1", `type="text" autocomplete="cc-name"`, true)}
+                ${payField("ccId", "\u05EA\u05E2\u05D5\u05D3\u05EA \u05D6\u05D4\u05D5\u05EA \u05E9\u05DC \u05D1\u05E2\u05DC \u05D4\u05DB\u05E8\u05D8\u05D9\u05E1", `type="text" inputmode="numeric" autocomplete="off" maxlength="9"`)}
+              </div>
+              ${payField("ccNumber", "\u05DE\u05E1\u05E4\u05E8 \u05DB\u05E8\u05D8\u05D9\u05E1", `type="text" inputmode="numeric" autocomplete="cc-number" maxlength="23" placeholder="0000 0000 0000 0000"`)}
+              <div class="form-row">
+                ${payField("ccExp", "\u05EA\u05D5\u05E7\u05E3", `type="text" inputmode="numeric" autocomplete="cc-exp" maxlength="5" placeholder="MM/YY"`, true)}
+                ${payField("ccCvv", "CVV", `type="password" inputmode="numeric" autocomplete="cc-csc" maxlength="4"`)}
+              </div>
             </div>
           </div>
-          <p class="text-sm text-muted">\u05D4\u05D3\u05D2\u05DE\u05D4 \u05D1\u05DC\u05D1\u05D3: \u05DC\u05D0 \u05DE\u05EA\u05D1\u05E6\u05E2 \u05D7\u05D9\u05D5\u05D1, \u05D5\u05E4\u05E8\u05D8\u05D9 \u05D4\u05DB\u05E8\u05D8\u05D9\u05E1 \u05DC\u05D0 \u05E0\u05E9\u05DE\u05E8\u05D9\u05DD. \u05DB\u05E8\u05D8\u05D9\u05E1 \u05D1\u05D3\u05D9\u05E7\u05D4: <span dir="ltr">4111 1111 1111 1111</span>.</p>
+          <p class="text-sm text-muted">\u05D4\u05D3\u05D2\u05DE\u05D4 \u05D1\u05DC\u05D1\u05D3: \u05DC\u05D0 \u05DE\u05EA\u05D1\u05E6\u05E2 \u05D7\u05D9\u05D5\u05D1, \u05D5\u05E4\u05E8\u05D8\u05D9 \u05D4\u05DB\u05E8\u05D8\u05D9\u05E1 \u05DC\u05D0 \u05E0\u05E9\u05DE\u05E8\u05D9\u05DD. \u05D0\u05E4\u05E9\u05E8 \u05DC\u05D4\u05E7\u05DC\u05D9\u05D3 \u05DB\u05DC \u05E2\u05E8\u05DA.</p>
         </section>
       </div>
       <aside class="checkout-card checkout-summary" aria-labelledby="checkout-summary-title">
@@ -5295,22 +5404,28 @@
     </form>
   </article>`;
   }
+  var required = {
+    firstName: "\u05E0\u05D0 \u05DC\u05DE\u05DC\u05D0 \u05E9\u05DD \u05E4\u05E8\u05D8\u05D9.",
+    lastName: "\u05E0\u05D0 \u05DC\u05DE\u05DC\u05D0 \u05E9\u05DD \u05DE\u05E9\u05E4\u05D7\u05D4.",
+    phone: "\u05E0\u05D0 \u05DC\u05DE\u05DC\u05D0 \u05D8\u05DC\u05E4\u05D5\u05DF.",
+    city: "\u05E0\u05D0 \u05DC\u05DE\u05DC\u05D0 \u05E2\u05D9\u05E8.",
+    street: "\u05E0\u05D0 \u05DC\u05DE\u05DC\u05D0 \u05E8\u05D7\u05D5\u05D1.",
+    house: "\u05E0\u05D0 \u05DC\u05DE\u05DC\u05D0 \u05DE\u05E1\u05E4\u05E8 \u05D1\u05D9\u05EA.",
+    ccName: "\u05E0\u05D0 \u05DC\u05DE\u05DC\u05D0 \u05D0\u05EA \u05D4\u05E9\u05DD \u05E9\u05E2\u05DC \u05D4\u05DB\u05E8\u05D8\u05D9\u05E1.",
+    ccId: "\u05E0\u05D0 \u05DC\u05DE\u05DC\u05D0 \u05EA\u05E2\u05D5\u05D3\u05EA \u05D6\u05D4\u05D5\u05EA.",
+    ccNumber: "\u05E0\u05D0 \u05DC\u05DE\u05DC\u05D0 \u05DE\u05E1\u05E4\u05E8 \u05DB\u05E8\u05D8\u05D9\u05E1.",
+    ccExp: "\u05E0\u05D0 \u05DC\u05DE\u05DC\u05D0 \u05EA\u05D5\u05E7\u05E3.",
+    ccCvv: "\u05E0\u05D0 \u05DC\u05DE\u05DC\u05D0 CVV."
+  };
   function validateCheckout(form) {
     const data = Object.fromEntries(new FormData(form).entries());
     const errors = {};
-    if (!String(data.name || "").trim() || String(data.name).trim().length < 2) errors.name = "\u05E0\u05D0 \u05DC\u05DE\u05DC\u05D0 \u05E9\u05DD \u05DE\u05DC\u05D0.";
-    const phone = String(data.phone || "").replace(/[^\d]/g, "");
-    if (!/^0\d{8,9}$/.test(phone)) errors.phone = "\u05E0\u05D0 \u05DC\u05DE\u05DC\u05D0 \u05D8\u05DC\u05E4\u05D5\u05DF \u05D9\u05E9\u05E8\u05D0\u05DC\u05D9.";
-    if (!String(data.city || "").trim()) errors.city = "\u05E0\u05D0 \u05DC\u05DE\u05DC\u05D0 \u05E2\u05D9\u05E8.";
-    if (!String(data.street || "").trim()) errors.street = "\u05E0\u05D0 \u05DC\u05DE\u05DC\u05D0 \u05E8\u05D7\u05D5\u05D1.";
-    if (!String(data.house || "").trim()) errors.house = "\u05E0\u05D0 \u05DC\u05DE\u05DC\u05D0 \u05DE\u05E1\u05E4\u05E8 \u05D1\u05D9\u05EA.";
-    const card2 = String(data.ccNumber || "").replace(/\D/g, "");
-    if (String(data.ccName || "").trim().length < 2) errors.ccName = "\u05E0\u05D0 \u05DC\u05DE\u05DC\u05D0 \u05D0\u05EA \u05D4\u05E9\u05DD \u05E9\u05DE\u05D5\u05E4\u05D9\u05E2 \u05E2\u05DC \u05D4\u05DB\u05E8\u05D8\u05D9\u05E1.";
-    if (!/^\d{9}$/.test(String(data.ccId || "").replace(/\D/g, ""))) errors.ccId = "\u05E0\u05D0 \u05DC\u05DE\u05DC\u05D0 \u05EA\u05E2\u05D5\u05D3\u05EA \u05D6\u05D4\u05D5\u05EA \u05D1\u05EA 9 \u05E1\u05E4\u05E8\u05D5\u05EA.";
-    if (card2.length < 12 || card2.length > 19 || !luhn(card2)) errors.ccNumber = "\u05E0\u05D0 \u05DC\u05DE\u05DC\u05D0 \u05DE\u05E1\u05E4\u05E8 \u05DB\u05E8\u05D8\u05D9\u05E1 \u05EA\u05E7\u05D9\u05DF.";
-    if (!validExpiry(String(data.ccExp || "").trim())) errors.ccExp = "\u05E0\u05D0 \u05DC\u05DE\u05DC\u05D0 \u05EA\u05D5\u05E7\u05E3 \u05D1\u05E4\u05D5\u05E8\u05DE\u05D8 MM/YY.";
-    if (!/^\d{3,4}$/.test(String(data.ccCvv || ""))) errors.ccCvv = "\u05E0\u05D0 \u05DC\u05DE\u05DC\u05D0 3 \u05D0\u05D5 4 \u05E1\u05E4\u05E8\u05D5\u05EA.";
-    return { data: { ...data, phone }, errors };
+    Object.entries(required).forEach(([name, message]) => {
+      if (!String(data[name] || "").trim()) errors[name] = message;
+    });
+    const firstName = String(data.firstName || "").trim();
+    const lastName = String(data.lastName || "").trim();
+    return { data: { ...data, name: `${firstName} ${lastName}`.trim(), phone: String(data.phone || "").trim() }, errors };
   }
 
   // js/state/orders.js
@@ -6232,7 +6347,7 @@
     return frame("orders", `\u05D4\u05D6\u05DE\u05E0\u05D4 ${esc(order.id)}`, page(`\u05D4\u05D6\u05DE\u05E0\u05D4 ${esc(order.id)}`, `
     <p class="mt-3 text-muted">${esc(when(order.createdAt))} \xB7 ${esc(order.status)}</p>
     <section class="order-card mt-6 max-w-3xl">${orderStatus(order)}</section>
-    <section class="mt-6 max-w-xl rounded-2xl border border-line p-5">
+    <section class="order-card mt-6 max-w-3xl">
       <h2 class="font-extrabold">\u05D4\u05E4\u05E8\u05D9\u05D8\u05D9\u05DD</h2>
       <ul class="mt-3 grid gap-2 text-sm">${items}</ul>
       <dl class="mt-4 grid gap-2 border-t border-line pt-3 text-sm">
@@ -6399,19 +6514,35 @@
     ${groups2}
   </div>`;
   }
-  function mountMega() {
+  function categoryLink(category) {
+    return `<a class="mega-trigger text-ink" href="#/c/${esc(category.slug)}"><span class="cat-heart" aria-hidden="true"></span>${esc(category.name)}</a>`;
+  }
+  function renderSupplierNav() {
     const nav = document.querySelector("[data-main-nav]");
-    const mega = document.getElementById("mega");
-    const body = document.getElementById("mega-body");
+    const multi = nav?.querySelector("[data-nav-multi]");
+    const single = nav?.querySelector("[data-nav-single]");
     const mobile = document.getElementById("mobile-nav");
-    if (!nav || !mega || !body || !mobile) return;
-    mobile.innerHTML = menus.map((item) => `<div>
+    if (!nav || !multi || !single || !mobile) return;
+    nav.megaClose?.();
+    const solo = isSingleSupplier();
+    multi.hidden = solo;
+    single.hidden = !solo;
+    single.innerHTML = solo ? supplierCategories().map(categoryLink).join("") : "";
+    mobile.innerHTML = solo ? supplierCategories().map((category) => `<div class="mega-mobile-head">${categoryLink(category)}</div>`).join("") : menus.map((item) => `<div>
       <div class="mega-mobile-head">
         <a class="mega-trigger" href="#/d/${esc(item.id)}"><span class="cat-heart" aria-hidden="true"></span>${esc(item.label)}</a>
         <button type="button" class="mega-trigger" data-mega-mobile="${esc(item.id)}" aria-expanded="false" aria-label="\u05E4\u05EA\u05D9\u05D7\u05EA ${esc(item.label)}">${chevron}</button>
       </div>
       <div class="mega-mobile" hidden data-mega-mobile-panel="${esc(item.id)}"></div>
     </div>`).join("");
+  }
+  function mountMega() {
+    const nav = document.querySelector("[data-main-nav]");
+    const mega = document.getElementById("mega");
+    const body = document.getElementById("mega-body");
+    const mobile = document.getElementById("mobile-nav");
+    if (!nav || !mega || !body || !mobile) return;
+    renderSupplierNav();
     const triggers = [...nav.querySelectorAll("[data-mega-open]")];
     let closeTimer = 0;
     const closeDesktop = () => {
@@ -6477,22 +6608,18 @@
     nav.addEventListener("focusout", (event) => {
       if (!nav.contains(event.relatedTarget)) closeDesktop();
     });
-    mobile.querySelectorAll("[data-mega-mobile]").forEach((button) => {
-      button.addEventListener("click", () => {
-        const id = button.dataset.megaMobile;
-        const panel = mobile.querySelector(`[data-mega-mobile-panel="${id}"]`);
-        const open3 = button.getAttribute("aria-expanded") === "true";
-        mobile.querySelectorAll("[data-mega-mobile]").forEach((item) => {
-          item.setAttribute("aria-expanded", "false");
-          const other = mobile.querySelector(`[data-mega-mobile-panel="${item.dataset.megaMobile}"]`);
-          if (other) other.hidden = true;
-        });
-        if (!open3 && panel) {
-          panel.innerHTML = megaPanel(id);
-          panel.hidden = false;
-          button.setAttribute("aria-expanded", "true");
-        }
-      });
+    mobile.addEventListener("click", (event) => {
+      const button = event.target.closest("[data-mega-mobile]");
+      if (!button) return;
+      const id = button.dataset.megaMobile;
+      const panel = mobile.querySelector(`[data-mega-mobile-panel="${id}"]`);
+      const open3 = button.getAttribute("aria-expanded") === "true";
+      closeMobile();
+      if (!open3 && panel) {
+        panel.innerHTML = megaPanel(id);
+        panel.hidden = false;
+        button.setAttribute("aria-expanded", "true");
+      }
     });
     document.addEventListener("click", (event) => {
       if (!nav.contains(event.target)) closeDesktop();
@@ -6526,7 +6653,7 @@
       navigate3(q ? `#/search?q=${encodeURIComponent(q)}` : "#/search");
     });
     input.addEventListener("input", () => {
-      const matches = searchProducts(input.value).slice(0, 6);
+      const matches = searchProducts(input.value).filter(inSupplierScope).slice(0, 6);
       if (!input.value.trim() || !matches.length) {
         suggest.innerHTML = "";
         setSuggestOpen(false);
@@ -6561,7 +6688,10 @@
     });
     menuOpen.addEventListener("click", () => toggleMenu());
     menu.addEventListener("click", (event) => {
-      if (event.target.closest("a")) toggleMenu(false);
+      if (event.target.closest("a, [data-menu-close]")) toggleMenu(false);
+    });
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && menu.classList.contains("is-open")) toggleMenu(false);
     });
     catPrev.addEventListener("click", () => categoryCarousel?.scrollPrev());
     catNext.addEventListener("click", () => categoryCarousel?.scrollNext());
@@ -6576,12 +6706,17 @@
     updateCartBadge();
     updateAccountSlot();
     function toggleMenu(force) {
-      const open3 = typeof force === "boolean" ? force : !menu.classList.contains("is-open");
+      const wasOpen = menu.classList.contains("is-open");
+      const open3 = typeof force === "boolean" ? force : !wasOpen;
+      const cover = document.documentElement.dataset.mobileMenu === "v2";
       menu.classList.toggle("is-open", open3);
       menuOpen.setAttribute("aria-expanded", String(open3));
+      document.documentElement.classList.toggle("is-menu-cover", open3 && cover);
+      if (cover && open3) menu.querySelector("[data-menu-close]")?.focus();
+      else if (cover && wasOpen && !open3) menuOpen.focus();
       const gsap = window.gsap;
-      if (gsap && !prefersReducedMotion()) {
-        gsap.fromTo(menu, { y: -8, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.28, ease: "power2.out" });
+      if (open3 && gsap && !prefersReducedMotion()) {
+        gsap.fromTo(menu, { y: cover ? 0 : -8, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: cover ? 0.2 : 0.28, ease: "power2.out" });
       }
     }
   }
@@ -6613,7 +6748,7 @@
     const list = document.getElementById("category-nav");
     const viewport = document.getElementById("category-viewport");
     const copies = 4;
-    list.innerHTML = Array.from({ length: copies }, (_, copy) => categories.map((category) => {
+    list.innerHTML = Array.from({ length: copies }, (_, copy) => supplierCategories().map((category) => {
       const current = copy === 0 && category.slug === activeSlug ? ' aria-current="page"' : "";
       const clone = copy === 0 ? "" : ' tabindex="-1" aria-hidden="true"';
       return `<li class="cat-slide"><a class="cat-link" href="#/c/${esc(category.slug)}"${current}${clone}><span class="thumb"></span><span>${esc(category.name)}</span></a></li>`;
@@ -6657,6 +6792,7 @@
     setSuggestOpen(false);
     document.getElementById("mobile-menu").classList.remove("is-open");
     document.getElementById("menu-open").setAttribute("aria-expanded", "false");
+    document.documentElement.classList.remove("is-menu-cover");
     closeMega();
   }
 
@@ -6678,10 +6814,12 @@
     const items = rows();
     const count = countItems();
     const show = !hiddenFor(routeName);
-    root.hidden = !show;
+    root.hidden = false;
+    root.inert = !show;
+    root.classList.toggle("is-away", !show);
     if (!open) root.querySelector(".cart-dock-body")?.remove();
     root.classList.toggle("is-open", open && show);
-    if (!show) return;
+    if (!show && root.childElementCount) return;
     const goods = subtotal();
     const total = goods + (count ? deliveryFee : 0);
     const countLabel = count === 0 ? "\u05D4\u05E1\u05DC \u05E8\u05D9\u05E7" : count === 1 ? "\u05E4\u05E8\u05D9\u05D8 \u05D0\u05D7\u05D3" : `${count} \u05E4\u05E8\u05D9\u05D8\u05D9\u05DD`;
@@ -6741,7 +6879,10 @@
   }
   function mountCartDock() {
     const header = document.querySelector(".site-header");
-    const sync = () => placeDock();
+    const sync = () => {
+      if (header) document.documentElement.style.setProperty("--header-h", `${header.offsetHeight}px`);
+      placeDock();
+    };
     if (header && "ResizeObserver" in window) new ResizeObserver(sync).observe(header);
     window.addEventListener("resize", sync);
     document.addEventListener("mousedown", (event) => {
@@ -6778,11 +6919,51 @@
       item.remove();
     }, 3200);
   }
-  function confirmAction(message) {
+  function confirmWithin(container, message) {
+    container.querySelector(".inline-confirm")?.remove();
+    const layer = document.createElement("div");
+    layer.className = "inline-confirm";
+    layer.setAttribute("role", "alertdialog");
+    layer.setAttribute("aria-modal", "true");
+    layer.setAttribute("aria-labelledby", "inline-confirm-title");
+    layer.innerHTML = `<div class="inline-confirm-card">
+    <h2 id="inline-confirm-title" class="text-lg font-extrabold">${esc(message)}</h2>
+    <div class="inline-confirm-actions">
+      <button type="button" class="btn" data-confirm="yes">\u05D4\u05E1\u05E8\u05D4</button>
+      <button type="button" class="btn btn-line" data-confirm="cancel">\u05D1\u05D9\u05D8\u05D5\u05DC</button>
+    </div>
+  </div>`;
+    container.appendChild(layer);
+    const buttons = [...layer.querySelectorAll("[data-confirm]")];
+    buttons[0].focus();
+    return new Promise((resolve) => {
+      const done = (answer) => {
+        layer.remove();
+        resolve(answer);
+      };
+      layer.addEventListener("click", (event) => {
+        const button = event.target.closest("[data-confirm]");
+        if (button) done(button.dataset.confirm === "yes");
+        else if (event.target === layer) done(false);
+      });
+      layer.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") {
+          event.stopPropagation();
+          done(false);
+        } else if (event.key === "Tab") {
+          event.preventDefault();
+          const next = buttons[(buttons.indexOf(document.activeElement) + 1) % buttons.length];
+          next.focus();
+        }
+      });
+    });
+  }
+  function confirmAction(message, { within } = {}) {
+    if (within) return confirmWithin(within, message);
     const root = document.getElementById("modal-root");
-    root.innerHTML = `<dialog aria-labelledby="confirm-title">
+    root.innerHTML = `<dialog class="confirm-dialog" aria-labelledby="confirm-title">
     <h2 id="confirm-title" class="text-lg font-extrabold">${esc(message)}</h2>
-    <form method="dialog" class="mt-5 flex gap-2">
+    <form method="dialog" class="inline-confirm-actions mt-5">
       <button class="btn" value="yes">\u05D4\u05E1\u05E8\u05D4</button>
       <button class="btn btn-line" value="cancel">\u05D1\u05D9\u05D8\u05D5\u05DC</button>
     </form>
@@ -7116,8 +7297,108 @@
     start();
   }
 
-  // js/components/product-popup.js
+  // js/components/newsletter-popup.js
+  var HIDE_KEY = "ashmoret-newsletter-hide";
+  var COUPON = "ASH50";
+  var closeIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg>`;
+  var arrowIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"></path></svg>`;
+  var scissorsIcon = `<svg class="news-scissors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="6" cy="6" r="3"></circle><circle cx="6" cy="18" r="3"></circle><path d="M20 4 8.1 15.9M14.5 14.5 20 20M8.1 8.1 12 12"></path></svg>`;
+  function hidden() {
+    try {
+      return localStorage.getItem(HIDE_KEY) === "1";
+    } catch {
+      return false;
+    }
+  }
+  function markup4() {
+    return `<div class="news-card">
+    <div class="news-hero">
+      <span class="proto-label" aria-hidden="true">\u05EA\u05DE\u05D5\u05E0\u05EA \u05E8\u05E7\u05E2</span>
+      <h2 id="news-title" class="news-offer">50% \u05D4\u05E0\u05D7\u05D4</h2>
+      <p class="news-sub">\u05E2\u05DC \u05D4\u05E8\u05DB\u05D9\u05E9\u05D4 \u05D4\u05E8\u05D0\u05E9\u05D5\u05E0\u05D4</p>
+    </div>
+    <form class="news-body" data-news-form novalidate>
+      <h3 class="news-heading">\u05D4\u05E8\u05E9\u05DE\u05D4 \u05DC\u05E0\u05D9\u05D5\u05D6\u05DC\u05D8\u05E8</h3>
+      <label class="sr-only" for="news-email">\u05DB\u05EA\u05D5\u05D1\u05EA \u05D3\u05D5\u05D0\u05F4\u05DC</label>
+      <input id="news-email" class="news-email" name="email" type="email" autocomplete="email" placeholder="\u05DB\u05EA\u05D5\u05D1\u05EA \u05D4\u05D3\u05D5\u05D0\u05F4\u05DC \u05E9\u05DC\u05DA" aria-describedby="news-error" aria-invalid="false">
+      <p id="news-error" class="news-error" hidden>\u05E0\u05D0 \u05DC\u05D4\u05D6\u05D9\u05DF \u05DB\u05EA\u05D5\u05D1\u05EA \u05D3\u05D5\u05D0\u05F4\u05DC \u05EA\u05E7\u05D9\u05E0\u05D4.</p>
+      <button class="news-submit" type="submit">\u05DC\u05D4\u05E8\u05E9\u05DE\u05D4 ${arrowIcon}</button>
+      <div class="news-coupon" data-news-coupon aria-live="polite">${scissorsIcon}<span>\u05DB\u05D0\u05DF \u05D9\u05D5\u05E4\u05D9\u05E2 \u05E7\u05D5\u05D3 \u05D4\u05E7\u05D5\u05E4\u05D5\u05DF \u05E9\u05DC\u05DA</span></div>
+      <div class="news-checks">
+        <label class="news-check">
+          <input type="checkbox" name="terms" data-news-terms aria-describedby="news-terms-error" aria-invalid="false">
+          <span>\u05D0\u05E0\u05D9 \u05DE\u05E1\u05DB\u05D9\u05DD/\u05D4 \u05DC<a href="#/terms">\u05EA\u05E0\u05D0\u05D9 \u05D4\u05E9\u05D9\u05DE\u05D5\u05E9</a></span>
+        </label>
+        <label class="news-check">
+          <input type="checkbox" data-news-hide ${hidden() ? "checked" : ""}>
+          \u05DC\u05D4\u05E1\u05EA\u05D9\u05E8 \u05D0\u05EA \u05D4\u05D7\u05DC\u05D5\u05DF \u05D4\u05D6\u05D4 \u05DE\u05E2\u05DB\u05E9\u05D9\u05D5
+        </label>
+      </div>
+      <p id="news-terms-error" class="news-error" hidden>\u05E0\u05D0 \u05DC\u05D0\u05E9\u05E8 \u05D0\u05EA \u05EA\u05E0\u05D0\u05D9 \u05D4\u05E9\u05D9\u05DE\u05D5\u05E9 \u05DB\u05D3\u05D9 \u05DC\u05D4\u05D9\u05E8\u05E9\u05DD.</p>
+    </form>
+  </div>
+  <button class="news-close" type="button" data-news-close aria-label="\u05E1\u05D2\u05D9\u05E8\u05D4">${closeIcon}</button>`;
+  }
   function ensureDialog3() {
+    let dialog = document.getElementById("newsletter-dialog");
+    if (dialog) return dialog;
+    dialog = document.createElement("dialog");
+    dialog.id = "newsletter-dialog";
+    dialog.className = "news-dialog";
+    dialog.setAttribute("aria-labelledby", "news-title");
+    dialog.innerHTML = markup4();
+    const form = dialog.querySelector("[data-news-form]");
+    const input = form.querySelector("#news-email");
+    const error = form.querySelector("#news-error");
+    const coupon = form.querySelector("[data-news-coupon]");
+    const submit = form.querySelector(".news-submit");
+    const terms = form.querySelector("[data-news-terms]");
+    const termsError = form.querySelector("#news-terms-error");
+    dialog.addEventListener("click", (event) => {
+      if (event.target === dialog || event.target.closest("[data-news-close], a[href^='#/']")) dialog.close();
+    });
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value.trim());
+      error.hidden = valid;
+      input.setAttribute("aria-invalid", String(!valid));
+      termsError.hidden = terms.checked;
+      terms.setAttribute("aria-invalid", String(!terms.checked));
+      if (!valid || !terms.checked) {
+        (valid ? terms : input).focus();
+        return;
+      }
+      coupon.classList.add("is-ready");
+      coupon.innerHTML = `${scissorsIcon}<span>\u05E7\u05D5\u05D3 \u05D4\u05E7\u05D5\u05E4\u05D5\u05DF \u05E9\u05DC\u05DA: <strong dir="ltr">${COUPON}</strong></span>`;
+      submit.disabled = true;
+      submit.textContent = "\u05E0\u05E8\u05E9\u05DE\u05EA \u05DC\u05E0\u05D9\u05D5\u05D6\u05DC\u05D8\u05E8";
+    });
+    form.addEventListener("change", (event) => {
+      if (event.target === terms && terms.checked) {
+        termsError.hidden = true;
+        terms.setAttribute("aria-invalid", "false");
+      }
+      if (!event.target.matches("[data-news-hide]")) return;
+      try {
+        if (event.target.checked) localStorage.setItem(HIDE_KEY, "1");
+        else localStorage.removeItem(HIDE_KEY);
+      } catch {
+      }
+    });
+    document.body.appendChild(dialog);
+    return dialog;
+  }
+  function bindNewsletter() {
+    document.addEventListener("click", (event) => {
+      if (!event.target.closest("[data-newsletter-open]")) return;
+      const dialog = ensureDialog3();
+      if (!dialog.open) dialog.showModal();
+      dialog.querySelector("#news-email")?.focus();
+    });
+  }
+
+  // js/components/product-popup.js
+  function ensureDialog4() {
     let dialog = document.getElementById("product-pop");
     if (dialog) return dialog;
     dialog = document.createElement("dialog");
@@ -7132,7 +7413,7 @@
   function field(label, value) {
     return `<p class="product-pop-spec">${esc(label)}: ${esc(value)}</p>`;
   }
-  function markup4(product) {
+  function markup5(product) {
     const commerce = getCommerce(product.id);
     const price = commerce ? `<p class="product-price">${money(commerce.price)}${commerce.compareAt ? `<s>${money(commerce.compareAt)}</s>` : ""}</p>` : `<p class="product-price is-pending">\u05DE\u05D7\u05D9\u05E8 \u05D9\u05E2\u05D5\u05D3\u05DB\u05DF</p>`;
     return `<div class="product-pop-bar">
@@ -7158,8 +7439,8 @@
   function openProductPopup(id) {
     const product = getProduct(id);
     if (!product || isElectronicsProduct(product)) return;
-    const dialog = ensureDialog3();
-    dialog.innerHTML = markup4(product);
+    const dialog = ensureDialog4();
+    dialog.innerHTML = markup5(product);
     dialog.setAttribute("aria-labelledby", "product-pop-title");
     mountProductGalleries(dialog);
     if (!dialog.open) dialog.showModal();
@@ -7319,7 +7600,8 @@
     const remove = event.target.closest("[data-remove]");
     if (remove) {
       const product = getProduct(remove.dataset.remove);
-      const yes = await confirmAction(product ? `\u05DC\u05D4\u05E1\u05D9\u05E8 \u05D0\u05EA ${product.name} \u05DE\u05D4\u05E1\u05DC?` : "\u05DC\u05D4\u05E1\u05D9\u05E8 \u05D0\u05EA \u05D4\u05E4\u05E8\u05D9\u05D8 \u05DE\u05D4\u05E1\u05DC?");
+      const message = product ? `\u05DC\u05D4\u05E1\u05D9\u05E8 \u05D0\u05EA ${product.name} \u05DE\u05D4\u05E1\u05DC?` : "\u05DC\u05D4\u05E1\u05D9\u05E8 \u05D0\u05EA \u05D4\u05E4\u05E8\u05D9\u05D8 \u05DE\u05D4\u05E1\u05DC?";
+      const yes = await confirmAction(message, { within: remove.closest(".cart-dock-body") });
       if (yes) removeItem(remove.dataset.remove);
       return;
     }
@@ -7407,10 +7689,18 @@
     navigate2(`#/order/${order.id}`);
   });
   bindShell(navigate2);
-  bindThemeOptions({ heroChange: () => render({ focus: false }) });
+  bindThemeOptions({
+    heroChange: () => render({ focus: false }),
+    suppliersChange: () => {
+      renderSupplierNav();
+      render({ focus: false });
+    }
+  });
   bindLogin(navigate2);
   bindServiceDialogs();
+  bindNewsletter();
   bindAccount(render);
+  bindCheckout();
   mountCartDock();
   subscribeSession(() => updateAccountSlot());
   subscribe(() => {

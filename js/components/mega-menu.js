@@ -1,4 +1,5 @@
 import { esc } from "../lib/format.js";
+import { isSingleSupplier, supplierCategories } from "./suppliers.js";
 
 const mark = "assets/images/brand/heart.png";
 const chevron = `<svg class="mega-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg>`;
@@ -137,6 +138,32 @@ export function megaPanel(id) {
   </div>`;
 }
 
+function categoryLink(category) {
+  return `<a class="mega-trigger text-ink" href="#/c/${esc(category.slug)}"><span class="cat-heart" aria-hidden="true"></span>${esc(category.name)}</a>`;
+}
+
+export function renderSupplierNav() {
+  const nav = document.querySelector("[data-main-nav]");
+  const multi = nav?.querySelector("[data-nav-multi]");
+  const single = nav?.querySelector("[data-nav-single]");
+  const mobile = document.getElementById("mobile-nav");
+  if (!nav || !multi || !single || !mobile) return;
+  nav.megaClose?.();
+  const solo = isSingleSupplier();
+  multi.hidden = solo;
+  single.hidden = !solo;
+  single.innerHTML = solo ? supplierCategories().map(categoryLink).join("") : "";
+  mobile.innerHTML = solo
+    ? supplierCategories().map((category) => `<div class="mega-mobile-head">${categoryLink(category)}</div>`).join("")
+    : menus.map((item) => `<div>
+      <div class="mega-mobile-head">
+        <a class="mega-trigger" href="#/d/${esc(item.id)}"><span class="cat-heart" aria-hidden="true"></span>${esc(item.label)}</a>
+        <button type="button" class="mega-trigger" data-mega-mobile="${esc(item.id)}" aria-expanded="false" aria-label="פתיחת ${esc(item.label)}">${chevron}</button>
+      </div>
+      <div class="mega-mobile" hidden data-mega-mobile-panel="${esc(item.id)}"></div>
+    </div>`).join("");
+}
+
 export function mountMega() {
   const nav = document.querySelector("[data-main-nav]");
   const mega = document.getElementById("mega");
@@ -144,13 +171,7 @@ export function mountMega() {
   const mobile = document.getElementById("mobile-nav");
   if (!nav || !mega || !body || !mobile) return;
 
-  mobile.innerHTML = menus.map((item) => `<div>
-      <div class="mega-mobile-head">
-        <a class="mega-trigger" href="#/d/${esc(item.id)}"><span class="cat-heart" aria-hidden="true"></span>${esc(item.label)}</a>
-        <button type="button" class="mega-trigger" data-mega-mobile="${esc(item.id)}" aria-expanded="false" aria-label="פתיחת ${esc(item.label)}">${chevron}</button>
-      </div>
-      <div class="mega-mobile" hidden data-mega-mobile-panel="${esc(item.id)}"></div>
-    </div>`).join("");
+  renderSupplierNav();
 
   const triggers = [...nav.querySelectorAll("[data-mega-open]")];
 
@@ -227,22 +248,18 @@ export function mountMega() {
     if (!nav.contains(event.relatedTarget)) closeDesktop();
   });
 
-  mobile.querySelectorAll("[data-mega-mobile]").forEach((button) => {
-    button.addEventListener("click", () => {
-      const id = button.dataset.megaMobile;
-      const panel = mobile.querySelector(`[data-mega-mobile-panel="${id}"]`);
-      const open = button.getAttribute("aria-expanded") === "true";
-      mobile.querySelectorAll("[data-mega-mobile]").forEach((item) => {
-        item.setAttribute("aria-expanded", "false");
-        const other = mobile.querySelector(`[data-mega-mobile-panel="${item.dataset.megaMobile}"]`);
-        if (other) other.hidden = true;
-      });
-      if (!open && panel) {
-        panel.innerHTML = megaPanel(id);
-        panel.hidden = false;
-        button.setAttribute("aria-expanded", "true");
-      }
-    });
+  mobile.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-mega-mobile]");
+    if (!button) return;
+    const id = button.dataset.megaMobile;
+    const panel = mobile.querySelector(`[data-mega-mobile-panel="${id}"]`);
+    const open = button.getAttribute("aria-expanded") === "true";
+    closeMobile();
+    if (!open && panel) {
+      panel.innerHTML = megaPanel(id);
+      panel.hidden = false;
+      button.setAttribute("aria-expanded", "true");
+    }
   });
 
   document.addEventListener("click", (event) => {

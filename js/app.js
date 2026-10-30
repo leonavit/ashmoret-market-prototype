@@ -4,7 +4,7 @@ import { renderMarket } from "./screens/market.js";
 import { renderCategory, renderDepartment, renderManufacturer, renderSearch } from "./screens/listing.js";
 import { renderProduct } from "./screens/product.js";
 import { renderCart } from "./screens/cart.js";
-import { renderCheckout, validateCheckout } from "./screens/checkout.js";
+import { bindCheckout, renderCheckout, validateCheckout } from "./screens/checkout.js";
 import { renderConfirmation } from "./screens/confirmation.js";
 import { bindLogin, openAuth } from "./screens/login.js";
 import { renderContact, validateContact } from "./screens/contact.js";
@@ -15,7 +15,9 @@ import { mountCartDock, updateCartDock } from "./components/cart-dock.js";
 import { bindServiceDialogs, renderServicePage, serviceTitle } from "./components/service-dialogs.js";
 import { bindThemeOptions, getTheme } from "./components/theme-options.js";
 import { setHeroSlider } from "./components/hero-slider.js";
+import { renderSupplierNav } from "./components/mega-menu.js";
 import { mountPromoCarousels } from "./components/promo-carousel.js";
+import { bindNewsletter } from "./components/newsletter-popup.js";
 import { mountCarousels } from "./components/carousel.js";
 import { mountCatalog } from "./components/catalog-rail.js";
 import { openProductPopup } from "./components/product-popup.js";
@@ -180,7 +182,8 @@ document.addEventListener("click", async (event) => {
   const remove = event.target.closest("[data-remove]");
   if (remove) {
     const product = getProduct(remove.dataset.remove);
-    const yes = await confirmAction(product ? `להסיר את ${product.name} מהסל?` : "להסיר את הפריט מהסל?");
+    const message = product ? `להסיר את ${product.name} מהסל?` : "להסיר את הפריט מהסל?";
+    const yes = await confirmAction(message, { within: remove.closest(".cart-dock-body") });
     if (yes) removeItem(remove.dataset.remove);
     return;
   }
@@ -274,10 +277,18 @@ document.addEventListener("submit", (event) => {
 });
 
 bindShell(navigate);
-bindThemeOptions({ heroChange: () => render({ focus: false }) });
+bindThemeOptions({
+  heroChange: () => render({ focus: false }),
+  suppliersChange: () => {
+    renderSupplierNav();
+    render({ focus: false });
+  },
+});
 bindLogin(navigate);
 bindServiceDialogs();
+bindNewsletter();
 bindAccount(render);
+bindCheckout();
 mountCartDock();
 subscribeSession(() => updateAccountSlot());
 subscribe(() => {

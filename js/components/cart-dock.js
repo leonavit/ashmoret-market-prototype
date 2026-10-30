@@ -27,10 +27,12 @@ export function updateCartDock(routeName = parseHash().name) {
   const items = rows();
   const count = countItems();
   const show = !hiddenFor(routeName);
-  root.hidden = !show;
+  root.hidden = false;
+  root.inert = !show;
+  root.classList.toggle("is-away", !show);
   if (!open) root.querySelector(".cart-dock-body")?.remove();
   root.classList.toggle("is-open", open && show);
-  if (!show) return;
+  if (!show && root.childElementCount) return;
   const goods = subtotal();
   const total = goods + (count ? deliveryFee : 0);
   const countLabel = count === 0 ? "הסל ריק" : count === 1 ? "פריט אחד" : `${count} פריטים`;
@@ -97,7 +99,10 @@ function placeDock() {
 
 export function mountCartDock() {
   const header = document.querySelector(".site-header");
-  const sync = () => placeDock();
+  const sync = () => {
+    if (header) document.documentElement.style.setProperty("--header-h", `${header.offsetHeight}px`);
+    placeDock();
+  };
   if (header && "ResizeObserver" in window) new ResizeObserver(sync).observe(header);
   window.addEventListener("resize", sync);
 

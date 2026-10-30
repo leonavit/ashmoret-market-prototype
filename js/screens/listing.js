@@ -4,11 +4,8 @@ import { getCommerce } from "../data/commerce.js";
 import { getManufacturer } from "../data/manufacturers.js";
 import { applyListing, listingControls, visibleSlice } from "../components/filters.js";
 import { productGrid } from "../components/product-card.js";
+import { inSupplierScope } from "../components/suppliers.js";
 import { esc } from "../lib/format.js";
-
-function brandsOf(list) {
-  return [...new Set(list.map((product) => product.brand))];
-}
 
 function crumbs(items) {
   return `<nav class="mb-4 text-sm text-muted" aria-label="מיקום">${items
@@ -41,7 +38,7 @@ export function renderCategory(slug, query) {
     <h1 class="text-3xl font-extrabold">${esc(category.name)}</h1>
     <p class="mt-2 text-muted">${items.length} מוצרים בקטלוג תוצרת</p>
     <div class="mt-6">
-      ${listingControls({ brands: brandsOf(source), categories: null, query })}
+      ${listingControls({ categories: null, query })}
       ${productGrid(view.shown)}
       ${moreButton(view.more)}
     </div>
@@ -82,7 +79,7 @@ export function renderManufacturer(id, query) {
       <section aria-labelledby="maker-grid">
         <h2 id="maker-grid" class="mb-4 text-2xl font-extrabold">המוצרים</h2>
         ${manufacturer.sample ? `<p class="rounded-2xl bg-paper px-5 py-8 font-semibold">ליצרן הזה אין קטלוג. התבנית מוכנה לנתונים.</p>` : `
-          ${listingControls({ brands: brandsOf(source), categories, query })}
+          ${listingControls({ categories, query })}
           ${productGrid(view.shown)}
           ${moreButton(view.more)}
         `}
@@ -118,7 +115,7 @@ export function renderDepartment(id, query) {
     <p class="mt-2 text-muted">${items.length} מוצרים במחלקה</p>
     ${chips}
     <div class="mt-6">
-      ${listingControls({ brands: brandsOf(source), categories: null, query })}
+      ${listingControls({ categories: null, query })}
       ${productGrid(view.shown)}
       ${moreButton(view.more)}
     </div>
@@ -127,7 +124,7 @@ export function renderDepartment(id, query) {
 
 export function renderSearch(query) {
   const text = (query.q || "").trim();
-  const source = text ? searchProducts(text) : products;
+  const source = (text ? searchProducts(text) : products).filter(inSupplierScope);
   const items = applyListing(source, query);
   const view = visibleSlice(items, query);
   return `<article class="wrap py-8">
@@ -135,7 +132,7 @@ export function renderSearch(query) {
     <h1 class="text-3xl font-extrabold">${text ? `תוצאות עבור „${esc(text)}”` : "חיפוש בקטלוג"}</h1>
     <p class="mt-2 text-muted">${items.length} מוצרים</p>
     <div class="mt-6">
-      ${listingControls({ brands: brandsOf(source), categories: null, query })}
+      ${listingControls({ categories: null, query })}
       ${productGrid(view.shown)}
       ${moreButton(view.more)}
     </div>

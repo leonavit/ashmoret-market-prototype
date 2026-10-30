@@ -173,7 +173,7 @@ export function renderOrderDetail(id) {
   return frame("orders", `הזמנה ${esc(order.id)}`, page(`הזמנה ${esc(order.id)}`, `
     <p class="mt-3 text-muted">${esc(when(order.createdAt))} · ${esc(order.status)}</p>
     <section class="order-card mt-6 max-w-3xl">${orderStatus(order)}</section>
-    <section class="mt-6 max-w-xl rounded-2xl border border-line p-5">
+    <section class="order-card mt-6 max-w-3xl">
       <h2 class="font-extrabold">הפריטים</h2>
       <ul class="mt-3 grid gap-2 text-sm">${items}</ul>
       <dl class="mt-4 grid gap-2 border-t border-line pt-3 text-sm">
