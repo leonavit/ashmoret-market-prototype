@@ -39,7 +39,7 @@ export function productFolds(product, options = {}) {
       <summary>תיאור</summary>
       <div class="product-fold-body">
         <p>${esc(product.name)} מבית ${esc(product.brand)}, בקטגוריית ${esc(product.categoryName)}. אריזה של ${esc(product.weight)}, ${esc(String(product.unitsPerPack))} יחידות במארז.</p>
-        ${product.manufacturerId === "tozeret" ? `<p><a href="#/m/tozeret">יצרן: תוצרת</a></p>` : ""}
+        ${makerLines(product)}
       </div>
     </details>
     <details class="product-fold">
@@ -58,6 +58,12 @@ export function productFolds(product, options = {}) {
     </details>
     ${shipping}
   </div>`;
+}
+
+function makerLines(product) {
+  if (product.manufacturerId !== "tozeret") return "";
+  return `<p><a href="#/m/tozeret">יצרן: תוצרת</a></p>
+      <p><strong>כשרות: בד״ץ בית יוסף</strong></p>`;
 }
 
 function spec(label, value) {
@@ -93,7 +99,7 @@ export function productTabs(product) {
         ${spec("קטגוריה", product.categoryName)}
         ${spec("עמוד בקטלוג", String(product.catalogPage))}
       </dl>
-      ${product.manufacturerId === "tozeret" ? `<p><a href="#/m/tozeret">יצרן: תוצרת</a></p>` : ""}`],
+      ${makerLines(product)}`],
     ["service", "שירות ואחריות", `<div class="product-tab-cols">
         <div>
           <h3>שירות לקוחות</h3>
