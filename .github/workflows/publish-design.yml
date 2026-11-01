@@ -1,0 +1,49 @@
+name: Publish design preview
+
+on:
+  push:
+    branches: [design]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: publish-design
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: src
+
+      - uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+          path: site
+
+      - name: Copy built site into design/
+        run: |
+          rm -rf site/design
+          mkdir -p site/design/js/vendor
+          cp src/index.html site/design/
+          cp -R src/assets site/design/
+          rm -rf site/design/assets/data
+          cp src/js/app.bundle.js site/design/js/
+          cp src/js/vendor/gsap.min.js src/js/vendor/embla-carousel.umd.js site/design/js/vendor/
+
+      - name: Commit and push
+        working-directory: site
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No changes to publish."
+          else
+            git commit -m "Update design preview from ${GITHUB_SHA::7}"
+            git push
+          fi
