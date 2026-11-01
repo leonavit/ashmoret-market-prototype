@@ -4274,7 +4274,7 @@
 
   // js/components/theme-options.js
   var KEY = "ashmoret-theme";
-  var defaults = { header: "v1", hero: "v3", categories: "v2", mobileMenu: "v1", suppliers: "v1", wideHeader: false };
+  var defaults = { header: "v1", hero: "v3", categories: "v2", mobileMenu: "v1", suppliers: "v1", wideHeader: true };
   var desktop = window.matchMedia("(min-width: 1024px)");
   var gearIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle cx="12" cy="12" r="3"></circle></svg>`;
   var groupIcon = (paths) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths}</svg>`;
@@ -4347,7 +4347,7 @@
         categories: ["v1", "v2"].includes(saved.categories) ? saved.categories : defaults.categories,
         mobileMenu: saved.mobileMenu === "v2" ? "v2" : defaults.mobileMenu,
         suppliers: saved.suppliers === "v2" ? "v2" : defaults.suppliers,
-        wideHeader: saved.wideHeader === true
+        wideHeader: typeof saved.wideHeader === "boolean" ? saved.wideHeader : defaults.wideHeader
       };
     } catch {
       return { ...defaults };
