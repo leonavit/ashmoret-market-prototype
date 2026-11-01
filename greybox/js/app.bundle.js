@@ -4963,7 +4963,7 @@
       <summary>\u05EA\u05D9\u05D0\u05D5\u05E8</summary>
       <div class="product-fold-body">
         <p>${esc(product.name)} \u05DE\u05D1\u05D9\u05EA ${esc(product.brand)}, \u05D1\u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D9\u05EA ${esc(product.categoryName)}. \u05D0\u05E8\u05D9\u05D6\u05D4 \u05E9\u05DC ${esc(product.weight)}, ${esc(String(product.unitsPerPack))} \u05D9\u05D7\u05D9\u05D3\u05D5\u05EA \u05D1\u05DE\u05D0\u05E8\u05D6.</p>
-        ${product.manufacturerId === "tozeret" ? `<p><a href="#/m/tozeret">\u05D9\u05E6\u05E8\u05DF: \u05EA\u05D5\u05E6\u05E8\u05EA</a></p>` : ""}
+        ${makerLines(product)}
       </div>
     </details>
     <details class="product-fold">
@@ -4982,6 +4982,11 @@
     </details>
     ${shipping}
   </div>`;
+  }
+  function makerLines(product) {
+    if (product.manufacturerId !== "tozeret") return "";
+    return `<p><a href="#/m/tozeret">\u05D9\u05E6\u05E8\u05DF: \u05EA\u05D5\u05E6\u05E8\u05EA</a></p>
+      <p><strong>\u05DB\u05E9\u05E8\u05D5\u05EA: \u05D1\u05D3\u05F4\u05E5 \u05D1\u05D9\u05EA \u05D9\u05D5\u05E1\u05E3</strong></p>`;
   }
   function spec(label, value) {
     return `<div><dt>${esc(label)}</dt><dd dir="auto">${esc(value)}</dd></div>`;
@@ -5013,7 +5018,7 @@
         ${spec("\u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D4", product.categoryName)}
         ${spec("\u05E2\u05DE\u05D5\u05D3 \u05D1\u05E7\u05D8\u05DC\u05D5\u05D2", String(product.catalogPage))}
       </dl>
-      ${product.manufacturerId === "tozeret" ? `<p><a href="#/m/tozeret">\u05D9\u05E6\u05E8\u05DF: \u05EA\u05D5\u05E6\u05E8\u05EA</a></p>` : ""}`],
+      ${makerLines(product)}`],
       ["service", "\u05E9\u05D9\u05E8\u05D5\u05EA \u05D5\u05D0\u05D7\u05E8\u05D9\u05D5\u05EA", `<div class="product-tab-cols">
         <div>
           <h3>\u05E9\u05D9\u05E8\u05D5\u05EA \u05DC\u05E7\u05D5\u05D7\u05D5\u05EA</h3>
@@ -5285,8 +5290,8 @@
   // js/screens/checkout.js
   var lockIcon = `<svg class="pay-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg>`;
   var payPrograms = [
-    ["general", "\u05DB\u05DC\u05DC \u05D4\u05DC\u05E7\u05D5\u05D7\u05D5\u05EA"],
-    ["ashmoret", "\u05DE\u05D7\u05D6\u05D9\u05E7\u05D9 \u05DB\u05E8\u05D8\u05D9\u05E1 \u05D0\u05E9\u05E8\u05D0\u05D9 \u05D0\u05E9\u05DE\u05D5\u05E8\u05EA \u05D1\u05DC\u05D1\u05D3"]
+    ["ashmoret", "\u05DE\u05D7\u05D6\u05D9\u05E7\u05D9 \u05DB\u05E8\u05D8\u05D9\u05E1 \u05D0\u05E9\u05E8\u05D0\u05D9 \u05D0\u05E9\u05DE\u05D5\u05E8\u05EA \u05D1\u05DC\u05D1\u05D3"],
+    ["general", "\u05DB\u05DC\u05DC \u05D4\u05DC\u05E7\u05D5\u05D7\u05D5\u05EA"]
   ];
   function selectPayTab(tab, focus) {
     const tabs = [...tab.closest("[role=tablist]").querySelectorAll("[data-pay-tab]")];
