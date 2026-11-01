@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>אשמורת MARKET</title>
+  <meta name="theme-color" content="#e9e9e9">
+  <link rel="icon" href="assets/images/brand/favicon.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/app.css?v=20261028m">
+</head>
+<body>
+  <a class="skip" href="#app">דילוג לתוכן</a>
+
+  <header class="site-header sticky top-0 z-40 border-b border-line bg-surface text-ink">
+    <div class="topbar border-b border-line bg-white">
+    <div class="wrap flex items-center justify-between gap-3 py-1.5 text-xs text-muted">
+      <div class="topbar-links flex min-w-0 items-center gap-2">
+        <button type="button" class="topbar-link" data-open-delivery aria-haspopup="dialog">
+          <svg class="topbar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 6.5h11.5v9.5H2z"></path><path d="M13.5 9.5h4.2l3.3 3.6v2.9h-7.5"></path><path d="M15.5 9.5v3.6H21"></path><circle cx="6" cy="17.5" r="1.8"></circle><circle cx="17" cy="17.5" r="1.8"></circle></svg>
+          <span class="topbar-link-text">משלוח עד הבית</span>
+        </button>
+        <span class="hidden text-line sm:inline" aria-hidden="true">·</span>
+        <button type="button" class="topbar-link" data-open-service aria-haspopup="dialog">
+          <svg class="topbar-icon is-small" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5.5"></path><path d="M12 7.6v.1"></path></svg>
+          <span class="topbar-link-text">שירות לקוחות</span>
+        </button>
+      </div>
+      <div id="topbar-search" class="topbar-search"></div>
+      <p id="topbar-tagline" class="hidden items-center gap-1.5 font-semibold text-ink md:inline-flex">
+        <svg class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>
+        משלוחים החל ממחר משעה 8:00 עד 20:00 בערב
+      </p>
+      <div id="account-slot" class="account-slot shrink-0"></div>
+    </div>
+    </div>
+    <div class="wrap header-bar py-3">
+      <a href="#/" class="header-logo shrink-0" lang="en">market</a>
+      <div class="search-slot relative min-w-0" id="search-slot">
+        <form id="search-form" class="search-form" role="search">
+          <label class="sr-only" for="search-input">חיפוש מוצרים</label>
+          <input id="search-input" name="q" type="search" placeholder="מה מחפשים?" autocomplete="off" enterkeyhint="search" role="combobox" aria-autocomplete="list" aria-controls="suggest" aria-expanded="false">
+          <button type="submit">
+            <svg viewBox="0 0 24 24" class="size-4" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+            חיפוש
+          </button>
+        </form>
+        <div id="suggest" class="suggest hidden" role="listbox" aria-label="הצעות חיפוש"></div>
+      </div>
+      <div class="header-tools flex items-center gap-1">
+        <aside id="cart-dock" class="cart-dock" hidden></aside>
+        <button type="button" class="icon-btn lg:hidden" id="menu-open" aria-expanded="false" aria-controls="mobile-menu">
+          <span class="sr-only">תפריט</span>
+          <svg viewBox="0 0 24 24" class="size-6" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"></path></svg>
+        </button>
+      </div>
+    </div>
+    <nav class="main-nav hidden lg:block" data-main-nav aria-label="ראשי">
+      <div class="wrap nav-row flex items-center justify-center gap-x-8 text-lg font-bold" data-nav-multi>
+        <a class="mega-trigger text-ink" id="mega-trigger-super" href="#/d/super" data-mega-open="super" aria-expanded="false" aria-controls="mega" aria-haspopup="true"><span class="cat-heart" aria-hidden="true"></span>סופר אשמורת <svg class="mega-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></a>
+        <a class="mega-trigger text-ink" id="mega-trigger-home" href="#/d/home" data-mega-open="home" aria-expanded="false" aria-controls="mega" aria-haspopup="true"><span class="cat-heart" aria-hidden="true"></span>חד פעמי וכלי בית <svg class="mega-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></a>
+        <a class="mega-trigger text-ink" id="mega-trigger-electronics" href="#/d/electronics" data-mega-open="electronics" aria-expanded="false" aria-controls="mega" aria-haspopup="true"><span class="cat-heart" aria-hidden="true"></span>קניון אשמורת <svg class="mega-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></a>
+        <a class="mega-trigger text-ink" id="mega-trigger-offers" href="#/d/offers" data-mega-open="offers" aria-expanded="false" aria-controls="mega" aria-haspopup="true"><span class="cat-heart" aria-hidden="true"></span>מבצעים <svg class="mega-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></a>
+      </div>
+      <div class="wrap nav-row nav-row-single flex items-center justify-center font-bold" data-nav-single hidden></div>
+      <div id="mega" class="mega" hidden>
+        <div class="wrap" id="mega-body"></div>
+      </div>
+    </nav>
+    <div id="mobile-menu" class="mobile-menu border-t border-line bg-white">
+      <div class="mobile-menu-head">
+        <a href="#/" class="mobile-menu-logo" lang="en">market</a>
+        <button type="button" class="icon-btn mobile-menu-close" data-menu-close aria-label="סגירת התפריט">
+          <svg viewBox="0 0 24 24" class="size-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+        </button>
+      </div>
+      <nav id="mobile-nav" class="wrap grid gap-1 py-3 text-lg font-semibold" aria-label="תפריט"></nav>
+    </div>
+  </header>
+
+  <section class="bg-paper" id="hero-slider" aria-roledescription="קרוסלה" aria-label="באנרים מתחלפים" hidden></section>
+
+  <section class="bg-paper" id="hero-top" aria-label="באנרים מקודמים" hidden></section>
+
+  <div class="bg-paper" id="category-band">
+    <div class="wrap pb-2 pt-6">
+      <h2 id="category-band-title" class="cat-band-title text-2xl font-extrabold" hidden><span class="cat-heart" aria-hidden="true"></span>קטגוריות נבחרות</h2>
+      <div class="cat-band">
+      <button type="button" class="cat-arrow" id="cat-prev" aria-label="קטגוריות קודמות">
+        <svg viewBox="0 0 24 24" class="size-5" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg>
+      </button>
+      <div class="cat-viewport" id="category-viewport">
+        <ul id="category-nav" class="cat-track"></ul>
+      </div>
+      <button type="button" class="cat-arrow" id="cat-next" aria-label="קטגוריות נוספות">
+        <svg viewBox="0 0 24 24" class="size-5" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg>
+      </button>
+      </div>
+    </div>
+  </div>
+
+  <main id="app" tabindex="-1"></main>
+
+  <footer class="site-footer mt-12 border-t border-line bg-surface text-ink">
+    <div class="wrap footer-main">
+      <div class="footer-brand">
+        <button type="button" class="footer-logo-btn" data-newsletter-open aria-haspopup="dialog" aria-label="50% הנחה על הרכישה הראשונה: הרשמה לניוזלטר">
+          <img src="assets/images/brand/logo.png" alt="" class="footer-logo">
+        </button>
+        <p>כל מה שצריך עד הבית</p>
+        <div class="footer-social">
+          <a class="footer-social-icon" href="https://chat.whatsapp.com/" target="_blank" rel="noopener noreferrer" aria-label="לקבוצת הווטסאפ">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3a9 9 0 0 0-7.8 13.4L3 21l4.7-1.2A9 9 0 1 0 12 3zm0 1.6a7.4 7.4 0 1 1-3.8 13.8l-.3-.2-2.6.7.7-2.5-.2-.3A7.4 7.4 0 0 1 12 4.6zm4.3 10.1c-.2-.1-1.4-.7-1.6-.8-.2-.1-.4-.1-.5.1l-.7.9c-.1.2-.3.2-.5.1a6 6 0 0 1-3-2.6c-.2-.4.2-.4.6-1.2.1-.1 0-.3 0-.4l-.7-1.7c-.2-.4-.4-.4-.5-.4h-.5a.9.9 0 0 0-.6.3 2.6 2.6 0 0 0-.8 1.9 4.5 4.5 0 0 0 1 2.4 10.3 10.3 0 0 0 3.9 3.5c1.5.6 2 .7 2.7.6a2.3 2.3 0 0 0 1.5-1.1 1.9 1.9 0 0 0 .1-1.1c0-.1-.2-.2-.4-.3z"></path></svg>
+          </a>
+          <a class="footer-social-icon" href="https://www.tiktok.com/" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.5 3.5c.4 2.3 1.9 3.9 4 4.2v3.2c-1.5 0-2.9-.4-4-1.2v6.1A5.8 5.8 0 1 1 10.7 10v3.3a2.6 2.6 0 1 0 2.6 2.6V3.5z"></path></svg>
+          </a>
+          <a class="footer-social-icon" href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.3" cy="6.7" r="1" fill="currentColor" stroke="none"></circle></svg>
+          </a>
+          <a class="footer-social-icon" href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13.5 21v-7.2h2.6l.4-3h-3V8.9c0-.9.3-1.5 1.5-1.5h1.6V4.7a20 20 0 0 0-2.3-.1c-2.3 0-3.9 1.4-3.9 4v2.2H7.8v3h2.6V21z"></path></svg>
+          </a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h2>תקנונים</h2>
+        <ul>
+          <li><a href="#/rules-offers">תקנון מבצעים</a></li>
+          <li><a href="#/rules-club">תקנון מועדון לקוחות</a></li>
+          <li><a href="#/rules-social">תקנון פעילות רשתות חברתיות</a></li>
+          <li><a href="#/rules-purchase">תקנון רכישה באתר</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h2>אשמורת MARKET</h2>
+        <ul>
+          <li><a href="#/account">איזור אישי</a></li>
+          <li><a href="#/orders">עדכון או ביטול הזמנה</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h2>קטלוג להורדה</h2>
+        <ul>
+          <li><a href="#/c/rice">אורז</a></li>
+          <li><a href="#/c/pasta">פסטות ופתיתים</a></li>
+          <li><a href="#/c/cans">שימורים</a></li>
+          <li><a href="#/c/oils">שמנים ורטבים</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h2>חשבון</h2>
+        <ul>
+          <li><a href="#/account">האזור האישי</a></li>
+          <li><a href="#/orders">הזמנות</a></li>
+          <li><a href="#/account/details">פרטים אישיים</a></li>
+          <li><a href="#/cart">סל הקניות</a></li>
+        </ul>
+      </div>
+      <div class="footer-contact">
+        <h2>יצירת קשר</h2>
+        <ul class="footer-lines">
+          <li>
+            <span class="footer-line-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 3h2.5l1.2 3.2-1.7 1a12 12 0 0 0 6.8 6.8l1-1.7 3.2 1.2V16a2 2 0 0 1-2.2 2A16 16 0 0 1 6 6.2 2 2 0 0 1 8 4z"></path></svg></span>
+            <a href="tel:03-000-0000"><strong dir="ltr">03-000-0000</strong><small>טלפון שירות לקוחות</small></a>
+          </li>
+          <li>
+            <span class="footer-line-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 0 0-7.8 13.4L3 21l4.7-1.2A9 9 0 1 0 12 3zm4.7 12.8c-.2.5-1 .9-1.6 1-.4.1-.9.1-1.5-.1a13 13 0 0 1-5.7-3.7 11 11 0 0 1-2.3-3.7c-.3-.9 0-1.6.3-2 .2-.3.5-.5.8-.5h.6c.2 0 .4 0 .6.5l.8 2c.1.2 0 .4-.1.6l-.4.6c-.1.2-.3.4-.1.7a8 8 0 0 0 2.5 2.8c.7.5 1.3.7 1.6.8.3.1.5 0 .7-.2l.6-.7c.2-.2.4-.2.6-.1l2 .9c.2.1.4.2.4.4 0 .1 0 .4-.2.8z"></path></svg></span>
+            <a href="https://wa.me/97230000000" target="_blank" rel="noopener noreferrer"><strong>ווטסאפ</strong><small>שירות לקוחות</small></a>
+          </li>
+          <li>
+            <span class="footer-line-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 6h16v12H4z"></path><path d="M4 7l8 6 8-6"></path></svg></span>
+            <a href="#/contact"><strong>טופס יצירת קשר</strong><small>שליחת פנייה</small></a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="border-t border-line">
+      <div class="wrap footer-bottom">
+        <p>©כל הזכויות שמורות 2026, אשמורת MARKET</p>
+        <nav class="footer-legal" aria-label="קישורי מידע משפטי">
+          <a href="#/terms">תנאי שימוש</a>
+          <a href="#/privacy">מדיניות פרטיות</a>
+          <a href="#/accessibility">הצהרת נגישות</a>
+        </nav>
+        <img class="footer-payments" src="assets/images/payment-methods.png" alt="אמצעי תשלום: Visa, CB, American Express, Maestro, Mastercard, PayPal" width="282" height="25">
+      </div>
+    </div>
+  </footer>
+
+  <div id="toast" aria-live="polite"></div>
+  <div id="modal-root"></div>
+
+  <script src="js/vendor/gsap.min.js"></script>
+  <script src="js/vendor/embla-carousel.umd.js"></script>
+  <script src="js/app.bundle.js?v=20261028i"></script>
+</body>
+</html>
