@@ -1,6 +1,6 @@
 const KEY = "ashmoret-theme";
-const REV = 5;
-const defaults = { header: "v2", hero: "v3", categories: "v2", featured: "v2", banners: "v2", mobileMenu: "v2", suppliers: "v1", palette: "v1", logo: "v1", wideHeader: true };
+const REV = 6;
+const defaults = { header: "v2", hero: "v4", categories: "v2", featured: "v2", banners: "v2", mobileMenu: "v2", suppliers: "v1", palette: "v1", logo: "v1", wideHeader: true };
 const logos = {
   v1: { src: "assets/images/brand/logo-market-cart.png?v=2", width: 300, height: 80 },
   v2: { src: "assets/images/brand/logo-market.png", width: 1024, height: 344 },
@@ -40,8 +40,8 @@ const groups = [
     options: [
       ["v1", "V1", "קרוסלת קטגוריות, אייטם מקודם ושני מקודמים קטנים בצד."],
       ["v2", "V2", "סליידר תמונות מתחלפות עם נקודות דפדוף, ומתחתיו קרוסלת הקטגוריות."],
-      ["v3", "V3 · ברירת מחדל", "שלושת הבאנרים למעלה, ומתחתיהם קרוסלת הקטגוריות עם הכותרת «קטגוריות נבחרות»."],
-      ["v4", "V4", "כמו V3, ובצד במקום שני באנרים משניים, באנר אחד עם תמונות מתחלפות וקישור."],
+      ["v3", "V3", "שלושת הבאנרים למעלה, ומתחתיהם קרוסלת הקטגוריות עם הכותרת «קטגוריות נבחרות»."],
+      ["v4", "V4 · ברירת מחדל", "כמו V3, ובצד במקום שני באנרים משניים, באנר אחד עם תמונות מתחלפות וקישור."],
     ],
   },
   {
@@ -117,7 +117,7 @@ function load() {
     return {
       rev: REV,
       header: current && saved.header === "v1" ? "v1" : defaults.header,
-      hero: ["v1", "v2", "v3", "v4"].includes(saved.hero) ? saved.hero : defaults.hero,
+      hero: saved.rev >= 6 && ["v1", "v2", "v3", "v4"].includes(saved.hero) ? saved.hero : defaults.hero,
       categories: ["v1", "v2"].includes(saved.categories) ? saved.categories : defaults.categories,
       featured: saved.rev >= 4 && saved.featured === "v1" ? "v1" : defaults.featured,
       banners: saved.rev >= 5 && saved.banners === "v1" ? "v1" : defaults.banners,

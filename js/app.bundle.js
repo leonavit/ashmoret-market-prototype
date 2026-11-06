@@ -4289,8 +4289,8 @@
 
   // js/components/theme-options.js
   var KEY = "ashmoret-theme";
-  var REV = 5;
-  var defaults = { header: "v2", hero: "v3", categories: "v2", featured: "v2", banners: "v2", mobileMenu: "v2", suppliers: "v1", palette: "v1", logo: "v1", wideHeader: true };
+  var REV = 6;
+  var defaults = { header: "v2", hero: "v4", categories: "v2", featured: "v2", banners: "v2", mobileMenu: "v2", suppliers: "v1", palette: "v1", logo: "v1", wideHeader: true };
   var logos = {
     v1: { src: "assets/images/brand/logo-market-cart.png?v=2", width: 300, height: 80 },
     v2: { src: "assets/images/brand/logo-market.png", width: 1024, height: 344 }
@@ -4327,8 +4327,8 @@
       options: [
         ["v1", "V1", "\u05E7\u05E8\u05D5\u05E1\u05DC\u05EA \u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D5\u05EA, \u05D0\u05D9\u05D9\u05D8\u05DD \u05DE\u05E7\u05D5\u05D3\u05DD \u05D5\u05E9\u05E0\u05D9 \u05DE\u05E7\u05D5\u05D3\u05DE\u05D9\u05DD \u05E7\u05D8\u05E0\u05D9\u05DD \u05D1\u05E6\u05D3."],
         ["v2", "V2", "\u05E1\u05DC\u05D9\u05D9\u05D3\u05E8 \u05EA\u05DE\u05D5\u05E0\u05D5\u05EA \u05DE\u05EA\u05D7\u05DC\u05E4\u05D5\u05EA \u05E2\u05DD \u05E0\u05E7\u05D5\u05D3\u05D5\u05EA \u05D3\u05E4\u05D3\u05D5\u05E3, \u05D5\u05DE\u05EA\u05D7\u05EA\u05D9\u05D5 \u05E7\u05E8\u05D5\u05E1\u05DC\u05EA \u05D4\u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D5\u05EA."],
-        ["v3", "V3 \xB7 \u05D1\u05E8\u05D9\u05E8\u05EA \u05DE\u05D7\u05D3\u05DC", "\u05E9\u05DC\u05D5\u05E9\u05EA \u05D4\u05D1\u05D0\u05E0\u05E8\u05D9\u05DD \u05DC\u05DE\u05E2\u05DC\u05D4, \u05D5\u05DE\u05EA\u05D7\u05EA\u05D9\u05D4\u05DD \u05E7\u05E8\u05D5\u05E1\u05DC\u05EA \u05D4\u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D5\u05EA \u05E2\u05DD \u05D4\u05DB\u05D5\u05EA\u05E8\u05EA \xAB\u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D5\u05EA \u05E0\u05D1\u05D7\u05E8\u05D5\u05EA\xBB."],
-        ["v4", "V4", "\u05DB\u05DE\u05D5 V3, \u05D5\u05D1\u05E6\u05D3 \u05D1\u05DE\u05E7\u05D5\u05DD \u05E9\u05E0\u05D9 \u05D1\u05D0\u05E0\u05E8\u05D9\u05DD \u05DE\u05E9\u05E0\u05D9\u05D9\u05DD, \u05D1\u05D0\u05E0\u05E8 \u05D0\u05D7\u05D3 \u05E2\u05DD \u05EA\u05DE\u05D5\u05E0\u05D5\u05EA \u05DE\u05EA\u05D7\u05DC\u05E4\u05D5\u05EA \u05D5\u05E7\u05D9\u05E9\u05D5\u05E8."]
+        ["v3", "V3", "\u05E9\u05DC\u05D5\u05E9\u05EA \u05D4\u05D1\u05D0\u05E0\u05E8\u05D9\u05DD \u05DC\u05DE\u05E2\u05DC\u05D4, \u05D5\u05DE\u05EA\u05D7\u05EA\u05D9\u05D4\u05DD \u05E7\u05E8\u05D5\u05E1\u05DC\u05EA \u05D4\u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D5\u05EA \u05E2\u05DD \u05D4\u05DB\u05D5\u05EA\u05E8\u05EA \xAB\u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D5\u05EA \u05E0\u05D1\u05D7\u05E8\u05D5\u05EA\xBB."],
+        ["v4", "V4 \xB7 \u05D1\u05E8\u05D9\u05E8\u05EA \u05DE\u05D7\u05D3\u05DC", "\u05DB\u05DE\u05D5 V3, \u05D5\u05D1\u05E6\u05D3 \u05D1\u05DE\u05E7\u05D5\u05DD \u05E9\u05E0\u05D9 \u05D1\u05D0\u05E0\u05E8\u05D9\u05DD \u05DE\u05E9\u05E0\u05D9\u05D9\u05DD, \u05D1\u05D0\u05E0\u05E8 \u05D0\u05D7\u05D3 \u05E2\u05DD \u05EA\u05DE\u05D5\u05E0\u05D5\u05EA \u05DE\u05EA\u05D7\u05DC\u05E4\u05D5\u05EA \u05D5\u05E7\u05D9\u05E9\u05D5\u05E8."]
       ]
     },
     {
@@ -4404,7 +4404,7 @@
       return {
         rev: REV,
         header: current && saved.header === "v1" ? "v1" : defaults.header,
-        hero: ["v1", "v2", "v3", "v4"].includes(saved.hero) ? saved.hero : defaults.hero,
+        hero: saved.rev >= 6 && ["v1", "v2", "v3", "v4"].includes(saved.hero) ? saved.hero : defaults.hero,
         categories: ["v1", "v2"].includes(saved.categories) ? saved.categories : defaults.categories,
         featured: saved.rev >= 4 && saved.featured === "v1" ? "v1" : defaults.featured,
         banners: saved.rev >= 5 && saved.banners === "v1" ? "v1" : defaults.banners,
