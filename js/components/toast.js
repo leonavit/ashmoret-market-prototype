@@ -18,7 +18,14 @@ export function showToast(message, href) {
   }, 3200);
 }
 
-function confirmWithin(container, message) {
+function titleHtml(message, highlight) {
+  const text = esc(message);
+  if (!highlight) return text;
+  const name = esc(highlight);
+  return text.replace(name, `<strong class="font-extrabold">${name}</strong>`);
+}
+
+function confirmWithin(container, message, highlight) {
   container.querySelector(".inline-confirm")?.remove();
   const layer = document.createElement("div");
   layer.className = "inline-confirm";
@@ -26,7 +33,7 @@ function confirmWithin(container, message) {
   layer.setAttribute("aria-modal", "true");
   layer.setAttribute("aria-labelledby", "inline-confirm-title");
   layer.innerHTML = `<div class="inline-confirm-card">
-    <h2 id="inline-confirm-title" class="text-lg font-extrabold">${esc(message)}</h2>
+    <h2 id="inline-confirm-title" class="text-lg font-normal">${titleHtml(message, highlight)}</h2>
     <div class="inline-confirm-actions">
       <button type="button" class="btn" data-confirm="yes">הסרה</button>
       <button type="button" class="btn btn-line" data-confirm="cancel">ביטול</button>
@@ -58,11 +65,11 @@ function confirmWithin(container, message) {
   });
 }
 
-export function confirmAction(message, { within } = {}) {
-  if (within) return confirmWithin(within, message);
+export function confirmAction(message, { within, highlight } = {}) {
+  if (within) return confirmWithin(within, message, highlight);
   const root = document.getElementById("modal-root");
   root.innerHTML = `<dialog class="confirm-dialog" aria-labelledby="confirm-title">
-    <h2 id="confirm-title" class="text-lg font-extrabold">${esc(message)}</h2>
+    <h2 id="confirm-title" class="text-lg font-normal">${titleHtml(message, highlight)}</h2>
     <form method="dialog" class="inline-confirm-actions mt-5">
       <button class="btn" value="yes">הסרה</button>
       <button class="btn btn-line" value="cancel">ביטול</button>

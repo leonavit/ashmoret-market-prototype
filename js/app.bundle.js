@@ -4289,8 +4289,8 @@
 
   // js/components/theme-options.js
   var KEY = "ashmoret-theme";
-  var REV = 2;
-  var defaults = { header: "v2", hero: "v3", categories: "v2", featured: "v1", banners: "v1", mobileMenu: "v1", suppliers: "v1", palette: "grey", logo: "v1", wideHeader: true };
+  var REV = 3;
+  var defaults = { header: "v2", hero: "v3", categories: "v2", featured: "v1", banners: "v1", mobileMenu: "v2", suppliers: "v1", palette: "v1", logo: "v1", wideHeader: true };
   var logos = {
     v1: { src: "assets/images/brand/logo-market-cart.png?v=2", width: 300, height: 80 },
     v2: { src: "assets/images/brand/logo-market.png", width: 1024, height: 344 }
@@ -4360,8 +4360,8 @@
       name: "mobileMenu",
       title: "\u05D4\u05D2\u05D3\u05E8\u05D5\u05EA \u05EA\u05E4\u05E8\u05D9\u05D8 \u05DE\u05D5\u05D1\u05D9\u05D9\u05DC",
       options: [
-        ["v1", "V1 \xB7 \u05D1\u05E8\u05D9\u05E8\u05EA \u05DE\u05D7\u05D3\u05DC", "\u05D4\u05EA\u05E4\u05E8\u05D9\u05D8 \u05E0\u05E4\u05EA\u05D7 \u05DE\u05EA\u05D7\u05EA \u05DC\u05D4\u05D3\u05E8."],
-        ["v2", "V2", "\u05D4\u05EA\u05E4\u05E8\u05D9\u05D8 \u05E0\u05E4\u05EA\u05D7 \u05E2\u05DC \u05DB\u05DC \u05D4\u05DE\u05E1\u05DA, \u05E2\u05DD \u05D4\u05DC\u05D5\u05D2\u05D5 \u05D1\u05DE\u05E8\u05DB\u05D6 \u05DC\u05DE\u05E2\u05DC\u05D4 \u05D5\u05DB\u05E4\u05EA\u05D5\u05E8 \u05E1\u05D2\u05D9\u05E8\u05D4 \u05DE\u05D9\u05DE\u05D9\u05DF, \u05D1\u05DE\u05E7\u05D5\u05DD \u05D4\u05D4\u05DE\u05D1\u05D5\u05E8\u05D2\u05E8."]
+        ["v1", "V1", "\u05D4\u05EA\u05E4\u05E8\u05D9\u05D8 \u05E0\u05E4\u05EA\u05D7 \u05DE\u05EA\u05D7\u05EA \u05DC\u05D4\u05D3\u05E8."],
+        ["v2", "V2 \xB7 \u05D1\u05E8\u05D9\u05E8\u05EA \u05DE\u05D7\u05D3\u05DC", "\u05D4\u05EA\u05E4\u05E8\u05D9\u05D8 \u05E0\u05E4\u05EA\u05D7 \u05E2\u05DC \u05DB\u05DC \u05D4\u05DE\u05E1\u05DA, \u05E2\u05DD \u05D4\u05DC\u05D5\u05D2\u05D5 \u05D1\u05DE\u05E8\u05DB\u05D6 \u05DC\u05DE\u05E2\u05DC\u05D4 \u05D5\u05DB\u05E4\u05EA\u05D5\u05E8 \u05E1\u05D2\u05D9\u05E8\u05D4 \u05DE\u05D9\u05DE\u05D9\u05DF, \u05D1\u05DE\u05E7\u05D5\u05DD \u05D4\u05D4\u05DE\u05D1\u05D5\u05E8\u05D2\u05E8."]
       ],
       note: "\u05D4\u05EA\u05E4\u05E8\u05D9\u05D8 \u05DE\u05D5\u05E6\u05D2 \u05D1\u05DE\u05E1\u05DB\u05D9\u05DD \u05E6\u05E8\u05D9\u05DD \u05DE\u05BE1024 \u05E4\u05D9\u05E7\u05E1\u05DC\u05D9\u05DD."
     },
@@ -4377,8 +4377,8 @@
       name: "palette",
       title: "\u05E4\u05DC\u05D8\u05EA \u05E6\u05D1\u05E2\u05D9\u05DD",
       options: [
-        ["grey", "\u05D0\u05E4\u05D5\u05E8\u05D9\u05DD \xB7 \u05D1\u05E8\u05D9\u05E8\u05EA \u05DE\u05D7\u05D3\u05DC", "\u05D2\u05D5\u05D5\u05E0\u05D9 \u05D4\u05D0\u05E4\u05D5\u05E8 \u05E9\u05DC \u05D4\u05BEGrey box.", ["#1f1f1f", "#e9e9e9", "#fff"]],
-        ["v1", "V1", `\u05DB\u05D4\u05D4 <bdi dir="ltr">#282B4A</bdi>, \u05D1\u05D4\u05D9\u05E8 <bdi dir="ltr">#EEEBDA</bdi> \u05D5\u05DC\u05D1\u05DF.`, ["#282B4A", "#EEEBDA", "#fff"]]
+        ["grey", "\u05D0\u05E4\u05D5\u05E8\u05D9\u05DD", "\u05D2\u05D5\u05D5\u05E0\u05D9 \u05D4\u05D0\u05E4\u05D5\u05E8 \u05E9\u05DC \u05D4\u05BEGrey box.", ["#1f1f1f", "#e9e9e9", "#fff"]],
+        ["v1", "V1 \xB7 \u05D1\u05E8\u05D9\u05E8\u05EA \u05DE\u05D7\u05D3\u05DC", `\u05DB\u05D4\u05D4 <bdi dir="ltr">#282B4A</bdi>, \u05D1\u05D4\u05D9\u05E8 <bdi dir="ltr">#EEEBDA</bdi> \u05D5\u05DC\u05D1\u05DF.`, ["#282B4A", "#EEEBDA", "#fff"]]
       ]
     },
     {
@@ -4408,9 +4408,9 @@
         categories: ["v1", "v2"].includes(saved.categories) ? saved.categories : defaults.categories,
         featured: saved.featured === "v2" ? "v2" : defaults.featured,
         banners: saved.banners === "v2" ? "v2" : defaults.banners,
-        mobileMenu: saved.mobileMenu === "v2" ? "v2" : defaults.mobileMenu,
+        mobileMenu: current && saved.mobileMenu === "v1" ? "v1" : defaults.mobileMenu,
         suppliers: saved.suppliers === "v2" ? "v2" : defaults.suppliers,
-        palette: saved.palette === "v1" ? "v1" : defaults.palette,
+        palette: current && saved.palette === "grey" ? "grey" : defaults.palette,
         logo: saved.logo === "v2" ? "v2" : defaults.logo,
         wideHeader: typeof saved.wideHeader === "boolean" ? saved.wideHeader : defaults.wideHeader
       };
@@ -4479,8 +4479,8 @@
     <button class="auth-close" type="button" data-theme-close aria-label="\u05E1\u05D2\u05D9\u05E8\u05EA \u05D0\u05E4\u05E9\u05E8\u05D5\u05D9\u05D5\u05EA \u05D4\u05EA\u05D1\u05E0\u05D9\u05EA">\xD7</button>
   </div>
   <div class="theme-panel-body">
-    ${groups.map((group) => `<fieldset class="theme-group">
-      <legend><span class="theme-legend-icon">${groupIcons[group.name]}</span>${group.title}</legend>
+    ${groups.map((group, index) => `<fieldset class="theme-group">
+      <legend><span class="theme-group-num" aria-hidden="true">${index + 1}</span><span class="theme-legend-icon">${groupIcons[group.name]}</span>${group.title}</legend>
       ${group.options.map(([value, label, text, swatches]) => `<label class="theme-option">
         <input type="radio" name="${group.name}" value="${value}" ${state[group.name] === value ? "checked" : ""} data-theme-option>
         <span><strong>${label}</strong><small>${text}</small>${swatches ? `<span class="theme-swatches" aria-hidden="true">${swatches.map((color) => `<span style="background:${color}"></span>`).join("")}</span>` : ""}</span>
@@ -4641,6 +4641,25 @@
   </div>`;
   }
   var sideSlides = () => getTheme().banners === "v2" ? offerBanners : sideBanners;
+  var pauseIcon = `<svg class="autoplay-pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"></rect><rect x="14" y="5" width="4" height="14" rx="1"></rect></svg>`;
+  var playIcon = `<svg class="autoplay-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"></path></svg>`;
+  function autoplayToggle() {
+    return `<button type="button" class="autoplay-toggle" data-autoplay-toggle aria-pressed="false" aria-label="\u05E2\u05E6\u05D9\u05E8\u05EA \u05D4\u05D4\u05D7\u05DC\u05E4\u05D4 \u05D4\u05D0\u05D5\u05D8\u05D5\u05DE\u05D8\u05D9\u05EA">${pauseIcon}${playIcon}</button>`;
+  }
+  function bindAutoplayToggle(root, onChange) {
+    const button = root.querySelector("[data-autoplay-toggle]");
+    if (!button) return;
+    if (prefersReducedMotion()) {
+      button.hidden = true;
+      return;
+    }
+    button.addEventListener("click", () => {
+      const stopped2 = button.getAttribute("aria-pressed") !== "true";
+      button.setAttribute("aria-pressed", String(stopped2));
+      button.setAttribute("aria-label", stopped2 ? "\u05D4\u05E4\u05E2\u05DC\u05EA \u05D4\u05D4\u05D7\u05DC\u05E4\u05D4 \u05D4\u05D0\u05D5\u05D8\u05D5\u05DE\u05D8\u05D9\u05EA" : "\u05E2\u05E6\u05D9\u05E8\u05EA \u05D4\u05D4\u05D7\u05DC\u05E4\u05D4 \u05D4\u05D0\u05D5\u05D8\u05D5\u05DE\u05D8\u05D9\u05EA");
+      onChange(stopped2);
+    });
+  }
   function carouselControls(count) {
     const dots = Array.from({ length: count }, (_, index) => `<button type="button" class="hero-dot" data-promo-dot="${index}" aria-label="\u05E9\u05E7\u05D5\u05E4\u05D9\u05EA ${index + 1} \u05DE\u05EA\u05D5\u05DA ${count}" ${index === 0 ? 'aria-current="true"' : ""}></button>`).join("");
     return `<button type="button" class="cat-arrow promo-arrow is-prev" data-promo-prev aria-label="\u05D4\u05E9\u05E7\u05D5\u05E4\u05D9\u05EA \u05D4\u05E7\u05D5\u05D3\u05DE\u05EA">
@@ -4649,7 +4668,7 @@
     <button type="button" class="cat-arrow promo-arrow is-next" data-promo-next aria-label="\u05D4\u05E9\u05E7\u05D5\u05E4\u05D9\u05EA \u05D4\u05D1\u05D0\u05D4">
       <svg viewBox="0 0 24 24" class="size-5" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg>
     </button>
-    <div class="hero-dots" role="group" aria-label="\u05D3\u05E4\u05D3\u05D5\u05E3 \u05D1\u05D9\u05DF \u05D4\u05E9\u05E7\u05D5\u05E4\u05D9\u05D5\u05EA">${dots}</div>`;
+    <div class="hero-dots" role="group" aria-label="\u05D3\u05E4\u05D3\u05D5\u05E3 \u05D1\u05D9\u05DF \u05D4\u05E9\u05E7\u05D5\u05E4\u05D9\u05D5\u05EA">${dots}${autoplayToggle()}</div>`;
   }
   function promoCarousel() {
     const slides2 = heroSlides.map(heroSlide).join("");
@@ -4705,14 +4724,14 @@
       direction: "rtl",
       duration: prefersReducedMotion() ? 0 : 30
     });
-    const entry = { root, embla: embla2, timer: 0, paused: false };
+    const entry = { root, embla: embla2, timer: 0, paused: false, stopped: false };
     const stop2 = () => {
       window.clearInterval(entry.timer);
       entry.timer = 0;
     };
     const start2 = () => {
       stop2();
-      if (entry.paused || prefersReducedMotion()) return;
+      if (entry.paused || entry.stopped || prefersReducedMotion()) return;
       entry.timer = window.setInterval(() => embla2.scrollNext(), AUTOPLAY_MS);
     };
     entry.stop = stop2;
@@ -4732,6 +4751,10 @@
     root.querySelector("[data-promo-next]")?.addEventListener("click", () => embla2.scrollNext());
     root.querySelectorAll("[data-promo-dot]").forEach((dot) => {
       dot.addEventListener("click", () => embla2.scrollTo(Number(dot.dataset.promoDot)));
+    });
+    bindAutoplayToggle(root, (stopped2) => {
+      entry.stopped = stopped2;
+      start2();
     });
     const pause = (value) => {
       entry.paused = value;
@@ -6566,6 +6589,7 @@
   // js/components/mega-menu.js
   var mark = "assets/images/brand/heart.png";
   var chevron = `<svg class="mega-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg>`;
+  var plus = `<svg class="mobile-nav-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"></path><path class="mobile-nav-plus-v" d="M12 5v14"></path></svg>`;
   var arrow = `<svg class="mega-all-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M19 12H6M12 6l-6 6 6 6"></path></svg>`;
   var menus = [
     {
@@ -6717,10 +6741,10 @@
     multi.hidden = solo;
     single.hidden = !solo;
     single.innerHTML = solo ? supplierCategories().map(categoryLink).join("") : "";
-    mobile.innerHTML = solo ? supplierCategories().map((category) => `<div class="mega-mobile-head">${categoryLink(category)}</div>`).join("") : menus.map((item) => `<div>
+    mobile.innerHTML = solo ? supplierCategories().map((category) => `<div class="mobile-nav-item"><div class="mega-mobile-head">${categoryLink(category)}</div></div>`).join("") : menus.map((item) => `<div class="mobile-nav-item">
       <div class="mega-mobile-head">
         <a class="mega-trigger" href="#/d/${esc(item.id)}"><span class="nav-icon is-${esc(item.id)}" aria-hidden="true"></span>${esc(item.label)}</a>
-        <button type="button" class="mega-trigger" data-mega-mobile="${esc(item.id)}" aria-expanded="false" aria-label="\u05E4\u05EA\u05D9\u05D7\u05EA ${esc(item.label)}">${chevron}</button>
+        <button type="button" class="mega-trigger mobile-nav-toggle" data-mega-mobile="${esc(item.id)}" aria-expanded="false" aria-label="\u05E4\u05EA\u05D9\u05D7\u05EA ${esc(item.label)}">${chevron}${plus}</button>
       </div>
       <div class="mega-mobile" hidden data-mega-mobile-panel="${esc(item.id)}"></div>
     </div>`).join("");
@@ -6827,6 +6851,10 @@
   function bindShell(navigate3) {
     if (bound) return;
     bound = true;
+    const header = document.querySelector(".site-header");
+    const markScrolled = () => header?.classList.toggle("is-scrolled", window.scrollY > 0);
+    window.addEventListener("scroll", markScrolled, { passive: true });
+    markScrolled();
     const form = document.getElementById("search-form");
     const input = document.getElementById("search-input");
     const suggest = document.getElementById("suggest");
@@ -7014,7 +7042,6 @@
     if (!show && root.childElementCount) return;
     const goods = subtotal();
     const total = goods + (count ? deliveryFee : 0);
-    const countLabel = count === 0 ? "\u05D4\u05E1\u05DC \u05E8\u05D9\u05E7" : count === 1 ? "\u05E4\u05E8\u05D9\u05D8 \u05D0\u05D7\u05D3" : `${count} \u05E4\u05E8\u05D9\u05D8\u05D9\u05DD`;
     const list = items.length ? `<ul class="cart-dock-list">${items.map((item) => `<li class="cart-dock-item">
         <a class="cart-dock-thumb${productPhoto(item.product) ? " has-photo" : ""}" href="#/p/${esc(item.product.id)}" tabindex="-1" aria-hidden="true">${photoImg(item.product)}</a>
         <div class="min-w-0">
@@ -7037,8 +7064,8 @@
         <span class="sr-only">${open ? "\u05E1\u05D2\u05D9\u05E8\u05EA \u05D4\u05E1\u05DC" : "\u05E4\u05EA\u05D9\u05D7\u05EA \u05D4\u05E1\u05DC"}</span>
       </button>
       <div class="min-w-0">
-        <p class="cart-dock-title"><span class="cart-dock-mark">${cartIcon}${count ? `<span class="cart-dock-badge">${count}</span>` : ""}</span><span>\u05D4\u05E1\u05DC \u05E9\u05DC\u05D9</span></p>
-        <p class="text-sm text-muted">${countLabel}</p>
+        <p class="cart-dock-title"><span class="cart-dock-mark">${cartIcon}${count ? `<span class="cart-dock-badge">${count}</span>` : ""}</span><span>\u05D4\u05E2\u05D2\u05DC\u05D4 \u05E9\u05DC\u05D9</span></p>
+        ${count ? "" : `<p class="text-sm text-muted">\u05D4\u05E1\u05DC \u05E8\u05D9\u05E7</p>`}
       </div>
       ${count ? `<a class="cart-dock-pay" href="#/checkout"><span>\u05DC\u05EA\u05E9\u05DC\u05D5\u05DD:</span><strong>${money(total)}</strong></a>` : `<span class="cart-dock-pay is-disabled" aria-disabled="true"><span>\u05DC\u05EA\u05E9\u05DC\u05D5\u05DD:</span><strong>${money(0)}</strong></span>`}
     </div>
@@ -7111,7 +7138,13 @@
       item.remove();
     }, 3200);
   }
-  function confirmWithin(container, message) {
+  function titleHtml(message, highlight) {
+    const text = esc(message);
+    if (!highlight) return text;
+    const name = esc(highlight);
+    return text.replace(name, `<strong class="font-extrabold">${name}</strong>`);
+  }
+  function confirmWithin(container, message, highlight) {
     container.querySelector(".inline-confirm")?.remove();
     const layer = document.createElement("div");
     layer.className = "inline-confirm";
@@ -7119,7 +7152,7 @@
     layer.setAttribute("aria-modal", "true");
     layer.setAttribute("aria-labelledby", "inline-confirm-title");
     layer.innerHTML = `<div class="inline-confirm-card">
-    <h2 id="inline-confirm-title" class="text-lg font-extrabold">${esc(message)}</h2>
+    <h2 id="inline-confirm-title" class="text-lg font-normal">${titleHtml(message, highlight)}</h2>
     <div class="inline-confirm-actions">
       <button type="button" class="btn" data-confirm="yes">\u05D4\u05E1\u05E8\u05D4</button>
       <button type="button" class="btn btn-line" data-confirm="cancel">\u05D1\u05D9\u05D8\u05D5\u05DC</button>
@@ -7150,11 +7183,11 @@
       });
     });
   }
-  function confirmAction(message, { within } = {}) {
-    if (within) return confirmWithin(within, message);
+  function confirmAction(message, { within, highlight } = {}) {
+    if (within) return confirmWithin(within, message, highlight);
     const root = document.getElementById("modal-root");
     root.innerHTML = `<dialog class="confirm-dialog" aria-labelledby="confirm-title">
-    <h2 id="confirm-title" class="text-lg font-extrabold">${esc(message)}</h2>
+    <h2 id="confirm-title" class="text-lg font-normal">${titleHtml(message, highlight)}</h2>
     <form method="dialog" class="inline-confirm-actions mt-5">
       <button class="btn" value="yes">\u05D4\u05E1\u05E8\u05D4</button>
       <button class="btn btn-line" value="cancel">\u05D1\u05D9\u05D8\u05D5\u05DC</button>
@@ -7400,6 +7433,7 @@
   var embla = null;
   var timer2 = 0;
   var paused = false;
+  var stopped = false;
   function markup3() {
     return `<div class="wrap pt-6">
     <div class="hero-slider" data-hero-slider>
@@ -7421,6 +7455,7 @@
       </div>
       <div class="hero-dots" role="group" aria-label="\u05D3\u05E4\u05D3\u05D5\u05E3 \u05D1\u05D9\u05DF \u05D4\u05E9\u05E7\u05D5\u05E4\u05D9\u05D5\u05EA">
         ${slides.map((_, index) => `<button type="button" class="hero-dot" data-hero-dot="${index}" aria-label="\u05E9\u05E7\u05D5\u05E4\u05D9\u05EA ${index + 1} \u05DE\u05EA\u05D5\u05DA ${slides.length}" ${index === 0 ? 'aria-current="true"' : ""}></button>`).join("")}
+        ${autoplayToggle()}
       </div>
     </div>
   </div>`;
@@ -7431,7 +7466,7 @@
   }
   function start() {
     stop();
-    if (!embla || paused || prefersReducedMotion()) return;
+    if (!embla || paused || stopped || prefersReducedMotion()) return;
     timer2 = window.setInterval(() => embla?.scrollNext(), AUTOPLAY_MS2);
   }
   function syncSlides(root) {
@@ -7474,6 +7509,10 @@
     slider.querySelectorAll("[data-hero-dot]").forEach((dot) => {
       dot.addEventListener("click", () => embla?.scrollTo(Number(dot.dataset.heroDot)));
     });
+    bindAutoplayToggle(slider, (value) => {
+      stopped = value;
+      start();
+    });
     const pause = (value) => () => {
       paused = value;
       if (value) stop();
@@ -7486,6 +7525,7 @@
       if (!slider.contains(event.relatedTarget)) pause(false)();
     });
     paused = false;
+    stopped = false;
     start();
   }
 
@@ -7795,7 +7835,7 @@
     if (remove) {
       const product = getProduct(remove.dataset.remove);
       const message = product ? `\u05DC\u05D4\u05E1\u05D9\u05E8 \u05D0\u05EA ${product.name} \u05DE\u05D4\u05E1\u05DC?` : "\u05DC\u05D4\u05E1\u05D9\u05E8 \u05D0\u05EA \u05D4\u05E4\u05E8\u05D9\u05D8 \u05DE\u05D4\u05E1\u05DC?";
-      const yes = await confirmAction(message, { within: remove.closest(".cart-dock-body") });
+      const yes = await confirmAction(message, { within: remove.closest(".cart-dock-body"), highlight: product?.name });
       if (yes) removeItem(remove.dataset.remove);
       return;
     }

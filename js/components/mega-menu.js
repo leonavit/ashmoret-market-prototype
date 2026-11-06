@@ -5,6 +5,7 @@ import { isSingleSupplier, supplierCategories } from "./suppliers.js";
 
 const mark = "assets/images/brand/heart.png";
 const chevron = `<svg class="mega-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg>`;
+const plus = `<svg class="mobile-nav-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"></path><path class="mobile-nav-plus-v" d="M12 5v14"></path></svg>`;
 const arrow = `<svg class="mega-all-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M19 12H6M12 6l-6 6 6 6"></path></svg>`;
 
 const menus = [
@@ -165,11 +166,11 @@ export function renderSupplierNav() {
   single.hidden = !solo;
   single.innerHTML = solo ? supplierCategories().map(categoryLink).join("") : "";
   mobile.innerHTML = solo
-    ? supplierCategories().map((category) => `<div class="mega-mobile-head">${categoryLink(category)}</div>`).join("")
-    : menus.map((item) => `<div>
+    ? supplierCategories().map((category) => `<div class="mobile-nav-item"><div class="mega-mobile-head">${categoryLink(category)}</div></div>`).join("")
+    : menus.map((item) => `<div class="mobile-nav-item">
       <div class="mega-mobile-head">
         <a class="mega-trigger" href="#/d/${esc(item.id)}"><span class="nav-icon is-${esc(item.id)}" aria-hidden="true"></span>${esc(item.label)}</a>
-        <button type="button" class="mega-trigger" data-mega-mobile="${esc(item.id)}" aria-expanded="false" aria-label="פתיחת ${esc(item.label)}">${chevron}</button>
+        <button type="button" class="mega-trigger mobile-nav-toggle" data-mega-mobile="${esc(item.id)}" aria-expanded="false" aria-label="פתיחת ${esc(item.label)}">${chevron}${plus}</button>
       </div>
       <div class="mega-mobile" hidden data-mega-mobile-panel="${esc(item.id)}"></div>
     </div>`).join("");

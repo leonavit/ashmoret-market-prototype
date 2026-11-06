@@ -36,7 +36,6 @@ export function updateCartDock(routeName = parseHash().name) {
   if (!show && root.childElementCount) return;
   const goods = subtotal();
   const total = goods + (count ? deliveryFee : 0);
-  const countLabel = count === 0 ? "הסל ריק" : count === 1 ? "פריט אחד" : `${count} פריטים`;
   const list = items.length
     ? `<ul class="cart-dock-list">${items.map((item) => `<li class="cart-dock-item">
         <a class="cart-dock-thumb${productPhoto(item.product) ? " has-photo" : ""}" href="#/p/${esc(item.product.id)}" tabindex="-1" aria-hidden="true">${photoImg(item.product)}</a>
@@ -61,8 +60,8 @@ export function updateCartDock(routeName = parseHash().name) {
         <span class="sr-only">${open ? "סגירת הסל" : "פתיחת הסל"}</span>
       </button>
       <div class="min-w-0">
-        <p class="cart-dock-title"><span class="cart-dock-mark">${cartIcon}${count ? `<span class="cart-dock-badge">${count}</span>` : ""}</span><span>הסל שלי</span></p>
-        <p class="text-sm text-muted">${countLabel}</p>
+        <p class="cart-dock-title"><span class="cart-dock-mark">${cartIcon}${count ? `<span class="cart-dock-badge">${count}</span>` : ""}</span><span>העגלה שלי</span></p>
+        ${count ? "" : `<p class="text-sm text-muted">הסל ריק</p>`}
       </div>
       ${count
         ? `<a class="cart-dock-pay" href="#/checkout"><span>לתשלום:</span><strong>${money(total)}</strong></a>`

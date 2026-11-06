@@ -187,7 +187,7 @@ document.addEventListener("click", async (event) => {
   if (remove) {
     const product = getProduct(remove.dataset.remove);
     const message = product ? `להסיר את ${product.name} מהסל?` : "להסיר את הפריט מהסל?";
-    const yes = await confirmAction(message, { within: remove.closest(".cart-dock-body") });
+    const yes = await confirmAction(message, { within: remove.closest(".cart-dock-body"), highlight: product?.name });
     if (yes) removeItem(remove.dataset.remove);
     return;
   }

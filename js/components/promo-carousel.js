@@ -56,6 +56,28 @@ function heroSlide(slide, index) {
 
 const sideSlides = () => (getTheme().banners === "v2" ? offerBanners : sideBanners);
 
+const pauseIcon = `<svg class="autoplay-pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"></rect><rect x="14" y="5" width="4" height="14" rx="1"></rect></svg>`;
+const playIcon = `<svg class="autoplay-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"></path></svg>`;
+
+export function autoplayToggle() {
+  return `<button type="button" class="autoplay-toggle" data-autoplay-toggle aria-pressed="false" aria-label="עצירת ההחלפה האוטומטית">${pauseIcon}${playIcon}</button>`;
+}
+
+export function bindAutoplayToggle(root, onChange) {
+  const button = root.querySelector("[data-autoplay-toggle]");
+  if (!button) return;
+  if (prefersReducedMotion()) {
+    button.hidden = true;
+    return;
+  }
+  button.addEventListener("click", () => {
+    const stopped = button.getAttribute("aria-pressed") !== "true";
+    button.setAttribute("aria-pressed", String(stopped));
+    button.setAttribute("aria-label", stopped ? "הפעלת ההחלפה האוטומטית" : "עצירת ההחלפה האוטומטית");
+    onChange(stopped);
+  });
+}
+
 function carouselControls(count) {
   const dots = Array.from({ length: count }, (_, index) => `<button type="button" class="hero-dot" data-promo-dot="${index}" aria-label="שקופית ${index + 1} מתוך ${count}" ${index === 0 ? 'aria-current="true"' : ""}></button>`).join("");
   return `<button type="button" class="cat-arrow promo-arrow is-prev" data-promo-prev aria-label="השקופית הקודמת">
@@ -64,7 +86,7 @@ function carouselControls(count) {
     <button type="button" class="cat-arrow promo-arrow is-next" data-promo-next aria-label="השקופית הבאה">
       <svg viewBox="0 0 24 24" class="size-5" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg>
     </button>
-    <div class="hero-dots" role="group" aria-label="דפדוף בין השקופיות">${dots}</div>`;
+    <div class="hero-dots" role="group" aria-label="דפדוף בין השקופיות">${dots}${autoplayToggle()}</div>`;
 }
 
 export function promoCarousel() {
@@ -128,14 +150,14 @@ function mountOne(root) {
       direction: "rtl",
       duration: prefersReducedMotion() ? 0 : 30,
     });
-  const entry = { root, embla, timer: 0, paused: false };
+  const entry = { root, embla, timer: 0, paused: false, stopped: false };
   const stop = () => {
     window.clearInterval(entry.timer);
     entry.timer = 0;
   };
   const start = () => {
     stop();
-    if (entry.paused || prefersReducedMotion()) return;
+    if (entry.paused || entry.stopped || prefersReducedMotion()) return;
     entry.timer = window.setInterval(() => embla.scrollNext(), AUTOPLAY_MS);
   };
   entry.stop = stop;
@@ -155,6 +177,10 @@ function mountOne(root) {
   root.querySelector("[data-promo-next]")?.addEventListener("click", () => embla.scrollNext());
   root.querySelectorAll("[data-promo-dot]").forEach((dot) => {
     dot.addEventListener("click", () => embla.scrollTo(Number(dot.dataset.promoDot)));
+  });
+  bindAutoplayToggle(root, (stopped) => {
+    entry.stopped = stopped;
+    start();
   });
   const pause = (value) => {
     entry.paused = value;

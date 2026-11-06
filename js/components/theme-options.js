@@ -1,6 +1,6 @@
 const KEY = "ashmoret-theme";
-const REV = 2;
-const defaults = { header: "v2", hero: "v3", categories: "v2", featured: "v1", banners: "v1", mobileMenu: "v1", suppliers: "v1", palette: "grey", logo: "v1", wideHeader: true };
+const REV = 3;
+const defaults = { header: "v2", hero: "v3", categories: "v2", featured: "v1", banners: "v1", mobileMenu: "v2", suppliers: "v1", palette: "v1", logo: "v1", wideHeader: true };
 const logos = {
   v1: { src: "assets/images/brand/logo-market-cart.png?v=2", width: 300, height: 80 },
   v2: { src: "assets/images/brand/logo-market.png", width: 1024, height: 344 },
@@ -73,8 +73,8 @@ const groups = [
     name: "mobileMenu",
     title: "הגדרות תפריט מובייל",
     options: [
-      ["v1", "V1 · ברירת מחדל", "התפריט נפתח מתחת להדר."],
-      ["v2", "V2", "התפריט נפתח על כל המסך, עם הלוגו במרכז למעלה וכפתור סגירה מימין, במקום ההמבורגר."],
+      ["v1", "V1", "התפריט נפתח מתחת להדר."],
+      ["v2", "V2 · ברירת מחדל", "התפריט נפתח על כל המסך, עם הלוגו במרכז למעלה וכפתור סגירה מימין, במקום ההמבורגר."],
     ],
     note: "התפריט מוצג במסכים צרים מ־1024 פיקסלים.",
   },
@@ -90,8 +90,8 @@ const groups = [
     name: "palette",
     title: "פלטת צבעים",
     options: [
-      ["grey", "אפורים · ברירת מחדל", "גווני האפור של ה־Grey box.", ["#1f1f1f", "#e9e9e9", "#fff"]],
-      ["v1", "V1", `כהה <bdi dir="ltr">#282B4A</bdi>, בהיר <bdi dir="ltr">#EEEBDA</bdi> ולבן.`, ["#282B4A", "#EEEBDA", "#fff"]],
+      ["grey", "אפורים", "גווני האפור של ה־Grey box.", ["#1f1f1f", "#e9e9e9", "#fff"]],
+      ["v1", "V1 · ברירת מחדל", `כהה <bdi dir="ltr">#282B4A</bdi>, בהיר <bdi dir="ltr">#EEEBDA</bdi> ולבן.`, ["#282B4A", "#EEEBDA", "#fff"]],
     ],
   },
   {
@@ -121,9 +121,9 @@ function load() {
       categories: ["v1", "v2"].includes(saved.categories) ? saved.categories : defaults.categories,
       featured: saved.featured === "v2" ? "v2" : defaults.featured,
       banners: saved.banners === "v2" ? "v2" : defaults.banners,
-      mobileMenu: saved.mobileMenu === "v2" ? "v2" : defaults.mobileMenu,
+      mobileMenu: current && saved.mobileMenu === "v1" ? "v1" : defaults.mobileMenu,
       suppliers: saved.suppliers === "v2" ? "v2" : defaults.suppliers,
-      palette: saved.palette === "v1" ? "v1" : defaults.palette,
+      palette: current && saved.palette === "grey" ? "grey" : defaults.palette,
       logo: saved.logo === "v2" ? "v2" : defaults.logo,
       wideHeader: typeof saved.wideHeader === "boolean" ? saved.wideHeader : defaults.wideHeader,
     };
@@ -200,8 +200,8 @@ function panelMarkup() {
     <button class="auth-close" type="button" data-theme-close aria-label="סגירת אפשרויות התבנית">×</button>
   </div>
   <div class="theme-panel-body">
-    ${groups.map((group) => `<fieldset class="theme-group">
-      <legend><span class="theme-legend-icon">${groupIcons[group.name]}</span>${group.title}</legend>
+    ${groups.map((group, index) => `<fieldset class="theme-group">
+      <legend><span class="theme-group-num" aria-hidden="true">${index + 1}</span><span class="theme-legend-icon">${groupIcons[group.name]}</span>${group.title}</legend>
       ${group.options.map(([value, label, text, swatches]) => `<label class="theme-option">
         <input type="radio" name="${group.name}" value="${value}" ${state[group.name] === value ? "checked" : ""} data-theme-option>
         <span><strong>${label}</strong><small>${text}</small>${swatches ? `<span class="theme-swatches" aria-hidden="true">${swatches.map((color) => `<span style="background:${color}"></span>`).join("")}</span>` : ""}</span>

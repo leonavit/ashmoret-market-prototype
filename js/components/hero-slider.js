@@ -1,4 +1,5 @@
 import { prefersReducedMotion } from "../lib/format.js";
+import { autoplayToggle, bindAutoplayToggle } from "./promo-carousel.js";
 
 const AUTOPLAY_MS = 5000;
 
@@ -12,6 +13,7 @@ const slides = [
 let embla = null;
 let timer = 0;
 let paused = false;
+let stopped = false;
 
 function markup() {
   return `<div class="wrap pt-6">
@@ -34,6 +36,7 @@ function markup() {
       </div>
       <div class="hero-dots" role="group" aria-label="דפדוף בין השקופיות">
         ${slides.map((_, index) => `<button type="button" class="hero-dot" data-hero-dot="${index}" aria-label="שקופית ${index + 1} מתוך ${slides.length}" ${index === 0 ? 'aria-current="true"' : ""}></button>`).join("")}
+        ${autoplayToggle()}
       </div>
     </div>
   </div>`;
@@ -46,7 +49,7 @@ function stop() {
 
 function start() {
   stop();
-  if (!embla || paused || prefersReducedMotion()) return;
+  if (!embla || paused || stopped || prefersReducedMotion()) return;
   timer = window.setInterval(() => embla?.scrollNext(), AUTOPLAY_MS);
 }
 
@@ -91,6 +94,10 @@ export function setHeroSlider(visible) {
   slider.querySelectorAll("[data-hero-dot]").forEach((dot) => {
     dot.addEventListener("click", () => embla?.scrollTo(Number(dot.dataset.heroDot)));
   });
+  bindAutoplayToggle(slider, (value) => {
+    stopped = value;
+    start();
+  });
   const pause = (value) => () => {
     paused = value;
     if (value) stop();
@@ -103,5 +110,6 @@ export function setHeroSlider(visible) {
     if (!slider.contains(event.relatedTarget)) pause(false)();
   });
   paused = false;
+  stopped = false;
   start();
 }

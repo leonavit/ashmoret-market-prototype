@@ -14,6 +14,11 @@ export function bindShell(navigate) {
   if (bound) return;
   bound = true;
 
+  const header = document.querySelector(".site-header");
+  const markScrolled = () => header?.classList.toggle("is-scrolled", window.scrollY > 0);
+  window.addEventListener("scroll", markScrolled, { passive: true });
+  markScrolled();
+
   const form = document.getElementById("search-form");
   const input = document.getElementById("search-input");
   const suggest = document.getElementById("suggest");
