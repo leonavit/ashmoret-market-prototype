@@ -5,20 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>אשמורת MARKET</title>
   <meta name="theme-color" content="#e9e9e9">
-  <script>try{var t=JSON.parse(localStorage.getItem("ashmoret-theme")||"{}");if(t.palette&&t.palette!=="grey")document.documentElement.dataset.palette=t.palette}catch(e){}</script>
+  <script>try{var t=JSON.parse(localStorage.getItem("ashmoret-theme")||"{}");if(!(t.rev===3&&t.palette==="grey"))document.documentElement.dataset.palette="v1"}catch(e){document.documentElement.dataset.palette="v1"}</script>
   <link rel="icon" href="assets/images/brand/favicon-32.png?v=3" type="image/png" sizes="32x32">
   <link rel="icon" href="assets/images/brand/favicon-192.png?v=3" type="image/png" sizes="192x192">
   <link rel="apple-touch-icon" href="assets/images/brand/apple-touch-icon.png?v=3">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/app.css?v=20261106e">
+  <link rel="stylesheet" href="assets/css/app.css?v=20261106p">
 </head>
 <body>
   <a class="skip" href="#app">דילוג לתוכן</a>
 
   <header class="site-header sticky top-0 z-40 border-b border-line text-ink">
-    <div class="topbar border-b border-line bg-white">
+    <div class="topbar border-b border-line bg-[#f7f6ee]">
     <div class="wrap flex items-center justify-between gap-3 py-1.5 text-xs text-muted">
       <div class="topbar-links flex min-w-0 items-center gap-2">
         <button type="button" class="topbar-link" data-open-delivery aria-haspopup="dialog">
@@ -72,7 +72,7 @@
         <div class="wrap" id="mega-body"></div>
       </div>
     </nav>
-    <div id="mobile-menu" class="mobile-menu border-t border-line bg-white">
+    <div id="mobile-menu" class="mobile-menu border-t border-line">
       <div class="mobile-menu-head">
         <a href="#/" class="mobile-menu-logo"><img src="assets/images/brand/logo-market-cart.png?v=2" alt="אשמורת MARKET, דף הבית" width="300" height="80" data-site-logo></a>
         <button type="button" class="icon-btn mobile-menu-close" data-menu-close aria-label="סגירת התפריט">
@@ -191,6 +191,6 @@
 
   <script src="js/vendor/gsap.min.js"></script>
   <script src="js/vendor/embla-carousel.umd.js"></script>
-  <script src="js/app.bundle.js?v=20261106i"></script>
+  <script src="js/app.bundle.js?v=20261106p"></script>
 </body>
 </html>
