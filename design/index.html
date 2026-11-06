@@ -5,16 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>אשמורת MARKET</title>
   <meta name="theme-color" content="#e9e9e9">
-  <link rel="icon" href="assets/images/brand/favicon.png" type="image/png">
+  <script>try{var t=JSON.parse(localStorage.getItem("ashmoret-theme")||"{}");if(t.palette&&t.palette!=="grey")document.documentElement.dataset.palette=t.palette}catch(e){}</script>
+  <link rel="icon" href="assets/images/brand/favicon-32.png?v=3" type="image/png" sizes="32x32">
+  <link rel="icon" href="assets/images/brand/favicon-192.png?v=3" type="image/png" sizes="192x192">
+  <link rel="apple-touch-icon" href="assets/images/brand/apple-touch-icon.png?v=3">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/app.css?v=20261028m">
+  <link rel="stylesheet" href="assets/css/app.css?v=20261106e">
 </head>
 <body>
   <a class="skip" href="#app">דילוג לתוכן</a>
 
-  <header class="site-header sticky top-0 z-40 border-b border-line bg-surface text-ink">
+  <header class="site-header sticky top-0 z-40 border-b border-line text-ink">
     <div class="topbar border-b border-line bg-white">
     <div class="wrap flex items-center justify-between gap-3 py-1.5 text-xs text-muted">
       <div class="topbar-links flex min-w-0 items-center gap-2">
@@ -37,7 +40,7 @@
     </div>
     </div>
     <div class="wrap header-bar py-3">
-      <a href="#/" class="header-logo shrink-0" lang="en">market</a>
+      <a href="#/" class="header-logo shrink-0"><img src="assets/images/brand/logo-market-cart.png?v=2" alt="אשמורת MARKET, דף הבית" width="300" height="80" data-site-logo></a>
       <div class="search-slot relative min-w-0" id="search-slot">
         <form id="search-form" class="search-form" role="search">
           <label class="sr-only" for="search-input">חיפוש מוצרים</label>
@@ -59,10 +62,10 @@
     </div>
     <nav class="main-nav hidden lg:block" data-main-nav aria-label="ראשי">
       <div class="wrap nav-row flex items-center justify-center gap-x-8 text-lg font-bold" data-nav-multi>
-        <a class="mega-trigger text-ink" id="mega-trigger-super" href="#/d/super" data-mega-open="super" aria-expanded="false" aria-controls="mega" aria-haspopup="true"><span class="cat-heart" aria-hidden="true"></span>סופר אשמורת <svg class="mega-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></a>
-        <a class="mega-trigger text-ink" id="mega-trigger-home" href="#/d/home" data-mega-open="home" aria-expanded="false" aria-controls="mega" aria-haspopup="true"><span class="cat-heart" aria-hidden="true"></span>חד פעמי וכלי בית <svg class="mega-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></a>
-        <a class="mega-trigger text-ink" id="mega-trigger-electronics" href="#/d/electronics" data-mega-open="electronics" aria-expanded="false" aria-controls="mega" aria-haspopup="true"><span class="cat-heart" aria-hidden="true"></span>קניון אשמורת <svg class="mega-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></a>
-        <a class="mega-trigger text-ink" id="mega-trigger-offers" href="#/d/offers" data-mega-open="offers" aria-expanded="false" aria-controls="mega" aria-haspopup="true"><span class="cat-heart" aria-hidden="true"></span>מבצעים <svg class="mega-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></a>
+        <a class="mega-trigger text-ink" id="mega-trigger-super" href="#/d/super" data-mega-open="super" aria-expanded="false" aria-controls="mega" aria-haspopup="true"><span class="nav-icon is-super" aria-hidden="true"></span>סופר אשמורת <svg class="mega-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></a>
+        <a class="mega-trigger text-ink" id="mega-trigger-home" href="#/d/home" data-mega-open="home" aria-expanded="false" aria-controls="mega" aria-haspopup="true"><span class="nav-icon is-home" aria-hidden="true"></span>חד פעמי וכלי בית <svg class="mega-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></a>
+        <a class="mega-trigger text-ink" id="mega-trigger-electronics" href="#/d/electronics" data-mega-open="electronics" aria-expanded="false" aria-controls="mega" aria-haspopup="true"><span class="nav-icon is-electronics" aria-hidden="true"></span>קניון אשמורת <svg class="mega-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></a>
+        <a class="mega-trigger text-ink" id="mega-trigger-offers" href="#/d/offers" data-mega-open="offers" aria-expanded="false" aria-controls="mega" aria-haspopup="true"><span class="nav-icon is-offers" aria-hidden="true"></span>מבצעים <svg class="mega-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></a>
       </div>
       <div class="wrap nav-row nav-row-single flex items-center justify-center font-bold" data-nav-single hidden></div>
       <div id="mega" class="mega" hidden>
@@ -71,7 +74,7 @@
     </nav>
     <div id="mobile-menu" class="mobile-menu border-t border-line bg-white">
       <div class="mobile-menu-head">
-        <a href="#/" class="mobile-menu-logo" lang="en">market</a>
+        <a href="#/" class="mobile-menu-logo"><img src="assets/images/brand/logo-market-cart.png?v=2" alt="אשמורת MARKET, דף הבית" width="300" height="80" data-site-logo></a>
         <button type="button" class="icon-btn mobile-menu-close" data-menu-close aria-label="סגירת התפריט">
           <svg viewBox="0 0 24 24" class="size-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg>
         </button>
@@ -107,13 +110,10 @@
     <div class="wrap footer-main">
       <div class="footer-brand">
         <button type="button" class="footer-logo-btn" data-newsletter-open aria-haspopup="dialog" aria-label="50% הנחה על הרכישה הראשונה: הרשמה לניוזלטר">
-          <img src="assets/images/brand/logo.png" alt="" class="footer-logo">
+          <img src="assets/images/brand/logo-market-cart.png?v=2" alt="" width="300" height="80" class="footer-logo" data-site-logo>
         </button>
         <p>כל מה שצריך עד הבית</p>
         <div class="footer-social">
-          <a class="footer-social-icon" href="https://chat.whatsapp.com/" target="_blank" rel="noopener noreferrer" aria-label="לקבוצת הווטסאפ">
-            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3a9 9 0 0 0-7.8 13.4L3 21l4.7-1.2A9 9 0 1 0 12 3zm0 1.6a7.4 7.4 0 1 1-3.8 13.8l-.3-.2-2.6.7.7-2.5-.2-.3A7.4 7.4 0 0 1 12 4.6zm4.3 10.1c-.2-.1-1.4-.7-1.6-.8-.2-.1-.4-.1-.5.1l-.7.9c-.1.2-.3.2-.5.1a6 6 0 0 1-3-2.6c-.2-.4.2-.4.6-1.2.1-.1 0-.3 0-.4l-.7-1.7c-.2-.4-.4-.4-.5-.4h-.5a.9.9 0 0 0-.6.3 2.6 2.6 0 0 0-.8 1.9 4.5 4.5 0 0 0 1 2.4 10.3 10.3 0 0 0 3.9 3.5c1.5.6 2 .7 2.7.6a2.3 2.3 0 0 0 1.5-1.1 1.9 1.9 0 0 0 .1-1.1c0-.1-.2-.2-.4-.3z"></path></svg>
-          </a>
           <a class="footer-social-icon" href="https://www.tiktok.com/" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
             <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.5 3.5c.4 2.3 1.9 3.9 4 4.2v3.2c-1.5 0-2.9-.4-4-1.2v6.1A5.8 5.8 0 1 1 10.7 10v3.3a2.6 2.6 0 1 0 2.6 2.6V3.5z"></path></svg>
           </a>
@@ -167,10 +167,6 @@
             <a href="tel:03-000-0000"><strong dir="ltr">03-000-0000</strong><small>טלפון שירות לקוחות</small></a>
           </li>
           <li>
-            <span class="footer-line-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 0 0-7.8 13.4L3 21l4.7-1.2A9 9 0 1 0 12 3zm4.7 12.8c-.2.5-1 .9-1.6 1-.4.1-.9.1-1.5-.1a13 13 0 0 1-5.7-3.7 11 11 0 0 1-2.3-3.7c-.3-.9 0-1.6.3-2 .2-.3.5-.5.8-.5h.6c.2 0 .4 0 .6.5l.8 2c.1.2 0 .4-.1.6l-.4.6c-.1.2-.3.4-.1.7a8 8 0 0 0 2.5 2.8c.7.5 1.3.7 1.6.8.3.1.5 0 .7-.2l.6-.7c.2-.2.4-.2.6-.1l2 .9c.2.1.4.2.4.4 0 .1 0 .4-.2.8z"></path></svg></span>
-            <a href="https://wa.me/97230000000" target="_blank" rel="noopener noreferrer"><strong>ווטסאפ</strong><small>שירות לקוחות</small></a>
-          </li>
-          <li>
             <span class="footer-line-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 6h16v12H4z"></path><path d="M4 7l8 6 8-6"></path></svg></span>
             <a href="#/contact"><strong>טופס יצירת קשר</strong><small>שליחת פנייה</small></a>
           </li>
@@ -195,6 +191,6 @@
 
   <script src="js/vendor/gsap.min.js"></script>
   <script src="js/vendor/embla-carousel.umd.js"></script>
-  <script src="js/app.bundle.js?v=20261101a"></script>
+  <script src="js/app.bundle.js?v=20261106i"></script>
 </body>
 </html>
