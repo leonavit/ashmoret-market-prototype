@@ -1,6 +1,6 @@
 const KEY = "ashmoret-theme";
-const REV = 3;
-const defaults = { header: "v2", hero: "v3", categories: "v2", featured: "v1", banners: "v1", mobileMenu: "v2", suppliers: "v1", palette: "v1", logo: "v1", wideHeader: true };
+const REV = 5;
+const defaults = { header: "v2", hero: "v3", categories: "v2", featured: "v2", banners: "v2", mobileMenu: "v2", suppliers: "v1", palette: "v1", logo: "v1", wideHeader: true };
 const logos = {
   v1: { src: "assets/images/brand/logo-market-cart.png?v=2", width: 300, height: 80 },
   v2: { src: "assets/images/brand/logo-market.png", width: 1024, height: 344 },
@@ -56,16 +56,16 @@ const groups = [
     name: "featured",
     title: "הגדרות קטגוריות נבחרות",
     options: [
-      ["v1", "V1 · ברירת מחדל", "תמונות מוצרים לכל קטגוריה."],
-      ["v2", "V2", "אייקון קווי לכל קטגוריה."],
+      ["v1", "V1", "תמונות מוצרים לכל קטגוריה."],
+      ["v2", "V2 · ברירת מחדל", "אייקון לכל קטגוריה."],
     ],
   },
   {
     name: "banners",
     title: "הגדרות באנרים",
     options: [
-      ["v1", "V1 · ברירת מחדל", "בתפריט המבצעים ארבעת באנרי המבצעים, ובסליידר הצדדי בעמוד הבית שלושת הבאנרים של המחלקות."],
-      ["v2", "V2", "הבאנרים מתחלפים: באנרי המחלקות בתפריט המבצעים, ובאנרי המבצעים בסליידר הצדדי בעמוד הבית."],
+      ["v1", "V1", "בתפריט המבצעים ארבעת באנרי המבצעים, ובסליידר הצדדי בעמוד הבית שלושת הבאנרים של המחלקות."],
+      ["v2", "V2 · ברירת מחדל", "הבאנרים מתחלפים: באנרי המחלקות בתפריט המבצעים, ובאנרי המבצעים בסליידר הצדדי בעמוד הבית."],
     ],
     note: "הסליידר הצדדי מוצג ב־Hero V4.",
   },
@@ -113,14 +113,14 @@ let onSuppliersChange = () => {};
 function load() {
   try {
     const saved = JSON.parse(localStorage.getItem(KEY) || "{}");
-    const current = saved.rev === REV;
+    const current = saved.rev >= 3;
     return {
       rev: REV,
       header: current && saved.header === "v1" ? "v1" : defaults.header,
       hero: ["v1", "v2", "v3", "v4"].includes(saved.hero) ? saved.hero : defaults.hero,
       categories: ["v1", "v2"].includes(saved.categories) ? saved.categories : defaults.categories,
-      featured: saved.featured === "v2" ? "v2" : defaults.featured,
-      banners: saved.banners === "v2" ? "v2" : defaults.banners,
+      featured: saved.rev >= 4 && saved.featured === "v1" ? "v1" : defaults.featured,
+      banners: saved.rev >= 5 && saved.banners === "v1" ? "v1" : defaults.banners,
       mobileMenu: current && saved.mobileMenu === "v1" ? "v1" : defaults.mobileMenu,
       suppliers: saved.suppliers === "v2" ? "v2" : defaults.suppliers,
       palette: current && saved.palette === "grey" ? "grey" : defaults.palette,
@@ -193,10 +193,7 @@ function applyHeader() {
 
 function panelMarkup() {
   return `<div class="theme-panel-head">
-    <div>
-      <p class="theme-panel-kicker" lang="en">Prototype controls</p>
-      <h2 id="theme-panel-title" class="text-xl font-extrabold">אפשרויות תבנית</h2>
-    </div>
+    <h2 id="theme-panel-title" class="text-xl font-extrabold">אפשרויות תבנית</h2>
     <button class="auth-close" type="button" data-theme-close aria-label="סגירת אפשרויות התבנית">×</button>
   </div>
   <div class="theme-panel-body">
@@ -248,7 +245,7 @@ export function bindThemeOptions({ heroChange, suppliersChange } = {}) {
   gear.setAttribute("aria-label", "אפשרויות תבנית");
   gear.setAttribute("aria-expanded", "false");
   gear.setAttribute("aria-controls", "theme-panel");
-  gear.innerHTML = `${gearIcon}<span class="theme-gear-label" lang="en">Prototype</span>`;
+  gear.innerHTML = gearIcon;
 
   const panel = document.createElement("aside");
   panel.id = "theme-panel";
