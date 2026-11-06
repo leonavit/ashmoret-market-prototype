@@ -4,7 +4,7 @@ import { getCommerce } from "../data/commerce.js";
 import { carousel } from "../components/carousel.js";
 import { catalogGridSection } from "../components/catalog-rail.js";
 import { getTheme } from "../components/theme-options.js";
-import { promoCarousel } from "../components/promo-carousel.js";
+import { promoCarousel, sideCarousel } from "../components/promo-carousel.js";
 import { inSupplierScope, isSingleSupplier, supplierCategories } from "../components/suppliers.js";
 
 function supplierCatalog() {
@@ -34,6 +34,7 @@ function departmentCatalogs() {
       title: department.name,
       href: `#/d/${id}`,
       tabs,
+      icon: id,
       className: "home-section",
       layout: getTheme().categories === "v2" ? "rail" : "grid",
     });
@@ -50,7 +51,7 @@ export function renderHome() {
 
     <section class="home-section" aria-labelledby="offers-title">
       <div class="catalog-head">
-        <h2 id="offers-title" class="text-2xl font-extrabold"><span class="cat-heart" aria-hidden="true"></span>מוצרים חדשים במבצע</h2>
+        <h2 id="offers-title" class="text-2xl font-extrabold"><span class="nav-icon is-offers" aria-hidden="true"></span>מוצרים חדשים במבצע</h2>
         <a class="deal-all" href="#/d/offers">לכל המבצעים
           <svg viewBox="0 0 24 24" class="size-4" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg>
         </a>
@@ -73,7 +74,12 @@ export function setHeroTop(visible) {
 function heroBlock() {
   return `<section class="grid gap-4 lg:grid-cols-3 lg:grid-rows-2" aria-label="מבצעי כניסה">
       ${promoCarousel()}
-      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:contents">
+      ${getTheme().hero === "v4" ? sideCarousel() : sideBanners()}
+    </section>`;
+}
+
+function sideBanners() {
+  return `<div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:contents">
         <a href="#/c/oils" class="home-block hero-side lg:col-start-3 lg:row-start-1">
           <span class="proto-label" aria-hidden="true">באנר משני 1/2</span>
           <div>
@@ -92,6 +98,5 @@ function heroBlock() {
           </div>
           <span class="hero-side-media" aria-hidden="true"></span>
         </a>
-      </div>
-    </section>`;
+      </div>`;
 }

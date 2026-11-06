@@ -16,7 +16,7 @@ function card(manufacturer) {
 export function renderMarket() {
   const picked = products.slice(0, 8);
   return `<div class="wrap py-6">
-    <section class="grid items-center gap-4 overflow-hidden rounded-2xl border border-line bg-[#ececec] text-ink lg:grid-cols-[1.3fr_0.7fr]" aria-labelledby="market-title">
+    <section class="grid items-center gap-4 overflow-hidden rounded-2xl border border-line bg-surface text-ink lg:grid-cols-[1.3fr_0.7fr]" aria-labelledby="market-title">
       <div class="p-8 lg:p-12" data-hero-copy>
         <p class="text-sm font-bold text-muted">אשמורת MARKET</p>
         <h1 id="market-title" class="mt-2 text-4xl font-extrabold leading-tight lg:text-5xl">כמה יצרנים. סל אחד.</h1>
@@ -43,7 +43,7 @@ export function renderMarket() {
       </ul>
     </section>
 
-    <section class="grid items-center gap-6 overflow-hidden rounded-2xl bg-[#ececec] p-8 lg:grid-cols-2" aria-labelledby="market-box">
+    <section class="grid items-center gap-6 overflow-hidden rounded-2xl bg-surface p-8 lg:grid-cols-2" aria-labelledby="market-box">
       <div>
         <h2 id="market-box" class="text-3xl font-extrabold">אותה שפה, סידור אחר</h2>
         <p class="mt-3 text-muted">הכותרת, החיפוש, הכרטיסים והפוטר זהים לדף תוצרת. כאן הסדר משרת כמה יצרנים.</p>

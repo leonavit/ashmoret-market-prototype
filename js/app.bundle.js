@@ -237,8 +237,8 @@
       "barcode": "7290002862482",
       "catalogPage": 3,
       "brand": "\u05EA\u05D5\u05E6\u05E8\u05EA",
-      "image": null,
-      "placeholder": true
+      "image": "assets/images/products/p-crumbs-seasoned.jpg",
+      "placeholder": false
     },
     {
       "id": "p002",
@@ -251,8 +251,8 @@
       "barcode": "7290002862413",
       "catalogPage": 3,
       "brand": "\u05EA\u05D5\u05E6\u05E8\u05EA",
-      "image": null,
-      "placeholder": true
+      "image": "assets/images/products/p-crumbs-white.jpg",
+      "placeholder": false
     },
     {
       "id": "p003",
@@ -265,7 +265,7 @@
       "barcode": "7290002862253",
       "catalogPage": 3,
       "brand": "\u05EA\u05D5\u05E6\u05E8\u05EA",
-      "image": null,
+      "image": "assets/images/products/p-crumbs-gold.jpg",
       "placeholder": true
     },
     {
@@ -279,7 +279,7 @@
       "barcode": "7290017406398",
       "catalogPage": 3,
       "brand": "\u05EA\u05D5\u05E6\u05E8\u05EA",
-      "image": null,
+      "image": "assets/images/products/p-crumbs-seasoned.jpg",
       "placeholder": true
     },
     {
@@ -293,7 +293,7 @@
       "barcode": "7290017406381",
       "catalogPage": 3,
       "brand": "\u05EA\u05D5\u05E6\u05E8\u05EA",
-      "image": null,
+      "image": "assets/images/products/p-crumbs-seasoned.jpg",
       "placeholder": true
     },
     {
@@ -307,7 +307,7 @@
       "barcode": "7290002862222",
       "catalogPage": 3,
       "brand": "\u05EA\u05D5\u05E6\u05E8\u05EA",
-      "image": null,
+      "image": "assets/images/products/p-crumbs-white.jpg",
       "placeholder": true
     },
     {
@@ -321,7 +321,7 @@
       "barcode": "7290002862734",
       "catalogPage": 3,
       "brand": "\u05EA\u05D5\u05E6\u05E8\u05EA",
-      "image": null,
+      "image": "assets/images/products/p-crumbs-white.jpg",
       "placeholder": true
     },
     {
@@ -335,7 +335,7 @@
       "barcode": "7290002862741",
       "catalogPage": 3,
       "brand": "\u05EA\u05D5\u05E6\u05E8\u05EA",
-      "image": null,
+      "image": "assets/images/products/p-crumbs-gold.jpg",
       "placeholder": true
     },
     {
@@ -349,7 +349,7 @@
       "barcode": "7290017406831",
       "catalogPage": 3,
       "brand": "\u05EA\u05D5\u05E6\u05E8\u05EA",
-      "image": null,
+      "image": "assets/images/products/p-crumbs-gold.jpg",
       "placeholder": true
     },
     {
@@ -363,8 +363,8 @@
       "barcode": "7290018546260",
       "catalogPage": 3,
       "brand": "\u05EA\u05D5\u05E6\u05E8\u05EA",
-      "image": null,
-      "placeholder": true
+      "image": "assets/images/products/p-crumbs-gold.jpg",
+      "placeholder": false
     },
     {
       "id": "p011",
@@ -377,7 +377,7 @@
       "barcode": "7290017406831",
       "catalogPage": 3,
       "brand": "\u05EA\u05D5\u05E6\u05E8\u05EA",
-      "image": null,
+      "image": "assets/images/products/p-crumbs-gold.jpg",
       "placeholder": true
     },
     {
@@ -1259,8 +1259,8 @@
       "barcode": "7296079000260",
       "catalogPage": 12,
       "brand": "\u05EA\u05D5\u05E6\u05E8\u05EA",
-      "image": null,
-      "placeholder": true
+      "image": "assets/images/products/p-basmati.jpg",
+      "placeholder": false
     },
     {
       "id": "p075",
@@ -1287,8 +1287,8 @@
       "barcode": "7290017406558",
       "catalogPage": 12,
       "brand": "\u05EA\u05D5\u05E6\u05E8\u05EA",
-      "image": null,
-      "placeholder": true
+      "image": "assets/images/products/p-persian.jpg",
+      "placeholder": false
     },
     {
       "id": "p077",
@@ -2813,7 +2813,7 @@
       "barcode": "\u05DC\u05D4\u05D3\u05D2\u05DE\u05D4",
       "catalogPage": "\u05DC\u05D4\u05D3\u05D2\u05DE\u05D4",
       "brand": "\u05D0\u05DC\u05D2\u05E0\u05D8",
-      "image": null,
+      "image": "assets/images/products/p-plates-large.webp",
       "placeholder": true
     },
     {
@@ -2827,7 +2827,7 @@
       "barcode": "\u05DC\u05D4\u05D3\u05D2\u05DE\u05D4",
       "catalogPage": "\u05DC\u05D4\u05D3\u05D2\u05DE\u05D4",
       "brand": "\u05D0\u05DC\u05D2\u05E0\u05D8",
-      "image": null,
+      "image": "assets/images/products/p-plate-large-white.webp",
       "placeholder": true
     },
     {
@@ -2841,7 +2841,7 @@
       "barcode": "\u05DC\u05D4\u05D3\u05D2\u05DE\u05D4",
       "catalogPage": "\u05DC\u05D4\u05D3\u05D2\u05DE\u05D4",
       "brand": "\u05D0\u05DC\u05D2\u05E0\u05D8",
-      "image": null,
+      "image": "assets/images/products/p-plates-large.webp",
       "placeholder": true
     },
     {
@@ -2855,7 +2855,7 @@
       "barcode": "\u05DC\u05D4\u05D3\u05D2\u05DE\u05D4",
       "catalogPage": "\u05DC\u05D4\u05D3\u05D2\u05DE\u05D4",
       "brand": "\u05D7\u05D3 \u05E4\u05E2\u05DE\u05D9",
-      "image": null,
+      "image": "assets/images/products/p-cups-coffee.webp",
       "placeholder": true
     },
     {
@@ -2869,7 +2869,7 @@
       "barcode": "\u05DC\u05D4\u05D3\u05D2\u05DE\u05D4",
       "catalogPage": "\u05DC\u05D4\u05D3\u05D2\u05DE\u05D4",
       "brand": "\u05D0\u05E7\u05D5\u05D2\u05D5",
-      "image": null,
+      "image": "assets/images/products/p-cups-pattern.webp",
       "placeholder": true
     },
     {
@@ -2995,7 +2995,7 @@
       "barcode": "\u05DC\u05D4\u05D3\u05D2\u05DE\u05D4",
       "catalogPage": "\u05DC\u05D4\u05D3\u05D2\u05DE\u05D4",
       "brand": "Arrow",
-      "image": null,
+      "image": "assets/images/products/mall/p198.webp",
       "placeholder": true
     },
     {
@@ -3009,7 +3009,7 @@
       "barcode": "\u05DC\u05D4\u05D3\u05D2\u05DE\u05D4",
       "catalogPage": "\u05DC\u05D4\u05D3\u05D2\u05DE\u05D4",
       "brand": "Black+Decker",
-      "image": null,
+      "image": "assets/images/products/mall/p199.webp",
       "placeholder": true
     },
     {
@@ -3023,7 +3023,7 @@
       "barcode": "\u05DC\u05D4\u05D3\u05D2\u05DE\u05D4",
       "catalogPage": "\u05DC\u05D4\u05D3\u05D2\u05DE\u05D4",
       "brand": "Star",
-      "image": null,
+      "image": "assets/images/products/mall/p200.webp",
       "placeholder": true
     },
     {
@@ -3037,7 +3037,7 @@
       "barcode": "\u05DC\u05D4\u05D3\u05D2\u05DE\u05D4",
       "catalogPage": "\u05DC\u05D4\u05D3\u05D2\u05DE\u05D4",
       "brand": "Smeg",
-      "image": null,
+      "image": "assets/images/products/p-kettle-green.webp",
       "placeholder": true
     },
     {
@@ -3051,7 +3051,7 @@
       "barcode": "\u05DC\u05D4\u05D3\u05D2\u05DE\u05D4",
       "catalogPage": "\u05DC\u05D4\u05D3\u05D2\u05DE\u05D4",
       "brand": "Peled",
-      "image": null,
+      "image": "assets/images/products/mall/p202.webp",
       "placeholder": true
     },
     {
@@ -3065,7 +3065,7 @@
       "barcode": "\u05DC\u05D4\u05D3\u05D2\u05DE\u05D4",
       "catalogPage": "\u05DC\u05D4\u05D3\u05D2\u05DE\u05D4",
       "brand": "\u05D0\u05D9\u05E7\u05D0\u05D4",
-      "image": null,
+      "image": "assets/images/products/mall/p203.webp",
       "placeholder": true
     },
     {
@@ -3079,7 +3079,7 @@
       "barcode": "\u05DC\u05D4\u05D3\u05D2\u05DE\u05D4",
       "catalogPage": "\u05DC\u05D4\u05D3\u05D2\u05DE\u05D4",
       "brand": "\u05D0\u05D9\u05E7\u05D0\u05D4",
-      "image": null,
+      "image": "assets/images/products/mall/p204.webp",
       "placeholder": true
     },
     {
@@ -3093,7 +3093,7 @@
       "barcode": "\u05DC\u05D4\u05D3\u05D2\u05DE\u05D4",
       "catalogPage": "\u05DC\u05D4\u05D3\u05D2\u05DE\u05D4",
       "brand": "Nitecore",
-      "image": null,
+      "image": "assets/images/products/mall/p205.webp",
       "placeholder": true
     },
     {
@@ -3107,7 +3107,7 @@
       "barcode": "\u05DC\u05D4\u05D3\u05D2\u05DE\u05D4",
       "catalogPage": "\u05DC\u05D4\u05D3\u05D2\u05DE\u05D4",
       "brand": "\u05D0\u05D9\u05E7\u05D0\u05D4",
-      "image": null,
+      "image": "assets/images/products/mall/p206.webp",
       "placeholder": true
     },
     {
@@ -3177,7 +3177,7 @@
       "barcode": "\u05DC\u05D4\u05D3\u05D2\u05DE\u05D4",
       "catalogPage": "\u05DC\u05D4\u05D3\u05D2\u05DE\u05D4",
       "brand": "Hyundai",
-      "image": null,
+      "image": "assets/images/products/p-contact-grill.webp",
       "placeholder": true
     },
     {
@@ -3219,7 +3219,7 @@
       "barcode": "\u05DC\u05D4\u05D3\u05D2\u05DE\u05D4",
       "catalogPage": "\u05DC\u05D4\u05D3\u05D2\u05DE\u05D4",
       "brand": "\u05D0\u05D9\u05E7\u05D0\u05D4",
-      "image": null,
+      "image": "assets/images/products/mall/p214.webp",
       "placeholder": true
     },
     {
@@ -3471,7 +3471,7 @@
       "barcode": "\u05DC\u05D4\u05D3\u05D2\u05DE\u05D4",
       "catalogPage": "\u05DC\u05D4\u05D3\u05D2\u05DE\u05D4",
       "brand": "Sauter",
-      "image": null,
+      "image": "assets/images/products/p-contact-grill.webp",
       "placeholder": true
     },
     {
@@ -3485,7 +3485,7 @@
       "barcode": "\u05DC\u05D4\u05D3\u05D2\u05DE\u05D4",
       "catalogPage": "\u05DC\u05D4\u05D3\u05D2\u05DE\u05D4",
       "brand": "Morphy Richards",
-      "image": null,
+      "image": "assets/images/products/p-contact-grill.webp",
       "placeholder": true
     },
     {
@@ -3499,7 +3499,7 @@
       "barcode": "\u05DC\u05D4\u05D3\u05D2\u05DE\u05D4",
       "catalogPage": "\u05DC\u05D4\u05D3\u05D2\u05DE\u05D4",
       "brand": "Morphy Richards",
-      "image": null,
+      "image": "assets/images/products/p-contact-grill.webp",
       "placeholder": true
     },
     {
@@ -3527,7 +3527,7 @@
       "barcode": "\u05DC\u05D4\u05D3\u05D2\u05DE\u05D4",
       "catalogPage": "\u05DC\u05D4\u05D3\u05D2\u05DE\u05D4",
       "brand": "\u05D0\u05D9\u05E7\u05D0\u05D4",
-      "image": null,
+      "image": "assets/images/products/mall/p236.webp",
       "placeholder": true
     },
     {
@@ -3541,7 +3541,7 @@
       "barcode": "\u05DC\u05D4\u05D3\u05D2\u05DE\u05D4",
       "catalogPage": "\u05DC\u05D4\u05D3\u05D2\u05DE\u05D4",
       "brand": "\u05D0\u05D9\u05E7\u05D0\u05D4",
-      "image": null,
+      "image": "assets/images/products/mall/p237.webp",
       "placeholder": true
     },
     {
@@ -3555,7 +3555,7 @@
       "barcode": "\u05DC\u05D4\u05D3\u05D2\u05DE\u05D4",
       "catalogPage": "\u05DC\u05D4\u05D3\u05D2\u05DE\u05D4",
       "brand": "\u05D0\u05D9\u05E7\u05D0\u05D4",
-      "image": null,
+      "image": "assets/images/products/mall/p238.webp",
       "placeholder": true
     },
     {
@@ -3569,7 +3569,7 @@
       "barcode": "\u05DC\u05D4\u05D3\u05D2\u05DE\u05D4",
       "catalogPage": "\u05DC\u05D4\u05D3\u05D2\u05DE\u05D4",
       "brand": "\u05D0\u05D9\u05E7\u05D0\u05D4",
-      "image": null,
+      "image": "assets/images/products/mall/p239.webp",
       "placeholder": true
     },
     {
@@ -3583,7 +3583,7 @@
       "barcode": "\u05DC\u05D4\u05D3\u05D2\u05DE\u05D4",
       "catalogPage": "\u05DC\u05D4\u05D3\u05D2\u05DE\u05D4",
       "brand": "\u05D0\u05D9\u05E7\u05D0\u05D4",
-      "image": null,
+      "image": "assets/images/products/mall/p240.webp",
       "placeholder": true
     },
     {
@@ -3625,7 +3625,7 @@
       "barcode": "\u05DC\u05D4\u05D3\u05D2\u05DE\u05D4",
       "catalogPage": "\u05DC\u05D4\u05D3\u05D2\u05DE\u05D4",
       "brand": "Apple",
-      "image": null,
+      "image": "assets/images/products/mall/p243.webp",
       "placeholder": true
     },
     {
@@ -3653,7 +3653,7 @@
       "barcode": "\u05DC\u05D4\u05D3\u05D2\u05DE\u05D4",
       "catalogPage": "\u05DC\u05D4\u05D3\u05D2\u05DE\u05D4",
       "brand": "\u05D0\u05D9\u05E7\u05D0\u05D4",
-      "image": null,
+      "image": "assets/images/products/mall/p245.webp",
       "placeholder": true
     },
     {
@@ -4051,14 +4051,27 @@
     return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   }
 
+  // js/components/product-photo.js
+  function productPhoto(product) {
+    return product?.image || null;
+  }
+  function photoImg(product, { alt = "", eager = false } = {}) {
+    const src = productPhoto(product);
+    if (!src) return "";
+    return `<img src="${esc(src)}" alt="${esc(alt)}" ${eager ? "" : `loading="lazy" `}decoding="async">`;
+  }
+
   // js/components/product-card.js
+  function mediaClass(base, product) {
+    return productPhoto(product) ? `${base} has-photo` : base;
+  }
   function productAnchor(product, attrs, inner) {
     const pop = isElectronicsProduct(product) ? "" : ` data-product-pop="${esc(product.id)}"`;
     return `<a href="#/p/${esc(product.id)}"${pop} ${attrs}>${inner}</a>`;
   }
   function cardParts(product) {
     const commerce = getCommerce(product.id);
-    const badge = commerce?.compareAt ? `<span class="sale-badge">\u05DE\u05D1\u05E6\u05E2</span>` : "";
+    const badge = commerce?.compareAt ? `<span class="sale-badge">\u05D1\u05DE\u05D1\u05E6\u05E2</span>` : "";
     const price = commerce ? `<p class="price">${money(commerce.price)}${commerce.compareAt ? `<s>${money(commerce.compareAt)}</s>` : ""}</p>` : `<p class="text-sm font-semibold text-muted">\u05DE\u05D7\u05D9\u05E8 \u05D9\u05E2\u05D5\u05D3\u05DB\u05DF</p>`;
     return { badge, price };
   }
@@ -4076,10 +4089,10 @@
   function shelfCard(product) {
     const { badge, price } = cardParts(product);
     return `<article class="card card-shelf">
-    ${productAnchor(product, `class="card-media"`, badge)}
+    ${productAnchor(product, `class="${mediaClass("card-media", product)}"`, `${photoImg(product)}${badge}`)}
     <p class="card-brand">${esc(product.brand)}</p>
     <h3 class="card-name" title="${esc(product.name)}">${productAnchor(product, ``, esc(product.name))}</h3>
-    <p class="card-meta">${esc(product.weight)} \xB7 ${esc(product.unitsPerPack)} \u05D9\u05D7\u05F3 \u05D1\u05DE\u05D0\u05E8\u05D6</p>
+    <p class="card-meta">${esc(product.weight)}</p>
     <div class="card-buy">
       ${price}
       ${buyRow(product.id)}
@@ -4116,9 +4129,10 @@
       if (node.dataset.ready === "true") return;
       const viewport = node.querySelector(".embla__viewport");
       const carousel2 = Embla(viewport, {
+        loop: true,
         direction: "rtl",
         align: "start",
-        containScroll: "trimSnaps",
+        containScroll: false,
         dragFree: false
       });
       node.dataset.ready = "true";
@@ -4203,13 +4217,14 @@
       activate(tabs[(keys[event.key] + tabs.length) % tabs.length]);
     });
   }
-  function catalogGridSection({ id, title, href, tabs, className = "pb-12", layout = "grid", showTabs = true }) {
+  function catalogGridSection({ id, title, href, tabs, className = "pb-12", layout = "grid", showTabs = true, icon: icon3 = "" }) {
+    const mark2 = icon3 ? `<span class="nav-icon is-${esc(icon3)}" aria-hidden="true"></span>` : `<span class="cat-heart" aria-hidden="true"></span>`;
     const first = tabs[0]?.[0];
     const panel = first ? panelHtml(layout, first, title) : `<p class="catalog-empty">\u05D0\u05D9\u05DF \u05DE\u05D5\u05E6\u05E8\u05D9\u05DD \u05DC\u05D4\u05E6\u05D2\u05D4 \u05D1\u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D4 \u05D4\u05D6\u05D5.</p>`;
     const tabList = showTabs && tabs.length ? `<div class="catalog-tabs" role="tablist" aria-label="\u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D5\u05EA ${esc(title)}">${catalogTabButtons(tabs, "data-catalog-grid-tab", id)}</div>` : "";
     return `<section class="${esc(className)}" data-catalog-grid data-catalog-layout="${esc(layout)}" data-catalog-label="${esc(title)}" aria-labelledby="${esc(id)}">
     <div class="catalog-head">
-      <h2 id="${esc(id)}"><a href="${esc(href)}"><span class="cat-heart" aria-hidden="true"></span>${esc(title)}</a></h2>
+      <h2 id="${esc(id)}"><a href="${esc(href)}">${mark2}${esc(title)}</a></h2>
       ${tabList}
     </div>
     <div data-catalog-grid-panel ${showTabs ? panelAttrs(id, tabs) : ""}>${panel}</div>
@@ -4274,7 +4289,12 @@
 
   // js/components/theme-options.js
   var KEY = "ashmoret-theme";
-  var defaults = { header: "v1", hero: "v3", categories: "v2", mobileMenu: "v1", suppliers: "v1", wideHeader: true };
+  var REV = 2;
+  var defaults = { header: "v2", hero: "v3", categories: "v2", featured: "v1", banners: "v1", mobileMenu: "v1", suppliers: "v1", palette: "grey", logo: "v1", wideHeader: true };
+  var logos = {
+    v1: { src: "assets/images/brand/logo-market-cart.png?v=2", width: 300, height: 80 },
+    v2: { src: "assets/images/brand/logo-market.png", width: 1024, height: 344 }
+  };
   var desktop = window.matchMedia("(min-width: 1024px)");
   var gearIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle cx="12" cy="12" r="3"></circle></svg>`;
   var groupIcon = (paths) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths}</svg>`;
@@ -4282,8 +4302,12 @@
     header: groupIcon(`<rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="M3 9h18M6.5 6.5h3M15 6.5h2.5"></path>`),
     hero: groupIcon(`<rect x="3" y="5" width="18" height="14" rx="2"></rect><circle cx="15.5" cy="9.5" r="1.5"></circle><path d="m3 16 5-4.5 4 3.5 3-2 6 4"></path>`),
     categories: groupIcon(`<rect x="3" y="4" width="7" height="7" rx="1.5"></rect><rect x="14" y="4" width="7" height="7" rx="1.5"></rect><rect x="3" y="13" width="7" height="7" rx="1.5"></rect><rect x="14" y="13" width="7" height="7" rx="1.5"></rect>`),
+    featured: groupIcon(`<circle cx="7" cy="8" r="3"></circle><circle cx="17" cy="8" r="3"></circle><circle cx="7" cy="17" r="3"></circle><circle cx="17" cy="17" r="3"></circle>`),
+    banners: groupIcon(`<rect x="3" y="5" width="8" height="14" rx="1.5"></rect><rect x="13" y="5" width="8" height="14" rx="1.5"></rect><path d="m9 2-2 2 2 2M15 18l2 2-2 2"></path>`),
     mobileMenu: groupIcon(`<rect x="6.5" y="2.5" width="11" height="19" rx="2.5"></rect><path d="M9.5 8h5M9.5 11h5M9.5 14h5"></path>`),
     suppliers: groupIcon(`<path d="M3 9 4.5 4h15L21 9"></path><path d="M4 9v11h16V9"></path><path d="M3 9h18"></path><path d="M9.5 20v-5.5h5V20"></path>`),
+    palette: groupIcon(`<path d="M12 3a9 9 0 1 0 0 18c1.1 0 1.8-.9 1.8-1.9 0-.5-.2-.9-.5-1.3-.3-.3-.5-.8-.5-1.2 0-1 .8-1.8 1.8-1.8H16a5 5 0 0 0 5-5c0-3.9-4-6.8-9-6.8z"></path><circle cx="7.5" cy="11" r="1.2"></circle><circle cx="10.5" cy="7" r="1.2"></circle><circle cx="15" cy="7.5" r="1.2"></circle>`),
+    logo: groupIcon(`<path d="M3 4h2l2.4 10.2a1.5 1.5 0 0 0 1.5 1.1h8.6a1.5 1.5 0 0 0 1.4-1.1L21 8H6.2"></path><circle cx="9.5" cy="19.5" r="1.3"></circle><circle cx="17" cy="19.5" r="1.3"></circle>`),
     wideHeader: groupIcon(`<path d="M3 12h18"></path><path d="m7 8-4 4 4 4M17 8l4 4-4 4"></path>`)
   };
   var groups = [
@@ -4291,8 +4315,8 @@
       name: "header",
       title: "\u05D4\u05D2\u05D3\u05E8\u05D5\u05EA Header",
       options: [
-        ["v1", "V1 \xB7 \u05D1\u05E8\u05D9\u05E8\u05EA \u05DE\u05D7\u05D3\u05DC", "\u05D7\u05D9\u05E4\u05D5\u05E9 \u05D1\u05D9\u05DF \u05D4\u05DC\u05D5\u05D2\u05D5 \u05DC\u05E1\u05DC, \u05D5\u05EA\u05E4\u05E8\u05D9\u05D8 \u05D4\u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D5\u05EA \u05D1\u05E4\u05E1 \u05E0\u05E4\u05E8\u05D3 \u05DE\u05EA\u05D7\u05EA."],
-        ["v2", "V2", "\u05D7\u05D9\u05E4\u05D5\u05E9 \u05D1\u05E4\u05E1 \u05D4\u05E2\u05DC\u05D9\u05D5\u05DF, \u05D5\u05EA\u05E4\u05E8\u05D9\u05D8 \u05D4\u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D5\u05EA \u05E2\u05DD \u05D4\u05DE\u05D2\u05D4\u05BE\u05DE\u05E0\u05D9\u05D5 \u05D1\u05D9\u05DF \u05D4\u05DC\u05D5\u05D2\u05D5 \u05DC\u05E1\u05DC."]
+        ["v1", "V1", "\u05D7\u05D9\u05E4\u05D5\u05E9 \u05D1\u05D9\u05DF \u05D4\u05DC\u05D5\u05D2\u05D5 \u05DC\u05E1\u05DC, \u05D5\u05EA\u05E4\u05E8\u05D9\u05D8 \u05D4\u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D5\u05EA \u05D1\u05E4\u05E1 \u05E0\u05E4\u05E8\u05D3 \u05DE\u05EA\u05D7\u05EA."],
+        ["v2", "V2 \xB7 \u05D1\u05E8\u05D9\u05E8\u05EA \u05DE\u05D7\u05D3\u05DC", "\u05D7\u05D9\u05E4\u05D5\u05E9 \u05D1\u05E4\u05E1 \u05D4\u05E2\u05DC\u05D9\u05D5\u05DF, \u05D5\u05EA\u05E4\u05E8\u05D9\u05D8 \u05D4\u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D5\u05EA \u05E2\u05DD \u05D4\u05DE\u05D2\u05D4\u05BE\u05DE\u05E0\u05D9\u05D5 \u05D1\u05D9\u05DF \u05D4\u05DC\u05D5\u05D2\u05D5 \u05DC\u05E1\u05DC."]
       ],
       checkbox: ["wideHeader", "Fullwidth", "\u05D4\u05D3\u05E8, \u05E4\u05D5\u05D8\u05E8, \u05E2\u05DE\u05D5\u05D3 \u05D4\u05D1\u05D9\u05EA, \u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D5\u05EA \u05D5\u05DB\u05DC \u05E9\u05D0\u05E8 \u05D4\u05E8\u05D0\u05E4\u05E8\u05D9\u05DD \u05D4\u05E8\u05D0\u05E9\u05D9\u05D9\u05DD \u05D1\u05E8\u05D5\u05D7\u05D1 90% \u05DE\u05D4\u05DE\u05E1\u05DA. \u05E2\u05DE\u05D5\u05D3\u05D9\u05DD \u05E6\u05E8\u05D9\u05DD \u05D1\u05DB\u05D5\u05D5\u05E0\u05D4, \u05DB\u05DE\u05D5 \u05E2\u05DE\u05D5\u05D3 \u05DE\u05D5\u05E6\u05E8 \u05D5\u05EA\u05E9\u05DC\u05D5\u05DD, \u05E0\u05E9\u05D0\u05E8\u05D9\u05DD \u05DB\u05DE\u05D5 \u05E9\u05D4\u05DD."],
       note: "V2 \u05DE\u05D5\u05E6\u05D2 \u05D1\u05DE\u05E1\u05DB\u05D9\u05DD \u05E8\u05D7\u05D1\u05D9\u05DD. \u05D1\u05DE\u05D5\u05D1\u05D9\u05D9\u05DC \u05E0\u05E9\u05D0\u05E8 \u05D4\u05EA\u05E4\u05E8\u05D9\u05D8 \u05D4\u05E8\u05D2\u05D9\u05DC. \u05E2\u05DD \u05E1\u05E4\u05E7 \u05D0\u05D7\u05D3, \u05EA\u05E4\u05E8\u05D9\u05D8 \u05D4\u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D5\u05EA \u05E0\u05E9\u05D0\u05E8 \u05D1\u05E4\u05E1 \u05E0\u05E4\u05E8\u05D3 \u05DE\u05EA\u05D7\u05EA."
@@ -4303,7 +4327,8 @@
       options: [
         ["v1", "V1", "\u05E7\u05E8\u05D5\u05E1\u05DC\u05EA \u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D5\u05EA, \u05D0\u05D9\u05D9\u05D8\u05DD \u05DE\u05E7\u05D5\u05D3\u05DD \u05D5\u05E9\u05E0\u05D9 \u05DE\u05E7\u05D5\u05D3\u05DE\u05D9\u05DD \u05E7\u05D8\u05E0\u05D9\u05DD \u05D1\u05E6\u05D3."],
         ["v2", "V2", "\u05E1\u05DC\u05D9\u05D9\u05D3\u05E8 \u05EA\u05DE\u05D5\u05E0\u05D5\u05EA \u05DE\u05EA\u05D7\u05DC\u05E4\u05D5\u05EA \u05E2\u05DD \u05E0\u05E7\u05D5\u05D3\u05D5\u05EA \u05D3\u05E4\u05D3\u05D5\u05E3, \u05D5\u05DE\u05EA\u05D7\u05EA\u05D9\u05D5 \u05E7\u05E8\u05D5\u05E1\u05DC\u05EA \u05D4\u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D5\u05EA."],
-        ["v3", "V3 \xB7 \u05D1\u05E8\u05D9\u05E8\u05EA \u05DE\u05D7\u05D3\u05DC", "\u05E9\u05DC\u05D5\u05E9\u05EA \u05D4\u05D1\u05D0\u05E0\u05E8\u05D9\u05DD \u05DC\u05DE\u05E2\u05DC\u05D4, \u05D5\u05DE\u05EA\u05D7\u05EA\u05D9\u05D4\u05DD \u05E7\u05E8\u05D5\u05E1\u05DC\u05EA \u05D4\u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D5\u05EA \u05E2\u05DD \u05D4\u05DB\u05D5\u05EA\u05E8\u05EA \xAB\u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D5\u05EA \u05E0\u05D1\u05D7\u05E8\u05D5\u05EA\xBB."]
+        ["v3", "V3 \xB7 \u05D1\u05E8\u05D9\u05E8\u05EA \u05DE\u05D7\u05D3\u05DC", "\u05E9\u05DC\u05D5\u05E9\u05EA \u05D4\u05D1\u05D0\u05E0\u05E8\u05D9\u05DD \u05DC\u05DE\u05E2\u05DC\u05D4, \u05D5\u05DE\u05EA\u05D7\u05EA\u05D9\u05D4\u05DD \u05E7\u05E8\u05D5\u05E1\u05DC\u05EA \u05D4\u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D5\u05EA \u05E2\u05DD \u05D4\u05DB\u05D5\u05EA\u05E8\u05EA \xAB\u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D5\u05EA \u05E0\u05D1\u05D7\u05E8\u05D5\u05EA\xBB."],
+        ["v4", "V4", "\u05DB\u05DE\u05D5 V3, \u05D5\u05D1\u05E6\u05D3 \u05D1\u05DE\u05E7\u05D5\u05DD \u05E9\u05E0\u05D9 \u05D1\u05D0\u05E0\u05E8\u05D9\u05DD \u05DE\u05E9\u05E0\u05D9\u05D9\u05DD, \u05D1\u05D0\u05E0\u05E8 \u05D0\u05D7\u05D3 \u05E2\u05DD \u05EA\u05DE\u05D5\u05E0\u05D5\u05EA \u05DE\u05EA\u05D7\u05DC\u05E4\u05D5\u05EA \u05D5\u05E7\u05D9\u05E9\u05D5\u05E8."]
       ]
     },
     {
@@ -4313,6 +4338,23 @@
         ["v1", "V1", "\u05D1\u05DC\u05D5\u05E7 \u05DC\u05DB\u05DC \u05DE\u05D7\u05DC\u05E7\u05D4 \u05E2\u05DD \u05D8\u05D0\u05D1\u05D9\u05DD \u05D5\u05E9\u05EA\u05D9 \u05E9\u05D5\u05E8\u05D5\u05EA \u05E9\u05DC \u05DE\u05D5\u05E6\u05E8\u05D9\u05DD."],
         ["v2", "V2 \xB7 \u05D1\u05E8\u05D9\u05E8\u05EA \u05DE\u05D7\u05D3\u05DC", "\u05E7\u05E8\u05D5\u05E1\u05DC\u05EA \u05DE\u05D5\u05E6\u05E8\u05D9\u05DD \u05DB\u05DE\u05D5 \u05E7\u05E8\u05D5\u05E1\u05DC\u05EA \u05D4\u05DE\u05D1\u05E6\u05E2\u05D9\u05DD. \u05D4\u05D8\u05D0\u05D1\u05D9\u05DD \u05DE\u05D7\u05DC\u05D9\u05E4\u05D9\u05DD \u05D0\u05EA \u05D4\u05DE\u05D5\u05E6\u05E8\u05D9\u05DD \u05D1\u05E7\u05E8\u05D5\u05E1\u05DC\u05D4."]
       ]
+    },
+    {
+      name: "featured",
+      title: "\u05D4\u05D2\u05D3\u05E8\u05D5\u05EA \u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D5\u05EA \u05E0\u05D1\u05D7\u05E8\u05D5\u05EA",
+      options: [
+        ["v1", "V1 \xB7 \u05D1\u05E8\u05D9\u05E8\u05EA \u05DE\u05D7\u05D3\u05DC", "\u05EA\u05DE\u05D5\u05E0\u05D5\u05EA \u05DE\u05D5\u05E6\u05E8\u05D9\u05DD \u05DC\u05DB\u05DC \u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D4."],
+        ["v2", "V2", "\u05D0\u05D9\u05D9\u05E7\u05D5\u05DF \u05E7\u05D5\u05D5\u05D9 \u05DC\u05DB\u05DC \u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D4."]
+      ]
+    },
+    {
+      name: "banners",
+      title: "\u05D4\u05D2\u05D3\u05E8\u05D5\u05EA \u05D1\u05D0\u05E0\u05E8\u05D9\u05DD",
+      options: [
+        ["v1", "V1 \xB7 \u05D1\u05E8\u05D9\u05E8\u05EA \u05DE\u05D7\u05D3\u05DC", "\u05D1\u05EA\u05E4\u05E8\u05D9\u05D8 \u05D4\u05DE\u05D1\u05E6\u05E2\u05D9\u05DD \u05D0\u05E8\u05D1\u05E2\u05EA \u05D1\u05D0\u05E0\u05E8\u05D9 \u05D4\u05DE\u05D1\u05E6\u05E2\u05D9\u05DD, \u05D5\u05D1\u05E1\u05DC\u05D9\u05D9\u05D3\u05E8 \u05D4\u05E6\u05D3\u05D3\u05D9 \u05D1\u05E2\u05DE\u05D5\u05D3 \u05D4\u05D1\u05D9\u05EA \u05E9\u05DC\u05D5\u05E9\u05EA \u05D4\u05D1\u05D0\u05E0\u05E8\u05D9\u05DD \u05E9\u05DC \u05D4\u05DE\u05D7\u05DC\u05E7\u05D5\u05EA."],
+        ["v2", "V2", "\u05D4\u05D1\u05D0\u05E0\u05E8\u05D9\u05DD \u05DE\u05EA\u05D7\u05DC\u05E4\u05D9\u05DD: \u05D1\u05D0\u05E0\u05E8\u05D9 \u05D4\u05DE\u05D7\u05DC\u05E7\u05D5\u05EA \u05D1\u05EA\u05E4\u05E8\u05D9\u05D8 \u05D4\u05DE\u05D1\u05E6\u05E2\u05D9\u05DD, \u05D5\u05D1\u05D0\u05E0\u05E8\u05D9 \u05D4\u05DE\u05D1\u05E6\u05E2\u05D9\u05DD \u05D1\u05E1\u05DC\u05D9\u05D9\u05D3\u05E8 \u05D4\u05E6\u05D3\u05D3\u05D9 \u05D1\u05E2\u05DE\u05D5\u05D3 \u05D4\u05D1\u05D9\u05EA."]
+      ],
+      note: "\u05D4\u05E1\u05DC\u05D9\u05D9\u05D3\u05E8 \u05D4\u05E6\u05D3\u05D3\u05D9 \u05DE\u05D5\u05E6\u05D2 \u05D1\u05BEHero V4."
     },
     {
       name: "mobileMenu",
@@ -4330,6 +4372,23 @@
         ["v1", "V1 \xB7 \u05D1\u05E8\u05D9\u05E8\u05EA \u05DE\u05D7\u05D3\u05DC", "\u05E8\u05D9\u05D1\u05D5\u05D9 \u05E1\u05E4\u05E7\u05D9\u05DD: \u05E1\u05D5\u05E4\u05E8 \u05D0\u05E9\u05DE\u05D5\u05E8\u05EA, \u05D7\u05D3 \u05E4\u05E2\u05DE\u05D9 \u05D5\u05DB\u05DC\u05D9 \u05D1\u05D9\u05EA, \u05E7\u05E0\u05D9\u05D5\u05DF \u05D0\u05E9\u05DE\u05D5\u05E8\u05EA \u05D5\u05DE\u05D1\u05E6\u05E2\u05D9\u05DD."],
         ["v2", "V2", "\u05E1\u05E4\u05E7 \u05D0\u05D7\u05D3, \u05EA\u05D5\u05E6\u05E8\u05EA. \u05D4\u05EA\u05E4\u05E8\u05D9\u05D8, \u05E7\u05E8\u05D5\u05E1\u05DC\u05EA \u05D4\u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D5\u05EA \u05D5\u05E2\u05DE\u05D5\u05D3 \u05D4\u05D1\u05D9\u05EA \u05DC\u05E4\u05D9 \u05D4\u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D5\u05EA \u05D1\u05E7\u05D8\u05DC\u05D5\u05D2 \u05EA\u05D5\u05E6\u05E8\u05EA."]
       ]
+    },
+    {
+      name: "palette",
+      title: "\u05E4\u05DC\u05D8\u05EA \u05E6\u05D1\u05E2\u05D9\u05DD",
+      options: [
+        ["grey", "\u05D0\u05E4\u05D5\u05E8\u05D9\u05DD \xB7 \u05D1\u05E8\u05D9\u05E8\u05EA \u05DE\u05D7\u05D3\u05DC", "\u05D2\u05D5\u05D5\u05E0\u05D9 \u05D4\u05D0\u05E4\u05D5\u05E8 \u05E9\u05DC \u05D4\u05BEGrey box.", ["#1f1f1f", "#e9e9e9", "#fff"]],
+        ["v1", "V1", `\u05DB\u05D4\u05D4 <bdi dir="ltr">#282B4A</bdi>, \u05D1\u05D4\u05D9\u05E8 <bdi dir="ltr">#EEEBDA</bdi> \u05D5\u05DC\u05D1\u05DF.`, ["#282B4A", "#EEEBDA", "#fff"]]
+      ]
+    },
+    {
+      name: "logo",
+      title: "\u05DC\u05D5\u05D2\u05D5",
+      options: [
+        ["v1", "V1 \xB7 \u05D1\u05E8\u05D9\u05E8\u05EA \u05DE\u05D7\u05D3\u05DC", "MARKET \u05DE\u05D1\u05D9\u05EA \u05D0\u05E9\u05DE\u05D5\u05E8\u05EA, \u05E2\u05DD \u05E2\u05D2\u05DC\u05EA \u05E7\u05E0\u05D9\u05D5\u05EA."],
+        ["v2", "V2", "\u05D0\u05E9\u05DE\u05D5\u05E8\u05EA MARKET \u05E2\u05DD \u05D4\u05DC\u05D1."]
+      ],
+      note: "\u05D4\u05DC\u05D5\u05D2\u05D5 \u05DE\u05EA\u05D7\u05DC\u05E3 \u05D1\u05D4\u05D3\u05E8, \u05D1\u05EA\u05E4\u05E8\u05D9\u05D8 \u05D4\u05DE\u05D5\u05D1\u05D9\u05D9\u05DC \u05D5\u05D1\u05E4\u05D5\u05D8\u05E8."
     }
   ];
   var state = load();
@@ -4341,16 +4400,22 @@
   function load() {
     try {
       const saved = JSON.parse(localStorage.getItem(KEY) || "{}");
+      const current = saved.rev === REV;
       return {
-        header: saved.header === "v2" ? "v2" : "v1",
-        hero: ["v1", "v2", "v3"].includes(saved.hero) ? saved.hero : defaults.hero,
+        rev: REV,
+        header: current && saved.header === "v1" ? "v1" : defaults.header,
+        hero: ["v1", "v2", "v3", "v4"].includes(saved.hero) ? saved.hero : defaults.hero,
         categories: ["v1", "v2"].includes(saved.categories) ? saved.categories : defaults.categories,
+        featured: saved.featured === "v2" ? "v2" : defaults.featured,
+        banners: saved.banners === "v2" ? "v2" : defaults.banners,
         mobileMenu: saved.mobileMenu === "v2" ? "v2" : defaults.mobileMenu,
         suppliers: saved.suppliers === "v2" ? "v2" : defaults.suppliers,
+        palette: saved.palette === "v1" ? "v1" : defaults.palette,
+        logo: saved.logo === "v2" ? "v2" : defaults.logo,
         wideHeader: typeof saved.wideHeader === "boolean" ? saved.wideHeader : defaults.wideHeader
       };
     } catch {
-      return { ...defaults };
+      return { rev: REV, ...defaults };
     }
   }
   function save() {
@@ -4361,6 +4426,23 @@
   }
   function getTheme() {
     return state;
+  }
+  function applyPalette() {
+    const root = document.documentElement;
+    if (state.palette === "grey") delete root.dataset.palette;
+    else root.dataset.palette = state.palette;
+    const surface = getComputedStyle(root).getPropertyValue("--color-surface").trim();
+    document.querySelector('meta[name="theme-color"]')?.setAttribute("content", surface);
+  }
+  function applyLogo() {
+    const logo = logos[state.logo] || logos.v1;
+    document.documentElement.dataset.logo = state.logo;
+    document.querySelectorAll("[data-site-logo]").forEach((img) => {
+      if (img.getAttribute("src") === logo.src) return;
+      img.src = logo.src;
+      img.width = logo.width;
+      img.height = logo.height;
+    });
   }
   function applyMobileMenu() {
     document.documentElement.dataset.mobileMenu = state.mobileMenu;
@@ -4399,9 +4481,9 @@
   <div class="theme-panel-body">
     ${groups.map((group) => `<fieldset class="theme-group">
       <legend><span class="theme-legend-icon">${groupIcons[group.name]}</span>${group.title}</legend>
-      ${group.options.map(([value, label, text]) => `<label class="theme-option">
+      ${group.options.map(([value, label, text, swatches]) => `<label class="theme-option">
         <input type="radio" name="${group.name}" value="${value}" ${state[group.name] === value ? "checked" : ""} data-theme-option>
-        <span><strong>${label}</strong><small>${text}</small></span>
+        <span><strong>${label}</strong><small>${text}</small>${swatches ? `<span class="theme-swatches" aria-hidden="true">${swatches.map((color) => `<span style="background:${color}"></span>`).join("")}</span>` : ""}</span>
       </label>`).join("")}
       ${group.checkbox ? `<label class="theme-option">
         <input type="checkbox" name="${group.checkbox[0]}" ${state[group.checkbox[0]] ? "checked" : ""} data-theme-toggle>
@@ -4426,9 +4508,11 @@
     save();
     syncInputs(panel);
     if (name === "header" || name === "wideHeader" || name === "suppliers") applyHeader();
-    if (name === "hero" || name === "categories") onHeroChange();
+    if (name === "hero" || name === "categories" || name === "featured" || name === "banners") onHeroChange();
     if (name === "mobileMenu") applyMobileMenu();
     if (name === "suppliers") onSuppliersChange();
+    if (name === "palette") applyPalette();
+    if (name === "logo") applyLogo();
   }
   function bindThemeOptions({ heroChange, suppliersChange } = {}) {
     onHeroChange = heroChange || onHeroChange;
@@ -4463,8 +4547,12 @@
         setOption("header", defaults.header, panel);
         setOption("hero", defaults.hero, panel);
         setOption("categories", defaults.categories, panel);
+        setOption("featured", defaults.featured, panel);
+        setOption("banners", defaults.banners, panel);
         setOption("mobileMenu", defaults.mobileMenu, panel);
         setOption("suppliers", defaults.suppliers, panel);
+        setOption("palette", defaults.palette, panel);
+        setOption("logo", defaults.logo, panel);
         setOption("wideHeader", defaults.wideHeader, panel);
       }
     });
@@ -4487,45 +4575,132 @@
     desktop.addEventListener("change", applyHeader);
     applyHeader();
     applyMobileMenu();
+    applyPalette();
+    applyLogo();
   }
+
+  // js/data/banners.js
+  var offerBanners = [
+    { href: "#/p/p198", label: "\u05E1\u05D8 \u05D1\u05DC\u05E0\u05D3\u05E8 \u05DE\u05D5\u05D8 \u05E8\u05D1\u05BE\u05EA\u05DB\u05DC\u05D9\u05EA\u05D9, \u05DC\u05E8\u05DB\u05D9\u05E9\u05D4 \u05E2\u05DB\u05E9\u05D9\u05D5", image: "assets/images/banners/offer-hand-blender.webp", size: [675, 640] },
+    { href: "#/p/p095", label: "\u05E4\u05E1\u05D8\u05D4 \u05E4\u05D5\u05D6\u05D9\u05DC\u05D9 \u05D5\u05D9\u05D8\u05D0\u05DC\u05D4, \u05DC\u05E8\u05DB\u05D9\u05E9\u05D4 \u05E2\u05DB\u05E9\u05D9\u05D5", image: "assets/images/banners/offer-pasta.webp", size: [675, 640] },
+    { href: "#/p/p001", label: "\u05E4\u05D9\u05E8\u05D5\u05E8\u05D9 \u05DC\u05D7\u05DD \u05DE\u05EA\u05D5\u05D1\u05DC\u05D9\u05DD \u05EA\u05D5\u05E6\u05E8\u05EA, \u05DC\u05E8\u05DB\u05D9\u05E9\u05D4 \u05E2\u05DB\u05E9\u05D9\u05D5", image: "assets/images/banners/offer-breadcrumbs.webp", size: [675, 640] },
+    { href: "#/p/p116", label: "\u05D2\u05E8\u05E2\u05D9\u05E0\u05D9 \u05EA\u05D9\u05E8\u05E1 \u05DE\u05EA\u05D5\u05E7 \u05EA\u05D5\u05E6\u05E8\u05EA, \u05DC\u05E8\u05DB\u05D9\u05E9\u05D4 \u05E2\u05DB\u05E9\u05D9\u05D5", image: "assets/images/banners/offer-corn.webp", size: [675, 640] }
+  ];
+  var sideBanners = [
+    { href: "#/c/oils", label: "\u05E9\u05DE\u05DF \u05D6\u05D9\u05EA \u05DB\u05EA\u05D9\u05EA \u05DE\u05E2\u05D5\u05DC\u05D4, \u05DC\u05E7\u05E0\u05D9\u05D9\u05D4 \u05E2\u05DB\u05E9\u05D9\u05D5", image: "assets/images/banners/side-olive-oil.webp", size: [1024, 970] },
+    { href: "#/c/household", label: "\u05E1\u05D8 \u05E7\u05D5\u05E4\u05E1\u05D0\u05D5\u05EA \u05D0\u05D7\u05E1\u05D5\u05DF, \u05DC\u05E6\u05E4\u05D9\u05D9\u05D4 \u05D1\u05DE\u05D5\u05E6\u05E8", image: "assets/images/banners/side-storage.webp", size: [1024, 970] },
+    { href: "#/c/appliances", label: "\u05D0\u05D9\u05D9\u05E8 \u05E4\u05E8\u05D9\u05D9\u05E8 \u05D3\u05D9\u05D2\u05D9\u05D8\u05DC\u05D9, \u05DC\u05E7\u05E0\u05D9\u05D9\u05D4 \u05E2\u05DB\u05E9\u05D9\u05D5", image: "assets/images/banners/side-air-fryer.webp", size: [1024, 970] }
+  ];
 
   // js/components/promo-carousel.js
   var AUTOPLAY_MS = 5e3;
-  var SLIDES = 3;
   var mounted = [];
-  function promoCarousel() {
-    const slides2 = Array.from({ length: SLIDES }, (_, index) => {
-      const heading = index === 0 ? "h1" : "h2";
-      return `<div class="promo-slide" role="group" aria-roledescription="\u05E9\u05E7\u05D5\u05E4\u05D9\u05EA" aria-label="${index + 1} \u05DE\u05EA\u05D5\u05DA ${SLIDES}" ${index === 0 ? "" : 'aria-hidden="true"'}>
-      <a href="#/m/tozeret" class="promo-slide-link" ${index === 0 ? "" : 'tabindex="-1"'}>
-        <span class="proto-label" aria-hidden="true">\u05D1\u05D0\u05E0\u05E8 \u05E8\u05D0\u05E9\u05D9 ${index + 1}/${SLIDES}</span>
-        <div class="hero-panel relative z-10 p-6 text-ink lg:flex lg:min-h-[520px] lg:items-center" ${index === 0 ? "data-hero-copy" : ""}>
-          <div class="max-w-md lg:p-8">
-            <${heading} class="text-4xl font-extrabold leading-tight lg:text-5xl">\u05D0\u05D9\u05D9\u05D8\u05DD \u05DE\u05E7\u05D5\u05D3\u05DD</${heading}>
-            <p class="mt-3 text-lg text-muted">\u05D0\u05D5\u05E8\u05D6, \u05E7\u05D8\u05E0\u05D9\u05D5\u05EA, \u05E4\u05E1\u05D8\u05D4, \u05E9\u05D9\u05DE\u05D5\u05E8\u05D9\u05DD, \u05E9\u05DE\u05E0\u05D9\u05DD \u05D5\u05EA\u05D1\u05DC\u05D9\u05E0\u05D9\u05DD. \u05E7\u05D8\u05DC\u05D5\u05D2 \u05EA\u05D5\u05E6\u05E8\u05EA, \u05D1\u05DE\u05E7\u05D5\u05DD \u05D0\u05D7\u05D3.</p>
-            <span class="btn mt-6">\u05D4\u05E0\u05E2\u05D4 \u05DC\u05E4\u05E2\u05D5\u05DC\u05D4</span>
-          </div>
-        </div>
-      </a>
-    </div>`;
-    }).join("");
-    const dots = Array.from({ length: SLIDES }, (_, index) => `<button type="button" class="hero-dot" data-promo-dot="${index}" aria-label="\u05E9\u05E7\u05D5\u05E4\u05D9\u05EA ${index + 1} \u05DE\u05EA\u05D5\u05DA ${SLIDES}" ${index === 0 ? 'aria-current="true"' : ""}></button>`).join("");
-    return `<div class="home-block promo-carousel overflow-hidden rounded-[12px] border border-line bg-surface lg:col-span-2 lg:row-span-2 lg:min-h-[520px]" data-promo-carousel aria-roledescription="\u05E7\u05E8\u05D5\u05E1\u05DC\u05D4" aria-label="\u05D0\u05D9\u05D9\u05D8\u05DE\u05D9\u05DD \u05DE\u05E7\u05D5\u05D3\u05DE\u05D9\u05DD">
-    <div class="promo-viewport"><div class="promo-track">${slides2}</div></div>
-    <button type="button" class="cat-arrow promo-arrow is-prev" data-promo-prev aria-label="\u05D4\u05E9\u05E7\u05D5\u05E4\u05D9\u05EA \u05D4\u05E7\u05D5\u05D3\u05DE\u05EA">
+  var heroSlides = [
+    {
+      image: "assets/images/banners/hero-pantry.webp",
+      size: [1024, 539],
+      fade: "#f7f2e9",
+      kicker: "\u05DE\u05D5\u05E6\u05E8\u05D9 \u05DE\u05D6\u05D5\u05D5\u05D4",
+      title: "\u05DB\u05DC \u05DE\u05D4 \u05E9\u05E6\u05E8\u05D9\u05DA",
+      sub: "\u05DC\u05DE\u05D6\u05D5\u05D5\u05D4 \u05D1\u05DE\u05E7\u05D5\u05DD \u05D0\u05D7\u05D3",
+      text: "\u05E4\u05E1\u05D8\u05D4, \u05D0\u05D5\u05E8\u05D6, \u05E7\u05D8\u05E0\u05D9\u05D5\u05EA, \u05E9\u05DE\u05E0\u05D9\u05DD, \u05E9\u05D9\u05DE\u05D5\u05E8\u05D9\u05DD \u05D5\u05EA\u05D1\u05DC\u05D9\u05E0\u05D9\u05DD \u2013 \u05D1\u05DE\u05D1\u05D7\u05E8 \u05D2\u05D3\u05D5\u05DC \u05D5\u05D1\u05E7\u05E0\u05D9\u05D9\u05D4 \u05E0\u05D5\u05D7\u05D4.",
+      cta: { href: "#/d/super", label: "\u05DC\u05E7\u05E0\u05D9\u05D9\u05D4 \u05E2\u05DB\u05E9\u05D9\u05D5" }
+    },
+    {
+      image: "assets/images/banners/hero-home.webp",
+      size: [1024, 539],
+      fade: "#f7f2e9",
+      kicker: "\u05DC\u05D1\u05D9\u05EA \u05D5\u05DC\u05DE\u05D8\u05D1\u05D7",
+      title: `<span class="whitespace-nowrap">\u05D7\u05D3\u05BE\u05E4\u05E2\u05DE\u05D9</span> \u05D5\u05DB\u05DC\u05D9 \u05D1\u05D9\u05EA`,
+      sub: "\u05DC\u05E9\u05D9\u05DE\u05D5\u05E9 \u05D9\u05D5\u05DE\u05D9\u05D5\u05DE\u05D9 \u05D5\u05DC\u05D0\u05D9\u05E8\u05D5\u05D7",
+      text: "\u05DE\u05D2\u05D5\u05D5\u05DF \u05E8\u05D7\u05D1 \u05E9\u05DC \u05DE\u05D5\u05E6\u05E8\u05D9\u05DD \u05DC\u05E9\u05D9\u05DE\u05D5\u05E9 \u05D9\u05D5\u05DE\u05D9\u05D5\u05DE\u05D9 \u05D1\u05D1\u05D9\u05EA, \u05D1\u05DE\u05D8\u05D1\u05D7 \u05D5\u05D1\u05D0\u05D9\u05E8\u05D5\u05D7.",
+      cta: { href: "#/d/home", label: "\u05DC\u05DE\u05D2\u05D5\u05D5\u05DF \u05D4\u05DE\u05DC\u05D0" }
+    },
+    {
+      image: "assets/images/banners/hero-appliances.webp",
+      size: [1024, 539],
+      fade: "#f7f2e9",
+      kicker: "\u05DE\u05DB\u05E9\u05D9\u05E8\u05D9 \u05D7\u05E9\u05DE\u05DC",
+      title: "\u05DE\u05DB\u05E9\u05D9\u05E8\u05D9 \u05D7\u05E9\u05DE\u05DC",
+      sub: "\u05E9\u05DE\u05E9\u05D3\u05E8\u05D2\u05D9\u05DD \u05D0\u05EA \u05D4\u05D1\u05D9\u05EA",
+      text: "\u05DE\u05D2\u05D5\u05D5\u05DF \u05E4\u05EA\u05E8\u05D5\u05E0\u05D5\u05EA \u05D7\u05DB\u05DE\u05D9\u05DD \u05DC\u05DE\u05D8\u05D1\u05D7 \u05D5\u05DC\u05D1\u05D9\u05EA \u05D1\u05DE\u05E7\u05D5\u05DD \u05D0\u05D7\u05D3, \u05DC\u05E7\u05E0\u05D9\u05D9\u05D4 \u05E0\u05D5\u05D7\u05D4.",
+      cta: { href: "#/d/electronics", label: "\u05DC\u05E6\u05E4\u05D9\u05D9\u05D4 \u05D1\u05DE\u05D5\u05E6\u05E8\u05D9\u05DD" }
+    }
+  ];
+  var SLIDES = heroSlides.length;
+  function heroSlide(slide, index) {
+    const heading = index === 0 ? "h1" : "h2";
+    return `<div class="promo-slide promo-hero" style="--hero-fade:${slide.fade}" role="group" aria-roledescription="\u05E9\u05E7\u05D5\u05E4\u05D9\u05EA" aria-label="${index + 1} \u05DE\u05EA\u05D5\u05DA ${SLIDES}" ${index === 0 ? "" : 'aria-hidden="true"'}>
+    <img class="promo-hero-img" src="${slide.image}" alt="" width="${slide.size[0]}" height="${slide.size[1]}" decoding="async">
+    <div class="promo-hero-copy" ${index === 0 ? "data-hero-copy" : ""}>
+      <p class="promo-hero-kicker">${slide.kicker}</p>
+      <${heading} class="promo-hero-title">${slide.title}<br><span class="promo-hero-sub">${slide.sub}</span></${heading}>
+      <p class="promo-hero-text">${slide.text}</p>
+      <a class="promo-hero-cta" href="${slide.cta.href}" ${index === 0 ? "" : 'tabindex="-1"'}>${slide.cta.label}</a>
+    </div>
+  </div>`;
+  }
+  var sideSlides = () => getTheme().banners === "v2" ? offerBanners : sideBanners;
+  function carouselControls(count) {
+    const dots = Array.from({ length: count }, (_, index) => `<button type="button" class="hero-dot" data-promo-dot="${index}" aria-label="\u05E9\u05E7\u05D5\u05E4\u05D9\u05EA ${index + 1} \u05DE\u05EA\u05D5\u05DA ${count}" ${index === 0 ? 'aria-current="true"' : ""}></button>`).join("");
+    return `<button type="button" class="cat-arrow promo-arrow is-prev" data-promo-prev aria-label="\u05D4\u05E9\u05E7\u05D5\u05E4\u05D9\u05EA \u05D4\u05E7\u05D5\u05D3\u05DE\u05EA">
       <svg viewBox="0 0 24 24" class="size-5" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg>
     </button>
     <button type="button" class="cat-arrow promo-arrow is-next" data-promo-next aria-label="\u05D4\u05E9\u05E7\u05D5\u05E4\u05D9\u05EA \u05D4\u05D1\u05D0\u05D4">
       <svg viewBox="0 0 24 24" class="size-5" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg>
     </button>
-    <div class="hero-dots" role="group" aria-label="\u05D3\u05E4\u05D3\u05D5\u05E3 \u05D1\u05D9\u05DF \u05D4\u05E9\u05E7\u05D5\u05E4\u05D9\u05D5\u05EA">${dots}</div>
+    <div class="hero-dots" role="group" aria-label="\u05D3\u05E4\u05D3\u05D5\u05E3 \u05D1\u05D9\u05DF \u05D4\u05E9\u05E7\u05D5\u05E4\u05D9\u05D5\u05EA">${dots}</div>`;
+  }
+  function promoCarousel() {
+    const slides2 = heroSlides.map(heroSlide).join("");
+    return `<div class="home-block promo-carousel overflow-hidden rounded-[12px] border border-line bg-surface lg:col-span-2 lg:row-span-2 lg:min-h-[520px]" data-promo-carousel aria-roledescription="\u05E7\u05E8\u05D5\u05E1\u05DC\u05D4" aria-label="\u05D0\u05D9\u05D9\u05D8\u05DE\u05D9\u05DD \u05DE\u05E7\u05D5\u05D3\u05DE\u05D9\u05DD">
+    <div class="promo-viewport"><div class="promo-track">${slides2}</div></div>
+    ${carouselControls(SLIDES)}
   </div>`;
+  }
+  function sideSlide(slide, index, slides2) {
+    const count = slides2.length;
+    const media = slide.image ? `<img class="side-slide-media" src="${slide.image}" alt="" width="${slide.size[0]}" height="${slide.size[1]}" decoding="async">` : `<span class="proto-label" aria-hidden="true">\u05D1\u05D0\u05E0\u05E8 \u05DE\u05EA\u05D7\u05DC\u05E3 ${index + 1}/${count}</span><span class="side-slide-media" aria-hidden="true"></span>`;
+    return `<div class="promo-slide side-slide" role="group" aria-roledescription="\u05E9\u05E7\u05D5\u05E4\u05D9\u05EA" aria-label="${index + 1} \u05DE\u05EA\u05D5\u05DA ${count}" ${index === 0 ? "" : 'aria-hidden="true"'}>
+    <a class="side-slide-link${slide.image ? " has-image" : ""}" href="${slide.href}" aria-label="${slide.label}" ${index === 0 ? "" : 'tabindex="-1"'}>
+      ${media}
+    </a>
+  </div>`;
+  }
+  function sideCarousel() {
+    const slides2 = sideSlides();
+    return `<div class="home-block promo-carousel side-carousel overflow-hidden rounded-[12px] border border-line bg-white lg:col-start-3 lg:row-span-2" data-promo-carousel data-promo-fade aria-roledescription="\u05E7\u05E8\u05D5\u05E1\u05DC\u05D4" aria-label="\u05D1\u05D0\u05E0\u05E8\u05D9\u05DD \u05DE\u05EA\u05D7\u05DC\u05E4\u05D9\u05DD">
+    <div class="promo-viewport"><div class="promo-track">${slides2.map(sideSlide).join("")}</div></div>
+    ${carouselControls(slides2.length)}
+  </div>`;
+  }
+  function fadeEngine(root) {
+    const slides2 = [...root.querySelectorAll(".promo-slide")];
+    const listeners3 = [];
+    let current = 0;
+    const show = (index) => {
+      current = (index + slides2.length) % slides2.length;
+      slides2.forEach((slide, n) => slide.classList.toggle("is-active", n === current));
+      listeners3.forEach((listener) => listener());
+    };
+    slides2[0]?.classList.add("is-active");
+    return {
+      scrollNext: () => show(current + 1),
+      scrollPrev: () => show(current - 1),
+      scrollTo: show,
+      selectedScrollSnap: () => current,
+      on: (event, listener) => {
+        if (event === "select") listeners3.push(listener);
+      },
+      destroy: () => {
+      }
+    };
   }
   function mountOne(root) {
     const Embla = window.EmblaCarousel;
     if (!Embla || root.dataset.ready === "true") return;
     root.dataset.ready = "true";
-    const embla2 = Embla(root.querySelector(".promo-viewport"), {
+    const embla2 = root.hasAttribute("data-promo-fade") ? fadeEngine(root) : Embla(root.querySelector(".promo-viewport"), {
       loop: true,
       direction: "rtl",
       duration: prefersReducedMotion() ? 0 : 30
@@ -4549,7 +4724,7 @@
       });
       root.querySelectorAll(".promo-slide").forEach((slide, index) => {
         slide.toggleAttribute("aria-hidden", index !== current);
-        slide.querySelector("a")?.setAttribute("tabindex", index === current ? "0" : "-1");
+        slide.querySelectorAll("a").forEach((link) => link.setAttribute("tabindex", index === current ? "0" : "-1"));
       });
       start2();
     });
@@ -4619,6 +4794,7 @@
         title: department.name,
         href: `#/d/${id}`,
         tabs,
+        icon: id,
         className: "home-section",
         layout: getTheme().categories === "v2" ? "rail" : "grid"
       });
@@ -4633,7 +4809,7 @@
 
     <section class="home-section" aria-labelledby="offers-title">
       <div class="catalog-head">
-        <h2 id="offers-title" class="text-2xl font-extrabold"><span class="cat-heart" aria-hidden="true"></span>\u05DE\u05D5\u05E6\u05E8\u05D9\u05DD \u05D7\u05D3\u05E9\u05D9\u05DD \u05D1\u05DE\u05D1\u05E6\u05E2</h2>
+        <h2 id="offers-title" class="text-2xl font-extrabold"><span class="nav-icon is-offers" aria-hidden="true"></span>\u05DE\u05D5\u05E6\u05E8\u05D9\u05DD \u05D7\u05D3\u05E9\u05D9\u05DD \u05D1\u05DE\u05D1\u05E6\u05E2</h2>
         <a class="deal-all" href="#/d/offers">\u05DC\u05DB\u05DC \u05D4\u05DE\u05D1\u05E6\u05E2\u05D9\u05DD
           <svg viewBox="0 0 24 24" class="size-4" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg>
         </a>
@@ -4654,7 +4830,11 @@
   function heroBlock() {
     return `<section class="grid gap-4 lg:grid-cols-3 lg:grid-rows-2" aria-label="\u05DE\u05D1\u05E6\u05E2\u05D9 \u05DB\u05E0\u05D9\u05E1\u05D4">
       ${promoCarousel()}
-      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:contents">
+      ${getTheme().hero === "v4" ? sideCarousel() : sideBanners2()}
+    </section>`;
+  }
+  function sideBanners2() {
+    return `<div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:contents">
         <a href="#/c/oils" class="home-block hero-side lg:col-start-3 lg:row-start-1">
           <span class="proto-label" aria-hidden="true">\u05D1\u05D0\u05E0\u05E8 \u05DE\u05E9\u05E0\u05D9 1/2</span>
           <div>
@@ -4673,8 +4853,7 @@
           </div>
           <span class="hero-side-media" aria-hidden="true"></span>
         </a>
-      </div>
-    </section>`;
+      </div>`;
   }
 
   // js/data/manufacturers.js
@@ -4730,7 +4909,7 @@
   function renderMarket() {
     const picked = products.slice(0, 8);
     return `<div class="wrap py-6">
-    <section class="grid items-center gap-4 overflow-hidden rounded-2xl border border-line bg-[#ececec] text-ink lg:grid-cols-[1.3fr_0.7fr]" aria-labelledby="market-title">
+    <section class="grid items-center gap-4 overflow-hidden rounded-2xl border border-line bg-surface text-ink lg:grid-cols-[1.3fr_0.7fr]" aria-labelledby="market-title">
       <div class="p-8 lg:p-12" data-hero-copy>
         <p class="text-sm font-bold text-muted">\u05D0\u05E9\u05DE\u05D5\u05E8\u05EA MARKET</p>
         <h1 id="market-title" class="mt-2 text-4xl font-extrabold leading-tight lg:text-5xl">\u05DB\u05DE\u05D4 \u05D9\u05E6\u05E8\u05E0\u05D9\u05DD. \u05E1\u05DC \u05D0\u05D7\u05D3.</h1>
@@ -4757,7 +4936,7 @@
       </ul>
     </section>
 
-    <section class="grid items-center gap-6 overflow-hidden rounded-2xl bg-[#ececec] p-8 lg:grid-cols-2" aria-labelledby="market-box">
+    <section class="grid items-center gap-6 overflow-hidden rounded-2xl bg-surface p-8 lg:grid-cols-2" aria-labelledby="market-box">
       <div>
         <h2 id="market-box" class="text-3xl font-extrabold">\u05D0\u05D5\u05EA\u05D4 \u05E9\u05E4\u05D4, \u05E1\u05D9\u05D3\u05D5\u05E8 \u05D0\u05D7\u05E8</h2>
         <p class="mt-3 text-muted">\u05D4\u05DB\u05D5\u05EA\u05E8\u05EA, \u05D4\u05D7\u05D9\u05E4\u05D5\u05E9, \u05D4\u05DB\u05E8\u05D8\u05D9\u05E1\u05D9\u05DD \u05D5\u05D4\u05E4\u05D5\u05D8\u05E8 \u05D6\u05D4\u05D9\u05DD \u05DC\u05D3\u05E3 \u05EA\u05D5\u05E6\u05E8\u05EA. \u05DB\u05D0\u05DF \u05D4\u05E1\u05D3\u05E8 \u05DE\u05E9\u05E8\u05EA \u05DB\u05DE\u05D4 \u05D9\u05E6\u05E8\u05E0\u05D9\u05DD.</p>
@@ -4848,7 +5027,7 @@
     const view2 = visibleSlice(items, query);
     const mark2 = `<span class="grid size-20 place-items-center rounded-full border border-line bg-white" aria-hidden="true"></span>`;
     return `<article>
-    <section class="relative min-h-72 overflow-hidden border-b border-line bg-[#ececec] text-ink">
+    <section class="relative min-h-72 overflow-hidden border-b border-line bg-surface text-ink">
       <div class="wrap relative flex min-h-72 items-end gap-4 py-8">
         ${mark2}
         <div>
@@ -4897,7 +5076,7 @@
     const chips = sections.length > 1 ? `<ul class="mt-5 flex flex-wrap gap-2">${sections.map((section) => `<li><a class="inline-flex min-h-10 items-center rounded-full border border-line px-3 text-sm font-semibold" href="#/c/${esc(section.slug)}">${esc(section.name)}</a></li>`).join("")}</ul>` : "";
     return `<article class="wrap py-8">
     ${crumbs([{ href: "#/", label: "\u05D3\u05E3 \u05D4\u05D1\u05D9\u05EA" }, { label: department.name }])}
-    <h1 class="text-3xl font-extrabold">${esc(department.name)}</h1>
+    <h1 class="flex items-center gap-3 text-3xl font-extrabold"><span class="nav-icon is-${esc(department.id)} h-8" aria-hidden="true"></span>${esc(department.name)}</h1>
     <p class="mt-2 text-muted">${items.length} \u05DE\u05D5\u05E6\u05E8\u05D9\u05DD \u05D1\u05DE\u05D7\u05DC\u05E7\u05D4</p>
     ${chips}
     <div class="mt-6">
@@ -4933,11 +5112,19 @@
   // js/components/product-view.js
   var prevIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg>`;
   var nextIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg>`;
-  var tones = ["#f3f3f3", "#e7e7e7", "#f7f7f7", "#dedede", "#ececec"];
+  var tones = ["var(--color-fill)", "var(--color-surface)", "var(--color-paper)", "var(--color-line)", "var(--color-fill)"];
   function face(index) {
     return `<span class="product-thumb-face is-placeholder" style="background-color:${tones[index]}"></span>`;
   }
   function productGallery(product, badge = "") {
+    if (productPhoto(product)) {
+      return `<div class="product-gallery">
+      <div class="product-stage">
+        <div class="product-frame"><span class="product-thumb-face has-photo">${photoImg(product, { alt: product.name, eager: true })}</span></div>
+        ${badge}
+      </div>
+    </div>`;
+    }
     const thumbs = tones.map((_, index) => `<button type="button" class="product-thumb${index === 0 ? " is-selected" : ""}" data-gallery-index="${index}" aria-label="\u05EA\u05DE\u05D5\u05E0\u05D4 ${index + 1} \u05DE\u05EA\u05D5\u05DA ${tones.length}"${index === 0 ? ` aria-current="true"` : ""}>${face(index)}</button>`).join("");
     return `<div class="product-gallery" data-product-gallery data-active="0">
     <div class="product-stage">
@@ -4962,8 +5149,8 @@
     <details class="product-fold"${descriptionOpen}>
       <summary>\u05EA\u05D9\u05D0\u05D5\u05E8</summary>
       <div class="product-fold-body">
-        <p>${esc(product.name)} \u05DE\u05D1\u05D9\u05EA ${esc(product.brand)}, \u05D1\u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D9\u05EA ${esc(product.categoryName)}. \u05D0\u05E8\u05D9\u05D6\u05D4 \u05E9\u05DC ${esc(product.weight)}, ${esc(String(product.unitsPerPack))} \u05D9\u05D7\u05D9\u05D3\u05D5\u05EA \u05D1\u05DE\u05D0\u05E8\u05D6.</p>
-        ${product.manufacturerId === "tozeret" ? `<p><a href="#/m/tozeret">\u05D9\u05E6\u05E8\u05DF: \u05EA\u05D5\u05E6\u05E8\u05EA</a></p>` : ""}
+        <p>${esc(product.name)} \u05DE\u05D1\u05D9\u05EA ${esc(product.brand)}, \u05D1\u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D9\u05EA ${esc(product.categoryName)}. \u05D0\u05E8\u05D9\u05D6\u05D4 \u05E9\u05DC ${esc(product.weight)}.</p>
+        ${makerLines(product)}
       </div>
     </details>
     <details class="product-fold">
@@ -4972,7 +5159,6 @@
         <dl class="product-specs">
           ${spec("\u05DE\u05E7\u05D8", product.id)}
           ${spec("\u05DE\u05E9\u05E7\u05DC", product.weight)}
-          ${spec("\u05D9\u05D7\u05F3 \u05D1\u05DE\u05D0\u05E8\u05D6", String(product.unitsPerPack))}
           ${spec("\u05D1\u05E8\u05E7\u05D5\u05D3", product.barcode)}
           ${spec("\u05DE\u05D5\u05EA\u05D2", product.brand)}
           ${spec("\u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D4", product.categoryName)}
@@ -4982,6 +5168,11 @@
     </details>
     ${shipping}
   </div>`;
+  }
+  function makerLines(product) {
+    if (product.manufacturerId !== "tozeret") return "";
+    return `<p><a href="#/m/tozeret">\u05D9\u05E6\u05E8\u05DF: \u05EA\u05D5\u05E6\u05E8\u05EA</a></p>
+      <p><strong>\u05DB\u05E9\u05E8\u05D5\u05EA: \u05D1\u05D3\u05F4\u05E5 \u05D1\u05D9\u05EA \u05D9\u05D5\u05E1\u05E3</strong></p>`;
   }
   function spec(label, value) {
     return `<div><dt>${esc(label)}</dt><dd dir="auto">${esc(value)}</dd></div>`;
@@ -5007,13 +5198,12 @@
       ["about", "\u05E2\u05DC \u05D4\u05DE\u05D5\u05E6\u05E8", `<dl class="product-specs">
         ${spec("\u05DE\u05E7\u05D8", product.id)}
         ${spec("\u05DE\u05E9\u05E7\u05DC", product.weight)}
-        ${spec("\u05D9\u05D7\u05F3 \u05D1\u05DE\u05D0\u05E8\u05D6", String(product.unitsPerPack))}
         ${spec("\u05D1\u05E8\u05E7\u05D5\u05D3", product.barcode)}
         ${spec("\u05DE\u05D5\u05EA\u05D2", product.brand)}
         ${spec("\u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D4", product.categoryName)}
         ${spec("\u05E2\u05DE\u05D5\u05D3 \u05D1\u05E7\u05D8\u05DC\u05D5\u05D2", String(product.catalogPage))}
       </dl>
-      ${product.manufacturerId === "tozeret" ? `<p><a href="#/m/tozeret">\u05D9\u05E6\u05E8\u05DF: \u05EA\u05D5\u05E6\u05E8\u05EA</a></p>` : ""}`],
+      ${makerLines(product)}`],
       ["service", "\u05E9\u05D9\u05E8\u05D5\u05EA \u05D5\u05D0\u05D7\u05E8\u05D9\u05D5\u05EA", `<div class="product-tab-cols">
         <div>
           <h3>\u05E9\u05D9\u05E8\u05D5\u05EA \u05DC\u05E7\u05D5\u05D7\u05D5\u05EA</h3>
@@ -5122,9 +5312,6 @@
     }
     const commerce = getCommerce(product.id);
     const siblings = productsByCategory(product.categorySlug);
-    const index = siblings.findIndex((item) => item.id === product.id);
-    const previous = index > 0 ? siblings[index - 1] : null;
-    const following = index >= 0 && index < siblings.length - 1 ? siblings[index + 1] : null;
     const related = siblings.filter((item) => item.id !== product.id).slice(0, 8);
     const price = commerce ? `<p class="product-price">${money(commerce.price)}${commerce.compareAt ? `<s>${money(commerce.compareAt)}</s>` : ""}</p>` : `<p class="product-price is-pending">\u05DE\u05D7\u05D9\u05E8 \u05D9\u05E2\u05D5\u05D3\u05DB\u05DF</p>`;
     return `<article class="product-page wrap">
@@ -5136,7 +5323,7 @@
       <span aria-current="page">${esc(product.name)}</span>
     </nav>
     <div class="product-layout">
-      ${productGallery(product, commerce?.compareAt ? `<span class="sale-badge">\u05DE\u05D1\u05E6\u05E2</span>` : "")}
+      ${productGallery(product, commerce?.compareAt ? `<span class="sale-badge">\u05D1\u05DE\u05D1\u05E6\u05E2</span>` : "")}
       <div class="product-info">
         <div class="product-head">
           <p class="product-brand">${esc(product.brand)}</p>
@@ -5148,13 +5335,8 @@
       </div>
     </div>
     ${productTabs(product)}
-    ${previous || following ? `<nav class="product-neighbors" aria-label="\u05DE\u05D5\u05E6\u05E8\u05D9\u05DD \u05E1\u05DE\u05D5\u05DB\u05D9\u05DD">${neighbor(previous, "\u05D4\u05DE\u05D5\u05E6\u05E8 \u05D4\u05E7\u05D5\u05D3\u05DD")}${neighbor(following, "\u05D4\u05DE\u05D5\u05E6\u05E8 \u05D4\u05D1\u05D0")}</nav>` : ""}
     ${related.length ? `<section class="product-related" aria-labelledby="related-title"><h2 id="related-title">\u05D0\u05D5\u05DC\u05D9 \u05D9\u05E2\u05E0\u05D9\u05D9\u05DF \u05D0\u05D5\u05EA\u05DA</h2>${carousel(related, "\u05DE\u05D5\u05E6\u05E8\u05D9\u05DD \u05E7\u05E9\u05D5\u05E8\u05D9\u05DD")}</section>` : ""}
   </article>`;
-  }
-  function neighbor(product, label) {
-    if (!product) return `<span class="product-neighbor is-empty"></span>`;
-    return `<a class="product-neighbor" href="#/p/${esc(product.id)}"><span>${esc(label)}</span><strong>${esc(product.name)}</strong></a>`;
   }
 
   // js/state/cart.js
@@ -5233,8 +5415,8 @@
     <div class="mt-6 grid items-start gap-8 lg:grid-cols-[1fr_320px]">
       <ul class="grid gap-4">
         ${items.map((item) => `<li class="grid grid-cols-[88px_1fr] gap-4 rounded-2xl border border-line p-3">
-          <a href="#/p/${esc(item.product.id)}" class="card-media">
-            <span class="block h-full w-full" aria-hidden="true"></span>
+          <a href="#/p/${esc(item.product.id)}" class="card-media${productPhoto(item.product) ? " has-photo" : ""}" tabindex="-1" aria-hidden="true">
+            ${photoImg(item.product) || `<span class="block h-full w-full"></span>`}
           </a>
           <div>
             <h2 class="font-extrabold"><a href="#/p/${esc(item.product.id)}">${esc(item.product.name)}</a></h2>
@@ -5273,7 +5455,7 @@
   }
   function orderLines(items, { scroll = false } = {}) {
     return `<ul class="order-lines${scroll ? " is-scroll" : ""}">${items.map((item) => `<li class="order-line">
-      <span class="order-line-thumb" aria-hidden="true"></span>
+      <span class="order-line-thumb${productPhoto(item.product) ? " has-photo" : ""}" aria-hidden="true">${photoImg(item.product)}</span>
       <div class="min-w-0">
         <p class="order-line-name">${esc(item.name)}</p>
         <p class="order-line-meta">${item.weight ? `${esc(item.weight)} \xB7 ` : ""}${item.qty} \u05D9\u05D7\u05F3</p>
@@ -5285,8 +5467,8 @@
   // js/screens/checkout.js
   var lockIcon = `<svg class="pay-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg>`;
   var payPrograms = [
-    ["general", "\u05DB\u05DC\u05DC \u05D4\u05DC\u05E7\u05D5\u05D7\u05D5\u05EA"],
-    ["ashmoret", "\u05DE\u05D7\u05D6\u05D9\u05E7\u05D9 \u05DB\u05E8\u05D8\u05D9\u05E1 \u05D0\u05E9\u05E8\u05D0\u05D9 \u05D0\u05E9\u05DE\u05D5\u05E8\u05EA \u05D1\u05DC\u05D1\u05D3"]
+    ["ashmoret", "\u05DE\u05D7\u05D6\u05D9\u05E7\u05D9 \u05DB\u05E8\u05D8\u05D9\u05E1 \u05D0\u05E9\u05E8\u05D0\u05D9 \u05D0\u05E9\u05DE\u05D5\u05E8\u05EA \u05D1\u05DC\u05D1\u05D3"],
+    ["general", "\u05DB\u05DC\u05DC \u05D4\u05DC\u05E7\u05D5\u05D7\u05D5\u05EA"]
   ];
   function selectPayTab(tab, focus) {
     const tabs = [...tab.closest("[role=tablist]").querySelectorAll("[data-pay-tab]")];
@@ -5326,7 +5508,7 @@
     const program = payPrograms.some(([id]) => id === values.cardProgram) ? values.cardProgram : payPrograms[0][0];
     const lines = rows2.map((item) => {
       const product = getProduct(item.id);
-      return { name: product.name, weight: product.weight, qty: item.qty, total: getCommerce(item.id).price * item.qty };
+      return { product, name: product.name, weight: product.weight, qty: item.qty, total: getCommerce(item.id).price * item.qty };
     });
     const field2 = (name, label, type = "text", extra = "") => `<label class="field">
     <span class="text-sm font-semibold">${label}</span>
@@ -5462,6 +5644,7 @@
     }
     const when2 = new Date(order.createdAt).toLocaleString("he-IL", { dateStyle: "medium", timeStyle: "short" });
     const lines = order.items.map((item) => ({
+      product: getProduct(item.id),
       name: item.name,
       weight: getProduct(item.id)?.weight || "",
       qty: item.qty,
@@ -6469,34 +6652,40 @@
     {
       id: "offers",
       label: "\u05DE\u05D1\u05E6\u05E2\u05D9\u05DD",
-      groups: [
-        ["\u05DE\u05D6\u05D5\u05D5\u05D4 \u05D1\u05DE\u05D1\u05E6\u05E2", [
-          ["\u05E4\u05D9\u05E8\u05D5\u05E8\u05D9 \u05DC\u05D7\u05DD", "#/c/breadcrumbs"],
-          ["\u05D3\u05D2\u05E0\u05D9\u05DD \u05D5\u05E7\u05D8\u05E0\u05D9\u05D5\u05EA", "#/c/grains"],
-          ["\u05D0\u05D5\u05E8\u05D6", "#/c/rice"],
-          ["\u05E4\u05E1\u05D8\u05D5\u05EA \u05D5\u05E4\u05EA\u05D9\u05EA\u05D9\u05DD", "#/c/pasta"],
-          ["\u05E9\u05D9\u05DE\u05D5\u05E8\u05D9\u05DD", "#/c/cans"],
-          ["\u05E9\u05DE\u05E0\u05D9\u05DD \u05D5\u05E8\u05D8\u05D1\u05D9\u05DD", "#/c/oils"],
-          ["\u05EA\u05D1\u05DC\u05D9\u05E0\u05D9\u05DD", "#/c/spices"]
-        ]],
-        ["\u05E2\u05D5\u05D3 \u05D1\u05DE\u05D1\u05E6\u05E2", [
-          ["\u05D8\u05D5\u05E8\u05D8\u05D9\u05D5\u05EA", "#/c/tortillas"],
-          ["\u05E9\u05DE\u05E0\u05D9\u05DD", "#/c/oils"],
-          ["\u05DC\u05DB\u05DC \u05D4\u05DE\u05D1\u05E6\u05E2\u05D9\u05DD", "#/d/offers"]
-        ]]
-      ],
-      promo: {
-        href: "#/d/offers",
-        title: "\u05DC\u05DB\u05DC \u05D4\u05DE\u05D1\u05E6\u05E2\u05D9\u05DD"
-      }
+      banners: true
     }
   ];
+  var groupImages = {
+    "\u05DE\u05D6\u05D5\u05D5\u05D4 \u05D9\u05D1\u05E9": "pantry.png",
+    "\u05E9\u05D9\u05DE\u05D5\u05E8\u05D9\u05DD \u05D5\u05E9\u05DE\u05E0\u05D9\u05DD": "cans-oils.png",
+    "\u05EA\u05D1\u05DC\u05D9\u05E0\u05D9\u05DD": "spices.png",
+    "\u05D7\u05D3 \u05E4\u05E2\u05DE\u05D9": "disposables.png",
+    "\u05E0\u05D9\u05E7\u05D9\u05D5\u05DF": "cleaning.png",
+    "\u05DB\u05DC\u05D9 \u05D1\u05D9\u05EA": "household.png",
+    "\u05DE\u05DB\u05E9\u05D9\u05E8\u05D9 \u05D7\u05E9\u05DE\u05DC": "appliances.png",
+    "\u05EA\u05D0\u05D5\u05E8\u05D4": "lighting.png",
+    "\u05D0\u05DC\u05E7\u05D8\u05E8\u05D5\u05E0\u05D9\u05E7\u05D4": "electronics.png"
+  };
+  function featuredGroups() {
+    return ["super", "home", "electronics"].flatMap((id) => menuById(id).groups.map(([name, links]) => ({
+      name,
+      href: links[0][1],
+      image: groupImages[name] ? `assets/images/categories/${groupImages[name]}` : null,
+      icon: groupImages[name] ? `assets/images/categories/icons/${groupImages[name].replace(".png", ".webp")}?v=2` : null
+    })));
+  }
   function menuById(id) {
     return menus.find((item) => item.id === id);
   }
   function megaPanel(id) {
     const item = menuById(id);
     if (!item) return "";
+    if (item.banners) {
+      const banners = getTheme().banners === "v2" ? sideBanners : offerBanners;
+      return `<div class="mega-layout mega-banners" style="--banner-count:${banners.length}">${banners.map((banner) => `<a class="mega-banner" href="${esc(banner.href)}" aria-label="${esc(banner.label)}">
+      <img src="${esc(banner.image)}" alt="" width="${banner.size[0]}" height="${banner.size[1]}" loading="lazy" decoding="async">
+    </a>`).join("")}</div>`;
+    }
     const groups2 = item.groups.map(([title, links]) => `<section class="mega-block">
       <h3><a href="${esc(links[0][1])}">${esc(title)}</a></h3>
       <ul>${links.map(([label, href]) => `<li><a href="${esc(href)}">${esc(label)}</a></li>`).join("")}</ul>
@@ -6530,7 +6719,7 @@
     single.innerHTML = solo ? supplierCategories().map(categoryLink).join("") : "";
     mobile.innerHTML = solo ? supplierCategories().map((category) => `<div class="mega-mobile-head">${categoryLink(category)}</div>`).join("") : menus.map((item) => `<div>
       <div class="mega-mobile-head">
-        <a class="mega-trigger" href="#/d/${esc(item.id)}"><span class="cat-heart" aria-hidden="true"></span>${esc(item.label)}</a>
+        <a class="mega-trigger" href="#/d/${esc(item.id)}"><span class="nav-icon is-${esc(item.id)}" aria-hidden="true"></span>${esc(item.label)}</a>
         <button type="button" class="mega-trigger" data-mega-mobile="${esc(item.id)}" aria-expanded="false" aria-label="\u05E4\u05EA\u05D9\u05D7\u05EA ${esc(item.label)}">${chevron}</button>
       </div>
       <div class="mega-mobile" hidden data-mega-mobile-panel="${esc(item.id)}"></div>
@@ -6748,10 +6937,13 @@
     const list = document.getElementById("category-nav");
     const viewport = document.getElementById("category-viewport");
     const copies = 4;
-    list.innerHTML = Array.from({ length: copies }, (_, copy) => supplierCategories().map((category) => {
-      const current = copy === 0 && category.slug === activeSlug ? ' aria-current="page"' : "";
+    const items = isSingleSupplier() ? supplierCategories().map((category) => ({ name: category.name, href: `#/c/${category.slug}` })) : featuredGroups();
+    list.innerHTML = Array.from({ length: copies }, (_, copy) => items.map((item) => {
+      const current = copy === 0 && activeSlug && item.href === `#/c/${activeSlug}` ? ' aria-current="page"' : "";
       const clone = copy === 0 ? "" : ' tabindex="-1" aria-hidden="true"';
-      return `<li class="cat-slide"><a class="cat-link" href="#/c/${esc(category.slug)}"${current}${clone}><span class="thumb"></span><span>${esc(category.name)}</span></a></li>`;
+      const icon3 = getTheme().featured === "v2" && item.icon;
+      const thumb = icon3 ? `<span class="thumb has-photo is-icon"><img src="${esc(item.icon)}" alt="" decoding="async"></span>` : item.image ? `<span class="thumb has-photo"><img src="${esc(item.image)}" alt="" decoding="async"></span>` : `<span class="thumb"></span>`;
+      return `<li class="cat-slide"><a class="cat-link" href="${esc(item.href)}"${current}${clone}>${thumb}<span>${esc(item.name)}</span></a></li>`;
     }).join("")).join("");
     if (categoryCarousel) {
       categoryCarousel.destroy();
@@ -6824,7 +7016,7 @@
     const total = goods + (count ? deliveryFee : 0);
     const countLabel = count === 0 ? "\u05D4\u05E1\u05DC \u05E8\u05D9\u05E7" : count === 1 ? "\u05E4\u05E8\u05D9\u05D8 \u05D0\u05D7\u05D3" : `${count} \u05E4\u05E8\u05D9\u05D8\u05D9\u05DD`;
     const list = items.length ? `<ul class="cart-dock-list">${items.map((item) => `<li class="cart-dock-item">
-        <a class="cart-dock-thumb" href="#/p/${esc(item.product.id)}" tabindex="-1" aria-hidden="true"></a>
+        <a class="cart-dock-thumb${productPhoto(item.product) ? " has-photo" : ""}" href="#/p/${esc(item.product.id)}" tabindex="-1" aria-hidden="true">${photoImg(item.product)}</a>
         <div class="min-w-0">
           <a class="cart-dock-name" href="#/p/${esc(item.product.id)}">${esc(item.product.name)}</a>
           <p class="text-xs text-muted">${esc(item.product.weight)}</p>
@@ -7200,10 +7392,10 @@
   // js/components/hero-slider.js
   var AUTOPLAY_MS2 = 5e3;
   var slides = [
-    { kicker: "\u05E1\u05D5\u05E4\u05E8 \u05D0\u05E9\u05DE\u05D5\u05E8\u05EA", title: "\u05D1\u05D0\u05E0\u05E8 \u05DE\u05EA\u05D7\u05DC\u05E3 \u05DC\u05E7\u05DE\u05E4\u05D9\u05D9\u05DF", text: "\u05DE\u05E7\u05D5\u05DD \u05DC\u05EA\u05DE\u05D5\u05E0\u05D4 \u05E8\u05D7\u05D1\u05D4 \u05E9\u05DC \u05DE\u05D1\u05E6\u05E2 \u05D0\u05D5 \u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D4.", href: "#/d/super", tone: "#e6e6e6" },
-    { kicker: "\u05D7\u05D3 \u05E4\u05E2\u05DE\u05D9 \u05D5\u05DB\u05DC\u05D9 \u05D1\u05D9\u05EA", title: "\u05D1\u05D0\u05E0\u05E8 \u05DE\u05EA\u05D7\u05DC\u05E3 \u05DC\u05DE\u05D5\u05E6\u05E8 \u05DE\u05E7\u05D5\u05D3\u05DD", text: "\u05DE\u05E7\u05D5\u05DD \u05DC\u05EA\u05DE\u05D5\u05E0\u05D4 \u05E8\u05D7\u05D1\u05D4 \u05E9\u05DC \u05DE\u05D5\u05E6\u05E8 \u05D0\u05D5 \u05DE\u05D5\u05EA\u05D2.", href: "#/d/home", tone: "#dcdcdc" },
-    { kicker: "\u05E7\u05E0\u05D9\u05D5\u05DF \u05D0\u05E9\u05DE\u05D5\u05E8\u05EA", title: "\u05D1\u05D0\u05E0\u05E8 \u05DE\u05EA\u05D7\u05DC\u05E3 \u05DC\u05DE\u05D7\u05DC\u05E7\u05D4", text: "\u05DE\u05E7\u05D5\u05DD \u05DC\u05EA\u05DE\u05D5\u05E0\u05D4 \u05E8\u05D7\u05D1\u05D4 \u05E9\u05DC \u05DE\u05D7\u05DC\u05E7\u05D4 \u05D0\u05D5 \u05D0\u05D9\u05E8\u05D5\u05E2.", href: "#/d/electronics", tone: "#ececec" },
-    { kicker: "\u05DE\u05D1\u05E6\u05E2\u05D9\u05DD", title: "\u05D1\u05D0\u05E0\u05E8 \u05DE\u05EA\u05D7\u05DC\u05E3 \u05DC\u05DE\u05D1\u05E6\u05E2", text: "\u05DE\u05E7\u05D5\u05DD \u05DC\u05EA\u05DE\u05D5\u05E0\u05D4 \u05E8\u05D7\u05D1\u05D4 \u05E9\u05DC \u05DE\u05D1\u05E6\u05E2 \u05E2\u05D5\u05E0\u05EA\u05D9.", href: "#/d/offers", tone: "#e1e1e1" }
+    { kicker: "\u05E1\u05D5\u05E4\u05E8 \u05D0\u05E9\u05DE\u05D5\u05E8\u05EA", title: "\u05D1\u05D0\u05E0\u05E8 \u05DE\u05EA\u05D7\u05DC\u05E3 \u05DC\u05E7\u05DE\u05E4\u05D9\u05D9\u05DF", text: "\u05DE\u05E7\u05D5\u05DD \u05DC\u05EA\u05DE\u05D5\u05E0\u05D4 \u05E8\u05D7\u05D1\u05D4 \u05E9\u05DC \u05DE\u05D1\u05E6\u05E2 \u05D0\u05D5 \u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D4.", href: "#/d/super", tone: "var(--color-surface)" },
+    { kicker: "\u05D7\u05D3 \u05E4\u05E2\u05DE\u05D9 \u05D5\u05DB\u05DC\u05D9 \u05D1\u05D9\u05EA", title: "\u05D1\u05D0\u05E0\u05E8 \u05DE\u05EA\u05D7\u05DC\u05E3 \u05DC\u05DE\u05D5\u05E6\u05E8 \u05DE\u05E7\u05D5\u05D3\u05DD", text: "\u05DE\u05E7\u05D5\u05DD \u05DC\u05EA\u05DE\u05D5\u05E0\u05D4 \u05E8\u05D7\u05D1\u05D4 \u05E9\u05DC \u05DE\u05D5\u05E6\u05E8 \u05D0\u05D5 \u05DE\u05D5\u05EA\u05D2.", href: "#/d/home", tone: "var(--color-line)" },
+    { kicker: "\u05E7\u05E0\u05D9\u05D5\u05DF \u05D0\u05E9\u05DE\u05D5\u05E8\u05EA", title: "\u05D1\u05D0\u05E0\u05E8 \u05DE\u05EA\u05D7\u05DC\u05E3 \u05DC\u05DE\u05D7\u05DC\u05E7\u05D4", text: "\u05DE\u05E7\u05D5\u05DD \u05DC\u05EA\u05DE\u05D5\u05E0\u05D4 \u05E8\u05D7\u05D1\u05D4 \u05E9\u05DC \u05DE\u05D7\u05DC\u05E7\u05D4 \u05D0\u05D5 \u05D0\u05D9\u05E8\u05D5\u05E2.", href: "#/d/electronics", tone: "var(--color-fill)" },
+    { kicker: "\u05DE\u05D1\u05E6\u05E2\u05D9\u05DD", title: "\u05D1\u05D0\u05E0\u05E8 \u05DE\u05EA\u05D7\u05DC\u05E3 \u05DC\u05DE\u05D1\u05E6\u05E2", text: "\u05DE\u05E7\u05D5\u05DD \u05DC\u05EA\u05DE\u05D5\u05E0\u05D4 \u05E8\u05D7\u05D1\u05D4 \u05E9\u05DC \u05DE\u05D1\u05E6\u05E2 \u05E2\u05D5\u05E0\u05EA\u05D9.", href: "#/d/offers", tone: "var(--color-surface)" }
   ];
   var embla = null;
   var timer2 = 0;
@@ -7420,16 +7612,15 @@
       <button type="button" class="auth-close" data-pop-close aria-label="\u05E1\u05D2\u05D9\u05E8\u05D4">\xD7</button>
     </div>
     <div class="product-pop-layout">
-      ${productGallery(product, commerce?.compareAt ? `<span class="sale-badge">\u05DE\u05D1\u05E6\u05E2</span>` : "")}
+      ${productGallery(product, commerce?.compareAt ? `<span class="sale-badge">\u05D1\u05DE\u05D1\u05E6\u05E2</span>` : "")}
       <div class="product-info">
         <div class="product-head">
           <h2 id="product-pop-title">${esc(product.name)}</h2>
-          <p class="product-pop-barcode">\u05D1\u05E8\u05E7\u05D5\u05D3 <span dir="ltr">7350013220547</span></p>
+          <p class="product-pop-barcode">\u05D1\u05E8\u05E7\u05D5\u05D3 <span dir="ltr">${esc(product.barcode)}</span></p>
           ${price}
         </div>
         <div class="product-fields">
           ${field("\u05DE\u05E9\u05E7\u05DC", product.weight)}
-          ${field("\u05D9\u05D7\u05F3 \u05D1\u05DE\u05D0\u05E8\u05D6", String(product.unitsPerPack))}
         </div>
         ${productBuy(product)}
         ${productFolds(product, { openDescription: false, shipping: false })}
@@ -7511,7 +7702,7 @@
     document.title = titleFor(route);
     setCategoryBand(route.name === "home");
     setHeroSlider(route.name === "home" && getTheme().hero === "v2");
-    setHeroTop(route.name === "home" && getTheme().hero === "v3");
+    setHeroTop(route.name === "home" && heroOnTop());
     if (route.name === "home") renderCategoryNav("");
     closePanels();
     mountCarousels(app);
@@ -7521,7 +7712,7 @@
     mountProductTabs(app);
     updateAccountSlot();
     updateCartDock(route.name);
-    playHero(getTheme().hero === "v3" ? document.getElementById("hero-top") : app);
+    playHero(heroOnTop() ? document.getElementById("hero-top") : app);
     if (scrollTop) window.scrollTo({ top: 0, left: 0, behavior: "instant" });
     const input = document.getElementById("search-input");
     if (route.name === "search" && document.activeElement !== input) input.value = route.query.q || "";
@@ -7529,6 +7720,9 @@
     const heading = app.querySelector("h1");
     if (heading) heading.setAttribute("tabindex", "-1");
     (heading || app).focus({ preventScroll: true });
+  }
+  function heroOnTop() {
+    return ["v3", "v4"].includes(getTheme().hero);
   }
   function view(route) {
     if (route.name === "home") return renderHome();

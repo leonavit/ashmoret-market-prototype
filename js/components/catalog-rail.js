@@ -91,7 +91,8 @@ function bindTabKeys(tablist, tabs, activate) {
   });
 }
 
-export function catalogGridSection({ id, title, href, tabs, className = "pb-12", layout = "grid", showTabs = true }) {
+export function catalogGridSection({ id, title, href, tabs, className = "pb-12", layout = "grid", showTabs = true, icon = "" }) {
+  const mark = icon ? `<span class="nav-icon is-${esc(icon)}" aria-hidden="true"></span>` : `<span class="cat-heart" aria-hidden="true"></span>`;
   const first = tabs[0]?.[0];
   const panel = first ? panelHtml(layout, first, title) : `<p class="catalog-empty">אין מוצרים להצגה בקטגוריה הזו.</p>`;
   const tabList = showTabs && tabs.length
@@ -99,7 +100,7 @@ export function catalogGridSection({ id, title, href, tabs, className = "pb-12",
     : "";
   return `<section class="${esc(className)}" data-catalog-grid data-catalog-layout="${esc(layout)}" data-catalog-label="${esc(title)}" aria-labelledby="${esc(id)}">
     <div class="catalog-head">
-      <h2 id="${esc(id)}"><a href="${esc(href)}"><span class="cat-heart" aria-hidden="true"></span>${esc(title)}</a></h2>
+      <h2 id="${esc(id)}"><a href="${esc(href)}">${mark}${esc(title)}</a></h2>
       ${tabList}
     </div>
     <div data-catalog-grid-panel ${showTabs ? panelAttrs(id, tabs) : ""}>${panel}</div>

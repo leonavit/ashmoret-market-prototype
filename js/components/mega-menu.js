@@ -1,4 +1,6 @@
 import { esc } from "../lib/format.js";
+import { offerBanners, sideBanners } from "../data/banners.js";
+import { getTheme } from "./theme-options.js";
 import { isSingleSupplier, supplierCategories } from "./suppliers.js";
 
 const mark = "assets/images/brand/heart.png";
@@ -90,28 +92,31 @@ const menus = [
   {
     id: "offers",
     label: "מבצעים",
-    groups: [
-      ["מזווה במבצע", [
-        ["פירורי לחם", "#/c/breadcrumbs"],
-        ["דגנים וקטניות", "#/c/grains"],
-        ["אורז", "#/c/rice"],
-        ["פסטות ופתיתים", "#/c/pasta"],
-        ["שימורים", "#/c/cans"],
-        ["שמנים ורטבים", "#/c/oils"],
-        ["תבלינים", "#/c/spices"],
-      ]],
-      ["עוד במבצע", [
-        ["טורטיות", "#/c/tortillas"],
-        ["שמנים", "#/c/oils"],
-        ["לכל המבצעים", "#/d/offers"],
-      ]],
-    ],
-    promo: {
-      href: "#/d/offers",
-      title: "לכל המבצעים",
-    },
+    banners: true,
   },
 ];
+
+const groupImages = {
+  "מזווה יבש": "pantry.png",
+  "שימורים ושמנים": "cans-oils.png",
+  "תבלינים": "spices.png",
+  "חד פעמי": "disposables.png",
+  "ניקיון": "cleaning.png",
+  "כלי בית": "household.png",
+  "מכשירי חשמל": "appliances.png",
+  "תאורה": "lighting.png",
+  "אלקטרוניקה": "electronics.png",
+};
+
+export function featuredGroups() {
+  return ["super", "home", "electronics"]
+    .flatMap((id) => menuById(id).groups.map(([name, links]) => ({
+      name,
+      href: links[0][1],
+      image: groupImages[name] ? `assets/images/categories/${groupImages[name]}` : null,
+      icon: groupImages[name] ? `assets/images/categories/icons/${groupImages[name].replace(".png", ".webp")}?v=2` : null,
+    })));
+}
 
 function menuById(id) {
   return menus.find((item) => item.id === id);
@@ -120,6 +125,12 @@ function menuById(id) {
 export function megaPanel(id) {
   const item = menuById(id);
   if (!item) return "";
+  if (item.banners) {
+    const banners = getTheme().banners === "v2" ? sideBanners : offerBanners;
+    return `<div class="mega-layout mega-banners" style="--banner-count:${banners.length}">${banners.map((banner) => `<a class="mega-banner" href="${esc(banner.href)}" aria-label="${esc(banner.label)}">
+      <img src="${esc(banner.image)}" alt="" width="${banner.size[0]}" height="${banner.size[1]}" loading="lazy" decoding="async">
+    </a>`).join("")}</div>`;
+  }
   const groups = item.groups.map(([title, links]) => `<section class="mega-block">
       <h3><a href="${esc(links[0][1])}">${esc(title)}</a></h3>
       <ul>${links.map(([label, href]) => `<li><a href="${esc(href)}">${esc(label)}</a></li>`).join("")}</ul>
@@ -157,7 +168,7 @@ export function renderSupplierNav() {
     ? supplierCategories().map((category) => `<div class="mega-mobile-head">${categoryLink(category)}</div>`).join("")
     : menus.map((item) => `<div>
       <div class="mega-mobile-head">
-        <a class="mega-trigger" href="#/d/${esc(item.id)}"><span class="cat-heart" aria-hidden="true"></span>${esc(item.label)}</a>
+        <a class="mega-trigger" href="#/d/${esc(item.id)}"><span class="nav-icon is-${esc(item.id)}" aria-hidden="true"></span>${esc(item.label)}</a>
         <button type="button" class="mega-trigger" data-mega-mobile="${esc(item.id)}" aria-expanded="false" aria-label="פתיחת ${esc(item.label)}">${chevron}</button>
       </div>
       <div class="mega-mobile" hidden data-mega-mobile-panel="${esc(item.id)}"></div>

@@ -86,7 +86,7 @@ function render({ focus = true, scrollTop = false } = {}) {
   document.title = titleFor(route);
   setCategoryBand(route.name === "home");
   setHeroSlider(route.name === "home" && getTheme().hero === "v2");
-  setHeroTop(route.name === "home" && getTheme().hero === "v3");
+  setHeroTop(route.name === "home" && heroOnTop());
   if (route.name === "home") renderCategoryNav("");
   closePanels();
   mountCarousels(app);
@@ -96,7 +96,7 @@ function render({ focus = true, scrollTop = false } = {}) {
   mountProductTabs(app);
   updateAccountSlot();
   updateCartDock(route.name);
-  playHero(getTheme().hero === "v3" ? document.getElementById("hero-top") : app);
+  playHero(heroOnTop() ? document.getElementById("hero-top") : app);
   if (scrollTop) window.scrollTo({ top: 0, left: 0, behavior: "instant" });
   const input = document.getElementById("search-input");
   if (route.name === "search" && document.activeElement !== input) input.value = route.query.q || "";
@@ -104,6 +104,10 @@ function render({ focus = true, scrollTop = false } = {}) {
   const heading = app.querySelector("h1");
   if (heading) heading.setAttribute("tabindex", "-1");
   (heading || app).focus({ preventScroll: true });
+}
+
+function heroOnTop() {
+  return ["v3", "v4"].includes(getTheme().hero);
 }
 
 function view(route) {

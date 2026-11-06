@@ -25,9 +25,10 @@ export function mountCarousels(root) {
     if (node.dataset.ready === "true") return;
     const viewport = node.querySelector(".embla__viewport");
     const carousel = Embla(viewport, {
+      loop: true,
       direction: "rtl",
       align: "start",
-      containScroll: "trimSnaps",
+      containScroll: false,
       dragFree: false,
     });
     node.dataset.ready = "true";

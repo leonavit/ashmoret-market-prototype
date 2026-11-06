@@ -1,6 +1,11 @@
 import { isElectronicsProduct } from "../data/departments.js";
 import { getCommerce } from "../data/commerce.js";
 import { esc, money } from "../lib/format.js";
+import { photoImg, productPhoto } from "./product-photo.js";
+
+function mediaClass(base, product) {
+  return productPhoto(product) ? `${base} has-photo` : base;
+}
 
 function productAnchor(product, attrs, inner) {
   const pop = isElectronicsProduct(product) ? "" : ` data-product-pop="${esc(product.id)}"`;
@@ -9,7 +14,7 @@ function productAnchor(product, attrs, inner) {
 
 function cardParts(product) {
   const commerce = getCommerce(product.id);
-  const badge = commerce?.compareAt ? `<span class="sale-badge">מבצע</span>` : "";
+  const badge = commerce?.compareAt ? `<span class="sale-badge">במבצע</span>` : "";
   const price = commerce
     ? `<p class="price">${money(commerce.price)}${commerce.compareAt ? `<s>${money(commerce.compareAt)}</s>` : ""}</p>`
     : `<p class="text-sm font-semibold text-muted">מחיר יעודכן</p>`;
@@ -35,10 +40,10 @@ export function productCard(product) {
 export function shelfCard(product) {
   const { badge, price } = cardParts(product);
   return `<article class="card card-shelf">
-    ${productAnchor(product, `class="card-media"`, badge)}
+    ${productAnchor(product, `class="${mediaClass("card-media", product)}"`, `${photoImg(product)}${badge}`)}
     <p class="card-brand">${esc(product.brand)}</p>
     <h3 class="card-name" title="${esc(product.name)}">${productAnchor(product, ``, esc(product.name))}</h3>
-    <p class="card-meta">${esc(product.weight)} · ${esc(product.unitsPerPack)} יח׳ במארז</p>
+    <p class="card-meta">${esc(product.weight)}</p>
     <div class="card-buy">
       ${price}
       ${buyRow(product.id)}
@@ -52,7 +57,7 @@ export function dealCard(product) {
     ? `<p class="price">${money(commerce.price)}${commerce.compareAt ? `<s>${money(commerce.compareAt)}</s>` : ""}</p>`
     : `<p class="text-sm font-semibold text-muted">מחיר יעודכן</p>`;
   return `<article class="deal-card">
-    ${productAnchor(product, `class="deal-media" aria-hidden="true" tabindex="-1"`, "")}
+    ${productAnchor(product, `class="${mediaClass("deal-media", product)}" aria-hidden="true" tabindex="-1"`, photoImg(product))}
     <div class="deal-body">
       <h3 class="leading-5">${productAnchor(product, ``, esc(product.name))}</h3>
       <div class="card-buy">

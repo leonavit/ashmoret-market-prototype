@@ -1,16 +1,25 @@
 import { deliveryFee } from "../data/commerce.js";
 import { esc, money } from "../lib/format.js";
+import { photoImg, productPhoto } from "./product-photo.js";
 
 const prevIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg>`;
 const nextIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg>`;
 
-const tones = ["#f3f3f3", "#e7e7e7", "#f7f7f7", "#dedede", "#ececec"];
+const tones = ["var(--color-fill)", "var(--color-surface)", "var(--color-paper)", "var(--color-line)", "var(--color-fill)"];
 
 function face(index) {
   return `<span class="product-thumb-face is-placeholder" style="background-color:${tones[index]}"></span>`;
 }
 
 export function productGallery(product, badge = "") {
+  if (productPhoto(product)) {
+    return `<div class="product-gallery">
+      <div class="product-stage">
+        <div class="product-frame"><span class="product-thumb-face has-photo">${photoImg(product, { alt: product.name, eager: true })}</span></div>
+        ${badge}
+      </div>
+    </div>`;
+  }
   const thumbs = tones.map((_, index) => `<button type="button" class="product-thumb${index === 0 ? " is-selected" : ""}" data-gallery-index="${index}" aria-label="תמונה ${index + 1} מתוך ${tones.length}"${index === 0 ? ` aria-current="true"` : ""}>${face(index)}</button>`).join("");
   return `<div class="product-gallery" data-product-gallery data-active="0">
     <div class="product-stage">
@@ -38,8 +47,8 @@ export function productFolds(product, options = {}) {
     <details class="product-fold"${descriptionOpen}>
       <summary>תיאור</summary>
       <div class="product-fold-body">
-        <p>${esc(product.name)} מבית ${esc(product.brand)}, בקטגוריית ${esc(product.categoryName)}. אריזה של ${esc(product.weight)}, ${esc(String(product.unitsPerPack))} יחידות במארז.</p>
-        ${product.manufacturerId === "tozeret" ? `<p><a href="#/m/tozeret">יצרן: תוצרת</a></p>` : ""}
+        <p>${esc(product.name)} מבית ${esc(product.brand)}, בקטגוריית ${esc(product.categoryName)}. אריזה של ${esc(product.weight)}.</p>
+        ${makerLines(product)}
       </div>
     </details>
     <details class="product-fold">
@@ -48,7 +57,6 @@ export function productFolds(product, options = {}) {
         <dl class="product-specs">
           ${spec("מקט", product.id)}
           ${spec("משקל", product.weight)}
-          ${spec("יח׳ במארז", String(product.unitsPerPack))}
           ${spec("ברקוד", product.barcode)}
           ${spec("מותג", product.brand)}
           ${spec("קטגוריה", product.categoryName)}
@@ -58,6 +66,12 @@ export function productFolds(product, options = {}) {
     </details>
     ${shipping}
   </div>`;
+}
+
+function makerLines(product) {
+  if (product.manufacturerId !== "tozeret") return "";
+  return `<p><a href="#/m/tozeret">יצרן: תוצרת</a></p>
+      <p><strong>כשרות: בד״ץ בית יוסף</strong></p>`;
 }
 
 function spec(label, value) {
@@ -87,13 +101,12 @@ export function productTabs(product) {
     ["about", "על המוצר", `<dl class="product-specs">
         ${spec("מקט", product.id)}
         ${spec("משקל", product.weight)}
-        ${spec("יח׳ במארז", String(product.unitsPerPack))}
         ${spec("ברקוד", product.barcode)}
         ${spec("מותג", product.brand)}
         ${spec("קטגוריה", product.categoryName)}
         ${spec("עמוד בקטלוג", String(product.catalogPage))}
       </dl>
-      ${product.manufacturerId === "tozeret" ? `<p><a href="#/m/tozeret">יצרן: תוצרת</a></p>` : ""}`],
+      ${makerLines(product)}`],
     ["service", "שירות ואחריות", `<div class="product-tab-cols">
         <div>
           <h3>שירות לקוחות</h3>

@@ -3,10 +3,10 @@ import { prefersReducedMotion } from "../lib/format.js";
 const AUTOPLAY_MS = 5000;
 
 const slides = [
-  { kicker: "סופר אשמורת", title: "באנר מתחלף לקמפיין", text: "מקום לתמונה רחבה של מבצע או קטגוריה.", href: "#/d/super", tone: "#e6e6e6" },
-  { kicker: "חד פעמי וכלי בית", title: "באנר מתחלף למוצר מקודם", text: "מקום לתמונה רחבה של מוצר או מותג.", href: "#/d/home", tone: "#dcdcdc" },
-  { kicker: "קניון אשמורת", title: "באנר מתחלף למחלקה", text: "מקום לתמונה רחבה של מחלקה או אירוע.", href: "#/d/electronics", tone: "#ececec" },
-  { kicker: "מבצעים", title: "באנר מתחלף למבצע", text: "מקום לתמונה רחבה של מבצע עונתי.", href: "#/d/offers", tone: "#e1e1e1" },
+  { kicker: "סופר אשמורת", title: "באנר מתחלף לקמפיין", text: "מקום לתמונה רחבה של מבצע או קטגוריה.", href: "#/d/super", tone: "var(--color-surface)" },
+  { kicker: "חד פעמי וכלי בית", title: "באנר מתחלף למוצר מקודם", text: "מקום לתמונה רחבה של מוצר או מותג.", href: "#/d/home", tone: "var(--color-line)" },
+  { kicker: "קניון אשמורת", title: "באנר מתחלף למחלקה", text: "מקום לתמונה רחבה של מחלקה או אירוע.", href: "#/d/electronics", tone: "var(--color-fill)" },
+  { kicker: "מבצעים", title: "באנר מתחלף למבצע", text: "מקום לתמונה רחבה של מבצע עונתי.", href: "#/d/offers", tone: "var(--color-surface)" },
 ];
 
 let embla = null;

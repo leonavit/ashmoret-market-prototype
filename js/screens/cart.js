@@ -2,6 +2,7 @@ import { getProduct } from "../data/catalog.js";
 import { getCommerce, deliveryFee } from "../data/commerce.js";
 import { getCart, lineTotal, subtotal } from "../state/cart.js";
 import { esc, money } from "../lib/format.js";
+import { photoImg, productPhoto } from "../components/product-photo.js";
 
 export function renderCart() {
   const items = getCart().items
@@ -24,8 +25,8 @@ export function renderCart() {
     <div class="mt-6 grid items-start gap-8 lg:grid-cols-[1fr_320px]">
       <ul class="grid gap-4">
         ${items.map((item) => `<li class="grid grid-cols-[88px_1fr] gap-4 rounded-2xl border border-line p-3">
-          <a href="#/p/${esc(item.product.id)}" class="card-media">
-            <span class="block h-full w-full" aria-hidden="true"></span>
+          <a href="#/p/${esc(item.product.id)}" class="card-media${productPhoto(item.product) ? " has-photo" : ""}" tabindex="-1" aria-hidden="true">
+            ${photoImg(item.product) || `<span class="block h-full w-full"></span>`}
           </a>
           <div>
             <h2 class="font-extrabold"><a href="#/p/${esc(item.product.id)}">${esc(item.product.name)}</a></h2>

@@ -30,16 +30,15 @@ function markup(product) {
       <button type="button" class="auth-close" data-pop-close aria-label="סגירה">×</button>
     </div>
     <div class="product-pop-layout">
-      ${productGallery(product, commerce?.compareAt ? `<span class="sale-badge">מבצע</span>` : "")}
+      ${productGallery(product, commerce?.compareAt ? `<span class="sale-badge">במבצע</span>` : "")}
       <div class="product-info">
         <div class="product-head">
           <h2 id="product-pop-title">${esc(product.name)}</h2>
-          <p class="product-pop-barcode">ברקוד <span dir="ltr">7350013220547</span></p>
+          <p class="product-pop-barcode">ברקוד <span dir="ltr">${esc(product.barcode)}</span></p>
           ${price}
         </div>
         <div class="product-fields">
           ${field("משקל", product.weight)}
-          ${field("יח׳ במארז", String(product.unitsPerPack))}
         </div>
         ${productBuy(product)}
         ${productFolds(product, { openDescription: false, shipping: false })}

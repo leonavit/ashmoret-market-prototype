@@ -53,7 +53,7 @@ export function renderManufacturer(id, query) {
   const view = visibleSlice(items, query);
   const mark = `<span class="grid size-20 place-items-center rounded-full border border-line bg-white" aria-hidden="true"></span>`;
   return `<article>
-    <section class="relative min-h-72 overflow-hidden border-b border-line bg-[#ececec] text-ink">
+    <section class="relative min-h-72 overflow-hidden border-b border-line bg-surface text-ink">
       <div class="wrap relative flex min-h-72 items-end gap-4 py-8">
         ${mark}
         <div>
@@ -111,7 +111,7 @@ export function renderDepartment(id, query) {
     : "";
   return `<article class="wrap py-8">
     ${crumbs([{ href: "#/", label: "דף הבית" }, { label: department.name }])}
-    <h1 class="text-3xl font-extrabold">${esc(department.name)}</h1>
+    <h1 class="flex items-center gap-3 text-3xl font-extrabold"><span class="nav-icon is-${esc(department.id)} h-8" aria-hidden="true"></span>${esc(department.name)}</h1>
     <p class="mt-2 text-muted">${items.length} מוצרים במחלקה</p>
     ${chips}
     <div class="mt-6">

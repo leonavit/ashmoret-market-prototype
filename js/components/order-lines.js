@@ -1,4 +1,5 @@
 import { esc, money } from "../lib/format.js";
+import { photoImg, productPhoto } from "./product-photo.js";
 
 export function itemCountLabel(items) {
   const count = items.reduce((sum, item) => sum + item.qty, 0);
@@ -7,7 +8,7 @@ export function itemCountLabel(items) {
 
 export function orderLines(items, { scroll = false } = {}) {
   return `<ul class="order-lines${scroll ? " is-scroll" : ""}">${items.map((item) => `<li class="order-line">
-      <span class="order-line-thumb" aria-hidden="true"></span>
+      <span class="order-line-thumb${productPhoto(item.product) ? " has-photo" : ""}" aria-hidden="true">${photoImg(item.product)}</span>
       <div class="min-w-0">
         <p class="order-line-name">${esc(item.name)}</p>
         <p class="order-line-meta">${item.weight ? `${esc(item.weight)} · ` : ""}${item.qty} יח׳</p>

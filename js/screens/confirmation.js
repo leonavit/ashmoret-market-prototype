@@ -14,6 +14,7 @@ export function renderConfirmation(id) {
   }
   const when = new Date(order.createdAt).toLocaleString("he-IL", { dateStyle: "medium", timeStyle: "short" });
   const lines = order.items.map((item) => ({
+    product: getProduct(item.id),
     name: item.name,
     weight: getProduct(item.id)?.weight || "",
     qty: item.qty,

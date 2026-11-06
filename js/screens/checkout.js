@@ -7,8 +7,8 @@ import { itemCountLabel, orderLines } from "../components/order-lines.js";
 const lockIcon = `<svg class="pay-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg>`;
 
 const payPrograms = [
-  ["general", "כלל הלקוחות"],
   ["ashmoret", "מחזיקי כרטיס אשראי אשמורת בלבד"],
+  ["general", "כלל הלקוחות"],
 ];
 
 function selectPayTab(tab, focus) {
@@ -51,7 +51,7 @@ export function renderCheckout(errors = {}, values = {}) {
   const program = payPrograms.some(([id]) => id === values.cardProgram) ? values.cardProgram : payPrograms[0][0];
   const lines = rows.map((item) => {
     const product = getProduct(item.id);
-    return { name: product.name, weight: product.weight, qty: item.qty, total: getCommerce(item.id).price * item.qty };
+    return { product, name: product.name, weight: product.weight, qty: item.qty, total: getCommerce(item.id).price * item.qty };
   });
   const field = (name, label, type = "text", extra = "") => `<label class="field">
     <span class="text-sm font-semibold">${label}</span>

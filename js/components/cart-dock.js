@@ -3,6 +3,7 @@ import { deliveryFee, getCommerce } from "../data/commerce.js";
 import { esc, money } from "../lib/format.js";
 import { parseHash } from "../router.js";
 import { countItems, getCart, lineTotal, subtotal } from "../state/cart.js";
+import { photoImg, productPhoto } from "./product-photo.js";
 
 const arrow = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg>`;
 const cartIcon = `<svg class="cart-dock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 7h15l-1.6 8.2a2 2 0 0 1-2 1.6H9.2a2 2 0 0 1-2-1.5L5.2 4.8H3"></path><circle cx="9" cy="20" r="1.2" fill="currentColor"></circle><circle cx="18" cy="20" r="1.2" fill="currentColor"></circle></svg>`;
@@ -38,7 +39,7 @@ export function updateCartDock(routeName = parseHash().name) {
   const countLabel = count === 0 ? "הסל ריק" : count === 1 ? "פריט אחד" : `${count} פריטים`;
   const list = items.length
     ? `<ul class="cart-dock-list">${items.map((item) => `<li class="cart-dock-item">
-        <a class="cart-dock-thumb" href="#/p/${esc(item.product.id)}" tabindex="-1" aria-hidden="true"></a>
+        <a class="cart-dock-thumb${productPhoto(item.product) ? " has-photo" : ""}" href="#/p/${esc(item.product.id)}" tabindex="-1" aria-hidden="true">${photoImg(item.product)}</a>
         <div class="min-w-0">
           <a class="cart-dock-name" href="#/p/${esc(item.product.id)}">${esc(item.product.name)}</a>
           <p class="text-xs text-muted">${esc(item.product.weight)}</p>

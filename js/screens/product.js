@@ -13,9 +13,6 @@ export function renderProduct(id) {
   }
   const commerce = getCommerce(product.id);
   const siblings = productsByCategory(product.categorySlug);
-  const index = siblings.findIndex((item) => item.id === product.id);
-  const previous = index > 0 ? siblings[index - 1] : null;
-  const following = index >= 0 && index < siblings.length - 1 ? siblings[index + 1] : null;
   const related = siblings.filter((item) => item.id !== product.id).slice(0, 8);
   const price = commerce
     ? `<p class="product-price">${money(commerce.price)}${commerce.compareAt ? `<s>${money(commerce.compareAt)}</s>` : ""}</p>`
@@ -30,7 +27,7 @@ export function renderProduct(id) {
       <span aria-current="page">${esc(product.name)}</span>
     </nav>
     <div class="product-layout">
-      ${productGallery(product, commerce?.compareAt ? `<span class="sale-badge">מבצע</span>` : "")}
+      ${productGallery(product, commerce?.compareAt ? `<span class="sale-badge">במבצע</span>` : "")}
       <div class="product-info">
         <div class="product-head">
           <p class="product-brand">${esc(product.brand)}</p>
@@ -42,13 +39,7 @@ export function renderProduct(id) {
       </div>
     </div>
     ${productTabs(product)}
-    ${previous || following ? `<nav class="product-neighbors" aria-label="מוצרים סמוכים">${neighbor(previous, "המוצר הקודם")}${neighbor(following, "המוצר הבא")}</nav>` : ""}
     ${related.length ? `<section class="product-related" aria-labelledby="related-title"><h2 id="related-title">אולי יעניין אותך</h2>${carousel(related, "מוצרים קשורים")}</section>` : ""}
   </article>`;
-}
-
-function neighbor(product, label) {
-  if (!product) return `<span class="product-neighbor is-empty"></span>`;
-  return `<a class="product-neighbor" href="#/p/${esc(product.id)}"><span>${esc(label)}</span><strong>${esc(product.name)}</strong></a>`;
 }
 

@@ -106,8 +106,8 @@ export const products = [
     "barcode": "7290002862482",
     "catalogPage": 3,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-crumbs-seasoned.jpg",
+    "placeholder": false
   },
   {
     "id": "p002",
@@ -120,8 +120,8 @@ export const products = [
     "barcode": "7290002862413",
     "catalogPage": 3,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-crumbs-white.jpg",
+    "placeholder": false
   },
   {
     "id": "p003",
@@ -134,7 +134,7 @@ export const products = [
     "barcode": "7290002862253",
     "catalogPage": 3,
     "brand": "תוצרת",
-    "image": null,
+    "image": "assets/images/products/p-crumbs-gold.jpg",
     "placeholder": true
   },
   {
@@ -148,7 +148,7 @@ export const products = [
     "barcode": "7290017406398",
     "catalogPage": 3,
     "brand": "תוצרת",
-    "image": null,
+    "image": "assets/images/products/p-crumbs-seasoned.jpg",
     "placeholder": true
   },
   {
@@ -162,7 +162,7 @@ export const products = [
     "barcode": "7290017406381",
     "catalogPage": 3,
     "brand": "תוצרת",
-    "image": null,
+    "image": "assets/images/products/p-crumbs-seasoned.jpg",
     "placeholder": true
   },
   {
@@ -176,7 +176,7 @@ export const products = [
     "barcode": "7290002862222",
     "catalogPage": 3,
     "brand": "תוצרת",
-    "image": null,
+    "image": "assets/images/products/p-crumbs-white.jpg",
     "placeholder": true
   },
   {
@@ -190,7 +190,7 @@ export const products = [
     "barcode": "7290002862734",
     "catalogPage": 3,
     "brand": "תוצרת",
-    "image": null,
+    "image": "assets/images/products/p-crumbs-white.jpg",
     "placeholder": true
   },
   {
@@ -204,7 +204,7 @@ export const products = [
     "barcode": "7290002862741",
     "catalogPage": 3,
     "brand": "תוצרת",
-    "image": null,
+    "image": "assets/images/products/p-crumbs-gold.jpg",
     "placeholder": true
   },
   {
@@ -218,7 +218,7 @@ export const products = [
     "barcode": "7290017406831",
     "catalogPage": 3,
     "brand": "תוצרת",
-    "image": null,
+    "image": "assets/images/products/p-crumbs-gold.jpg",
     "placeholder": true
   },
   {
@@ -232,8 +232,8 @@ export const products = [
     "barcode": "7290018546260",
     "catalogPage": 3,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-crumbs-gold.jpg",
+    "placeholder": false
   },
   {
     "id": "p011",
@@ -246,7 +246,7 @@ export const products = [
     "barcode": "7290017406831",
     "catalogPage": 3,
     "brand": "תוצרת",
-    "image": null,
+    "image": "assets/images/products/p-crumbs-gold.jpg",
     "placeholder": true
   },
   {
@@ -1128,8 +1128,8 @@ export const products = [
     "barcode": "7296079000260",
     "catalogPage": 12,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-basmati.jpg",
+    "placeholder": false
   },
   {
     "id": "p075",
@@ -1156,8 +1156,8 @@ export const products = [
     "barcode": "7290017406558",
     "catalogPage": 12,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-persian.jpg",
+    "placeholder": false
   },
   {
     "id": "p077",
@@ -2682,7 +2682,7 @@ export const products = [
     "barcode": "להדגמה",
     "catalogPage": "להדגמה",
     "brand": "אלגנט",
-    "image": null,
+    "image": "assets/images/products/p-plates-large.webp",
     "placeholder": true
   },
   {
@@ -2696,7 +2696,7 @@ export const products = [
     "barcode": "להדגמה",
     "catalogPage": "להדגמה",
     "brand": "אלגנט",
-    "image": null,
+    "image": "assets/images/products/p-plate-large-white.webp",
     "placeholder": true
   },
   {
@@ -2710,7 +2710,7 @@ export const products = [
     "barcode": "להדגמה",
     "catalogPage": "להדגמה",
     "brand": "אלגנט",
-    "image": null,
+    "image": "assets/images/products/p-plates-large.webp",
     "placeholder": true
   },
   {
@@ -2724,7 +2724,7 @@ export const products = [
     "barcode": "להדגמה",
     "catalogPage": "להדגמה",
     "brand": "חד פעמי",
-    "image": null,
+    "image": "assets/images/products/p-cups-coffee.webp",
     "placeholder": true
   },
   {
@@ -2738,7 +2738,7 @@ export const products = [
     "barcode": "להדגמה",
     "catalogPage": "להדגמה",
     "brand": "אקוגו",
-    "image": null,
+    "image": "assets/images/products/p-cups-pattern.webp",
     "placeholder": true
   },
   {
@@ -2864,7 +2864,7 @@ export const products = [
     "barcode": "להדגמה",
     "catalogPage": "להדגמה",
     "brand": "Arrow",
-    "image": null,
+    "image": "assets/images/products/mall/p198.webp",
     "placeholder": true
   },
   {
@@ -2878,7 +2878,7 @@ export const products = [
     "barcode": "להדגמה",
     "catalogPage": "להדגמה",
     "brand": "Black+Decker",
-    "image": null,
+    "image": "assets/images/products/mall/p199.webp",
     "placeholder": true
   },
   {
@@ -2892,7 +2892,7 @@ export const products = [
     "barcode": "להדגמה",
     "catalogPage": "להדגמה",
     "brand": "Star",
-    "image": null,
+    "image": "assets/images/products/mall/p200.webp",
     "placeholder": true
   },
   {
@@ -2906,7 +2906,7 @@ export const products = [
     "barcode": "להדגמה",
     "catalogPage": "להדגמה",
     "brand": "Smeg",
-    "image": null,
+    "image": "assets/images/products/p-kettle-green.webp",
     "placeholder": true
   },
   {
@@ -2920,7 +2920,7 @@ export const products = [
     "barcode": "להדגמה",
     "catalogPage": "להדגמה",
     "brand": "Peled",
-    "image": null,
+    "image": "assets/images/products/mall/p202.webp",
     "placeholder": true
   },
   {
@@ -2934,7 +2934,7 @@ export const products = [
     "barcode": "להדגמה",
     "catalogPage": "להדגמה",
     "brand": "איקאה",
-    "image": null,
+    "image": "assets/images/products/mall/p203.webp",
     "placeholder": true
   },
   {
@@ -2948,7 +2948,7 @@ export const products = [
     "barcode": "להדגמה",
     "catalogPage": "להדגמה",
     "brand": "איקאה",
-    "image": null,
+    "image": "assets/images/products/mall/p204.webp",
     "placeholder": true
   },
   {
@@ -2962,7 +2962,7 @@ export const products = [
     "barcode": "להדגמה",
     "catalogPage": "להדגמה",
     "brand": "Nitecore",
-    "image": null,
+    "image": "assets/images/products/mall/p205.webp",
     "placeholder": true
   },
   {
@@ -2976,7 +2976,7 @@ export const products = [
     "barcode": "להדגמה",
     "catalogPage": "להדגמה",
     "brand": "איקאה",
-    "image": null,
+    "image": "assets/images/products/mall/p206.webp",
     "placeholder": true
   },
   {
@@ -3046,7 +3046,7 @@ export const products = [
     "barcode": "להדגמה",
     "catalogPage": "להדגמה",
     "brand": "Hyundai",
-    "image": null,
+    "image": "assets/images/products/p-contact-grill.webp",
     "placeholder": true
   },
   {
@@ -3088,7 +3088,7 @@ export const products = [
     "barcode": "להדגמה",
     "catalogPage": "להדגמה",
     "brand": "איקאה",
-    "image": null,
+    "image": "assets/images/products/mall/p214.webp",
     "placeholder": true
   },
   {
@@ -3340,7 +3340,7 @@ export const products = [
     "barcode": "להדגמה",
     "catalogPage": "להדגמה",
     "brand": "Sauter",
-    "image": null,
+    "image": "assets/images/products/p-contact-grill.webp",
     "placeholder": true
   },
   {
@@ -3354,7 +3354,7 @@ export const products = [
     "barcode": "להדגמה",
     "catalogPage": "להדגמה",
     "brand": "Morphy Richards",
-    "image": null,
+    "image": "assets/images/products/p-contact-grill.webp",
     "placeholder": true
   },
   {
@@ -3368,7 +3368,7 @@ export const products = [
     "barcode": "להדגמה",
     "catalogPage": "להדגמה",
     "brand": "Morphy Richards",
-    "image": null,
+    "image": "assets/images/products/p-contact-grill.webp",
     "placeholder": true
   },
   {
@@ -3396,7 +3396,7 @@ export const products = [
     "barcode": "להדגמה",
     "catalogPage": "להדגמה",
     "brand": "איקאה",
-    "image": null,
+    "image": "assets/images/products/mall/p236.webp",
     "placeholder": true
   },
   {
@@ -3410,7 +3410,7 @@ export const products = [
     "barcode": "להדגמה",
     "catalogPage": "להדגמה",
     "brand": "איקאה",
-    "image": null,
+    "image": "assets/images/products/mall/p237.webp",
     "placeholder": true
   },
   {
@@ -3424,7 +3424,7 @@ export const products = [
     "barcode": "להדגמה",
     "catalogPage": "להדגמה",
     "brand": "איקאה",
-    "image": null,
+    "image": "assets/images/products/mall/p238.webp",
     "placeholder": true
   },
   {
@@ -3438,7 +3438,7 @@ export const products = [
     "barcode": "להדגמה",
     "catalogPage": "להדגמה",
     "brand": "איקאה",
-    "image": null,
+    "image": "assets/images/products/mall/p239.webp",
     "placeholder": true
   },
   {
@@ -3452,7 +3452,7 @@ export const products = [
     "barcode": "להדגמה",
     "catalogPage": "להדגמה",
     "brand": "איקאה",
-    "image": null,
+    "image": "assets/images/products/mall/p240.webp",
     "placeholder": true
   },
   {
@@ -3494,7 +3494,7 @@ export const products = [
     "barcode": "להדגמה",
     "catalogPage": "להדגמה",
     "brand": "Apple",
-    "image": null,
+    "image": "assets/images/products/mall/p243.webp",
     "placeholder": true
   },
   {
@@ -3522,7 +3522,7 @@ export const products = [
     "barcode": "להדגמה",
     "catalogPage": "להדגמה",
     "brand": "איקאה",
-    "image": null,
+    "image": "assets/images/products/mall/p245.webp",
     "placeholder": true
   },
   {

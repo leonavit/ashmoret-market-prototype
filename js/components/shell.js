@@ -1,9 +1,10 @@
 import { searchProducts } from "../data/catalog.js";
-import { inSupplierScope, supplierCategories } from "./suppliers.js";
+import { inSupplierScope, isSingleSupplier, supplierCategories } from "./suppliers.js";
 import { countItems, subscribe } from "../state/cart.js";
 import { esc } from "../lib/format.js";
 import { prefersReducedMotion } from "../lib/format.js";
-import { closeMega, mountMega } from "./mega-menu.js";
+import { closeMega, featuredGroups, mountMega } from "./mega-menu.js";
+import { getTheme } from "./theme-options.js";
 import { isPrivateRoute, parseHash } from "../router.js";
 import { getSession, logout } from "../state/session.js";
 
@@ -142,11 +143,20 @@ export function renderCategoryNav(activeSlug) {
   const list = document.getElementById("category-nav");
   const viewport = document.getElementById("category-viewport");
   const copies = 4;
-  list.innerHTML = Array.from({ length: copies }, (_, copy) => supplierCategories()
-    .map((category) => {
-      const current = copy === 0 && category.slug === activeSlug ? ' aria-current="page"' : "";
+  const items = isSingleSupplier()
+    ? supplierCategories().map((category) => ({ name: category.name, href: `#/c/${category.slug}` }))
+    : featuredGroups();
+  list.innerHTML = Array.from({ length: copies }, (_, copy) => items
+    .map((item) => {
+      const current = copy === 0 && activeSlug && item.href === `#/c/${activeSlug}` ? ' aria-current="page"' : "";
       const clone = copy === 0 ? "" : ' tabindex="-1" aria-hidden="true"';
-      return `<li class="cat-slide"><a class="cat-link" href="#/c/${esc(category.slug)}"${current}${clone}><span class="thumb"></span><span>${esc(category.name)}</span></a></li>`;
+      const icon = getTheme().featured === "v2" && item.icon;
+      const thumb = icon
+        ? `<span class="thumb has-photo is-icon"><img src="${esc(item.icon)}" alt="" decoding="async"></span>`
+        : item.image
+        ? `<span class="thumb has-photo"><img src="${esc(item.image)}" alt="" decoding="async"></span>`
+        : `<span class="thumb"></span>`;
+      return `<li class="cat-slide"><a class="cat-link" href="${esc(item.href)}"${current}${clone}>${thumb}<span>${esc(item.name)}</span></a></li>`;
     })
     .join("")).join("");
   if (categoryCarousel) {
