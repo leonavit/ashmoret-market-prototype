@@ -4289,8 +4289,8 @@
 
   // js/components/theme-options.js
   var KEY = "ashmoret-theme";
-  var REV = 3;
-  var defaults = { header: "v2", hero: "v3", categories: "v2", featured: "v1", banners: "v1", mobileMenu: "v2", suppliers: "v1", palette: "v1", logo: "v1", wideHeader: true };
+  var REV = 5;
+  var defaults = { header: "v2", hero: "v3", categories: "v2", featured: "v2", banners: "v2", mobileMenu: "v2", suppliers: "v1", palette: "v1", logo: "v1", wideHeader: true };
   var logos = {
     v1: { src: "assets/images/brand/logo-market-cart.png?v=2", width: 300, height: 80 },
     v2: { src: "assets/images/brand/logo-market.png", width: 1024, height: 344 }
@@ -4343,16 +4343,16 @@
       name: "featured",
       title: "\u05D4\u05D2\u05D3\u05E8\u05D5\u05EA \u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D5\u05EA \u05E0\u05D1\u05D7\u05E8\u05D5\u05EA",
       options: [
-        ["v1", "V1 \xB7 \u05D1\u05E8\u05D9\u05E8\u05EA \u05DE\u05D7\u05D3\u05DC", "\u05EA\u05DE\u05D5\u05E0\u05D5\u05EA \u05DE\u05D5\u05E6\u05E8\u05D9\u05DD \u05DC\u05DB\u05DC \u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D4."],
-        ["v2", "V2", "\u05D0\u05D9\u05D9\u05E7\u05D5\u05DF \u05E7\u05D5\u05D5\u05D9 \u05DC\u05DB\u05DC \u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D4."]
+        ["v1", "V1", "\u05EA\u05DE\u05D5\u05E0\u05D5\u05EA \u05DE\u05D5\u05E6\u05E8\u05D9\u05DD \u05DC\u05DB\u05DC \u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D4."],
+        ["v2", "V2 \xB7 \u05D1\u05E8\u05D9\u05E8\u05EA \u05DE\u05D7\u05D3\u05DC", "\u05D0\u05D9\u05D9\u05E7\u05D5\u05DF \u05DC\u05DB\u05DC \u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D4."]
       ]
     },
     {
       name: "banners",
       title: "\u05D4\u05D2\u05D3\u05E8\u05D5\u05EA \u05D1\u05D0\u05E0\u05E8\u05D9\u05DD",
       options: [
-        ["v1", "V1 \xB7 \u05D1\u05E8\u05D9\u05E8\u05EA \u05DE\u05D7\u05D3\u05DC", "\u05D1\u05EA\u05E4\u05E8\u05D9\u05D8 \u05D4\u05DE\u05D1\u05E6\u05E2\u05D9\u05DD \u05D0\u05E8\u05D1\u05E2\u05EA \u05D1\u05D0\u05E0\u05E8\u05D9 \u05D4\u05DE\u05D1\u05E6\u05E2\u05D9\u05DD, \u05D5\u05D1\u05E1\u05DC\u05D9\u05D9\u05D3\u05E8 \u05D4\u05E6\u05D3\u05D3\u05D9 \u05D1\u05E2\u05DE\u05D5\u05D3 \u05D4\u05D1\u05D9\u05EA \u05E9\u05DC\u05D5\u05E9\u05EA \u05D4\u05D1\u05D0\u05E0\u05E8\u05D9\u05DD \u05E9\u05DC \u05D4\u05DE\u05D7\u05DC\u05E7\u05D5\u05EA."],
-        ["v2", "V2", "\u05D4\u05D1\u05D0\u05E0\u05E8\u05D9\u05DD \u05DE\u05EA\u05D7\u05DC\u05E4\u05D9\u05DD: \u05D1\u05D0\u05E0\u05E8\u05D9 \u05D4\u05DE\u05D7\u05DC\u05E7\u05D5\u05EA \u05D1\u05EA\u05E4\u05E8\u05D9\u05D8 \u05D4\u05DE\u05D1\u05E6\u05E2\u05D9\u05DD, \u05D5\u05D1\u05D0\u05E0\u05E8\u05D9 \u05D4\u05DE\u05D1\u05E6\u05E2\u05D9\u05DD \u05D1\u05E1\u05DC\u05D9\u05D9\u05D3\u05E8 \u05D4\u05E6\u05D3\u05D3\u05D9 \u05D1\u05E2\u05DE\u05D5\u05D3 \u05D4\u05D1\u05D9\u05EA."]
+        ["v1", "V1", "\u05D1\u05EA\u05E4\u05E8\u05D9\u05D8 \u05D4\u05DE\u05D1\u05E6\u05E2\u05D9\u05DD \u05D0\u05E8\u05D1\u05E2\u05EA \u05D1\u05D0\u05E0\u05E8\u05D9 \u05D4\u05DE\u05D1\u05E6\u05E2\u05D9\u05DD, \u05D5\u05D1\u05E1\u05DC\u05D9\u05D9\u05D3\u05E8 \u05D4\u05E6\u05D3\u05D3\u05D9 \u05D1\u05E2\u05DE\u05D5\u05D3 \u05D4\u05D1\u05D9\u05EA \u05E9\u05DC\u05D5\u05E9\u05EA \u05D4\u05D1\u05D0\u05E0\u05E8\u05D9\u05DD \u05E9\u05DC \u05D4\u05DE\u05D7\u05DC\u05E7\u05D5\u05EA."],
+        ["v2", "V2 \xB7 \u05D1\u05E8\u05D9\u05E8\u05EA \u05DE\u05D7\u05D3\u05DC", "\u05D4\u05D1\u05D0\u05E0\u05E8\u05D9\u05DD \u05DE\u05EA\u05D7\u05DC\u05E4\u05D9\u05DD: \u05D1\u05D0\u05E0\u05E8\u05D9 \u05D4\u05DE\u05D7\u05DC\u05E7\u05D5\u05EA \u05D1\u05EA\u05E4\u05E8\u05D9\u05D8 \u05D4\u05DE\u05D1\u05E6\u05E2\u05D9\u05DD, \u05D5\u05D1\u05D0\u05E0\u05E8\u05D9 \u05D4\u05DE\u05D1\u05E6\u05E2\u05D9\u05DD \u05D1\u05E1\u05DC\u05D9\u05D9\u05D3\u05E8 \u05D4\u05E6\u05D3\u05D3\u05D9 \u05D1\u05E2\u05DE\u05D5\u05D3 \u05D4\u05D1\u05D9\u05EA."]
       ],
       note: "\u05D4\u05E1\u05DC\u05D9\u05D9\u05D3\u05E8 \u05D4\u05E6\u05D3\u05D3\u05D9 \u05DE\u05D5\u05E6\u05D2 \u05D1\u05BEHero V4."
     },
@@ -4400,14 +4400,14 @@
   function load() {
     try {
       const saved = JSON.parse(localStorage.getItem(KEY) || "{}");
-      const current = saved.rev === REV;
+      const current = saved.rev >= 3;
       return {
         rev: REV,
         header: current && saved.header === "v1" ? "v1" : defaults.header,
         hero: ["v1", "v2", "v3", "v4"].includes(saved.hero) ? saved.hero : defaults.hero,
         categories: ["v1", "v2"].includes(saved.categories) ? saved.categories : defaults.categories,
-        featured: saved.featured === "v2" ? "v2" : defaults.featured,
-        banners: saved.banners === "v2" ? "v2" : defaults.banners,
+        featured: saved.rev >= 4 && saved.featured === "v1" ? "v1" : defaults.featured,
+        banners: saved.rev >= 5 && saved.banners === "v1" ? "v1" : defaults.banners,
         mobileMenu: current && saved.mobileMenu === "v1" ? "v1" : defaults.mobileMenu,
         suppliers: saved.suppliers === "v2" ? "v2" : defaults.suppliers,
         palette: current && saved.palette === "grey" ? "grey" : defaults.palette,
@@ -4472,10 +4472,7 @@
   }
   function panelMarkup() {
     return `<div class="theme-panel-head">
-    <div>
-      <p class="theme-panel-kicker" lang="en">Prototype controls</p>
-      <h2 id="theme-panel-title" class="text-xl font-extrabold">\u05D0\u05E4\u05E9\u05E8\u05D5\u05D9\u05D5\u05EA \u05EA\u05D1\u05E0\u05D9\u05EA</h2>
-    </div>
+    <h2 id="theme-panel-title" class="text-xl font-extrabold">\u05D0\u05E4\u05E9\u05E8\u05D5\u05D9\u05D5\u05EA \u05EA\u05D1\u05E0\u05D9\u05EA</h2>
     <button class="auth-close" type="button" data-theme-close aria-label="\u05E1\u05D2\u05D9\u05E8\u05EA \u05D0\u05E4\u05E9\u05E8\u05D5\u05D9\u05D5\u05EA \u05D4\u05EA\u05D1\u05E0\u05D9\u05EA">\xD7</button>
   </div>
   <div class="theme-panel-body">
@@ -4523,7 +4520,7 @@
     gear.setAttribute("aria-label", "\u05D0\u05E4\u05E9\u05E8\u05D5\u05D9\u05D5\u05EA \u05EA\u05D1\u05E0\u05D9\u05EA");
     gear.setAttribute("aria-expanded", "false");
     gear.setAttribute("aria-controls", "theme-panel");
-    gear.innerHTML = `${gearIcon}<span class="theme-gear-label" lang="en">Prototype</span>`;
+    gear.innerHTML = gearIcon;
     const panel = document.createElement("aside");
     panel.id = "theme-panel";
     panel.className = "theme-panel";
