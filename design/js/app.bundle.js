@@ -4630,10 +4630,14 @@
     return `<div class="promo-slide promo-hero" style="--hero-fade:${slide.fade}" role="group" aria-roledescription="\u05E9\u05E7\u05D5\u05E4\u05D9\u05EA" aria-label="${index + 1} \u05DE\u05EA\u05D5\u05DA ${SLIDES}" ${index === 0 ? "" : 'aria-hidden="true"'}>
     <img class="promo-hero-img" src="${slide.image}" alt="" width="${slide.size[0]}" height="${slide.size[1]}" decoding="async">
     <div class="promo-hero-copy" ${index === 0 ? "data-hero-copy" : ""}>
-      <p class="promo-hero-kicker">${slide.kicker}</p>
-      <${heading} class="promo-hero-title">${slide.title}<br><span class="promo-hero-sub">${slide.sub}</span></${heading}>
-      <p class="promo-hero-text">${slide.text}</p>
-      <a class="promo-hero-cta" href="${slide.cta.href}" ${index === 0 ? "" : 'tabindex="-1"'}>${slide.cta.label}</a>
+      <div class="promo-hero-head">
+        <p class="promo-hero-kicker">${slide.kicker}</p>
+        <${heading} class="promo-hero-title">${slide.title}<br><span class="promo-hero-sub">${slide.sub}</span></${heading}>
+      </div>
+      <div class="promo-hero-body">
+        <p class="promo-hero-text">${slide.text}</p>
+        <a class="promo-hero-cta" href="${slide.cta.href}" ${index === 0 ? "" : 'tabindex="-1"'}>${slide.cta.label}</a>
+      </div>
     </div>
   </div>`;
   }
@@ -4704,21 +4708,51 @@
     let startX = 0;
     let startY = 0;
     let dragging = false;
+    let horizontal = false;
     let swiped = false;
-    const onDown = (event) => {
-      if (event.button > 0) return;
+    const begin = (x, y) => {
       dragging = true;
+      horizontal = false;
       swiped = false;
-      startX = event.clientX;
-      startY = event.clientY;
+      startX = x;
+      startY = y;
     };
-    const onUp = (event) => {
+    const finish2 = (x, y) => {
       if (!dragging) return;
       dragging = false;
-      const dx = event.clientX - startX;
-      if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(event.clientY - startY)) return;
+      const dx = x - startX;
+      if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(y - startY)) return;
       swiped = true;
       show(dx > 0 ? current + 1 : current - 1);
+    };
+    const onDown = (event) => {
+      if (event.pointerType === "touch" || event.button > 0) return;
+      begin(event.clientX, event.clientY);
+    };
+    const onUp = (event) => {
+      if (event.pointerType === "touch") return;
+      finish2(event.clientX, event.clientY);
+    };
+    const onTouchStart = (event) => {
+      const touch = event.touches[0];
+      if (event.touches.length === 1) begin(touch.clientX, touch.clientY);
+      else dragging = false;
+    };
+    const onTouchMove = (event) => {
+      if (!dragging) return;
+      const touch = event.touches[0];
+      const dx = Math.abs(touch.clientX - startX);
+      const dy = Math.abs(touch.clientY - startY);
+      if (!horizontal && dx > 8 && dx > dy) horizontal = true;
+      if (!horizontal && dy > 8 && dy >= dx) dragging = false;
+      if (horizontal && event.cancelable) event.preventDefault();
+    };
+    const onTouchEnd = (event) => {
+      const touch = event.changedTouches[0];
+      if (touch) finish2(touch.clientX, touch.clientY);
+    };
+    const onTouchCancel = () => {
+      dragging = false;
     };
     const onClick = (event) => {
       if (!swiped) return;
@@ -4729,6 +4763,10 @@
     const onDragStart = (event) => event.preventDefault();
     track.addEventListener("pointerdown", onDown);
     window.addEventListener("pointerup", onUp);
+    track.addEventListener("touchstart", onTouchStart, { passive: true });
+    track.addEventListener("touchmove", onTouchMove, { passive: false });
+    track.addEventListener("touchend", onTouchEnd);
+    track.addEventListener("touchcancel", onTouchCancel);
     track.addEventListener("click", onClick, true);
     track.addEventListener("dragstart", onDragStart);
     return {
@@ -4742,6 +4780,10 @@
       destroy: () => {
         track.removeEventListener("pointerdown", onDown);
         window.removeEventListener("pointerup", onUp);
+        track.removeEventListener("touchstart", onTouchStart);
+        track.removeEventListener("touchmove", onTouchMove);
+        track.removeEventListener("touchend", onTouchEnd);
+        track.removeEventListener("touchcancel", onTouchCancel);
         track.removeEventListener("click", onClick, true);
         track.removeEventListener("dragstart", onDragStart);
       }
@@ -5046,6 +5088,11 @@
   function crumbs(items) {
     return `<nav class="mb-4 text-sm text-muted" aria-label="\u05DE\u05D9\u05E7\u05D5\u05DD">${items.map((item, index) => index === items.length - 1 ? `<span aria-current="page">${esc(item.label)}</span>` : `<a class="font-semibold text-blue" href="${esc(item.href)}">${esc(item.label)}</a>`).join('<span aria-hidden="true"> / </span>')}</nav>`;
   }
+  function listingHero(content) {
+    return `<section class="listing-hero">
+    <div class="wrap py-8">${content}</div>
+  </section>`;
+  }
   function moreButton(more) {
     if (!more) return "";
     return `<button type="button" class="btn btn-line mx-auto mt-6" data-show-all>\u05D4\u05E6\u05D2\u05EA \u05DB\u05DC \u05D4\u05DE\u05D5\u05E6\u05E8\u05D9\u05DD, \u05E2\u05D5\u05D3 ${more}</button>`;
@@ -5063,11 +5110,13 @@
     const source = productsByCategory(slug);
     const items = applyListing(source, query);
     const view2 = visibleSlice(items, query);
-    return `<article class="wrap py-8">
-    ${crumbs([{ href: "#/", label: "\u05D3\u05E3 \u05D4\u05D1\u05D9\u05EA" }, { label: category.name }])}
-    <h1 class="text-3xl font-extrabold">${esc(category.name)}</h1>
-    <p class="mt-2 text-muted">${items.length} \u05DE\u05D5\u05E6\u05E8\u05D9\u05DD \u05D1\u05E7\u05D8\u05DC\u05D5\u05D2 \u05EA\u05D5\u05E6\u05E8\u05EA</p>
-    <div class="mt-6">
+    return `<article>
+    ${listingHero(`
+      ${crumbs([{ href: "#/", label: "\u05D3\u05E3 \u05D4\u05D1\u05D9\u05EA" }, { label: category.name }])}
+      <h1 class="text-3xl font-extrabold">${esc(category.name)}</h1>
+      <p class="mt-2 text-muted">${items.length} \u05DE\u05D5\u05E6\u05E8\u05D9\u05DD \u05D1\u05E7\u05D8\u05DC\u05D5\u05D2 \u05EA\u05D5\u05E6\u05E8\u05EA</p>
+    `)}
+    <div class="wrap pt-6 pb-8">
       ${listingControls({ categories: null, query })}
       ${productGrid(view2.shown)}
       ${moreButton(view2.more)}
@@ -5128,13 +5177,15 @@
     }
     const items = applyListing(source, query);
     const view2 = visibleSlice(items, query);
-    const chips = sections.length > 1 ? `<ul class="mt-5 flex flex-wrap gap-2">${sections.map((section) => `<li><a class="inline-flex min-h-10 items-center rounded-full border border-line px-3 text-sm font-semibold" href="#/c/${esc(section.slug)}">${esc(section.name)}</a></li>`).join("")}</ul>` : "";
-    return `<article class="wrap py-8">
-    ${crumbs([{ href: "#/", label: "\u05D3\u05E3 \u05D4\u05D1\u05D9\u05EA" }, { label: department.name }])}
-    <h1 class="flex items-center gap-3 text-3xl font-extrabold"><span class="nav-icon is-${esc(department.id)} h-8" aria-hidden="true"></span>${esc(department.name)}</h1>
-    <p class="mt-2 text-muted">${items.length} \u05DE\u05D5\u05E6\u05E8\u05D9\u05DD \u05D1\u05DE\u05D7\u05DC\u05E7\u05D4</p>
-    ${chips}
-    <div class="mt-6">
+    const chips = sections.length > 1 ? `<ul class="mt-5 flex flex-wrap gap-2">${sections.map((section) => `<li><a class="listing-chip" href="#/c/${esc(section.slug)}">${esc(section.name)}</a></li>`).join("")}</ul>` : "";
+    return `<article>
+    ${listingHero(`
+      ${crumbs([{ href: "#/", label: "\u05D3\u05E3 \u05D4\u05D1\u05D9\u05EA" }, { label: department.name }])}
+      <h1 class="flex items-center gap-3 text-3xl font-extrabold"><span class="nav-icon is-${esc(department.id)} h-8" aria-hidden="true"></span>${esc(department.name)}</h1>
+      <p class="mt-2 text-muted">${items.length} \u05DE\u05D5\u05E6\u05E8\u05D9\u05DD \u05D1\u05DE\u05D7\u05DC\u05E7\u05D4</p>
+      ${chips}
+    `)}
+    <div class="wrap pt-6 pb-8">
       ${listingControls({ categories: null, query })}
       ${productGrid(view2.shown)}
       ${moreButton(view2.more)}
@@ -5262,7 +5313,7 @@
       ["service", "\u05E9\u05D9\u05E8\u05D5\u05EA \u05D5\u05D0\u05D7\u05E8\u05D9\u05D5\u05EA", `<div class="product-tab-cols">
         <div>
           <h3>\u05E9\u05D9\u05E8\u05D5\u05EA \u05DC\u05E7\u05D5\u05D7\u05D5\u05EA</h3>
-          <p>\u05D8\u05DC\u05E4\u05D5\u05DF <a href="tel:03-000-0000" dir="ltr">03-000-0000</a> \u05D0\u05D5 <a href="https://wa.me/97230000000" target="_blank" rel="noopener noreferrer">\u05D5\u05D5\u05D8\u05E1\u05D0\u05E4</a>.</p>
+          <p>\u05D8\u05DC\u05E4\u05D5\u05DF <a href="tel:097448038" dir="ltr">09-7448038</a> \u05D0\u05D5 <a href="https://wa.me/97230000000" target="_blank" rel="noopener noreferrer">\u05D5\u05D5\u05D8\u05E1\u05D0\u05E4</a>.</p>
           <button type="button" class="product-tab-link" data-open-service>\u05D4\u05E9\u05D0\u05E8\u05EA \u05E4\u05E0\u05D9\u05D9\u05D4</button>
         </div>
         <div>
@@ -6367,7 +6418,7 @@
     }
     return `<article class="wrap max-w-2xl py-12">
     <h1 class="text-3xl font-extrabold">\u05D8\u05D5\u05E4\u05E1 \u05D9\u05E6\u05D9\u05E8\u05EA \u05E7\u05E9\u05E8</h1>
-    <p class="mt-2 text-muted">\u05D4\u05D8\u05D5\u05E4\u05E1 \u05DC\u05D4\u05D3\u05D2\u05DE\u05D4 \u05D1\u05DC\u05D1\u05D3. \u05D0\u05E4\u05E9\u05E8 \u05D2\u05DD \u05DC\u05D4\u05EA\u05E7\u05E9\u05E8 \u05DC\u05BE<a href="tel:03-000-0000" dir="ltr">03-000-0000</a> \u05D0\u05D5 \u05DC\u05E4\u05E0\u05D5\u05EA \u05D1<a href="https://wa.me/97230000000" target="_blank" rel="noopener noreferrer">\u05D5\u05D5\u05D8\u05E1\u05D0\u05E4</a>.</p>
+    <p class="mt-2 text-muted">\u05D4\u05D8\u05D5\u05E4\u05E1 \u05DC\u05D4\u05D3\u05D2\u05DE\u05D4 \u05D1\u05DC\u05D1\u05D3. \u05D0\u05E4\u05E9\u05E8 \u05D2\u05DD \u05DC\u05D4\u05EA\u05E7\u05E9\u05E8 \u05DC\u05BE<a href="tel:097448038" dir="ltr">09-7448038</a> \u05D0\u05D5 \u05DC\u05E4\u05E0\u05D5\u05EA \u05D1<a href="https://wa.me/97230000000" target="_blank" rel="noopener noreferrer">\u05D5\u05D5\u05D8\u05E1\u05D0\u05E4</a>.</p>
     <form id="contact-form" class="mt-6 grid gap-4 rounded-2xl border border-line bg-white p-5" novalidate>
       ${contactFields({ values, errors })}
       <button class="btn" type="submit">\u05E9\u05DC\u05D9\u05D7\u05EA \u05E4\u05E0\u05D9\u05D9\u05D4</button>
@@ -6619,7 +6670,7 @@
   }
 
   // js/components/mega-menu.js
-  var mark = "assets/images/brand/heart.png";
+  var mark = "assets/images/brand/placeholder-cart.png";
   var chevron = `<svg class="mega-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg>`;
   var plus = `<svg class="mobile-nav-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"></path><path class="mobile-nav-plus-v" d="M12 5v14"></path></svg>`;
   var arrow = `<svg class="mega-all-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M19 12H6M12 6l-6 6 6 6"></path></svg>`;
@@ -6704,7 +6755,8 @@
       ],
       promo: {
         href: "#/d/electronics",
-        title: "\u05DC\u05DB\u05DC \u05D4\u05DE\u05D5\u05E6\u05E8\u05D9\u05DD \u05D1\u05E7\u05E0\u05D9\u05D5\u05DF \u05D0\u05E9\u05DE\u05D5\u05E8\u05EA"
+        title: "\u05DC\u05DB\u05DC \u05D4\u05DE\u05D5\u05E6\u05E8\u05D9\u05DD \u05D1\u05E7\u05E0\u05D9\u05D5\u05DF \u05D0\u05E9\u05DE\u05D5\u05E8\u05EA",
+        image: "assets/images/banners/mega-all-electronics.webp"
       }
     },
     {
@@ -6971,6 +7023,14 @@
       const wasOpen = menu.classList.contains("is-open");
       const open3 = typeof force === "boolean" ? force : !wasOpen;
       const cover = document.documentElement.dataset.mobileMenu === "v2";
+      if (open3 && cover) {
+        const topbar = document.querySelector(".site-header .topbar");
+        const top = topbar?.getBoundingClientRect().bottom || 0;
+        const button = menuOpen.getBoundingClientRect();
+        const rowCenter = button.top + button.height / 2 - top;
+        document.documentElement.style.setProperty("--menu-cover-top", `${top}px`);
+        document.documentElement.style.setProperty("--menu-head-h", `${rowCenter * 2 + 1}px`);
+      }
       menu.classList.toggle("is-open", open3);
       menuOpen.setAttribute("aria-expanded", String(open3));
       document.documentElement.classList.toggle("is-menu-cover", open3 && cover);
@@ -7006,12 +7066,33 @@
     if (!band) return;
     band.hidden = !visible;
   }
+  var categoryActive = "";
+  var categoryCount = 0;
+  var categoryFits = null;
+  var resizeTimer = 0;
+  function categoriesFit(list, viewport, count) {
+    const slide = list.querySelector(".cat-slide");
+    const width = viewport.getBoundingClientRect().width;
+    return Boolean(slide && width) && slide.getBoundingClientRect().width * count <= width + 1;
+  }
+  window.addEventListener("resize", () => {
+    window.clearTimeout(resizeTimer);
+    resizeTimer = window.setTimeout(() => {
+      const band = document.getElementById("category-band");
+      if (!band || band.hidden || categoryFits === null) return;
+      const list = document.getElementById("category-nav");
+      const viewport = document.getElementById("category-viewport");
+      if (categoriesFit(list, viewport, categoryCount) !== categoryFits) renderCategoryNav(categoryActive);
+    }, 150);
+  });
   function renderCategoryNav(activeSlug) {
     const list = document.getElementById("category-nav");
     const viewport = document.getElementById("category-viewport");
-    const copies = 4;
+    const band = document.getElementById("category-band");
     const items = isSingleSupplier() ? supplierCategories().map((category) => ({ name: category.name, href: `#/c/${category.slug}` })) : featuredGroups();
-    list.innerHTML = Array.from({ length: copies }, (_, copy) => items.map((item) => {
+    categoryActive = activeSlug;
+    categoryCount = items.length;
+    const markup6 = (copies) => Array.from({ length: copies }, (_, copy) => items.map((item) => {
       const current = copy === 0 && activeSlug && item.href === `#/c/${activeSlug}` ? ' aria-current="page"' : "";
       const clone = copy === 0 ? "" : ' tabindex="-1" aria-hidden="true"';
       const icon3 = getTheme().featured === "v2" && item.icon;
@@ -7022,6 +7103,11 @@
       categoryCarousel.destroy();
       categoryCarousel = null;
     }
+    list.innerHTML = markup6(1);
+    categoryFits = viewport ? categoriesFit(list, viewport, items.length) : null;
+    band?.classList.toggle("is-static", Boolean(categoryFits));
+    if (categoryFits) return;
+    list.innerHTML = markup6(4);
     const Embla = window.EmblaCarousel;
     if (!Embla || !viewport) return;
     categoryCarousel = Embla(viewport, {
@@ -7312,9 +7398,9 @@
   function serviceBody(inPage) {
     const service = state2.service;
     const contact = `<ul class="service-contact">
-    <li><a href="tel:03-000-0000">
+    <li><a href="tel:097448038">
       <span class="service-contact-icon">${phoneIcon}</span>
-      <span class="service-contact-text"><strong><span dir="ltr">03-000-0000</span></strong><small>\u05D8\u05DC\u05E4\u05D5\u05DF \u05E9\u05D9\u05E8\u05D5\u05EA \u05DC\u05E7\u05D5\u05D7\u05D5\u05EA</small></span>
+      <span class="service-contact-text"><strong><span dir="ltr">09-7448038</span></strong><small>\u05D8\u05DC\u05E4\u05D5\u05DF \u05E9\u05D9\u05E8\u05D5\u05EA \u05DC\u05E7\u05D5\u05D7\u05D5\u05EA</small></span>
     </a></li>
     <li><a href="https://wa.me/97230000000" target="_blank" rel="noopener noreferrer">
       <span class="service-contact-icon">${whatsappIcon}</span>
@@ -7674,6 +7760,46 @@
     });
   }
 
+  // js/components/cookie-notice.js
+  var KEY4 = "ashmoret-cookies";
+  var MAX_AGE = 60 * 60 * 24 * 365;
+  var closeIcon2 = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg>`;
+  function accepted() {
+    if (document.cookie.split("; ").includes(`${KEY4}=1`)) return true;
+    try {
+      return localStorage.getItem(KEY4) === "1";
+    } catch {
+      return false;
+    }
+  }
+  function accept() {
+    document.cookie = `${KEY4}=1; max-age=${MAX_AGE}; path=/; SameSite=Lax`;
+    try {
+      localStorage.setItem(KEY4, "1");
+    } catch {
+    }
+  }
+  function bindCookieNotice() {
+    if (accepted()) return;
+    const notice = document.createElement("section");
+    notice.className = "cookie-notice";
+    notice.setAttribute("aria-labelledby", "cookie-title");
+    notice.innerHTML = `<button class="cookie-close" type="button" data-cookie-close aria-label="\u05E1\u05D2\u05D9\u05E8\u05EA \u05D4\u05D5\u05D3\u05E2\u05EA \u05D4\u05E2\u05D5\u05D2\u05D9\u05D5\u05EA">${closeIcon2}</button>
+    <h2 id="cookie-title" class="cookie-title"><span aria-hidden="true">\u{1F36A}</span> \u05D0\u05D5\u05D4\u05D1\u05D9\u05DD \u05E2\u05D5\u05D2\u05D9\u05D5\u05EA? \u05D2\u05DD \u05D0\u05E0\u05D7\u05E0\u05D5</h2>
+    <p class="cookie-text">\u05D0\u05E0\u05D7\u05E0\u05D5 \u05DE\u05E9\u05EA\u05DE\u05E9\u05D9\u05DD \u05D1\u05E2\u05D5\u05D2\u05D9\u05D5\u05EA (cookies) \u05DC\u05E9\u05D9\u05E4\u05D5\u05E8 \u05D7\u05D5\u05D5\u05D9\u05D9\u05EA \u05D4\u05D2\u05DC\u05D9\u05E9\u05D4 \u05E9\u05DC\u05DA, \u05D4\u05E6\u05D2\u05EA \u05D4\u05E6\u05E2\u05D5\u05EA \u05DE\u05D5\u05EA\u05D0\u05DE\u05D5\u05EA \u05D5\u05E2\u05D5\u05D3.<br>\u05DB\u05DE\u05E4\u05D5\u05E8\u05D8 <a href="#/privacy">\u05D1\u05DE\u05D3\u05D9\u05E0\u05D9\u05D5\u05EA \u05D4\u05E4\u05E8\u05D8\u05D9\u05D5\u05EA</a> \u05E9\u05DC\u05E0\u05D5.</p>
+    <button class="btn cookie-accept" type="button" data-cookie-accept>\u05D4\u05D1\u05E0\u05EA\u05D9</button>`;
+    notice.addEventListener("click", (event) => {
+      const acceptButton = event.target.closest("[data-cookie-accept]");
+      if (!acceptButton && !event.target.closest("[data-cookie-close]")) return;
+      if (acceptButton) accept();
+      notice.classList.add("is-leaving");
+      const remove = () => notice.remove();
+      notice.addEventListener("animationend", remove, { once: true });
+      window.setTimeout(remove, 400);
+    });
+    document.body.appendChild(notice);
+  }
+
   // js/components/product-popup.js
   function ensureDialog4() {
     let dialog = document.getElementById("product-pop");
@@ -7978,6 +8104,7 @@
   bindLogin(navigate2);
   bindServiceDialogs();
   bindNewsletter();
+  bindCookieNotice();
   bindAccount(render);
   bindCheckout();
   mountCartDock();
