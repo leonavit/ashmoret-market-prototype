@@ -202,6 +202,16 @@ document.addEventListener("click", async (event) => {
     addItem(product.id, qty);
     updateCartBadge(true);
     pulseAdd(add);
+    if (add.dataset.addedLabel) {
+      add.dataset.label ??= add.textContent;
+      add.textContent = add.dataset.addedLabel;
+      add.classList.add("is-added");
+      window.clearTimeout(Number(add.dataset.addedTimer));
+      add.dataset.addedTimer = String(window.setTimeout(() => {
+        add.textContent = add.dataset.label;
+        add.classList.remove("is-added");
+      }, 1600));
+    }
     showToast(`${product.name} נוסף לסל`, "#/cart");
   }
 });

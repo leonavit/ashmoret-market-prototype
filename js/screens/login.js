@@ -197,7 +197,7 @@ function registerPanel() {
     ${field("phone", "טלפון", data.phone, `type="tel" autocomplete="tel" dir="ltr" required`)}
     <label class="auth-check">
       <input type="checkbox" name="privacy" required ${data.privacy ? "checked" : ""} aria-invalid="${bad("privacy") ? "true" : "false"}" ${bad("privacy") ? "data-auth-focus" : ""}>
-      <span><span class="req" aria-hidden="true">*</span>קראתי את מדיניות הפרטיות, את תנאי השימוש ואת תקנון מועדון הלקוחות, ואני מאשר/ת שהמידע שמסרתי ו/או שייאסף אודותיי במסגרת מתן השירותים יישמר במאגרי המידע שבשליטת אשמורת מרקט ו/או מי מטעמה, לרבות ספקי שירות הפועלים עבורה. המידע ישמש לצורך זיהוי, ניהול החשבון, אספקת הזמנות, שירות לקוחות, תפעול מועדון הלקוחות, עמידה בחובות הדין ושיפור השירות, והכול בהתאם למדיניות הפרטיות.</span>
+      <span><span class="req" aria-hidden="true">*</span>קראתי את <a href="#/privacy" target="_blank" rel="noopener">מדיניות הפרטיות</a>, את <a href="#/terms" target="_blank" rel="noopener">תנאי השימוש</a> ואת תקנון מועדון הלקוחות, ואני מאשר/ת שהמידע שמסרתי ו/או שייאסף אודותיי במסגרת מתן השירותים יישמר במאגרי המידע שבשליטת אשמורת מרקט ו/או מי מטעמה, לרבות ספקי שירות הפועלים עבורה. המידע ישמש לצורך זיהוי, ניהול החשבון, אספקת הזמנות, שירות לקוחות, תפעול מועדון הלקוחות, עמידה בחובות הדין ושיפור השירות, והכול בהתאם למדיניות הפרטיות.</span>
     </label>
     <label class="auth-check">
       <input type="checkbox" name="marketing" ${data.marketing ? "checked" : ""}>

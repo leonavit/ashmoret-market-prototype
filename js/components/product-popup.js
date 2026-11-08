@@ -1,7 +1,8 @@
 import { getProduct } from "../data/catalog.js";
 import { getCommerce } from "../data/commerce.js";
 import { isElectronicsProduct } from "../data/departments.js";
-import { mountProductGalleries, productBuy, productFolds, productGallery } from "./product-view.js";
+import { mountProductGalleries, productFolds, productGallery } from "./product-view.js";
+import { qtyStep } from "./product-card.js";
 import { esc, money } from "../lib/format.js";
 
 function ensureDialog() {
@@ -34,13 +35,14 @@ function markup(product) {
       <div class="product-info">
         <div class="product-head">
           <h2 id="product-pop-title">${esc(product.name)}</h2>
+          ${field("משקל", product.weight)}
           <p class="product-pop-barcode">ברקוד <span dir="ltr">${esc(product.barcode)}</span></p>
           ${price}
         </div>
-        <div class="product-fields">
-          ${field("משקל", product.weight)}
+        <div class="pop-buy" data-buy>
+          <button type="button" class="buy-add pop-add" data-add="${esc(product.id)}" data-added-label="נוסף לסל ✓">הוספה לסל</button>
+          ${qtyStep()}
         </div>
-        ${productBuy(product)}
         ${productFolds(product, { openDescription: false, shipping: false })}
       </div>
     </div>`;

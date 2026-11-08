@@ -21,14 +21,18 @@ function cardParts(product) {
   return { badge, price };
 }
 
-export function buyRow(id, { flat = false } = {}) {
-  return `<div class="buy-row${flat ? " is-flat" : ""}" data-buy>
-    <div class="qty-step" dir="ltr">
+export function qtyStep() {
+  return `<div class="qty-step" dir="ltr">
       <button type="button" data-qty="-1" aria-label="הפחתת כמות">−</button>
       <span class="qty-unit">יח׳</span>
       <input data-qty-input inputmode="numeric" maxlength="2" value="1" aria-label="כמות">
       <button type="button" data-qty="1" aria-label="הגדלת כמות">+</button>
-    </div>
+    </div>`;
+}
+
+export function buyRow(id, { flat = false } = {}) {
+  return `<div class="buy-row${flat ? " is-flat" : ""}" data-buy>
+    ${qtyStep()}
     <button type="button" class="buy-add" data-add="${esc(id)}">הוספה</button>
   </div>`;
 }
