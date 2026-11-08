@@ -1,8 +1,8 @@
 export const offerBanners = [
-  { href: "#/p/p198", label: "סט בלנדר מוט רב־תכליתי, לרכישה עכשיו", image: "assets/images/banners/offer-hand-blender.webp", size: [675, 640] },
-  { href: "#/p/p095", label: "פסטה פוזילי ויטאלה, לרכישה עכשיו", image: "assets/images/banners/offer-pasta.webp", size: [675, 640] },
+  { href: "#/p/p198", label: "סט בלנדר מוט רב־תכליתי, לרכישה עכשיו", image: "assets/images/banners/offer-hand-blender.webp?v=2", size: [675, 640] },
+  { href: "#/p/p095", label: "פסטה פוזילי ויטאלה, לרכישה עכשיו", image: "assets/images/banners/offer-pasta.webp?v=2", size: [675, 640] },
   { href: "#/p/p001", label: "פירורי לחם מתובלים תוצרת, לרכישה עכשיו", image: "assets/images/banners/offer-breadcrumbs.webp", size: [675, 640] },
-  { href: "#/p/p116", label: "גרעיני תירס מתוק תוצרת, לרכישה עכשיו", image: "assets/images/banners/offer-corn.webp", size: [675, 640] },
+  { href: "#/p/p116", label: "גרעיני תירס מתוק תוצרת, לרכישה עכשיו", image: "assets/images/banners/offer-corn.webp?v=2", size: [675, 640] },
 ];
 
 export const sideBanners = [

@@ -34,6 +34,7 @@ const menus = [
     promo: {
       href: "#/d/super",
       title: "לכל המוצרים בסופר אשמורת",
+      image: "assets/images/banners/mega-all-super.webp?v=2",
     },
   },
   {
@@ -62,6 +63,7 @@ const menus = [
     promo: {
       href: "#/d/home",
       title: "לכל המוצרים בחד פעמי וכלי בית",
+      image: "assets/images/banners/mega-all-home.webp?v=2",
     },
   },
   {
@@ -109,13 +111,17 @@ const groupImages = {
   "אלקטרוניקה": "electronics.png",
 };
 
+function groupIcon(name) {
+  return groupImages[name] ? `assets/images/categories/icons/${groupImages[name].replace(".png", ".webp")}?v=2` : null;
+}
+
 export function featuredGroups() {
   return ["super", "home", "electronics"]
     .flatMap((id) => menuById(id).groups.map(([name, links]) => ({
       name,
       href: links[0][1],
       image: groupImages[name] ? `assets/images/categories/${groupImages[name]}` : null,
-      icon: groupImages[name] ? `assets/images/categories/icons/${groupImages[name].replace(".png", ".webp")}?v=2` : null,
+      icon: groupIcon(name),
     })));
 }
 
@@ -135,9 +141,17 @@ export function megaPanel(id) {
   const groups = item.groups.map(([title, links]) => `<section class="mega-block">
       <h3><a href="${esc(links[0][1])}">${esc(title)}</a></h3>
       <ul>${links.map(([label, href]) => `<li><a href="${esc(href)}">${esc(label)}</a></li>`).join("")}</ul>
-      <span class="mega-block-photo" style="background-image:url('${mark}')"></span>
+      <span class="mega-block-photo" style="background-image:url('${groupIcon(title) || mark}')"></span>
     </section>`).join("");
   const promo = item.promo;
+  if (promo.image) {
+    return `<div class="mega-layout">
+    <a class="mega-all has-image" href="${esc(promo.href)}">
+      <img class="mega-all-image" src="${esc(promo.image)}" alt="${esc(promo.title)}" width="1024" height="682" loading="lazy">
+    </a>
+    ${groups}
+  </div>`;
+  }
   return `<div class="mega-layout">
     <a class="mega-all" href="${esc(promo.href)}">
       <span class="mega-all-photo" style="background-image:url('${mark}')"></span>

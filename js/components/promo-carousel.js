@@ -127,6 +127,39 @@ function fadeEngine(root) {
     listeners.forEach((listener) => listener());
   };
   slides[0]?.classList.add("is-active");
+
+  const track = root.querySelector(".promo-track") || root;
+  let startX = 0;
+  let startY = 0;
+  let dragging = false;
+  let swiped = false;
+  const onDown = (event) => {
+    if (event.button > 0) return;
+    dragging = true;
+    swiped = false;
+    startX = event.clientX;
+    startY = event.clientY;
+  };
+  const onUp = (event) => {
+    if (!dragging) return;
+    dragging = false;
+    const dx = event.clientX - startX;
+    if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(event.clientY - startY)) return;
+    swiped = true;
+    show(dx > 0 ? current + 1 : current - 1);
+  };
+  const onClick = (event) => {
+    if (!swiped) return;
+    event.preventDefault();
+    event.stopPropagation();
+    swiped = false;
+  };
+  const onDragStart = (event) => event.preventDefault();
+  track.addEventListener("pointerdown", onDown);
+  window.addEventListener("pointerup", onUp);
+  track.addEventListener("click", onClick, true);
+  track.addEventListener("dragstart", onDragStart);
+
   return {
     scrollNext: () => show(current + 1),
     scrollPrev: () => show(current - 1),
@@ -135,7 +168,12 @@ function fadeEngine(root) {
     on: (event, listener) => {
       if (event === "select") listeners.push(listener);
     },
-    destroy: () => {},
+    destroy: () => {
+      track.removeEventListener("pointerdown", onDown);
+      window.removeEventListener("pointerup", onUp);
+      track.removeEventListener("click", onClick, true);
+      track.removeEventListener("dragstart", onDragStart);
+    },
   };
 }
 
