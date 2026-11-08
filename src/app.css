@@ -1509,6 +1509,7 @@
     .promo-hero-copy {
       gap: 0;
       padding-top: 0;
+      padding-bottom: 4rem;
     }
 
     .promo-hero-head {
@@ -1668,7 +1669,20 @@
   }
 
   .hero-dots {
+    width: fit-content;
     align-items: center;
+    margin-inline: auto;
+    border-radius: var(--radius-pill);
+    background: rgb(255 255 255 / 0.62);
+    padding: 0.25rem 0.6rem;
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+  }
+
+  @media (max-width: 1023px) {
+    .side-carousel .hero-dots {
+      inset-inline: 0;
+    }
   }
 
   .autoplay-toggle {
@@ -2440,6 +2454,23 @@
       display: none;
     }
 
+    .cart-dock-arrow,
+    .cart-dock.is-open .cart-dock-arrow {
+      border: 0;
+    }
+
+    .cart-dock.is-open {
+      border-color: #c9230d;
+    }
+
+    .cart-dock-badge {
+      z-index: 4;
+      top: -0.95rem;
+      inset-inline-end: -1.1rem;
+      box-shadow: 0 0 0 2px var(--color-white);
+      pointer-events: none;
+    }
+
     .cart-dock-title > span:not(.cart-dock-mark),
     .cart-dock-bar > .min-w-0 > .text-sm,
     .cart-dock-pay {
@@ -2943,6 +2974,14 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .mega-banners.is-deals {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+
+  .mega-mobile .mega-banners.is-deals {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
   .mega-mobile .mega-all,
   .mega-mobile .mega-all-copy,
   .mega-mobile .mega-block {
@@ -3050,13 +3089,20 @@
       grid-area: menu;
       width: 2.75rem;
       height: 2.75rem;
-      border: 1px solid var(--color-line-strong);
-      background: var(--color-white);
+      border: 0;
+      background: transparent;
     }
 
     .header-bar #menu-open:hover {
-      border-color: var(--color-ink);
-      background: var(--color-white);
+      background: transparent;
+      opacity: 0.75;
+    }
+
+    .header-bar .menu-open-icon {
+      width: 1.9rem;
+      height: 1.9rem;
+      stroke-width: 2.6;
+      stroke-linecap: round;
     }
   }
   .header-tools { grid-area: tools; justify-self: end; color: var(--color-ink); }

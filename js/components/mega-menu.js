@@ -1,6 +1,5 @@
 import { esc } from "../lib/format.js";
-import { offerBanners, sideBanners } from "../data/banners.js";
-import { getTheme } from "./theme-options.js";
+import { dealBanners } from "../data/banners.js";
 import { isSingleSupplier, supplierCategories } from "./suppliers.js";
 
 const mark = "assets/images/brand/placeholder-cart.png";
@@ -134,8 +133,7 @@ export function megaPanel(id) {
   const item = menuById(id);
   if (!item) return "";
   if (item.banners) {
-    const banners = getTheme().banners === "v2" ? sideBanners : offerBanners;
-    return `<div class="mega-layout mega-banners" style="--banner-count:${banners.length}">${banners.map((banner) => `<a class="mega-banner" href="${esc(banner.href)}" aria-label="${esc(banner.label)}">
+    return `<div class="mega-layout mega-banners is-deals">${dealBanners.map((banner) => `<a class="mega-banner" href="${esc(banner.href)}" aria-label="${esc(banner.label)}">
       <img src="${esc(banner.image)}" alt="" width="${banner.size[0]}" height="${banner.size[1]}" loading="lazy" decoding="async">
     </a>`).join("")}</div>`;
   }
