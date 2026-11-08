@@ -4075,14 +4075,17 @@
     const price = commerce ? `<p class="price">${money(commerce.price)}${commerce.compareAt ? `<s>${money(commerce.compareAt)}</s>` : ""}</p>` : `<p class="text-sm font-semibold text-muted">\u05DE\u05D7\u05D9\u05E8 \u05D9\u05E2\u05D5\u05D3\u05DB\u05DF</p>`;
     return { badge, price };
   }
-  function buyRow(id, { flat = false } = {}) {
-    return `<div class="buy-row${flat ? " is-flat" : ""}" data-buy>
-    <div class="qty-step" dir="ltr">
+  function qtyStep() {
+    return `<div class="qty-step" dir="ltr">
       <button type="button" data-qty="-1" aria-label="\u05D4\u05E4\u05D7\u05EA\u05EA \u05DB\u05DE\u05D5\u05EA">\u2212</button>
       <span class="qty-unit">\u05D9\u05D7\u05F3</span>
       <input data-qty-input inputmode="numeric" maxlength="2" value="1" aria-label="\u05DB\u05DE\u05D5\u05EA">
       <button type="button" data-qty="1" aria-label="\u05D4\u05D2\u05D3\u05DC\u05EA \u05DB\u05DE\u05D5\u05EA">+</button>
-    </div>
+    </div>`;
+  }
+  function buyRow(id, { flat = false } = {}) {
+    return `<div class="buy-row${flat ? " is-flat" : ""}" data-buy>
+    ${qtyStep()}
     <button type="button" class="buy-add" data-add="${esc(id)}">\u05D4\u05D5\u05E1\u05E4\u05D4</button>
   </div>`;
   }
@@ -6143,7 +6146,7 @@
     ${field2("phone", "\u05D8\u05DC\u05E4\u05D5\u05DF", data.phone, `type="tel" autocomplete="tel" dir="ltr" required`)}
     <label class="auth-check">
       <input type="checkbox" name="privacy" required ${data.privacy ? "checked" : ""} aria-invalid="${bad("privacy") ? "true" : "false"}" ${bad("privacy") ? "data-auth-focus" : ""}>
-      <span><span class="req" aria-hidden="true">*</span>\u05E7\u05E8\u05D0\u05EA\u05D9 \u05D0\u05EA \u05DE\u05D3\u05D9\u05E0\u05D9\u05D5\u05EA \u05D4\u05E4\u05E8\u05D8\u05D9\u05D5\u05EA, \u05D0\u05EA \u05EA\u05E0\u05D0\u05D9 \u05D4\u05E9\u05D9\u05DE\u05D5\u05E9 \u05D5\u05D0\u05EA \u05EA\u05E7\u05E0\u05D5\u05DF \u05DE\u05D5\u05E2\u05D3\u05D5\u05DF \u05D4\u05DC\u05E7\u05D5\u05D7\u05D5\u05EA, \u05D5\u05D0\u05E0\u05D9 \u05DE\u05D0\u05E9\u05E8/\u05EA \u05E9\u05D4\u05DE\u05D9\u05D3\u05E2 \u05E9\u05DE\u05E1\u05E8\u05EA\u05D9 \u05D5/\u05D0\u05D5 \u05E9\u05D9\u05D9\u05D0\u05E1\u05E3 \u05D0\u05D5\u05D3\u05D5\u05EA\u05D9\u05D9 \u05D1\u05DE\u05E1\u05D2\u05E8\u05EA \u05DE\u05EA\u05DF \u05D4\u05E9\u05D9\u05E8\u05D5\u05EA\u05D9\u05DD \u05D9\u05D9\u05E9\u05DE\u05E8 \u05D1\u05DE\u05D0\u05D2\u05E8\u05D9 \u05D4\u05DE\u05D9\u05D3\u05E2 \u05E9\u05D1\u05E9\u05DC\u05D9\u05D8\u05EA \u05D0\u05E9\u05DE\u05D5\u05E8\u05EA \u05DE\u05E8\u05E7\u05D8 \u05D5/\u05D0\u05D5 \u05DE\u05D9 \u05DE\u05D8\u05E2\u05DE\u05D4, \u05DC\u05E8\u05D1\u05D5\u05EA \u05E1\u05E4\u05E7\u05D9 \u05E9\u05D9\u05E8\u05D5\u05EA \u05D4\u05E4\u05D5\u05E2\u05DC\u05D9\u05DD \u05E2\u05D1\u05D5\u05E8\u05D4. \u05D4\u05DE\u05D9\u05D3\u05E2 \u05D9\u05E9\u05DE\u05E9 \u05DC\u05E6\u05D5\u05E8\u05DA \u05D6\u05D9\u05D4\u05D5\u05D9, \u05E0\u05D9\u05D4\u05D5\u05DC \u05D4\u05D7\u05E9\u05D1\u05D5\u05DF, \u05D0\u05E1\u05E4\u05E7\u05EA \u05D4\u05D6\u05DE\u05E0\u05D5\u05EA, \u05E9\u05D9\u05E8\u05D5\u05EA \u05DC\u05E7\u05D5\u05D7\u05D5\u05EA, \u05EA\u05E4\u05E2\u05D5\u05DC \u05DE\u05D5\u05E2\u05D3\u05D5\u05DF \u05D4\u05DC\u05E7\u05D5\u05D7\u05D5\u05EA, \u05E2\u05DE\u05D9\u05D3\u05D4 \u05D1\u05D7\u05D5\u05D1\u05D5\u05EA \u05D4\u05D3\u05D9\u05DF \u05D5\u05E9\u05D9\u05E4\u05D5\u05E8 \u05D4\u05E9\u05D9\u05E8\u05D5\u05EA, \u05D5\u05D4\u05DB\u05D5\u05DC \u05D1\u05D4\u05EA\u05D0\u05DD \u05DC\u05DE\u05D3\u05D9\u05E0\u05D9\u05D5\u05EA \u05D4\u05E4\u05E8\u05D8\u05D9\u05D5\u05EA.</span>
+      <span><span class="req" aria-hidden="true">*</span>\u05E7\u05E8\u05D0\u05EA\u05D9 \u05D0\u05EA <a href="#/privacy" target="_blank" rel="noopener">\u05DE\u05D3\u05D9\u05E0\u05D9\u05D5\u05EA \u05D4\u05E4\u05E8\u05D8\u05D9\u05D5\u05EA</a>, \u05D0\u05EA <a href="#/terms" target="_blank" rel="noopener">\u05EA\u05E0\u05D0\u05D9 \u05D4\u05E9\u05D9\u05DE\u05D5\u05E9</a> \u05D5\u05D0\u05EA \u05EA\u05E7\u05E0\u05D5\u05DF \u05DE\u05D5\u05E2\u05D3\u05D5\u05DF \u05D4\u05DC\u05E7\u05D5\u05D7\u05D5\u05EA, \u05D5\u05D0\u05E0\u05D9 \u05DE\u05D0\u05E9\u05E8/\u05EA \u05E9\u05D4\u05DE\u05D9\u05D3\u05E2 \u05E9\u05DE\u05E1\u05E8\u05EA\u05D9 \u05D5/\u05D0\u05D5 \u05E9\u05D9\u05D9\u05D0\u05E1\u05E3 \u05D0\u05D5\u05D3\u05D5\u05EA\u05D9\u05D9 \u05D1\u05DE\u05E1\u05D2\u05E8\u05EA \u05DE\u05EA\u05DF \u05D4\u05E9\u05D9\u05E8\u05D5\u05EA\u05D9\u05DD \u05D9\u05D9\u05E9\u05DE\u05E8 \u05D1\u05DE\u05D0\u05D2\u05E8\u05D9 \u05D4\u05DE\u05D9\u05D3\u05E2 \u05E9\u05D1\u05E9\u05DC\u05D9\u05D8\u05EA \u05D0\u05E9\u05DE\u05D5\u05E8\u05EA \u05DE\u05E8\u05E7\u05D8 \u05D5/\u05D0\u05D5 \u05DE\u05D9 \u05DE\u05D8\u05E2\u05DE\u05D4, \u05DC\u05E8\u05D1\u05D5\u05EA \u05E1\u05E4\u05E7\u05D9 \u05E9\u05D9\u05E8\u05D5\u05EA \u05D4\u05E4\u05D5\u05E2\u05DC\u05D9\u05DD \u05E2\u05D1\u05D5\u05E8\u05D4. \u05D4\u05DE\u05D9\u05D3\u05E2 \u05D9\u05E9\u05DE\u05E9 \u05DC\u05E6\u05D5\u05E8\u05DA \u05D6\u05D9\u05D4\u05D5\u05D9, \u05E0\u05D9\u05D4\u05D5\u05DC \u05D4\u05D7\u05E9\u05D1\u05D5\u05DF, \u05D0\u05E1\u05E4\u05E7\u05EA \u05D4\u05D6\u05DE\u05E0\u05D5\u05EA, \u05E9\u05D9\u05E8\u05D5\u05EA \u05DC\u05E7\u05D5\u05D7\u05D5\u05EA, \u05EA\u05E4\u05E2\u05D5\u05DC \u05DE\u05D5\u05E2\u05D3\u05D5\u05DF \u05D4\u05DC\u05E7\u05D5\u05D7\u05D5\u05EA, \u05E2\u05DE\u05D9\u05D3\u05D4 \u05D1\u05D7\u05D5\u05D1\u05D5\u05EA \u05D4\u05D3\u05D9\u05DF \u05D5\u05E9\u05D9\u05E4\u05D5\u05E8 \u05D4\u05E9\u05D9\u05E8\u05D5\u05EA, \u05D5\u05D4\u05DB\u05D5\u05DC \u05D1\u05D4\u05EA\u05D0\u05DD \u05DC\u05DE\u05D3\u05D9\u05E0\u05D9\u05D5\u05EA \u05D4\u05E4\u05E8\u05D8\u05D9\u05D5\u05EA.</span>
     </label>
     <label class="auth-check">
       <input type="checkbox" name="marketing" ${data.marketing ? "checked" : ""}>
@@ -7827,13 +7830,14 @@
       <div class="product-info">
         <div class="product-head">
           <h2 id="product-pop-title">${esc(product.name)}</h2>
+          ${field("\u05DE\u05E9\u05E7\u05DC", product.weight)}
           <p class="product-pop-barcode">\u05D1\u05E8\u05E7\u05D5\u05D3 <span dir="ltr">${esc(product.barcode)}</span></p>
           ${price}
         </div>
-        <div class="product-fields">
-          ${field("\u05DE\u05E9\u05E7\u05DC", product.weight)}
+        <div class="pop-buy" data-buy>
+          <button type="button" class="buy-add pop-add" data-add="${esc(product.id)}" data-added-label="\u05E0\u05D5\u05E1\u05E3 \u05DC\u05E1\u05DC \u2713">\u05D4\u05D5\u05E1\u05E4\u05D4 \u05DC\u05E1\u05DC</button>
+          ${qtyStep()}
         </div>
-        ${productBuy(product)}
         ${productFolds(product, { openDescription: false, shipping: false })}
       </div>
     </div>`;
@@ -8019,6 +8023,16 @@
       addItem(product.id, qty);
       updateCartBadge(true);
       pulseAdd(add);
+      if (add.dataset.addedLabel) {
+        add.dataset.label ??= add.textContent;
+        add.textContent = add.dataset.addedLabel;
+        add.classList.add("is-added");
+        window.clearTimeout(Number(add.dataset.addedTimer));
+        add.dataset.addedTimer = String(window.setTimeout(() => {
+          add.textContent = add.dataset.label;
+          add.classList.remove("is-added");
+        }, 1600));
+      }
       showToast(`${product.name} \u05E0\u05D5\u05E1\u05E3 \u05DC\u05E1\u05DC`, "#/cart");
     }
   });
