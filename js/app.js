@@ -19,12 +19,13 @@ import { renderSupplierNav } from "./components/mega-menu.js";
 import { mountPromoCarousels } from "./components/promo-carousel.js";
 import { bindNewsletter } from "./components/newsletter-popup.js";
 import { bindCookieNotice } from "./components/cookie-notice.js";
+import { mountTopbarIcons } from "./components/topbar-icons.js";
 import { mountCarousels } from "./components/carousel.js";
 import { mountCatalog } from "./components/catalog-rail.js";
 import { openProductPopup } from "./components/product-popup.js";
 import { mountProductGalleries, mountProductTabs } from "./components/product-view.js";
-import { confirmAction, showToast } from "./components/toast.js";
-import { playHero, pulseAdd } from "./motion.js";
+import { announce, confirmAction } from "./components/toast.js";
+import { playHero, pulseAdd, rollQty, sparkAt } from "./motion.js";
 import { addItem, clearCart, getCart, removeItem, setQty, subscribe } from "./state/cart.js";
 import { createOrderId, saveOrder } from "./state/orders.js";
 import { getSession, subscribeSession, takeExpiredNotice } from "./state/session.js";
@@ -172,7 +173,9 @@ document.addEventListener("click", async (event) => {
   if (qtyBtn) {
     const input = qtyBtn.closest("[data-buy]")?.querySelector("[data-qty-input]");
     if (!input) return;
-    const next = Math.max(1, Math.min(99, Number(input.value || 1) + Number(qtyBtn.dataset.qty)));
+    const direction = Number(qtyBtn.dataset.qty);
+    const next = Math.max(1, Math.min(99, Number(input.value || 1) + direction));
+    if (String(next) !== input.value) rollQty(input, direction);
     input.value = String(next);
     return;
   }
@@ -180,7 +183,12 @@ document.addEventListener("click", async (event) => {
   const step = event.target.closest("[data-cart-step]");
   if (step) {
     const item = getCart().items.find((row) => row.id === step.dataset.id);
-    if (item) setQty(item.id, item.qty + Number(step.dataset.cartStep));
+    if (!item) return;
+    const direction = Number(step.dataset.cartStep);
+    const next = Math.max(1, Math.min(99, item.qty + direction));
+    if (next === item.qty) return;
+    setQty(item.id, next);
+    document.querySelectorAll(`[data-cart-step="1"][data-id="${CSS.escape(item.id)}"]`).forEach((plus) => rollQty(plus.previousElementSibling, direction));
     return;
   }
 
@@ -202,17 +210,18 @@ document.addEventListener("click", async (event) => {
     addItem(product.id, qty);
     updateCartBadge(true);
     pulseAdd(add);
+    sparkAt(event, add);
     if (add.dataset.addedLabel) {
       add.dataset.label ??= add.textContent;
       add.textContent = add.dataset.addedLabel;
-      add.classList.add("is-added");
-      window.clearTimeout(Number(add.dataset.addedTimer));
-      add.dataset.addedTimer = String(window.setTimeout(() => {
-        add.textContent = add.dataset.label;
-        add.classList.remove("is-added");
-      }, 1600));
     }
-    showToast(`${product.name} נוסף לסל`, "#/cart");
+    add.classList.add("is-added");
+    window.clearTimeout(Number(add.dataset.addedTimer));
+    add.dataset.addedTimer = String(window.setTimeout(() => {
+      if (add.dataset.label) add.textContent = add.dataset.label;
+      add.classList.remove("is-added");
+    }, 2000));
+    announce(`${product.name} נוסף לסל`);
   }
 });
 
@@ -303,6 +312,7 @@ bindLogin(navigate);
 bindServiceDialogs();
 bindNewsletter();
 bindCookieNotice();
+mountTopbarIcons();
 bindAccount(render);
 bindCheckout();
 mountCartDock();

@@ -123,7 +123,7 @@ export function bindShell(navigate) {
   }
 }
 
-const personIcon = `<svg viewBox="0 0 24 24" class="size-6" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="8" r="3.2"></circle><path d="M5 19.2c1.4-3 3.8-4.4 7-4.4s5.6 1.4 7 4.4"></path></svg>`;
+const personIcon = `<svg viewBox="0 0 24 24" class="account-icon" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="8" r="3.2"></circle><path d="M5 19.2c1.4-3 3.8-4.4 7-4.4s5.6 1.4 7 4.4"></path></svg>`;
 
 export function updateAccountSlot() {
   const slot = document.getElementById("account-slot");

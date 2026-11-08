@@ -24,7 +24,7 @@ export function renderCart() {
     <h1 class="text-3xl font-extrabold">סל הקניות</h1>
     <div class="mt-6 grid items-start gap-8 lg:grid-cols-[1fr_320px]">
       <ul class="grid gap-4">
-        ${items.map((item) => `<li class="grid grid-cols-[88px_1fr] gap-4 rounded-2xl border border-line p-3">
+        ${items.map((item) => `<li class="grid grid-cols-[88px_1fr] gap-4 rounded-2xl border border-line bg-white p-3">
           <a href="#/p/${esc(item.product.id)}" class="card-media${productPhoto(item.product) ? " has-photo" : ""}" tabindex="-1" aria-hidden="true">
             ${photoImg(item.product) || `<span class="block h-full w-full"></span>`}
           </a>
@@ -33,7 +33,7 @@ export function renderCart() {
             <p class="text-sm text-muted">${esc(item.product.weight)}</p>
             <p class="mt-1 font-bold">${money(item.commerce.price)}</p>
             <div class="mt-3 flex flex-wrap items-center gap-3">
-              <div class="flex items-center rounded-full border border-line">
+              <div class="flex items-center rounded-full border border-line" dir="ltr">
                 <button type="button" class="icon-btn" data-cart-step="-1" data-id="${esc(item.product.id)}" aria-label="הפחתת כמות">−</button>
                 <span class="w-8 text-center font-bold">${item.qty}</span>
                 <button type="button" class="icon-btn" data-cart-step="1" data-id="${esc(item.product.id)}" aria-label="הגדלת כמות">+</button>

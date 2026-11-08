@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "embla-carousel": "^8.6.0",
-    "gsap": "^3.12.7"
+    "gsap": "^3.12.7",
+    "lottie-web": "^5.13.0"
   }
 }

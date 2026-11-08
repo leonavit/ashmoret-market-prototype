@@ -18,6 +18,16 @@ export function showToast(message, href) {
   }, 3200);
 }
 
+export function announce(message) {
+  const region = document.getElementById("toast");
+  if (!region) return;
+  const item = document.createElement("p");
+  item.className = "sr-only";
+  item.textContent = message;
+  region.appendChild(item);
+  window.setTimeout(() => item.remove(), 3200);
+}
+
 function titleHtml(message, highlight) {
   const text = esc(message);
   if (!highlight) return text;

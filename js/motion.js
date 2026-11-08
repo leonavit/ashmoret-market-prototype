@@ -7,6 +7,33 @@ export function playHero(root) {
   gsap.fromTo(copy, { y: 22, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.7, ease: "power2.out" });
 }
 
+export function rollQty(el, direction) {
+  if (!el || prefersReducedMotion()) return;
+  el.classList.remove("is-rolling-up", "is-rolling-down");
+  void el.offsetWidth;
+  el.classList.add(direction > 0 ? "is-rolling-up" : "is-rolling-down");
+  el.addEventListener("animationend", () => el.classList.remove("is-rolling-up", "is-rolling-down"), { once: true });
+}
+
+export function sparkAt(event, target) {
+  if (prefersReducedMotion()) return;
+  const rect = target.getBoundingClientRect();
+  const fromPointer = event.detail > 0;
+  const burst = document.createElement("span");
+  burst.className = "click-spark";
+  burst.setAttribute("aria-hidden", "true");
+  burst.style.left = `${fromPointer ? event.clientX : rect.left + rect.width / 2}px`;
+  burst.style.top = `${fromPointer ? event.clientY : rect.top + rect.height / 2}px`;
+  const rays = 8;
+  for (let i = 0; i < rays; i += 1) {
+    const ray = document.createElement("i");
+    ray.style.setProperty("--spark-angle", `${(360 / rays) * i + Math.random() * 14 - 7}deg`);
+    burst.appendChild(ray);
+  }
+  document.body.appendChild(burst);
+  window.setTimeout(() => burst.remove(), 600);
+}
+
 export function pulseAdd(button) {
   const gsap = window.gsap;
   if (!gsap || !button || prefersReducedMotion()) return;

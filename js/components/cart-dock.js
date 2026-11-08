@@ -10,6 +10,7 @@ const cartIcon = `<svg class="cart-dock-icon" viewBox="0 0 24 24" fill="none" st
 const trashIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7h16"></path><path d="M9 7V5h6v2"></path><path d="M7 7l1 13h8l1-13"></path><path d="M10 11v5M14 11v5"></path></svg>`;
 
 let open = false;
+let turnTimer = 0;
 
 function rows() {
   return getCart().items
@@ -84,6 +85,10 @@ export function updateCartDock(routeName = parseHash().name) {
 export function toggleCartDock(force) {
   const y = window.scrollY;
   open = typeof force === "boolean" ? force : !open;
+  const root = document.getElementById("cart-dock");
+  root?.classList.add("is-turning");
+  window.clearTimeout(turnTimer);
+  turnTimer = window.setTimeout(() => root?.classList.remove("is-turning"), 320);
   updateCartDock();
   if (open) document.querySelector(".cart-dock-arrow")?.focus({ preventScroll: true });
   if (window.scrollY !== y) window.scrollTo({ top: y, behavior: "instant" });
