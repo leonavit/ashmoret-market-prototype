@@ -4578,10 +4578,10 @@
 
   // js/data/banners.js
   var offerBanners = [
-    { href: "#/p/p198", label: "\u05E1\u05D8 \u05D1\u05DC\u05E0\u05D3\u05E8 \u05DE\u05D5\u05D8 \u05E8\u05D1\u05BE\u05EA\u05DB\u05DC\u05D9\u05EA\u05D9, \u05DC\u05E8\u05DB\u05D9\u05E9\u05D4 \u05E2\u05DB\u05E9\u05D9\u05D5", image: "assets/images/banners/offer-hand-blender.webp", size: [675, 640] },
-    { href: "#/p/p095", label: "\u05E4\u05E1\u05D8\u05D4 \u05E4\u05D5\u05D6\u05D9\u05DC\u05D9 \u05D5\u05D9\u05D8\u05D0\u05DC\u05D4, \u05DC\u05E8\u05DB\u05D9\u05E9\u05D4 \u05E2\u05DB\u05E9\u05D9\u05D5", image: "assets/images/banners/offer-pasta.webp", size: [675, 640] },
+    { href: "#/p/p198", label: "\u05E1\u05D8 \u05D1\u05DC\u05E0\u05D3\u05E8 \u05DE\u05D5\u05D8 \u05E8\u05D1\u05BE\u05EA\u05DB\u05DC\u05D9\u05EA\u05D9, \u05DC\u05E8\u05DB\u05D9\u05E9\u05D4 \u05E2\u05DB\u05E9\u05D9\u05D5", image: "assets/images/banners/offer-hand-blender.webp?v=2", size: [675, 640] },
+    { href: "#/p/p095", label: "\u05E4\u05E1\u05D8\u05D4 \u05E4\u05D5\u05D6\u05D9\u05DC\u05D9 \u05D5\u05D9\u05D8\u05D0\u05DC\u05D4, \u05DC\u05E8\u05DB\u05D9\u05E9\u05D4 \u05E2\u05DB\u05E9\u05D9\u05D5", image: "assets/images/banners/offer-pasta.webp?v=2", size: [675, 640] },
     { href: "#/p/p001", label: "\u05E4\u05D9\u05E8\u05D5\u05E8\u05D9 \u05DC\u05D7\u05DD \u05DE\u05EA\u05D5\u05D1\u05DC\u05D9\u05DD \u05EA\u05D5\u05E6\u05E8\u05EA, \u05DC\u05E8\u05DB\u05D9\u05E9\u05D4 \u05E2\u05DB\u05E9\u05D9\u05D5", image: "assets/images/banners/offer-breadcrumbs.webp", size: [675, 640] },
-    { href: "#/p/p116", label: "\u05D2\u05E8\u05E2\u05D9\u05E0\u05D9 \u05EA\u05D9\u05E8\u05E1 \u05DE\u05EA\u05D5\u05E7 \u05EA\u05D5\u05E6\u05E8\u05EA, \u05DC\u05E8\u05DB\u05D9\u05E9\u05D4 \u05E2\u05DB\u05E9\u05D9\u05D5", image: "assets/images/banners/offer-corn.webp", size: [675, 640] }
+    { href: "#/p/p116", label: "\u05D2\u05E8\u05E2\u05D9\u05E0\u05D9 \u05EA\u05D9\u05E8\u05E1 \u05DE\u05EA\u05D5\u05E7 \u05EA\u05D5\u05E6\u05E8\u05EA, \u05DC\u05E8\u05DB\u05D9\u05E9\u05D4 \u05E2\u05DB\u05E9\u05D9\u05D5", image: "assets/images/banners/offer-corn.webp?v=2", size: [675, 640] }
   ];
   var sideBanners = [
     { href: "#/c/oils", label: "\u05E9\u05DE\u05DF \u05D6\u05D9\u05EA \u05DB\u05EA\u05D9\u05EA \u05DE\u05E2\u05D5\u05DC\u05D4, \u05DC\u05E7\u05E0\u05D9\u05D9\u05D4 \u05E2\u05DB\u05E9\u05D9\u05D5", image: "assets/images/banners/side-olive-oil.webp", size: [1024, 970] },
@@ -4700,6 +4700,37 @@
       listeners3.forEach((listener) => listener());
     };
     slides2[0]?.classList.add("is-active");
+    const track = root.querySelector(".promo-track") || root;
+    let startX = 0;
+    let startY = 0;
+    let dragging = false;
+    let swiped = false;
+    const onDown = (event) => {
+      if (event.button > 0) return;
+      dragging = true;
+      swiped = false;
+      startX = event.clientX;
+      startY = event.clientY;
+    };
+    const onUp = (event) => {
+      if (!dragging) return;
+      dragging = false;
+      const dx = event.clientX - startX;
+      if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(event.clientY - startY)) return;
+      swiped = true;
+      show(dx > 0 ? current + 1 : current - 1);
+    };
+    const onClick = (event) => {
+      if (!swiped) return;
+      event.preventDefault();
+      event.stopPropagation();
+      swiped = false;
+    };
+    const onDragStart = (event) => event.preventDefault();
+    track.addEventListener("pointerdown", onDown);
+    window.addEventListener("pointerup", onUp);
+    track.addEventListener("click", onClick, true);
+    track.addEventListener("dragstart", onDragStart);
     return {
       scrollNext: () => show(current + 1),
       scrollPrev: () => show(current - 1),
@@ -4709,6 +4740,10 @@
         if (event === "select") listeners3.push(listener);
       },
       destroy: () => {
+        track.removeEventListener("pointerdown", onDown);
+        window.removeEventListener("pointerup", onUp);
+        track.removeEventListener("click", onClick, true);
+        track.removeEventListener("dragstart", onDragStart);
       }
     };
   }
@@ -6613,7 +6648,8 @@
       ],
       promo: {
         href: "#/d/super",
-        title: "\u05DC\u05DB\u05DC \u05D4\u05DE\u05D5\u05E6\u05E8\u05D9\u05DD \u05D1\u05E1\u05D5\u05E4\u05E8 \u05D0\u05E9\u05DE\u05D5\u05E8\u05EA"
+        title: "\u05DC\u05DB\u05DC \u05D4\u05DE\u05D5\u05E6\u05E8\u05D9\u05DD \u05D1\u05E1\u05D5\u05E4\u05E8 \u05D0\u05E9\u05DE\u05D5\u05E8\u05EA",
+        image: "assets/images/banners/mega-all-super.webp?v=2"
       }
     },
     {
@@ -6641,7 +6677,8 @@
       ],
       promo: {
         href: "#/d/home",
-        title: "\u05DC\u05DB\u05DC \u05D4\u05DE\u05D5\u05E6\u05E8\u05D9\u05DD \u05D1\u05D7\u05D3 \u05E4\u05E2\u05DE\u05D9 \u05D5\u05DB\u05DC\u05D9 \u05D1\u05D9\u05EA"
+        title: "\u05DC\u05DB\u05DC \u05D4\u05DE\u05D5\u05E6\u05E8\u05D9\u05DD \u05D1\u05D7\u05D3 \u05E4\u05E2\u05DE\u05D9 \u05D5\u05DB\u05DC\u05D9 \u05D1\u05D9\u05EA",
+        image: "assets/images/banners/mega-all-home.webp?v=2"
       }
     },
     {
@@ -6687,12 +6724,15 @@
     "\u05EA\u05D0\u05D5\u05E8\u05D4": "lighting.png",
     "\u05D0\u05DC\u05E7\u05D8\u05E8\u05D5\u05E0\u05D9\u05E7\u05D4": "electronics.png"
   };
+  function groupIcon2(name) {
+    return groupImages[name] ? `assets/images/categories/icons/${groupImages[name].replace(".png", ".webp")}?v=2` : null;
+  }
   function featuredGroups() {
     return ["super", "home", "electronics"].flatMap((id) => menuById(id).groups.map(([name, links]) => ({
       name,
       href: links[0][1],
       image: groupImages[name] ? `assets/images/categories/${groupImages[name]}` : null,
-      icon: groupImages[name] ? `assets/images/categories/icons/${groupImages[name].replace(".png", ".webp")}?v=2` : null
+      icon: groupIcon2(name)
     })));
   }
   function menuById(id) {
@@ -6710,9 +6750,17 @@
     const groups2 = item.groups.map(([title, links]) => `<section class="mega-block">
       <h3><a href="${esc(links[0][1])}">${esc(title)}</a></h3>
       <ul>${links.map(([label, href]) => `<li><a href="${esc(href)}">${esc(label)}</a></li>`).join("")}</ul>
-      <span class="mega-block-photo" style="background-image:url('${mark}')"></span>
+      <span class="mega-block-photo" style="background-image:url('${groupIcon2(title) || mark}')"></span>
     </section>`).join("");
     const promo = item.promo;
+    if (promo.image) {
+      return `<div class="mega-layout">
+    <a class="mega-all has-image" href="${esc(promo.href)}">
+      <img class="mega-all-image" src="${esc(promo.image)}" alt="${esc(promo.title)}" width="1024" height="682" loading="lazy">
+    </a>
+    ${groups2}
+  </div>`;
+    }
     return `<div class="mega-layout">
     <a class="mega-all" href="${esc(promo.href)}">
       <span class="mega-all-photo" style="background-image:url('${mark}')"></span>
