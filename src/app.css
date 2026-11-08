@@ -365,6 +365,18 @@
     border-radius: var(--radius-md);
   }
 
+  @media (max-width: 767px) {
+    .card.card-shelf .card-media {
+      overflow: visible;
+    }
+
+    .card-shelf .sale-badge {
+      z-index: 2;
+      top: -7px;
+      inset-inline-start: -7px;
+    }
+  }
+
   .card-brand {
     color: var(--color-muted);
     font-size: 12px;
