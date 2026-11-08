@@ -77,9 +77,9 @@ function deliveryBody() {
 function serviceBody(inPage) {
   const service = state.service;
   const contact = `<ul class="service-contact">
-    <li><a href="tel:03-000-0000">
+    <li><a href="tel:097448038">
       <span class="service-contact-icon">${phoneIcon}</span>
-      <span class="service-contact-text"><strong><span dir="ltr">03-000-0000</span></strong><small>טלפון שירות לקוחות</small></span>
+      <span class="service-contact-text"><strong><span dir="ltr">09-7448038</span></strong><small>טלפון שירות לקוחות</small></span>
     </a></li>
     <li><a href="https://wa.me/97230000000" target="_blank" rel="noopener noreferrer">
       <span class="service-contact-icon">${whatsappIcon}</span>

@@ -46,10 +46,14 @@ function heroSlide(slide, index) {
   return `<div class="promo-slide promo-hero" style="--hero-fade:${slide.fade}" role="group" aria-roledescription="שקופית" aria-label="${index + 1} מתוך ${SLIDES}" ${index === 0 ? "" : 'aria-hidden="true"'}>
     <img class="promo-hero-img" src="${slide.image}" alt="" width="${slide.size[0]}" height="${slide.size[1]}" decoding="async">
     <div class="promo-hero-copy" ${index === 0 ? "data-hero-copy" : ""}>
-      <p class="promo-hero-kicker">${slide.kicker}</p>
-      <${heading} class="promo-hero-title">${slide.title}<br><span class="promo-hero-sub">${slide.sub}</span></${heading}>
-      <p class="promo-hero-text">${slide.text}</p>
-      <a class="promo-hero-cta" href="${slide.cta.href}" ${index === 0 ? "" : 'tabindex="-1"'}>${slide.cta.label}</a>
+      <div class="promo-hero-head">
+        <p class="promo-hero-kicker">${slide.kicker}</p>
+        <${heading} class="promo-hero-title">${slide.title}<br><span class="promo-hero-sub">${slide.sub}</span></${heading}>
+      </div>
+      <div class="promo-hero-body">
+        <p class="promo-hero-text">${slide.text}</p>
+        <a class="promo-hero-cta" href="${slide.cta.href}" ${index === 0 ? "" : 'tabindex="-1"'}>${slide.cta.label}</a>
+      </div>
     </div>
   </div>`;
 }
@@ -132,21 +136,51 @@ function fadeEngine(root) {
   let startX = 0;
   let startY = 0;
   let dragging = false;
+  let horizontal = false;
   let swiped = false;
-  const onDown = (event) => {
-    if (event.button > 0) return;
+  const begin = (x, y) => {
     dragging = true;
+    horizontal = false;
     swiped = false;
-    startX = event.clientX;
-    startY = event.clientY;
+    startX = x;
+    startY = y;
   };
-  const onUp = (event) => {
+  const finish = (x, y) => {
     if (!dragging) return;
     dragging = false;
-    const dx = event.clientX - startX;
-    if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(event.clientY - startY)) return;
+    const dx = x - startX;
+    if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(y - startY)) return;
     swiped = true;
     show(dx > 0 ? current + 1 : current - 1);
+  };
+  const onDown = (event) => {
+    if (event.pointerType === "touch" || event.button > 0) return;
+    begin(event.clientX, event.clientY);
+  };
+  const onUp = (event) => {
+    if (event.pointerType === "touch") return;
+    finish(event.clientX, event.clientY);
+  };
+  const onTouchStart = (event) => {
+    const touch = event.touches[0];
+    if (event.touches.length === 1) begin(touch.clientX, touch.clientY);
+    else dragging = false;
+  };
+  const onTouchMove = (event) => {
+    if (!dragging) return;
+    const touch = event.touches[0];
+    const dx = Math.abs(touch.clientX - startX);
+    const dy = Math.abs(touch.clientY - startY);
+    if (!horizontal && dx > 8 && dx > dy) horizontal = true;
+    if (!horizontal && dy > 8 && dy >= dx) dragging = false;
+    if (horizontal && event.cancelable) event.preventDefault();
+  };
+  const onTouchEnd = (event) => {
+    const touch = event.changedTouches[0];
+    if (touch) finish(touch.clientX, touch.clientY);
+  };
+  const onTouchCancel = () => {
+    dragging = false;
   };
   const onClick = (event) => {
     if (!swiped) return;
@@ -157,6 +191,10 @@ function fadeEngine(root) {
   const onDragStart = (event) => event.preventDefault();
   track.addEventListener("pointerdown", onDown);
   window.addEventListener("pointerup", onUp);
+  track.addEventListener("touchstart", onTouchStart, { passive: true });
+  track.addEventListener("touchmove", onTouchMove, { passive: false });
+  track.addEventListener("touchend", onTouchEnd);
+  track.addEventListener("touchcancel", onTouchCancel);
   track.addEventListener("click", onClick, true);
   track.addEventListener("dragstart", onDragStart);
 
@@ -171,6 +209,10 @@ function fadeEngine(root) {
     destroy: () => {
       track.removeEventListener("pointerdown", onDown);
       window.removeEventListener("pointerup", onUp);
+      track.removeEventListener("touchstart", onTouchStart);
+      track.removeEventListener("touchmove", onTouchMove);
+      track.removeEventListener("touchend", onTouchEnd);
+      track.removeEventListener("touchcancel", onTouchCancel);
       track.removeEventListener("click", onClick, true);
       track.removeEventListener("dragstart", onDragStart);
     },

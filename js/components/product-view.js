@@ -110,7 +110,7 @@ export function productTabs(product) {
     ["service", "שירות ואחריות", `<div class="product-tab-cols">
         <div>
           <h3>שירות לקוחות</h3>
-          <p>טלפון <a href="tel:03-000-0000" dir="ltr">03-000-0000</a> או <a href="https://wa.me/97230000000" target="_blank" rel="noopener noreferrer">ווטסאפ</a>.</p>
+          <p>טלפון <a href="tel:097448038" dir="ltr">09-7448038</a> או <a href="https://wa.me/97230000000" target="_blank" rel="noopener noreferrer">ווטסאפ</a>.</p>
           <button type="button" class="product-tab-link" data-open-service>השארת פנייה</button>
         </div>
         <div>

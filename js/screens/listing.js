@@ -15,6 +15,12 @@ function crumbs(items) {
     .join('<span aria-hidden="true"> / </span>')}</nav>`;
 }
 
+function listingHero(content) {
+  return `<section class="listing-hero">
+    <div class="wrap py-8">${content}</div>
+  </section>`;
+}
+
 function moreButton(more) {
   if (!more) return "";
   return `<button type="button" class="btn btn-line mx-auto mt-6" data-show-all>הצגת כל המוצרים, עוד ${more}</button>`;
@@ -33,11 +39,13 @@ export function renderCategory(slug, query) {
   const source = productsByCategory(slug);
   const items = applyListing(source, query);
   const view = visibleSlice(items, query);
-  return `<article class="wrap py-8">
-    ${crumbs([{ href: "#/", label: "דף הבית" }, { label: category.name }])}
-    <h1 class="text-3xl font-extrabold">${esc(category.name)}</h1>
-    <p class="mt-2 text-muted">${items.length} מוצרים בקטלוג תוצרת</p>
-    <div class="mt-6">
+  return `<article>
+    ${listingHero(`
+      ${crumbs([{ href: "#/", label: "דף הבית" }, { label: category.name }])}
+      <h1 class="text-3xl font-extrabold">${esc(category.name)}</h1>
+      <p class="mt-2 text-muted">${items.length} מוצרים בקטלוג תוצרת</p>
+    `)}
+    <div class="wrap pt-6 pb-8">
       ${listingControls({ categories: null, query })}
       ${productGrid(view.shown)}
       ${moreButton(view.more)}
@@ -107,14 +115,16 @@ export function renderDepartment(id, query) {
   const items = applyListing(source, query);
   const view = visibleSlice(items, query);
   const chips = sections.length > 1
-    ? `<ul class="mt-5 flex flex-wrap gap-2">${sections.map((section) => `<li><a class="inline-flex min-h-10 items-center rounded-full border border-line px-3 text-sm font-semibold" href="#/c/${esc(section.slug)}">${esc(section.name)}</a></li>`).join("")}</ul>`
+    ? `<ul class="mt-5 flex flex-wrap gap-2">${sections.map((section) => `<li><a class="listing-chip" href="#/c/${esc(section.slug)}">${esc(section.name)}</a></li>`).join("")}</ul>`
     : "";
-  return `<article class="wrap py-8">
-    ${crumbs([{ href: "#/", label: "דף הבית" }, { label: department.name }])}
-    <h1 class="flex items-center gap-3 text-3xl font-extrabold"><span class="nav-icon is-${esc(department.id)} h-8" aria-hidden="true"></span>${esc(department.name)}</h1>
-    <p class="mt-2 text-muted">${items.length} מוצרים במחלקה</p>
-    ${chips}
-    <div class="mt-6">
+  return `<article>
+    ${listingHero(`
+      ${crumbs([{ href: "#/", label: "דף הבית" }, { label: department.name }])}
+      <h1 class="flex items-center gap-3 text-3xl font-extrabold"><span class="nav-icon is-${esc(department.id)} h-8" aria-hidden="true"></span>${esc(department.name)}</h1>
+      <p class="mt-2 text-muted">${items.length} מוצרים במחלקה</p>
+      ${chips}
+    `)}
+    <div class="wrap pt-6 pb-8">
       ${listingControls({ categories: null, query })}
       ${productGrid(view.shown)}
       ${moreButton(view.more)}

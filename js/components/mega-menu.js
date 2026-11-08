@@ -3,7 +3,7 @@ import { offerBanners, sideBanners } from "../data/banners.js";
 import { getTheme } from "./theme-options.js";
 import { isSingleSupplier, supplierCategories } from "./suppliers.js";
 
-const mark = "assets/images/brand/heart.png";
+const mark = "assets/images/brand/placeholder-cart.png";
 const chevron = `<svg class="mega-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg>`;
 const plus = `<svg class="mobile-nav-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"></path><path class="mobile-nav-plus-v" d="M12 5v14"></path></svg>`;
 const arrow = `<svg class="mega-all-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M19 12H6M12 6l-6 6 6 6"></path></svg>`;
@@ -90,6 +90,7 @@ const menus = [
     promo: {
       href: "#/d/electronics",
       title: "לכל המוצרים בקניון אשמורת",
+      image: "assets/images/banners/mega-all-electronics.webp",
     },
   },
   {

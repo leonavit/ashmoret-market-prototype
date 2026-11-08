@@ -103,6 +103,14 @@ export function bindShell(navigate) {
     const wasOpen = menu.classList.contains("is-open");
     const open = typeof force === "boolean" ? force : !wasOpen;
     const cover = document.documentElement.dataset.mobileMenu === "v2";
+    if (open && cover) {
+      const topbar = document.querySelector(".site-header .topbar");
+      const top = topbar?.getBoundingClientRect().bottom || 0;
+      const button = menuOpen.getBoundingClientRect();
+      const rowCenter = button.top + button.height / 2 - top;
+      document.documentElement.style.setProperty("--menu-cover-top", `${top}px`);
+      document.documentElement.style.setProperty("--menu-head-h", `${rowCenter * 2 + 1}px`);
+    }
     menu.classList.toggle("is-open", open);
     menuOpen.setAttribute("aria-expanded", String(open));
     document.documentElement.classList.toggle("is-menu-cover", open && cover);
@@ -144,14 +152,38 @@ export function setCategoryBand(visible) {
   band.hidden = !visible;
 }
 
+let categoryActive = "";
+let categoryCount = 0;
+let categoryFits = null;
+let resizeTimer = 0;
+
+function categoriesFit(list, viewport, count) {
+  const slide = list.querySelector(".cat-slide");
+  const width = viewport.getBoundingClientRect().width;
+  return Boolean(slide && width) && slide.getBoundingClientRect().width * count <= width + 1;
+}
+
+window.addEventListener("resize", () => {
+  window.clearTimeout(resizeTimer);
+  resizeTimer = window.setTimeout(() => {
+    const band = document.getElementById("category-band");
+    if (!band || band.hidden || categoryFits === null) return;
+    const list = document.getElementById("category-nav");
+    const viewport = document.getElementById("category-viewport");
+    if (categoriesFit(list, viewport, categoryCount) !== categoryFits) renderCategoryNav(categoryActive);
+  }, 150);
+});
+
 export function renderCategoryNav(activeSlug) {
   const list = document.getElementById("category-nav");
   const viewport = document.getElementById("category-viewport");
-  const copies = 4;
+  const band = document.getElementById("category-band");
   const items = isSingleSupplier()
     ? supplierCategories().map((category) => ({ name: category.name, href: `#/c/${category.slug}` }))
     : featuredGroups();
-  list.innerHTML = Array.from({ length: copies }, (_, copy) => items
+  categoryActive = activeSlug;
+  categoryCount = items.length;
+  const markup = (copies) => Array.from({ length: copies }, (_, copy) => items
     .map((item) => {
       const current = copy === 0 && activeSlug && item.href === `#/c/${activeSlug}` ? ' aria-current="page"' : "";
       const clone = copy === 0 ? "" : ' tabindex="-1" aria-hidden="true"';
@@ -168,6 +200,11 @@ export function renderCategoryNav(activeSlug) {
     categoryCarousel.destroy();
     categoryCarousel = null;
   }
+  list.innerHTML = markup(1);
+  categoryFits = viewport ? categoriesFit(list, viewport, items.length) : null;
+  band?.classList.toggle("is-static", Boolean(categoryFits));
+  if (categoryFits) return;
+  list.innerHTML = markup(4);
   const Embla = window.EmblaCarousel;
   if (!Embla || !viewport) return;
   categoryCarousel = Embla(viewport, {

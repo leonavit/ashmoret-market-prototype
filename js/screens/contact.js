@@ -41,7 +41,7 @@ export function renderContact({ sent = false, values = {}, errors = {} } = {}) {
 
   return `<article class="wrap max-w-2xl py-12">
     <h1 class="text-3xl font-extrabold">טופס יצירת קשר</h1>
-    <p class="mt-2 text-muted">הטופס להדגמה בלבד. אפשר גם להתקשר ל־<a href="tel:03-000-0000" dir="ltr">03-000-0000</a> או לפנות ב<a href="https://wa.me/97230000000" target="_blank" rel="noopener noreferrer">ווטסאפ</a>.</p>
+    <p class="mt-2 text-muted">הטופס להדגמה בלבד. אפשר גם להתקשר ל־<a href="tel:097448038" dir="ltr">09-7448038</a> או לפנות ב<a href="https://wa.me/97230000000" target="_blank" rel="noopener noreferrer">ווטסאפ</a>.</p>
     <form id="contact-form" class="mt-6 grid gap-4 rounded-2xl border border-line bg-white p-5" novalidate>
       ${contactFields({ values, errors })}
       <button class="btn" type="submit">שליחת פנייה</button>

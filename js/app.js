@@ -18,6 +18,7 @@ import { setHeroSlider } from "./components/hero-slider.js";
 import { renderSupplierNav } from "./components/mega-menu.js";
 import { mountPromoCarousels } from "./components/promo-carousel.js";
 import { bindNewsletter } from "./components/newsletter-popup.js";
+import { bindCookieNotice } from "./components/cookie-notice.js";
 import { mountCarousels } from "./components/carousel.js";
 import { mountCatalog } from "./components/catalog-rail.js";
 import { openProductPopup } from "./components/product-popup.js";
@@ -291,6 +292,7 @@ bindThemeOptions({
 bindLogin(navigate);
 bindServiceDialogs();
 bindNewsletter();
+bindCookieNotice();
 bindAccount(render);
 bindCheckout();
 mountCartDock();
