@@ -4354,8 +4354,8 @@
       name: "banners",
       title: "\u05D4\u05D2\u05D3\u05E8\u05D5\u05EA \u05D1\u05D0\u05E0\u05E8\u05D9\u05DD",
       options: [
-        ["v1", "V1", "\u05D1\u05EA\u05E4\u05E8\u05D9\u05D8 \u05D4\u05DE\u05D1\u05E6\u05E2\u05D9\u05DD \u05D0\u05E8\u05D1\u05E2\u05EA \u05D1\u05D0\u05E0\u05E8\u05D9 \u05D4\u05DE\u05D1\u05E6\u05E2\u05D9\u05DD, \u05D5\u05D1\u05E1\u05DC\u05D9\u05D9\u05D3\u05E8 \u05D4\u05E6\u05D3\u05D3\u05D9 \u05D1\u05E2\u05DE\u05D5\u05D3 \u05D4\u05D1\u05D9\u05EA \u05E9\u05DC\u05D5\u05E9\u05EA \u05D4\u05D1\u05D0\u05E0\u05E8\u05D9\u05DD \u05E9\u05DC \u05D4\u05DE\u05D7\u05DC\u05E7\u05D5\u05EA."],
-        ["v2", "V2 \xB7 \u05D1\u05E8\u05D9\u05E8\u05EA \u05DE\u05D7\u05D3\u05DC", "\u05D4\u05D1\u05D0\u05E0\u05E8\u05D9\u05DD \u05DE\u05EA\u05D7\u05DC\u05E4\u05D9\u05DD: \u05D1\u05D0\u05E0\u05E8\u05D9 \u05D4\u05DE\u05D7\u05DC\u05E7\u05D5\u05EA \u05D1\u05EA\u05E4\u05E8\u05D9\u05D8 \u05D4\u05DE\u05D1\u05E6\u05E2\u05D9\u05DD, \u05D5\u05D1\u05D0\u05E0\u05E8\u05D9 \u05D4\u05DE\u05D1\u05E6\u05E2\u05D9\u05DD \u05D1\u05E1\u05DC\u05D9\u05D9\u05D3\u05E8 \u05D4\u05E6\u05D3\u05D3\u05D9 \u05D1\u05E2\u05DE\u05D5\u05D3 \u05D4\u05D1\u05D9\u05EA."]
+        ["v1", "V1", "\u05D1\u05E1\u05DC\u05D9\u05D9\u05D3\u05E8 \u05D4\u05E6\u05D3\u05D3\u05D9 \u05D1\u05E2\u05DE\u05D5\u05D3 \u05D4\u05D1\u05D9\u05EA \u05E9\u05DC\u05D5\u05E9\u05EA \u05D4\u05D1\u05D0\u05E0\u05E8\u05D9\u05DD \u05E9\u05DC \u05D4\u05DE\u05D7\u05DC\u05E7\u05D5\u05EA."],
+        ["v2", "V2 \xB7 \u05D1\u05E8\u05D9\u05E8\u05EA \u05DE\u05D7\u05D3\u05DC", "\u05D1\u05E1\u05DC\u05D9\u05D9\u05D3\u05E8 \u05D4\u05E6\u05D3\u05D3\u05D9 \u05D1\u05E2\u05DE\u05D5\u05D3 \u05D4\u05D1\u05D9\u05EA \u05D0\u05E8\u05D1\u05E2\u05EA \u05D1\u05D0\u05E0\u05E8\u05D9 \u05D4\u05DE\u05D1\u05E6\u05E2\u05D9\u05DD."]
       ],
       note: "\u05D4\u05E1\u05DC\u05D9\u05D9\u05D3\u05E8 \u05D4\u05E6\u05D3\u05D3\u05D9 \u05DE\u05D5\u05E6\u05D2 \u05D1\u05BEHero V4."
     },
@@ -4585,6 +4585,14 @@
     { href: "#/p/p095", label: "\u05E4\u05E1\u05D8\u05D4 \u05E4\u05D5\u05D6\u05D9\u05DC\u05D9 \u05D5\u05D9\u05D8\u05D0\u05DC\u05D4, \u05DC\u05E8\u05DB\u05D9\u05E9\u05D4 \u05E2\u05DB\u05E9\u05D9\u05D5", image: "assets/images/banners/offer-pasta.webp?v=2", size: [675, 640] },
     { href: "#/p/p001", label: "\u05E4\u05D9\u05E8\u05D5\u05E8\u05D9 \u05DC\u05D7\u05DD \u05DE\u05EA\u05D5\u05D1\u05DC\u05D9\u05DD \u05EA\u05D5\u05E6\u05E8\u05EA, \u05DC\u05E8\u05DB\u05D9\u05E9\u05D4 \u05E2\u05DB\u05E9\u05D9\u05D5", image: "assets/images/banners/offer-breadcrumbs.webp", size: [675, 640] },
     { href: "#/p/p116", label: "\u05D2\u05E8\u05E2\u05D9\u05E0\u05D9 \u05EA\u05D9\u05E8\u05E1 \u05DE\u05EA\u05D5\u05E7 \u05EA\u05D5\u05E6\u05E8\u05EA, \u05DC\u05E8\u05DB\u05D9\u05E9\u05D4 \u05E2\u05DB\u05E9\u05D9\u05D5", image: "assets/images/banners/offer-corn.webp?v=2", size: [675, 640] }
+  ];
+  var dealBanners = [
+    { href: "#/c/cans", label: "\u05DE\u05DC\u05E4\u05E4\u05D5\u05E0\u05D9\u05DD \u05D7\u05DE\u05D5\u05E6\u05D9\u05DD \u05EA\u05D5\u05E6\u05E8\u05EA, \u05DC\u05E8\u05DB\u05D9\u05E9\u05D4 \u05E2\u05DB\u05E9\u05D9\u05D5", image: "assets/images/banners/deal-pickles.webp", size: [1024, 341] },
+    { href: "#/p/p146", label: "\u05E9\u05DE\u05DF \u05D6\u05D9\u05EA \u05DB\u05EA\u05D9\u05EA \u05DE\u05E2\u05D5\u05DC\u05D4, \u05DC\u05E8\u05DB\u05D9\u05E9\u05D4 \u05E2\u05DB\u05E9\u05D9\u05D5", image: "assets/images/banners/deal-olive-1.webp", size: [1024, 341] },
+    { href: "#/p/p146", label: "\u05E9\u05DE\u05DF \u05D6\u05D9\u05EA \u05DB\u05EA\u05D9\u05EA \u05DE\u05E2\u05D5\u05DC\u05D4, \u05DC\u05E8\u05DB\u05D9\u05E9\u05D4 \u05E2\u05DB\u05E9\u05D9\u05D5", image: "assets/images/banners/deal-olive-2.webp", size: [1024, 341] },
+    { href: "#/p/p001", label: "\u05E4\u05D9\u05E8\u05D5\u05E8\u05D9 \u05DC\u05D7\u05DD \u05DE\u05EA\u05D5\u05D1\u05DC\u05D9\u05DD \u05EA\u05D5\u05E6\u05E8\u05EA, \u05DC\u05E8\u05DB\u05D9\u05E9\u05D4 \u05E2\u05DB\u05E9\u05D9\u05D5", image: "assets/images/banners/deal-breadcrumbs.webp", size: [1024, 341] },
+    { href: "#/p/p146", label: "\u05E9\u05DE\u05DF \u05D6\u05D9\u05EA \u05DB\u05EA\u05D9\u05EA \u05DE\u05E2\u05D5\u05DC\u05D4, \u05DC\u05E8\u05DB\u05D9\u05E9\u05D4 \u05E2\u05DB\u05E9\u05D9\u05D5", image: "assets/images/banners/deal-olive-3.webp", size: [1024, 341] },
+    { href: "#/p/p147", label: "\u05E9\u05DE\u05DF \u05E7\u05E0\u05D5\u05DC\u05D4 \u05EA\u05D5\u05E6\u05E8\u05EA, \u05DC\u05E8\u05DB\u05D9\u05E9\u05D4 \u05E2\u05DB\u05E9\u05D9\u05D5", image: "assets/images/banners/deal-canola.webp", size: [1024, 341] }
   ];
   var sideBanners = [
     { href: "#/c/oils", label: "\u05E9\u05DE\u05DF \u05D6\u05D9\u05EA \u05DB\u05EA\u05D9\u05EA \u05DE\u05E2\u05D5\u05DC\u05D4, \u05DC\u05E7\u05E0\u05D9\u05D9\u05D4 \u05E2\u05DB\u05E9\u05D9\u05D5", image: "assets/images/banners/side-olive-oil.webp", size: [1024, 970] },
@@ -6797,8 +6805,7 @@
     const item = menuById(id);
     if (!item) return "";
     if (item.banners) {
-      const banners = getTheme().banners === "v2" ? sideBanners : offerBanners;
-      return `<div class="mega-layout mega-banners" style="--banner-count:${banners.length}">${banners.map((banner) => `<a class="mega-banner" href="${esc(banner.href)}" aria-label="${esc(banner.label)}">
+      return `<div class="mega-layout mega-banners is-deals">${dealBanners.map((banner) => `<a class="mega-banner" href="${esc(banner.href)}" aria-label="${esc(banner.label)}">
       <img src="${esc(banner.image)}" alt="" width="${banner.size[0]}" height="${banner.size[1]}" loading="lazy" decoding="async">
     </a>`).join("")}</div>`;
     }
