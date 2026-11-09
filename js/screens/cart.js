@@ -7,7 +7,8 @@ import { photoImg, productPhoto } from "../components/product-photo.js";
 const tagIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z"></path><circle cx="7.5" cy="7.5" r="1.5"></circle></svg>`;
 
 export function savedNote(saved) {
-  return saved > 0 ? `<p class="cart-saved">${tagIcon}<span>חסכת <strong>${money(saved)}</strong> בקנייה הזו</span></p>` : "";
+  const icon = tagIcon.replace("<svg ", `<svg class="cart-saved-icon" data-lottie="calculator-coins" data-lottie-play="loop" `);
+  return saved > 0 ? `<p class="cart-saved">${icon}<span>חסכת <strong>${money(saved)}</strong> בקנייה הזו</span></p>` : "";
 }
 
 export function couponForm(coupon, message = "") {
@@ -68,10 +69,10 @@ export function renderCart() {
         <h2 class="text-lg font-extrabold">סיכום</h2>
         ${couponForm(totals.coupon)}
         <dl class="mt-4 grid gap-2 text-sm">
-          <div class="flex justify-between"><dt>מוצרים</dt><dd>${money(totals.goods)}</dd></div>
+          <div class="flex justify-between"><dt>סה״כ:</dt><dd>${money(totals.goods)}</dd></div>
           ${totals.discount ? `<div class="flex justify-between cart-discount"><dt>קופון ${esc(totals.coupon.code)}</dt><dd>−${money(totals.discount)}</dd></div>` : ""}
-          <div class="flex justify-between"><dt>מחיר משלוח</dt><dd>${money(totals.delivery)}</dd></div>
-          <div class="flex justify-between border-t border-line pt-2 text-base font-extrabold"><dt>לתשלום</dt><dd>${money(totals.total)}</dd></div>
+          <div class="flex justify-between"><dt>מחיר משלוח:</dt><dd>${money(totals.delivery)}</dd></div>
+          <div class="flex justify-between border-t border-line pt-2 text-base font-extrabold"><dt>סה״כ לתשלום:</dt><dd>${money(totals.total)}</dd></div>
         </dl>
         ${savedNote(totals.saved)}
         <p class="mt-3 text-xs text-muted">המחירים ודמי המשלוח הם נתוני הדגמה, לא חישוב אמיתי.</p>

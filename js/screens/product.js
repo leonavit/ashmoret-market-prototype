@@ -2,6 +2,7 @@ import { getProduct, productsByCategory } from "../data/catalog.js";
 import { getCommerce, saleLabel } from "../data/commerce.js";
 import { carousel } from "../components/carousel.js";
 import { productBuy, productDescription, productGallery, productTabs } from "../components/product-view.js";
+import { kosherMark } from "../components/kosher-mark.js";
 import { esc, money } from "../lib/format.js";
 
 const sep = `<svg class="product-sep" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg>`;
@@ -33,6 +34,7 @@ export function renderProduct(id) {
           <p class="product-brand">${esc(product.brand)}</p>
           <h1>${esc(product.name)}</h1>
           ${price}
+          ${kosherMark(product)}
         </div>
         ${productBuy(product)}
         ${productDescription(product)}

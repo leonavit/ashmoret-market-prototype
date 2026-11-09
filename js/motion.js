@@ -7,6 +7,30 @@ export function playHero(root) {
   gsap.fromTo(copy, { y: 22, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.7, ease: "power2.out" });
 }
 
+let shimmers = [];
+
+export function shimmerButtons(root) {
+  shimmers = shimmers.filter((tween) => {
+    if (tween.targets()[0]?.isConnected) return true;
+    tween.kill();
+    return false;
+  });
+  const gsap = window.gsap;
+  if (!gsap || prefersReducedMotion()) return;
+  root.querySelectorAll(".promo-hero-cta, .hero-cta").forEach((button, index) => {
+    if (button.classList.contains("has-shimmer")) return;
+    button.classList.add("has-shimmer");
+    shimmers.push(gsap.fromTo(button, { "--shimmer-x": "260%" }, {
+      "--shimmer-x": "-130%",
+      duration: 1.1,
+      ease: "power2.inOut",
+      repeat: -1,
+      repeatDelay: 2.8,
+      delay: 0.8 + index * 0.35,
+    }));
+  });
+}
+
 export function rollQty(el, direction) {
   if (!el || prefersReducedMotion()) return;
   el.classList.remove("is-rolling-up", "is-rolling-down");

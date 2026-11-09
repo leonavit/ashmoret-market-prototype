@@ -4,6 +4,7 @@ import { esc, money } from "../lib/format.js";
 import { parseHash } from "../router.js";
 import { cartTotals, countItems, getCart, lineTotal } from "../state/cart.js";
 import { savedNote } from "../screens/cart.js";
+import { mountLottieIcons } from "./topbar-icons.js";
 import { photoImg, productPhoto } from "./product-photo.js";
 
 const arrow = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg>`;
@@ -73,10 +74,10 @@ export function updateCartDock(routeName = parseHash().name) {
       ${list}
       <div class="cart-dock-foot">
         <dl>
-          <div><dt>מוצרים</dt><dd>${money(totals.goods)}</dd></div>
+          <div><dt>סה״כ:</dt><dd>${money(totals.goods)}</dd></div>
           ${totals.discount ? `<div class="cart-discount"><dt>קופון ${esc(totals.coupon.code)}</dt><dd>−${money(totals.discount)}</dd></div>` : ""}
-          <div><dt>מחיר משלוח</dt><dd>${money(totals.delivery)}</dd></div>
-          <div class="is-total"><dt>לתשלום</dt><dd>${money(totals.total)}</dd></div>
+          <div><dt>מחיר משלוח:</dt><dd>${money(totals.delivery)}</dd></div>
+          <div class="is-total"><dt>סה״כ לתשלום:</dt><dd>${money(totals.total)}</dd></div>
         </dl>
         ${savedNote(totals.saved)}
         ${count ? `<a class="btn" href="#/checkout">המשך לתשלום</a>` : `<a class="btn btn-line" href="#/">להמשך קנייה</a>`}
@@ -84,6 +85,7 @@ export function updateCartDock(routeName = parseHash().name) {
     </div>` : ""}`;
   const listEl = root.querySelector(".cart-dock-list");
   if (listEl) listEl.scrollTop = listScroll;
+  mountLottieIcons(root);
   placeDock();
 }
 

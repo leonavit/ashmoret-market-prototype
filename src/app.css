@@ -1622,6 +1622,24 @@
     font-weight: 800;
   }
 
+  .has-shimmer {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .has-shimmer::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 45%;
+    background: linear-gradient(100deg, transparent 0%, rgb(255 255 255 / 0.38) 50%, transparent 100%);
+    pointer-events: none;
+    transform: translateX(var(--shimmer-x, 260%)) skewX(-18deg);
+  }
+
   .promo-hero-cta:hover {
     background: var(--color-action-hover);
   }
@@ -2744,12 +2762,13 @@
   .cart-saved {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 0.5rem;
     margin-top: 0.85rem;
-    border: 1px dashed rgb(201 35 13 / 0.45);
+    border: 1px dashed rgb(31 122 61 / 0.45);
     border-radius: var(--radius-md);
-    background: rgb(201 35 13 / 0.07);
-    color: #c9230d;
+    background: rgb(31 122 61 / 0.08);
+    color: #1f7a3d;
     padding: 0.6rem 0.75rem;
     font-size: 0.9rem;
     font-weight: 600;
@@ -2760,6 +2779,14 @@
     width: 1.1rem;
     height: 1.1rem;
     flex: 0 0 auto;
+  }
+
+  .cart-saved .cart-saved-icon.is-lottie {
+    display: block;
+    width: 1.9rem;
+    height: 1.9rem;
+    flex: 0 0 auto;
+    margin-block: -0.35rem;
   }
 
   .cart-saved strong {
@@ -3358,22 +3385,21 @@
 
   .topbar-link {
     display: inline-flex;
+    min-height: 38px;
     align-items: center;
     gap: 0.4rem;
-    border: 0;
-    background: transparent;
-    padding: 0;
-    color: inherit;
+    border: 1px solid var(--color-line-strong);
+    border-radius: var(--radius-pill);
+    background: var(--color-white);
+    padding: 0 0.6rem 0 0.95rem;
+    color: var(--color-ink);
     font: inherit;
+    font-weight: 500;
     cursor: pointer;
   }
 
-  .topbar-link-text {
-    text-decoration: underline;
-    text-underline-offset: 3px;
-  }
-
   .topbar-link:hover {
+    border-color: var(--color-ink);
     color: var(--color-ink);
   }
 
@@ -3391,14 +3417,14 @@
 
   .topbar-icon.is-lottie {
     display: block;
-    width: 1.6rem;
-    height: 1.6rem;
+    width: 1.712rem;
+    height: 1.712rem;
     margin-block: -0.15rem;
   }
 
   .topbar-icon.is-lottie.is-small {
-    width: 1.3rem;
-    height: 1.3rem;
+    width: 1.391rem;
+    height: 1.391rem;
   }
 
   @media (max-width: 639px) {
@@ -3406,10 +3432,12 @@
       display: grid;
       width: 2.25rem;
       height: 2.25rem;
+      min-height: 0;
       place-items: center;
       border: 1px solid var(--color-line-strong);
       border-radius: var(--radius-pill);
       background: var(--color-white);
+      padding: 0;
     }
 
     .topbar-link:hover {
@@ -3422,14 +3450,14 @@
     }
 
     .topbar-link .topbar-icon.is-lottie {
-      width: 1.55rem;
-      height: 1.55rem;
+      width: 1.66rem;
+      height: 1.66rem;
       margin: 0;
     }
 
     .topbar-link .topbar-icon.is-lottie.is-small {
-      width: 1.35rem;
-      height: 1.35rem;
+      width: 1.445rem;
+      height: 1.445rem;
     }
 
     .topbar-link-text {
@@ -4810,6 +4838,33 @@
     flex: 0 0 auto;
   }
 
+  .service-call {
+    display: none;
+  }
+
+  @media (max-width: 767px) {
+    .service-call {
+      display: grid;
+      width: var(--control-h-sm);
+      height: var(--control-h-sm);
+      flex: 0 0 auto;
+      place-items: center;
+      border: 1px solid var(--color-line-strong);
+      border-radius: var(--radius-pill);
+      background: var(--color-white);
+      color: var(--color-ink);
+    }
+
+    .service-call:hover {
+      border-color: var(--color-ink);
+    }
+
+    .service-call svg {
+      width: 1.05rem;
+      height: 1.05rem;
+    }
+  }
+
   @media (max-width: 479px) {
     .service-dialog .share-link span {
       display: none;
@@ -5267,6 +5322,23 @@
   .product-head {
     display: grid;
     gap: 0.3rem;
+  }
+
+  .product-head:has(.kosher-mark) {
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: 0.75rem;
+  }
+
+  .product-head:has(.kosher-mark) > * {
+    grid-column: 1;
+  }
+
+  .product-head > .kosher-mark {
+    grid-column: 2;
+    grid-row: 1 / span 6;
+    align-self: center;
+    width: 4.75rem;
+    height: auto;
   }
 
   .product-brand {
@@ -6024,7 +6096,6 @@
   .footer-col a,
   .footer-legal a,
   .cookie-text a,
-  .topbar-link-text,
   .account-logout,
   .account-card-head a,
   .auth-check a,
@@ -6049,7 +6120,6 @@
   }
 
   .cookie-text a,
-  .topbar-link-text,
   .account-logout,
   .account-card-head a,
   .auth-check a,
@@ -6066,7 +6136,6 @@
   .footer-col a::after,
   .footer-legal a::after,
   .cookie-text a::after,
-  .topbar-link-text::after,
   .account-logout::after,
   .account-card-head a::after,
   .auth-check a::after,
@@ -6093,7 +6162,6 @@
   .footer-col a:hover::after,
   .footer-legal a:hover::after,
   .cookie-text a:hover::after,
-  .topbar-link:hover .topbar-link-text::after,
   .account-logout:hover::after,
   .account-card-head a:hover::after,
   .auth-check a:hover::after,
@@ -6112,8 +6180,7 @@
     .footer-col a::after,
     .footer-legal a::after,
     .cookie-text a::after,
-    .topbar-link-text::after,
-    .account-logout::after,
+      .account-logout::after,
     .account-card-head a::after,
     .auth-check a::after,
     .news-check a::after,

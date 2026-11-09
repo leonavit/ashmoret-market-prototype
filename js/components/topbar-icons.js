@@ -1,9 +1,11 @@
 import lottie from "lottie-web/build/player/lottie_light.min.js";
 import truckDelivery from "../../assets/animations/truck-delivery.json";
-import infoCircle from "../../assets/animations/info-circle.json";
+import customerService from "../../assets/animations/customer-service.json";
+import calculatorCoins from "../../assets/animations/calculator-coins.json";
 
-const animations = { "truck-delivery": truckDelivery, "info-circle": infoCircle };
+const animations = { "truck-delivery": truckDelivery, "customer-service": customerService, "calculator-coins": calculatorCoins };
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+let live = [];
 
 function mountIcon(icon) {
   const animationData = animations[icon.dataset.lottie];
@@ -20,6 +22,7 @@ function mountIcon(icon) {
     autoplay: loop && !reduceMotion.matches,
     animationData: structuredClone(animationData),
   });
+  live.push(animation);
   if (loop) return;
   const play = () => {
     if (!reduceMotion.matches && animation.isPaused) animation.goToAndPlay(0, true);
@@ -29,6 +32,11 @@ function mountIcon(icon) {
   trigger.addEventListener("focus", play);
 }
 
-export function mountTopbarIcons() {
-  document.querySelectorAll("[data-lottie]").forEach(mountIcon);
+export function mountLottieIcons(root = document) {
+  live = live.filter((animation) => {
+    if (animation.wrapper?.isConnected) return true;
+    animation.destroy();
+    return false;
+  });
+  root.querySelectorAll("[data-lottie]").forEach(mountIcon);
 }

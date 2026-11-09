@@ -95,7 +95,6 @@ function validateTopic(topic, form) {
 }
 
 const phoneIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3h2.5l1.2 3.2-1.7 1a12 12 0 0 0 6.8 6.8l1-1.7 3.2 1.2V16a2 2 0 0 1-2.2 2A16 16 0 0 1 6 6.2 2 2 0 0 1 8 4z"></path></svg>`;
-const whatsappIcon = `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3a9 9 0 0 0-7.8 13.4L3 21l4.7-1.2A9 9 0 1 0 12 3zm0 1.6a7.4 7.4 0 1 1-3.8 13.8l-.3-.2-2.6.7.7-2.5-.2-.3A7.4 7.4 0 0 1 12 4.6zm4.3 10.1c-.2-.1-1.4-.7-1.6-.8-.2-.1-.4-.1-.5.1l-.7.9c-.1.2-.3.2-.5.1a6 6 0 0 1-3-2.6c-.2-.4.2-.4.6-1.2.1-.1 0-.3 0-.4l-.7-1.7c-.2-.4-.4-.4-.5-.4h-.5a.9.9 0 0 0-.6.3 2.6 2.6 0 0 0-.8 1.9 4.5 4.5 0 0 0 1 2.4 10.3 10.3 0 0 0 3.9 3.5c1.5.6 2 .7 2.7.6a2.3 2.3 0 0 0 1.5-1.1 1.9 1.9 0 0 0 .1-1.1c0-.1-.2-.2-.4-.3z"></path></svg>`;
 const shareIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"></path><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"></path></svg>`;
 const pageIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg>`;
 
@@ -110,6 +109,10 @@ export function serviceTitle(kind) {
   return kinds[kind]?.title || "";
 }
 
+function callButton(kind) {
+  return kind === "service" ? `<a class="service-call" href="tel:097448038" aria-label="חיוג לשירות הלקוחות 09-7448038">${phoneIcon}</a>` : "";
+}
+
 function shareButton(kind) {
   return `<button type="button" class="share-link" data-share-link="${kind}">${shareIcon}<span>שליחת קישור</span></button>`;
 }
@@ -122,6 +125,7 @@ function dialogHead(kind) {
       <h2 id="${dialogId}-title" class="mt-1 text-2xl font-extrabold"><a class="service-title-link" href="${path}">${title}${pageIcon}</a></h2>
     </div>
     <div class="service-dialog-actions">
+      ${callButton(kind)}
       ${shareButton(kind)}
       <button class="auth-close" type="button" data-service-close aria-label="סגירה">×</button>
     </div>
@@ -158,20 +162,9 @@ function deliveryBody() {
 
 function serviceBody(inPage) {
   const service = state.service;
-  const contact = `<ul class="service-contact">
-    <li><a href="tel:097448038">
-      <span class="service-contact-icon">${phoneIcon}</span>
-      <span class="service-contact-text"><strong><span dir="ltr">09-7448038</span></strong><small>טלפון שירות לקוחות</small></span>
-    </a></li>
-    <li><a href="https://wa.me/97230000000" target="_blank" rel="noopener noreferrer">
-      <span class="service-contact-icon">${whatsappIcon}</span>
-      <span class="service-contact-text"><strong>ווטסאפ</strong><small>שירות לקוחות</small></span>
-    </a></li>
-  </ul>`;
   const topic = topics[service.topic];
   if (!topic) {
-    return `${contact}
-    <h3 class="service-topics-title">במה אפשר לעזור?</h3>
+    return `<h3 class="service-topics-title">במה אפשר לעזור?</h3>
     <ul class="service-topics">
       ${Object.entries(topics).map(([key, item], index) => `<li><button type="button" class="service-topic" data-service-topic="${key}" ${index === 0 ? "data-service-focus" : ""}>
         <span class="service-topic-icon">${item.icon}</span>
@@ -195,8 +188,7 @@ function serviceBody(inPage) {
   <form class="mt-4 grid gap-4" data-service-form="service" novalidate>
     ${topic.fields.map((name, index) => serviceField(name, service, prefix, index === 0)).join("")}
     <button class="btn" type="submit" ${service.pending ? "disabled" : ""}>${service.pending ? "שולחים…" : topic.submit}</button>
-  </form>
-  ${contact}`;
+  </form>`;
 }
 
 function markup(kind, inPage) {
@@ -261,7 +253,7 @@ export function renderServicePage(kind) {
         <p class="text-sm font-bold text-muted">הדגמה בלבד</p>
         <h1 class="mt-1 text-3xl font-extrabold">${kinds[kind].title}</h1>
       </div>
-      ${shareButton(kind)}
+      <div class="service-dialog-actions">${callButton(kind)}${shareButton(kind)}</div>
     </div>
     <div class="service-page-body" data-service-root="${kind}" data-service-mode="page">${markup(kind, true)}</div>
   </article>`;
