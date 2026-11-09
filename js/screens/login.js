@@ -112,8 +112,7 @@ function markup() {
   const title = ui.tab === "register" ? "הרשמה" : "התחברות";
   return `<div class="auth-dialog-bar">
     <div>
-      <p class="text-sm font-bold text-muted">הדגמה בלבד</p>
-      <h2 id="auth-title" class="mt-1 text-2xl font-extrabold">${title}</h2>
+      <h2 id="auth-title" class="text-2xl font-extrabold">${title}</h2>
     </div>
     <button class="auth-close" type="button" data-auth-close aria-label="סגירה">×</button>
   </div>

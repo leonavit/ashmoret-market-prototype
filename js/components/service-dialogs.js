@@ -121,8 +121,7 @@ function dialogHead(kind) {
   const { title, path, dialogId } = kinds[kind];
   return `<div class="auth-dialog-bar">
     <div>
-      <p class="text-sm font-bold text-muted">הדגמה בלבד</p>
-      <h2 id="${dialogId}-title" class="mt-1 text-2xl font-extrabold"><a class="service-title-link" href="${path}">${title}${pageIcon}</a></h2>
+      <h2 id="${dialogId}-title" class="text-2xl font-extrabold"><a class="service-title-link" href="${path}">${title}${pageIcon}</a></h2>
     </div>
     <div class="service-dialog-actions">
       ${callButton(kind)}
@@ -250,8 +249,7 @@ export function renderServicePage(kind) {
   return `<article class="wrap service-page py-10">
     <div class="service-page-head">
       <div>
-        <p class="text-sm font-bold text-muted">הדגמה בלבד</p>
-        <h1 class="mt-1 text-3xl font-extrabold">${kinds[kind].title}</h1>
+        <h1 class="text-3xl font-extrabold">${kinds[kind].title}</h1>
       </div>
       <div class="service-dialog-actions">${callButton(kind)}${shareButton(kind)}</div>
     </div>
