@@ -9629,8 +9629,7 @@
     const title = ui.tab === "register" ? "\u05D4\u05E8\u05E9\u05DE\u05D4" : "\u05D4\u05EA\u05D7\u05D1\u05E8\u05D5\u05EA";
     return `<div class="auth-dialog-bar">
     <div>
-      <p class="text-sm font-bold text-muted">\u05D4\u05D3\u05D2\u05DE\u05D4 \u05D1\u05DC\u05D1\u05D3</p>
-      <h2 id="auth-title" class="mt-1 text-2xl font-extrabold">${title}</h2>
+      <h2 id="auth-title" class="text-2xl font-extrabold">${title}</h2>
     </div>
     <button class="auth-close" type="button" data-auth-close aria-label="\u05E1\u05D2\u05D9\u05E8\u05D4">\xD7</button>
   </div>
@@ -11104,8 +11103,7 @@
     const { title, path, dialogId } = kinds[kind];
     return `<div class="auth-dialog-bar">
     <div>
-      <p class="text-sm font-bold text-muted">\u05D4\u05D3\u05D2\u05DE\u05D4 \u05D1\u05DC\u05D1\u05D3</p>
-      <h2 id="${dialogId}-title" class="mt-1 text-2xl font-extrabold"><a class="service-title-link" href="${path}">${title}${pageIcon}</a></h2>
+      <h2 id="${dialogId}-title" class="text-2xl font-extrabold"><a class="service-title-link" href="${path}">${title}${pageIcon}</a></h2>
     </div>
     <div class="service-dialog-actions">
       ${callButton(kind)}
@@ -11222,8 +11220,7 @@
     return `<article class="wrap service-page py-10">
     <div class="service-page-head">
       <div>
-        <p class="text-sm font-bold text-muted">\u05D4\u05D3\u05D2\u05DE\u05D4 \u05D1\u05DC\u05D1\u05D3</p>
-        <h1 class="mt-1 text-3xl font-extrabold">${kinds[kind].title}</h1>
+        <h1 class="text-3xl font-extrabold">${kinds[kind].title}</h1>
       </div>
       <div class="service-dialog-actions">${callButton(kind)}${shareButton(kind)}</div>
     </div>
