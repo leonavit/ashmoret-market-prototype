@@ -931,6 +931,33 @@
     font-weight: 700;
   }
 
+  @media (max-width: 767px) {
+    html[data-mobile-carousel="v2"] .catalog-viewport {
+      width: auto;
+    }
+
+    html[data-mobile-carousel="v2"] .catalog-rail .embla__container {
+      margin-inline: 0;
+    }
+
+    html[data-mobile-carousel="v2"] .catalog-rail .embla__slide {
+      flex-basis: calc(80cqw + var(--catalog-gap));
+      padding-inline: calc(var(--catalog-gap) / 2);
+    }
+
+    html[data-mobile-carousel="v2"] .catalog-rail .cat-arrow {
+      display: none;
+    }
+  }
+
+  @supports (width: round(down, 100%, 1px)) {
+    @media (max-width: 767px) {
+      html[data-mobile-carousel="v2"] .catalog-rail .embla__slide {
+        flex-basis: calc(round(down, 80cqw, 2px) + var(--catalog-gap));
+      }
+    }
+  }
+
   @media (min-width: 768px) {
     .catalog-rail {
       --catalog-cols: 3;

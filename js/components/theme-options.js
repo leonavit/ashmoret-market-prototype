@@ -1,6 +1,6 @@
 const KEY = "ashmoret-theme";
 const REV = 6;
-const defaults = { header: "v2", hero: "v4", categories: "v2", featured: "v2", banners: "v2", mobileMenu: "v2", suppliers: "v1", palette: "v1", logo: "v1", wideHeader: true };
+const defaults = { header: "v2", hero: "v4", categories: "v2", featured: "v2", banners: "v2", mobileMenu: "v2", mobileCarousel: "v1", suppliers: "v1", palette: "v1", logo: "v1", wideHeader: true };
 const logos = {
   v1: { src: "assets/images/brand/logo-market-cart.png?v=2", width: 300, height: 80 },
   v2: { src: "assets/images/brand/logo-market.png", width: 1024, height: 344 },
@@ -17,6 +17,7 @@ const groupIcons = {
   featured: groupIcon(`<circle cx="7" cy="8" r="3"></circle><circle cx="17" cy="8" r="3"></circle><circle cx="7" cy="17" r="3"></circle><circle cx="17" cy="17" r="3"></circle>`),
   banners: groupIcon(`<rect x="3" y="5" width="8" height="14" rx="1.5"></rect><rect x="13" y="5" width="8" height="14" rx="1.5"></rect><path d="m9 2-2 2 2 2M15 18l2 2-2 2"></path>`),
   mobileMenu: groupIcon(`<rect x="6.5" y="2.5" width="11" height="19" rx="2.5"></rect><path d="M9.5 8h5M9.5 11h5M9.5 14h5"></path>`),
+  mobileCarousel: groupIcon(`<rect x="7" y="5" width="10" height="14" rx="1.5"></rect><path d="M4 7v10M20 7v10"></path>`),
   suppliers: groupIcon(`<path d="M3 9 4.5 4h15L21 9"></path><path d="M4 9v11h16V9"></path><path d="M3 9h18"></path><path d="M9.5 20v-5.5h5V20"></path>`),
   palette: groupIcon(`<path d="M12 3a9 9 0 1 0 0 18c1.1 0 1.8-.9 1.8-1.9 0-.5-.2-.9-.5-1.3-.3-.3-.5-.8-.5-1.2 0-1 .8-1.8 1.8-1.8H16a5 5 0 0 0 5-5c0-3.9-4-6.8-9-6.8z"></path><circle cx="7.5" cy="11" r="1.2"></circle><circle cx="10.5" cy="7" r="1.2"></circle><circle cx="15" cy="7.5" r="1.2"></circle>`),
   logo: groupIcon(`<path d="M3 4h2l2.4 10.2a1.5 1.5 0 0 0 1.5 1.1h8.6a1.5 1.5 0 0 0 1.4-1.1L21 8H6.2"></path><circle cx="9.5" cy="19.5" r="1.3"></circle><circle cx="17" cy="19.5" r="1.3"></circle>`),
@@ -79,6 +80,15 @@ const groups = [
     note: "התפריט מוצג במסכים צרים מ־1024 פיקסלים.",
   },
   {
+    name: "mobileCarousel",
+    title: "קרוסלת מוצרים במובייל",
+    options: [
+      ["v1", "Grid 2 · ברירת מחדל", "שני מוצרים זה לצד זה, עם חיצי ניווט."],
+      ["v2", "Centered Peek", "מוצר אחד במרכז, עם הצצה למוצר הקודם והבא משני הצדדים. ניווט בהחלקה."],
+    ],
+    note: "חל על קרוסלות המוצרים במסכים צרים מ־768 פיקסלים. בטאבלט ובמחשב התצוגה נשארת כמו שהיא.",
+  },
+  {
     name: "suppliers",
     title: "הגדרות ספקים",
     options: [
@@ -122,6 +132,7 @@ function load() {
       featured: saved.rev >= 4 && saved.featured === "v1" ? "v1" : defaults.featured,
       banners: saved.rev >= 5 && saved.banners === "v1" ? "v1" : defaults.banners,
       mobileMenu: current && saved.mobileMenu === "v1" ? "v1" : defaults.mobileMenu,
+      mobileCarousel: saved.mobileCarousel === "v2" ? "v2" : defaults.mobileCarousel,
       suppliers: saved.suppliers === "v2" ? "v2" : defaults.suppliers,
       palette: current && saved.palette === "grey" ? "grey" : defaults.palette,
       logo: saved.logo === "v2" ? "v2" : defaults.logo,
@@ -166,6 +177,10 @@ function applyLogo() {
 function applyMobileMenu() {
   document.documentElement.dataset.mobileMenu = state.mobileMenu;
   if (state.mobileMenu !== "v2") document.documentElement.classList.remove("is-menu-cover");
+}
+
+function applyMobileCarousel() {
+  document.documentElement.dataset.mobileCarousel = state.mobileCarousel;
 }
 
 function applyHeader() {
@@ -230,6 +245,10 @@ function setOption(name, value, panel) {
   if (name === "header" || name === "wideHeader" || name === "suppliers") applyHeader();
   if (name === "hero" || name === "categories" || name === "featured" || name === "banners") onHeroChange();
   if (name === "mobileMenu") applyMobileMenu();
+  if (name === "mobileCarousel") {
+    applyMobileCarousel();
+    onHeroChange();
+  }
   if (name === "suppliers") onSuppliersChange();
   if (name === "palette") applyPalette();
   if (name === "logo") applyLogo();
@@ -276,6 +295,7 @@ export function bindThemeOptions({ heroChange, suppliersChange } = {}) {
       setOption("featured", defaults.featured, panel);
       setOption("banners", defaults.banners, panel);
       setOption("mobileMenu", defaults.mobileMenu, panel);
+      setOption("mobileCarousel", defaults.mobileCarousel, panel);
       setOption("suppliers", defaults.suppliers, panel);
       setOption("palette", defaults.palette, panel);
       setOption("logo", defaults.logo, panel);
@@ -302,6 +322,7 @@ export function bindThemeOptions({ heroChange, suppliersChange } = {}) {
   desktop.addEventListener("change", applyHeader);
   applyHeader();
   applyMobileMenu();
+  applyMobileCarousel();
   applyPalette();
   applyLogo();
 }

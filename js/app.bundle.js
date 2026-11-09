@@ -7552,6 +7552,315 @@
     return `<ul class="grid grid-cols-2 product-grid md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">${items.map((product) => `<li>${shelfCard(product)}</li>`).join("")}</ul>`;
   }
 
+  // js/components/theme-options.js
+  var KEY = "ashmoret-theme";
+  var REV = 6;
+  var defaults = { header: "v2", hero: "v4", categories: "v2", featured: "v2", banners: "v2", mobileMenu: "v2", mobileCarousel: "v1", suppliers: "v1", palette: "v1", logo: "v1", wideHeader: true };
+  var logos = {
+    v1: { src: "assets/images/brand/logo-market-cart.png?v=2", width: 300, height: 80 },
+    v2: { src: "assets/images/brand/logo-market.png", width: 1024, height: 344 }
+  };
+  var desktop = window.matchMedia("(min-width: 1024px)");
+  var gearIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle cx="12" cy="12" r="3"></circle></svg>`;
+  var groupIcon = (paths) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths}</svg>`;
+  var groupIcons = {
+    header: groupIcon(`<rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="M3 9h18M6.5 6.5h3M15 6.5h2.5"></path>`),
+    hero: groupIcon(`<rect x="3" y="5" width="18" height="14" rx="2"></rect><circle cx="15.5" cy="9.5" r="1.5"></circle><path d="m3 16 5-4.5 4 3.5 3-2 6 4"></path>`),
+    categories: groupIcon(`<rect x="3" y="4" width="7" height="7" rx="1.5"></rect><rect x="14" y="4" width="7" height="7" rx="1.5"></rect><rect x="3" y="13" width="7" height="7" rx="1.5"></rect><rect x="14" y="13" width="7" height="7" rx="1.5"></rect>`),
+    featured: groupIcon(`<circle cx="7" cy="8" r="3"></circle><circle cx="17" cy="8" r="3"></circle><circle cx="7" cy="17" r="3"></circle><circle cx="17" cy="17" r="3"></circle>`),
+    banners: groupIcon(`<rect x="3" y="5" width="8" height="14" rx="1.5"></rect><rect x="13" y="5" width="8" height="14" rx="1.5"></rect><path d="m9 2-2 2 2 2M15 18l2 2-2 2"></path>`),
+    mobileMenu: groupIcon(`<rect x="6.5" y="2.5" width="11" height="19" rx="2.5"></rect><path d="M9.5 8h5M9.5 11h5M9.5 14h5"></path>`),
+    mobileCarousel: groupIcon(`<rect x="7" y="5" width="10" height="14" rx="1.5"></rect><path d="M4 7v10M20 7v10"></path>`),
+    suppliers: groupIcon(`<path d="M3 9 4.5 4h15L21 9"></path><path d="M4 9v11h16V9"></path><path d="M3 9h18"></path><path d="M9.5 20v-5.5h5V20"></path>`),
+    palette: groupIcon(`<path d="M12 3a9 9 0 1 0 0 18c1.1 0 1.8-.9 1.8-1.9 0-.5-.2-.9-.5-1.3-.3-.3-.5-.8-.5-1.2 0-1 .8-1.8 1.8-1.8H16a5 5 0 0 0 5-5c0-3.9-4-6.8-9-6.8z"></path><circle cx="7.5" cy="11" r="1.2"></circle><circle cx="10.5" cy="7" r="1.2"></circle><circle cx="15" cy="7.5" r="1.2"></circle>`),
+    logo: groupIcon(`<path d="M3 4h2l2.4 10.2a1.5 1.5 0 0 0 1.5 1.1h8.6a1.5 1.5 0 0 0 1.4-1.1L21 8H6.2"></path><circle cx="9.5" cy="19.5" r="1.3"></circle><circle cx="17" cy="19.5" r="1.3"></circle>`),
+    wideHeader: groupIcon(`<path d="M3 12h18"></path><path d="m7 8-4 4 4 4M17 8l4 4-4 4"></path>`)
+  };
+  var groups = [
+    {
+      name: "header",
+      title: "\u05D4\u05D2\u05D3\u05E8\u05D5\u05EA Header",
+      options: [
+        ["v1", "V1", "\u05D7\u05D9\u05E4\u05D5\u05E9 \u05D1\u05D9\u05DF \u05D4\u05DC\u05D5\u05D2\u05D5 \u05DC\u05E1\u05DC, \u05D5\u05EA\u05E4\u05E8\u05D9\u05D8 \u05D4\u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D5\u05EA \u05D1\u05E4\u05E1 \u05E0\u05E4\u05E8\u05D3 \u05DE\u05EA\u05D7\u05EA."],
+        ["v2", "V2 \xB7 \u05D1\u05E8\u05D9\u05E8\u05EA \u05DE\u05D7\u05D3\u05DC", "\u05D7\u05D9\u05E4\u05D5\u05E9 \u05D1\u05E4\u05E1 \u05D4\u05E2\u05DC\u05D9\u05D5\u05DF, \u05D5\u05EA\u05E4\u05E8\u05D9\u05D8 \u05D4\u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D5\u05EA \u05E2\u05DD \u05D4\u05DE\u05D2\u05D4\u05BE\u05DE\u05E0\u05D9\u05D5 \u05D1\u05D9\u05DF \u05D4\u05DC\u05D5\u05D2\u05D5 \u05DC\u05E1\u05DC."]
+      ],
+      checkbox: ["wideHeader", "Fullwidth", "\u05D4\u05D3\u05E8, \u05E4\u05D5\u05D8\u05E8, \u05E2\u05DE\u05D5\u05D3 \u05D4\u05D1\u05D9\u05EA, \u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D5\u05EA \u05D5\u05DB\u05DC \u05E9\u05D0\u05E8 \u05D4\u05E8\u05D0\u05E4\u05E8\u05D9\u05DD \u05D4\u05E8\u05D0\u05E9\u05D9\u05D9\u05DD \u05D1\u05E8\u05D5\u05D7\u05D1 90% \u05DE\u05D4\u05DE\u05E1\u05DA. \u05E2\u05DE\u05D5\u05D3\u05D9\u05DD \u05E6\u05E8\u05D9\u05DD \u05D1\u05DB\u05D5\u05D5\u05E0\u05D4, \u05DB\u05DE\u05D5 \u05E2\u05DE\u05D5\u05D3 \u05DE\u05D5\u05E6\u05E8 \u05D5\u05EA\u05E9\u05DC\u05D5\u05DD, \u05E0\u05E9\u05D0\u05E8\u05D9\u05DD \u05DB\u05DE\u05D5 \u05E9\u05D4\u05DD."],
+      note: "V2 \u05DE\u05D5\u05E6\u05D2 \u05D1\u05DE\u05E1\u05DB\u05D9\u05DD \u05E8\u05D7\u05D1\u05D9\u05DD. \u05D1\u05DE\u05D5\u05D1\u05D9\u05D9\u05DC \u05E0\u05E9\u05D0\u05E8 \u05D4\u05EA\u05E4\u05E8\u05D9\u05D8 \u05D4\u05E8\u05D2\u05D9\u05DC. \u05E2\u05DD \u05E1\u05E4\u05E7 \u05D0\u05D7\u05D3, \u05EA\u05E4\u05E8\u05D9\u05D8 \u05D4\u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D5\u05EA \u05E0\u05E9\u05D0\u05E8 \u05D1\u05E4\u05E1 \u05E0\u05E4\u05E8\u05D3 \u05DE\u05EA\u05D7\u05EA."
+    },
+    {
+      name: "hero",
+      title: "\u05D4\u05D2\u05D3\u05E8\u05D5\u05EA Hero",
+      options: [
+        ["v1", "V1", "\u05E7\u05E8\u05D5\u05E1\u05DC\u05EA \u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D5\u05EA, \u05D0\u05D9\u05D9\u05D8\u05DD \u05DE\u05E7\u05D5\u05D3\u05DD \u05D5\u05E9\u05E0\u05D9 \u05DE\u05E7\u05D5\u05D3\u05DE\u05D9\u05DD \u05E7\u05D8\u05E0\u05D9\u05DD \u05D1\u05E6\u05D3."],
+        ["v2", "V2", "\u05E1\u05DC\u05D9\u05D9\u05D3\u05E8 \u05EA\u05DE\u05D5\u05E0\u05D5\u05EA \u05DE\u05EA\u05D7\u05DC\u05E4\u05D5\u05EA \u05E2\u05DD \u05E0\u05E7\u05D5\u05D3\u05D5\u05EA \u05D3\u05E4\u05D3\u05D5\u05E3, \u05D5\u05DE\u05EA\u05D7\u05EA\u05D9\u05D5 \u05E7\u05E8\u05D5\u05E1\u05DC\u05EA \u05D4\u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D5\u05EA."],
+        ["v3", "V3", "\u05E9\u05DC\u05D5\u05E9\u05EA \u05D4\u05D1\u05D0\u05E0\u05E8\u05D9\u05DD \u05DC\u05DE\u05E2\u05DC\u05D4, \u05D5\u05DE\u05EA\u05D7\u05EA\u05D9\u05D4\u05DD \u05E7\u05E8\u05D5\u05E1\u05DC\u05EA \u05D4\u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D5\u05EA \u05E2\u05DD \u05D4\u05DB\u05D5\u05EA\u05E8\u05EA \xAB\u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D5\u05EA \u05E0\u05D1\u05D7\u05E8\u05D5\u05EA\xBB."],
+        ["v4", "V4 \xB7 \u05D1\u05E8\u05D9\u05E8\u05EA \u05DE\u05D7\u05D3\u05DC", "\u05DB\u05DE\u05D5 V3, \u05D5\u05D1\u05E6\u05D3 \u05D1\u05DE\u05E7\u05D5\u05DD \u05E9\u05E0\u05D9 \u05D1\u05D0\u05E0\u05E8\u05D9\u05DD \u05DE\u05E9\u05E0\u05D9\u05D9\u05DD, \u05D1\u05D0\u05E0\u05E8 \u05D0\u05D7\u05D3 \u05E2\u05DD \u05EA\u05DE\u05D5\u05E0\u05D5\u05EA \u05DE\u05EA\u05D7\u05DC\u05E4\u05D5\u05EA \u05D5\u05E7\u05D9\u05E9\u05D5\u05E8."]
+      ]
+    },
+    {
+      name: "categories",
+      title: "\u05D4\u05D2\u05D3\u05E8\u05D5\u05EA \u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D5\u05EA \u05D1\u05E2\u05DE\u05D5\u05D3 \u05D4\u05D1\u05D9\u05EA",
+      options: [
+        ["v1", "V1", "\u05D1\u05DC\u05D5\u05E7 \u05DC\u05DB\u05DC \u05DE\u05D7\u05DC\u05E7\u05D4 \u05E2\u05DD \u05D8\u05D0\u05D1\u05D9\u05DD \u05D5\u05E9\u05EA\u05D9 \u05E9\u05D5\u05E8\u05D5\u05EA \u05E9\u05DC \u05DE\u05D5\u05E6\u05E8\u05D9\u05DD."],
+        ["v2", "V2 \xB7 \u05D1\u05E8\u05D9\u05E8\u05EA \u05DE\u05D7\u05D3\u05DC", "\u05E7\u05E8\u05D5\u05E1\u05DC\u05EA \u05DE\u05D5\u05E6\u05E8\u05D9\u05DD \u05DB\u05DE\u05D5 \u05E7\u05E8\u05D5\u05E1\u05DC\u05EA \u05D4\u05DE\u05D1\u05E6\u05E2\u05D9\u05DD. \u05D4\u05D8\u05D0\u05D1\u05D9\u05DD \u05DE\u05D7\u05DC\u05D9\u05E4\u05D9\u05DD \u05D0\u05EA \u05D4\u05DE\u05D5\u05E6\u05E8\u05D9\u05DD \u05D1\u05E7\u05E8\u05D5\u05E1\u05DC\u05D4."]
+      ]
+    },
+    {
+      name: "featured",
+      title: "\u05D4\u05D2\u05D3\u05E8\u05D5\u05EA \u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D5\u05EA \u05E0\u05D1\u05D7\u05E8\u05D5\u05EA",
+      options: [
+        ["v1", "V1", "\u05EA\u05DE\u05D5\u05E0\u05D5\u05EA \u05DE\u05D5\u05E6\u05E8\u05D9\u05DD \u05DC\u05DB\u05DC \u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D4."],
+        ["v2", "V2 \xB7 \u05D1\u05E8\u05D9\u05E8\u05EA \u05DE\u05D7\u05D3\u05DC", "\u05D0\u05D9\u05D9\u05E7\u05D5\u05DF \u05DC\u05DB\u05DC \u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D4."]
+      ]
+    },
+    {
+      name: "banners",
+      title: "\u05D4\u05D2\u05D3\u05E8\u05D5\u05EA \u05D1\u05D0\u05E0\u05E8\u05D9\u05DD",
+      options: [
+        ["v1", "V1", "\u05D1\u05E1\u05DC\u05D9\u05D9\u05D3\u05E8 \u05D4\u05E6\u05D3\u05D3\u05D9 \u05D1\u05E2\u05DE\u05D5\u05D3 \u05D4\u05D1\u05D9\u05EA \u05E9\u05DC\u05D5\u05E9\u05EA \u05D4\u05D1\u05D0\u05E0\u05E8\u05D9\u05DD \u05E9\u05DC \u05D4\u05DE\u05D7\u05DC\u05E7\u05D5\u05EA."],
+        ["v2", "V2 \xB7 \u05D1\u05E8\u05D9\u05E8\u05EA \u05DE\u05D7\u05D3\u05DC", "\u05D1\u05E1\u05DC\u05D9\u05D9\u05D3\u05E8 \u05D4\u05E6\u05D3\u05D3\u05D9 \u05D1\u05E2\u05DE\u05D5\u05D3 \u05D4\u05D1\u05D9\u05EA \u05D0\u05E8\u05D1\u05E2\u05EA \u05D1\u05D0\u05E0\u05E8\u05D9 \u05D4\u05DE\u05D1\u05E6\u05E2\u05D9\u05DD."]
+      ],
+      note: "\u05D4\u05E1\u05DC\u05D9\u05D9\u05D3\u05E8 \u05D4\u05E6\u05D3\u05D3\u05D9 \u05DE\u05D5\u05E6\u05D2 \u05D1\u05BEHero V4."
+    },
+    {
+      name: "mobileMenu",
+      title: "\u05D4\u05D2\u05D3\u05E8\u05D5\u05EA \u05EA\u05E4\u05E8\u05D9\u05D8 \u05DE\u05D5\u05D1\u05D9\u05D9\u05DC",
+      options: [
+        ["v1", "V1", "\u05D4\u05EA\u05E4\u05E8\u05D9\u05D8 \u05E0\u05E4\u05EA\u05D7 \u05DE\u05EA\u05D7\u05EA \u05DC\u05D4\u05D3\u05E8."],
+        ["v2", "V2 \xB7 \u05D1\u05E8\u05D9\u05E8\u05EA \u05DE\u05D7\u05D3\u05DC", "\u05D4\u05EA\u05E4\u05E8\u05D9\u05D8 \u05E0\u05E4\u05EA\u05D7 \u05E2\u05DC \u05DB\u05DC \u05D4\u05DE\u05E1\u05DA, \u05E2\u05DD \u05D4\u05DC\u05D5\u05D2\u05D5 \u05D1\u05DE\u05E8\u05DB\u05D6 \u05DC\u05DE\u05E2\u05DC\u05D4 \u05D5\u05DB\u05E4\u05EA\u05D5\u05E8 \u05E1\u05D2\u05D9\u05E8\u05D4 \u05DE\u05D9\u05DE\u05D9\u05DF, \u05D1\u05DE\u05E7\u05D5\u05DD \u05D4\u05D4\u05DE\u05D1\u05D5\u05E8\u05D2\u05E8."]
+      ],
+      note: "\u05D4\u05EA\u05E4\u05E8\u05D9\u05D8 \u05DE\u05D5\u05E6\u05D2 \u05D1\u05DE\u05E1\u05DB\u05D9\u05DD \u05E6\u05E8\u05D9\u05DD \u05DE\u05BE1024 \u05E4\u05D9\u05E7\u05E1\u05DC\u05D9\u05DD."
+    },
+    {
+      name: "mobileCarousel",
+      title: "\u05E7\u05E8\u05D5\u05E1\u05DC\u05EA \u05DE\u05D5\u05E6\u05E8\u05D9\u05DD \u05D1\u05DE\u05D5\u05D1\u05D9\u05D9\u05DC",
+      options: [
+        ["v1", "Grid 2 \xB7 \u05D1\u05E8\u05D9\u05E8\u05EA \u05DE\u05D7\u05D3\u05DC", "\u05E9\u05E0\u05D9 \u05DE\u05D5\u05E6\u05E8\u05D9\u05DD \u05D6\u05D4 \u05DC\u05E6\u05D3 \u05D6\u05D4, \u05E2\u05DD \u05D7\u05D9\u05E6\u05D9 \u05E0\u05D9\u05D5\u05D5\u05D8."],
+        ["v2", "Centered Peek", "\u05DE\u05D5\u05E6\u05E8 \u05D0\u05D7\u05D3 \u05D1\u05DE\u05E8\u05DB\u05D6, \u05E2\u05DD \u05D4\u05E6\u05E6\u05D4 \u05DC\u05DE\u05D5\u05E6\u05E8 \u05D4\u05E7\u05D5\u05D3\u05DD \u05D5\u05D4\u05D1\u05D0 \u05DE\u05E9\u05E0\u05D9 \u05D4\u05E6\u05D3\u05D3\u05D9\u05DD. \u05E0\u05D9\u05D5\u05D5\u05D8 \u05D1\u05D4\u05D7\u05DC\u05E7\u05D4."]
+      ],
+      note: "\u05D7\u05DC \u05E2\u05DC \u05E7\u05E8\u05D5\u05E1\u05DC\u05D5\u05EA \u05D4\u05DE\u05D5\u05E6\u05E8\u05D9\u05DD \u05D1\u05DE\u05E1\u05DB\u05D9\u05DD \u05E6\u05E8\u05D9\u05DD \u05DE\u05BE768 \u05E4\u05D9\u05E7\u05E1\u05DC\u05D9\u05DD. \u05D1\u05D8\u05D0\u05D1\u05DC\u05D8 \u05D5\u05D1\u05DE\u05D7\u05E9\u05D1 \u05D4\u05EA\u05E6\u05D5\u05D2\u05D4 \u05E0\u05E9\u05D0\u05E8\u05EA \u05DB\u05DE\u05D5 \u05E9\u05D4\u05D9\u05D0."
+    },
+    {
+      name: "suppliers",
+      title: "\u05D4\u05D2\u05D3\u05E8\u05D5\u05EA \u05E1\u05E4\u05E7\u05D9\u05DD",
+      options: [
+        ["v1", "V1 \xB7 \u05D1\u05E8\u05D9\u05E8\u05EA \u05DE\u05D7\u05D3\u05DC", "\u05E8\u05D9\u05D1\u05D5\u05D9 \u05E1\u05E4\u05E7\u05D9\u05DD: \u05E1\u05D5\u05E4\u05E8 \u05D0\u05E9\u05DE\u05D5\u05E8\u05EA, \u05D7\u05D3 \u05E4\u05E2\u05DE\u05D9 \u05D5\u05DB\u05DC\u05D9 \u05D1\u05D9\u05EA, \u05E7\u05E0\u05D9\u05D5\u05DF \u05D0\u05E9\u05DE\u05D5\u05E8\u05EA \u05D5\u05DE\u05D1\u05E6\u05E2\u05D9\u05DD."],
+        ["v2", "V2", "\u05E1\u05E4\u05E7 \u05D0\u05D7\u05D3, \u05EA\u05D5\u05E6\u05E8\u05EA. \u05D4\u05EA\u05E4\u05E8\u05D9\u05D8, \u05E7\u05E8\u05D5\u05E1\u05DC\u05EA \u05D4\u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D5\u05EA \u05D5\u05E2\u05DE\u05D5\u05D3 \u05D4\u05D1\u05D9\u05EA \u05DC\u05E4\u05D9 \u05D4\u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D5\u05EA \u05D1\u05E7\u05D8\u05DC\u05D5\u05D2 \u05EA\u05D5\u05E6\u05E8\u05EA."]
+      ]
+    },
+    {
+      name: "palette",
+      title: "\u05E4\u05DC\u05D8\u05EA \u05E6\u05D1\u05E2\u05D9\u05DD",
+      options: [
+        ["grey", "\u05D0\u05E4\u05D5\u05E8\u05D9\u05DD", "\u05D2\u05D5\u05D5\u05E0\u05D9 \u05D4\u05D0\u05E4\u05D5\u05E8 \u05E9\u05DC \u05D4\u05BEGrey box.", ["#1f1f1f", "#e9e9e9", "#fff"]],
+        ["v1", "V1 \xB7 \u05D1\u05E8\u05D9\u05E8\u05EA \u05DE\u05D7\u05D3\u05DC", `\u05DB\u05D4\u05D4 <bdi dir="ltr">#282B4A</bdi>, \u05D1\u05D4\u05D9\u05E8 <bdi dir="ltr">#EEEBDA</bdi> \u05D5\u05DC\u05D1\u05DF.`, ["#282B4A", "#EEEBDA", "#fff"]]
+      ]
+    },
+    {
+      name: "logo",
+      title: "\u05DC\u05D5\u05D2\u05D5",
+      options: [
+        ["v1", "V1 \xB7 \u05D1\u05E8\u05D9\u05E8\u05EA \u05DE\u05D7\u05D3\u05DC", "MARKET \u05DE\u05D1\u05D9\u05EA \u05D0\u05E9\u05DE\u05D5\u05E8\u05EA, \u05E2\u05DD \u05E2\u05D2\u05DC\u05EA \u05E7\u05E0\u05D9\u05D5\u05EA."],
+        ["v2", "V2", "\u05D0\u05E9\u05DE\u05D5\u05E8\u05EA MARKET \u05E2\u05DD \u05D4\u05DC\u05D1."]
+      ],
+      note: "\u05D4\u05DC\u05D5\u05D2\u05D5 \u05DE\u05EA\u05D7\u05DC\u05E3 \u05D1\u05D4\u05D3\u05E8, \u05D1\u05EA\u05E4\u05E8\u05D9\u05D8 \u05D4\u05DE\u05D5\u05D1\u05D9\u05D9\u05DC \u05D5\u05D1\u05E4\u05D5\u05D8\u05E8."
+    }
+  ];
+  var state = load();
+  var markers = null;
+  var onHeroChange = () => {
+  };
+  var onSuppliersChange = () => {
+  };
+  function load() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(KEY) || "{}");
+      const current = saved.rev >= 3;
+      return {
+        rev: REV,
+        header: current && saved.header === "v1" ? "v1" : defaults.header,
+        hero: saved.rev >= 6 && ["v1", "v2", "v3", "v4"].includes(saved.hero) ? saved.hero : defaults.hero,
+        categories: ["v1", "v2"].includes(saved.categories) ? saved.categories : defaults.categories,
+        featured: saved.rev >= 4 && saved.featured === "v1" ? "v1" : defaults.featured,
+        banners: saved.rev >= 5 && saved.banners === "v1" ? "v1" : defaults.banners,
+        mobileMenu: current && saved.mobileMenu === "v1" ? "v1" : defaults.mobileMenu,
+        mobileCarousel: saved.mobileCarousel === "v2" ? "v2" : defaults.mobileCarousel,
+        suppliers: saved.suppliers === "v2" ? "v2" : defaults.suppliers,
+        palette: current && saved.palette === "grey" ? "grey" : defaults.palette,
+        logo: saved.logo === "v2" ? "v2" : defaults.logo,
+        wideHeader: typeof saved.wideHeader === "boolean" ? saved.wideHeader : defaults.wideHeader
+      };
+    } catch {
+      return { rev: REV, ...defaults };
+    }
+  }
+  function save() {
+    try {
+      localStorage.setItem(KEY, JSON.stringify(state));
+    } catch {
+    }
+  }
+  function getTheme() {
+    return state;
+  }
+  function applyPalette() {
+    const root = document.documentElement;
+    if (state.palette === "grey") delete root.dataset.palette;
+    else root.dataset.palette = state.palette;
+    const surface = getComputedStyle(root).getPropertyValue("--color-surface").trim();
+    document.querySelector('meta[name="theme-color"]')?.setAttribute("content", surface);
+  }
+  function applyLogo() {
+    const logo = logos[state.logo] || logos.v1;
+    document.documentElement.dataset.logo = state.logo;
+    document.querySelectorAll("[data-site-logo]").forEach((img) => {
+      if (img.getAttribute("src") === logo.src) return;
+      img.src = logo.src;
+      img.width = logo.width;
+      img.height = logo.height;
+    });
+  }
+  function applyMobileMenu() {
+    document.documentElement.dataset.mobileMenu = state.mobileMenu;
+    if (state.mobileMenu !== "v2") document.documentElement.classList.remove("is-menu-cover");
+  }
+  function applyMobileCarousel() {
+    document.documentElement.dataset.mobileCarousel = state.mobileCarousel;
+  }
+  function applyHeader() {
+    const search = document.getElementById("search-slot");
+    const nav = document.querySelector("[data-main-nav]");
+    const topSlot = document.getElementById("topbar-search");
+    const tagline = document.getElementById("topbar-tagline");
+    const tools = document.querySelector(".header-bar .header-tools");
+    if (!search || !nav || !topSlot || !tools) return;
+    if (!markers) {
+      markers = { search: document.createComment("search-slot"), nav: document.createComment("main-nav") };
+      search.before(markers.search);
+      nav.before(markers.nav);
+    }
+    nav.megaClose?.();
+    document.documentElement.toggleAttribute("data-header-wide", state.wideHeader);
+    const moved = state.header === "v2" && desktop.matches;
+    document.documentElement.dataset.headerLayout = moved ? "v2" : "v1";
+    if (tagline) tagline.hidden = moved;
+    if (moved) topSlot.append(search);
+    else markers.search.after(search);
+    if (moved && state.suppliers !== "v2") tools.before(nav);
+    else markers.nav.after(nav);
+  }
+  function panelMarkup() {
+    return `<div class="theme-panel-head">
+    <h2 id="theme-panel-title" class="text-xl font-extrabold">\u05D0\u05E4\u05E9\u05E8\u05D5\u05D9\u05D5\u05EA \u05EA\u05D1\u05E0\u05D9\u05EA</h2>
+    <button class="auth-close" type="button" data-theme-close aria-label="\u05E1\u05D2\u05D9\u05E8\u05EA \u05D0\u05E4\u05E9\u05E8\u05D5\u05D9\u05D5\u05EA \u05D4\u05EA\u05D1\u05E0\u05D9\u05EA">\xD7</button>
+  </div>
+  <div class="theme-panel-body">
+    ${groups.map((group, index) => `<fieldset class="theme-group">
+      <legend><span class="theme-group-num" aria-hidden="true">${index + 1}</span><span class="theme-legend-icon">${groupIcons[group.name]}</span>${group.title}</legend>
+      ${group.options.map(([value, label, text, swatches]) => `<label class="theme-option">
+        <input type="radio" name="${group.name}" value="${value}" ${state[group.name] === value ? "checked" : ""} data-theme-option>
+        <span><strong>${label}</strong><small>${text}</small>${swatches ? `<span class="theme-swatches" aria-hidden="true">${swatches.map((color) => `<span style="background:${color}"></span>`).join("")}</span>` : ""}</span>
+      </label>`).join("")}
+      ${group.checkbox ? `<label class="theme-option">
+        <input type="checkbox" name="${group.checkbox[0]}" ${state[group.checkbox[0]] ? "checked" : ""} data-theme-toggle>
+        <span><strong class="theme-option-title"><span class="theme-legend-icon">${groupIcons[group.checkbox[0]]}</span>${group.checkbox[1]}</strong><small>${group.checkbox[2]}</small></span>
+      </label>` : ""}
+      ${group.note ? `<p class="theme-note">${group.note}</p>` : ""}
+    </fieldset>`).join("")}
+    <button class="btn btn-line theme-reset" type="button" data-theme-reset>\u05D0\u05D9\u05E4\u05D5\u05E1 \u05DC\u05D1\u05E8\u05D9\u05E8\u05EA \u05DE\u05D7\u05D3\u05DC</button>
+  </div>`;
+  }
+  function syncInputs(panel) {
+    panel.querySelectorAll("[data-theme-option]").forEach((input) => {
+      input.checked = state[input.name] === input.value;
+    });
+    panel.querySelectorAll("[data-theme-toggle]").forEach((input) => {
+      input.checked = state[input.name] === true;
+    });
+  }
+  function setOption(name, value, panel) {
+    if (state[name] === value) return;
+    state = { ...state, [name]: value };
+    save();
+    syncInputs(panel);
+    if (name === "header" || name === "wideHeader" || name === "suppliers") applyHeader();
+    if (name === "hero" || name === "categories" || name === "featured" || name === "banners") onHeroChange();
+    if (name === "mobileMenu") applyMobileMenu();
+    if (name === "mobileCarousel") {
+      applyMobileCarousel();
+      onHeroChange();
+    }
+    if (name === "suppliers") onSuppliersChange();
+    if (name === "palette") applyPalette();
+    if (name === "logo") applyLogo();
+  }
+  function bindThemeOptions({ heroChange, suppliersChange } = {}) {
+    onHeroChange = heroChange || onHeroChange;
+    onSuppliersChange = suppliersChange || onSuppliersChange;
+    const gear = document.createElement("button");
+    gear.type = "button";
+    gear.className = "theme-gear";
+    gear.setAttribute("aria-label", "\u05D0\u05E4\u05E9\u05E8\u05D5\u05D9\u05D5\u05EA \u05EA\u05D1\u05E0\u05D9\u05EA");
+    gear.setAttribute("aria-expanded", "false");
+    gear.setAttribute("aria-controls", "theme-panel");
+    gear.innerHTML = gearIcon;
+    const panel = document.createElement("aside");
+    panel.id = "theme-panel";
+    panel.className = "theme-panel";
+    panel.setAttribute("role", "dialog");
+    panel.setAttribute("aria-modal", "false");
+    panel.setAttribute("aria-labelledby", "theme-panel-title");
+    panel.inert = true;
+    panel.innerHTML = panelMarkup();
+    document.body.append(gear, panel);
+    const toggle = (open3) => {
+      panel.classList.toggle("is-open", open3);
+      panel.inert = !open3;
+      gear.setAttribute("aria-expanded", String(open3));
+      if (open3) panel.querySelector("[data-theme-option]:checked")?.focus();
+      else gear.focus();
+    };
+    gear.addEventListener("click", () => toggle(!panel.classList.contains("is-open")));
+    panel.addEventListener("click", (event) => {
+      if (event.target.closest("[data-theme-close]")) toggle(false);
+      if (event.target.closest("[data-theme-reset]")) {
+        setOption("header", defaults.header, panel);
+        setOption("hero", defaults.hero, panel);
+        setOption("categories", defaults.categories, panel);
+        setOption("featured", defaults.featured, panel);
+        setOption("banners", defaults.banners, panel);
+        setOption("mobileMenu", defaults.mobileMenu, panel);
+        setOption("mobileCarousel", defaults.mobileCarousel, panel);
+        setOption("suppliers", defaults.suppliers, panel);
+        setOption("palette", defaults.palette, panel);
+        setOption("logo", defaults.logo, panel);
+        setOption("wideHeader", defaults.wideHeader, panel);
+      }
+    });
+    panel.addEventListener("change", (event) => {
+      const input = event.target.closest("[data-theme-option]");
+      if (input) setOption(input.name, input.value, panel);
+      const toggle2 = event.target.closest("[data-theme-toggle]");
+      if (toggle2) setOption(toggle2.name, toggle2.checked, panel);
+    });
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && panel.classList.contains("is-open")) toggle(false);
+    });
+    document.addEventListener("pointerdown", (event) => {
+      if (!panel.classList.contains("is-open")) return;
+      if (panel.contains(event.target) || gear.contains(event.target)) return;
+      panel.classList.remove("is-open");
+      panel.inert = true;
+      gear.setAttribute("aria-expanded", "false");
+    });
+    desktop.addEventListener("change", applyHeader);
+    applyHeader();
+    applyMobileMenu();
+    applyMobileCarousel();
+    applyPalette();
+    applyLogo();
+  }
+
   // js/components/carousel.js
   function carousel(items, label) {
     return `<div class="embla catalog-rail" data-carousel aria-label="${esc(label)}">
@@ -7571,6 +7880,7 @@
   function mountCarousels(root) {
     const Embla = window.EmblaCarousel;
     if (!Embla) return;
+    const peek = getTheme().mobileCarousel === "v2";
     root.querySelectorAll("[data-carousel]").forEach((node) => {
       if (node.dataset.ready === "true") return;
       const viewport = node.querySelector(".embla__viewport");
@@ -7579,7 +7889,8 @@
         direction: "rtl",
         align: "start",
         containScroll: false,
-        dragFree: false
+        dragFree: false,
+        breakpoints: peek ? { "(max-width: 767px)": { align: "center" } } : {}
       });
       node.dataset.ready = "true";
       const prev = node.querySelector("[data-carousel-prev]");
@@ -7738,295 +8049,6 @@
   function mountCatalog(root) {
     root.querySelectorAll("[data-catalog]").forEach(bindCatalogRail);
     root.querySelectorAll("[data-catalog-grid]").forEach(bindCatalogGrid);
-  }
-
-  // js/components/theme-options.js
-  var KEY = "ashmoret-theme";
-  var REV = 6;
-  var defaults = { header: "v2", hero: "v4", categories: "v2", featured: "v2", banners: "v2", mobileMenu: "v2", suppliers: "v1", palette: "v1", logo: "v1", wideHeader: true };
-  var logos = {
-    v1: { src: "assets/images/brand/logo-market-cart.png?v=2", width: 300, height: 80 },
-    v2: { src: "assets/images/brand/logo-market.png", width: 1024, height: 344 }
-  };
-  var desktop = window.matchMedia("(min-width: 1024px)");
-  var gearIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle cx="12" cy="12" r="3"></circle></svg>`;
-  var groupIcon = (paths) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths}</svg>`;
-  var groupIcons = {
-    header: groupIcon(`<rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="M3 9h18M6.5 6.5h3M15 6.5h2.5"></path>`),
-    hero: groupIcon(`<rect x="3" y="5" width="18" height="14" rx="2"></rect><circle cx="15.5" cy="9.5" r="1.5"></circle><path d="m3 16 5-4.5 4 3.5 3-2 6 4"></path>`),
-    categories: groupIcon(`<rect x="3" y="4" width="7" height="7" rx="1.5"></rect><rect x="14" y="4" width="7" height="7" rx="1.5"></rect><rect x="3" y="13" width="7" height="7" rx="1.5"></rect><rect x="14" y="13" width="7" height="7" rx="1.5"></rect>`),
-    featured: groupIcon(`<circle cx="7" cy="8" r="3"></circle><circle cx="17" cy="8" r="3"></circle><circle cx="7" cy="17" r="3"></circle><circle cx="17" cy="17" r="3"></circle>`),
-    banners: groupIcon(`<rect x="3" y="5" width="8" height="14" rx="1.5"></rect><rect x="13" y="5" width="8" height="14" rx="1.5"></rect><path d="m9 2-2 2 2 2M15 18l2 2-2 2"></path>`),
-    mobileMenu: groupIcon(`<rect x="6.5" y="2.5" width="11" height="19" rx="2.5"></rect><path d="M9.5 8h5M9.5 11h5M9.5 14h5"></path>`),
-    suppliers: groupIcon(`<path d="M3 9 4.5 4h15L21 9"></path><path d="M4 9v11h16V9"></path><path d="M3 9h18"></path><path d="M9.5 20v-5.5h5V20"></path>`),
-    palette: groupIcon(`<path d="M12 3a9 9 0 1 0 0 18c1.1 0 1.8-.9 1.8-1.9 0-.5-.2-.9-.5-1.3-.3-.3-.5-.8-.5-1.2 0-1 .8-1.8 1.8-1.8H16a5 5 0 0 0 5-5c0-3.9-4-6.8-9-6.8z"></path><circle cx="7.5" cy="11" r="1.2"></circle><circle cx="10.5" cy="7" r="1.2"></circle><circle cx="15" cy="7.5" r="1.2"></circle>`),
-    logo: groupIcon(`<path d="M3 4h2l2.4 10.2a1.5 1.5 0 0 0 1.5 1.1h8.6a1.5 1.5 0 0 0 1.4-1.1L21 8H6.2"></path><circle cx="9.5" cy="19.5" r="1.3"></circle><circle cx="17" cy="19.5" r="1.3"></circle>`),
-    wideHeader: groupIcon(`<path d="M3 12h18"></path><path d="m7 8-4 4 4 4M17 8l4 4-4 4"></path>`)
-  };
-  var groups = [
-    {
-      name: "header",
-      title: "\u05D4\u05D2\u05D3\u05E8\u05D5\u05EA Header",
-      options: [
-        ["v1", "V1", "\u05D7\u05D9\u05E4\u05D5\u05E9 \u05D1\u05D9\u05DF \u05D4\u05DC\u05D5\u05D2\u05D5 \u05DC\u05E1\u05DC, \u05D5\u05EA\u05E4\u05E8\u05D9\u05D8 \u05D4\u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D5\u05EA \u05D1\u05E4\u05E1 \u05E0\u05E4\u05E8\u05D3 \u05DE\u05EA\u05D7\u05EA."],
-        ["v2", "V2 \xB7 \u05D1\u05E8\u05D9\u05E8\u05EA \u05DE\u05D7\u05D3\u05DC", "\u05D7\u05D9\u05E4\u05D5\u05E9 \u05D1\u05E4\u05E1 \u05D4\u05E2\u05DC\u05D9\u05D5\u05DF, \u05D5\u05EA\u05E4\u05E8\u05D9\u05D8 \u05D4\u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D5\u05EA \u05E2\u05DD \u05D4\u05DE\u05D2\u05D4\u05BE\u05DE\u05E0\u05D9\u05D5 \u05D1\u05D9\u05DF \u05D4\u05DC\u05D5\u05D2\u05D5 \u05DC\u05E1\u05DC."]
-      ],
-      checkbox: ["wideHeader", "Fullwidth", "\u05D4\u05D3\u05E8, \u05E4\u05D5\u05D8\u05E8, \u05E2\u05DE\u05D5\u05D3 \u05D4\u05D1\u05D9\u05EA, \u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D5\u05EA \u05D5\u05DB\u05DC \u05E9\u05D0\u05E8 \u05D4\u05E8\u05D0\u05E4\u05E8\u05D9\u05DD \u05D4\u05E8\u05D0\u05E9\u05D9\u05D9\u05DD \u05D1\u05E8\u05D5\u05D7\u05D1 90% \u05DE\u05D4\u05DE\u05E1\u05DA. \u05E2\u05DE\u05D5\u05D3\u05D9\u05DD \u05E6\u05E8\u05D9\u05DD \u05D1\u05DB\u05D5\u05D5\u05E0\u05D4, \u05DB\u05DE\u05D5 \u05E2\u05DE\u05D5\u05D3 \u05DE\u05D5\u05E6\u05E8 \u05D5\u05EA\u05E9\u05DC\u05D5\u05DD, \u05E0\u05E9\u05D0\u05E8\u05D9\u05DD \u05DB\u05DE\u05D5 \u05E9\u05D4\u05DD."],
-      note: "V2 \u05DE\u05D5\u05E6\u05D2 \u05D1\u05DE\u05E1\u05DB\u05D9\u05DD \u05E8\u05D7\u05D1\u05D9\u05DD. \u05D1\u05DE\u05D5\u05D1\u05D9\u05D9\u05DC \u05E0\u05E9\u05D0\u05E8 \u05D4\u05EA\u05E4\u05E8\u05D9\u05D8 \u05D4\u05E8\u05D2\u05D9\u05DC. \u05E2\u05DD \u05E1\u05E4\u05E7 \u05D0\u05D7\u05D3, \u05EA\u05E4\u05E8\u05D9\u05D8 \u05D4\u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D5\u05EA \u05E0\u05E9\u05D0\u05E8 \u05D1\u05E4\u05E1 \u05E0\u05E4\u05E8\u05D3 \u05DE\u05EA\u05D7\u05EA."
-    },
-    {
-      name: "hero",
-      title: "\u05D4\u05D2\u05D3\u05E8\u05D5\u05EA Hero",
-      options: [
-        ["v1", "V1", "\u05E7\u05E8\u05D5\u05E1\u05DC\u05EA \u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D5\u05EA, \u05D0\u05D9\u05D9\u05D8\u05DD \u05DE\u05E7\u05D5\u05D3\u05DD \u05D5\u05E9\u05E0\u05D9 \u05DE\u05E7\u05D5\u05D3\u05DE\u05D9\u05DD \u05E7\u05D8\u05E0\u05D9\u05DD \u05D1\u05E6\u05D3."],
-        ["v2", "V2", "\u05E1\u05DC\u05D9\u05D9\u05D3\u05E8 \u05EA\u05DE\u05D5\u05E0\u05D5\u05EA \u05DE\u05EA\u05D7\u05DC\u05E4\u05D5\u05EA \u05E2\u05DD \u05E0\u05E7\u05D5\u05D3\u05D5\u05EA \u05D3\u05E4\u05D3\u05D5\u05E3, \u05D5\u05DE\u05EA\u05D7\u05EA\u05D9\u05D5 \u05E7\u05E8\u05D5\u05E1\u05DC\u05EA \u05D4\u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D5\u05EA."],
-        ["v3", "V3", "\u05E9\u05DC\u05D5\u05E9\u05EA \u05D4\u05D1\u05D0\u05E0\u05E8\u05D9\u05DD \u05DC\u05DE\u05E2\u05DC\u05D4, \u05D5\u05DE\u05EA\u05D7\u05EA\u05D9\u05D4\u05DD \u05E7\u05E8\u05D5\u05E1\u05DC\u05EA \u05D4\u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D5\u05EA \u05E2\u05DD \u05D4\u05DB\u05D5\u05EA\u05E8\u05EA \xAB\u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D5\u05EA \u05E0\u05D1\u05D7\u05E8\u05D5\u05EA\xBB."],
-        ["v4", "V4 \xB7 \u05D1\u05E8\u05D9\u05E8\u05EA \u05DE\u05D7\u05D3\u05DC", "\u05DB\u05DE\u05D5 V3, \u05D5\u05D1\u05E6\u05D3 \u05D1\u05DE\u05E7\u05D5\u05DD \u05E9\u05E0\u05D9 \u05D1\u05D0\u05E0\u05E8\u05D9\u05DD \u05DE\u05E9\u05E0\u05D9\u05D9\u05DD, \u05D1\u05D0\u05E0\u05E8 \u05D0\u05D7\u05D3 \u05E2\u05DD \u05EA\u05DE\u05D5\u05E0\u05D5\u05EA \u05DE\u05EA\u05D7\u05DC\u05E4\u05D5\u05EA \u05D5\u05E7\u05D9\u05E9\u05D5\u05E8."]
-      ]
-    },
-    {
-      name: "categories",
-      title: "\u05D4\u05D2\u05D3\u05E8\u05D5\u05EA \u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D5\u05EA \u05D1\u05E2\u05DE\u05D5\u05D3 \u05D4\u05D1\u05D9\u05EA",
-      options: [
-        ["v1", "V1", "\u05D1\u05DC\u05D5\u05E7 \u05DC\u05DB\u05DC \u05DE\u05D7\u05DC\u05E7\u05D4 \u05E2\u05DD \u05D8\u05D0\u05D1\u05D9\u05DD \u05D5\u05E9\u05EA\u05D9 \u05E9\u05D5\u05E8\u05D5\u05EA \u05E9\u05DC \u05DE\u05D5\u05E6\u05E8\u05D9\u05DD."],
-        ["v2", "V2 \xB7 \u05D1\u05E8\u05D9\u05E8\u05EA \u05DE\u05D7\u05D3\u05DC", "\u05E7\u05E8\u05D5\u05E1\u05DC\u05EA \u05DE\u05D5\u05E6\u05E8\u05D9\u05DD \u05DB\u05DE\u05D5 \u05E7\u05E8\u05D5\u05E1\u05DC\u05EA \u05D4\u05DE\u05D1\u05E6\u05E2\u05D9\u05DD. \u05D4\u05D8\u05D0\u05D1\u05D9\u05DD \u05DE\u05D7\u05DC\u05D9\u05E4\u05D9\u05DD \u05D0\u05EA \u05D4\u05DE\u05D5\u05E6\u05E8\u05D9\u05DD \u05D1\u05E7\u05E8\u05D5\u05E1\u05DC\u05D4."]
-      ]
-    },
-    {
-      name: "featured",
-      title: "\u05D4\u05D2\u05D3\u05E8\u05D5\u05EA \u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D5\u05EA \u05E0\u05D1\u05D7\u05E8\u05D5\u05EA",
-      options: [
-        ["v1", "V1", "\u05EA\u05DE\u05D5\u05E0\u05D5\u05EA \u05DE\u05D5\u05E6\u05E8\u05D9\u05DD \u05DC\u05DB\u05DC \u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D4."],
-        ["v2", "V2 \xB7 \u05D1\u05E8\u05D9\u05E8\u05EA \u05DE\u05D7\u05D3\u05DC", "\u05D0\u05D9\u05D9\u05E7\u05D5\u05DF \u05DC\u05DB\u05DC \u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D4."]
-      ]
-    },
-    {
-      name: "banners",
-      title: "\u05D4\u05D2\u05D3\u05E8\u05D5\u05EA \u05D1\u05D0\u05E0\u05E8\u05D9\u05DD",
-      options: [
-        ["v1", "V1", "\u05D1\u05E1\u05DC\u05D9\u05D9\u05D3\u05E8 \u05D4\u05E6\u05D3\u05D3\u05D9 \u05D1\u05E2\u05DE\u05D5\u05D3 \u05D4\u05D1\u05D9\u05EA \u05E9\u05DC\u05D5\u05E9\u05EA \u05D4\u05D1\u05D0\u05E0\u05E8\u05D9\u05DD \u05E9\u05DC \u05D4\u05DE\u05D7\u05DC\u05E7\u05D5\u05EA."],
-        ["v2", "V2 \xB7 \u05D1\u05E8\u05D9\u05E8\u05EA \u05DE\u05D7\u05D3\u05DC", "\u05D1\u05E1\u05DC\u05D9\u05D9\u05D3\u05E8 \u05D4\u05E6\u05D3\u05D3\u05D9 \u05D1\u05E2\u05DE\u05D5\u05D3 \u05D4\u05D1\u05D9\u05EA \u05D0\u05E8\u05D1\u05E2\u05EA \u05D1\u05D0\u05E0\u05E8\u05D9 \u05D4\u05DE\u05D1\u05E6\u05E2\u05D9\u05DD."]
-      ],
-      note: "\u05D4\u05E1\u05DC\u05D9\u05D9\u05D3\u05E8 \u05D4\u05E6\u05D3\u05D3\u05D9 \u05DE\u05D5\u05E6\u05D2 \u05D1\u05BEHero V4."
-    },
-    {
-      name: "mobileMenu",
-      title: "\u05D4\u05D2\u05D3\u05E8\u05D5\u05EA \u05EA\u05E4\u05E8\u05D9\u05D8 \u05DE\u05D5\u05D1\u05D9\u05D9\u05DC",
-      options: [
-        ["v1", "V1", "\u05D4\u05EA\u05E4\u05E8\u05D9\u05D8 \u05E0\u05E4\u05EA\u05D7 \u05DE\u05EA\u05D7\u05EA \u05DC\u05D4\u05D3\u05E8."],
-        ["v2", "V2 \xB7 \u05D1\u05E8\u05D9\u05E8\u05EA \u05DE\u05D7\u05D3\u05DC", "\u05D4\u05EA\u05E4\u05E8\u05D9\u05D8 \u05E0\u05E4\u05EA\u05D7 \u05E2\u05DC \u05DB\u05DC \u05D4\u05DE\u05E1\u05DA, \u05E2\u05DD \u05D4\u05DC\u05D5\u05D2\u05D5 \u05D1\u05DE\u05E8\u05DB\u05D6 \u05DC\u05DE\u05E2\u05DC\u05D4 \u05D5\u05DB\u05E4\u05EA\u05D5\u05E8 \u05E1\u05D2\u05D9\u05E8\u05D4 \u05DE\u05D9\u05DE\u05D9\u05DF, \u05D1\u05DE\u05E7\u05D5\u05DD \u05D4\u05D4\u05DE\u05D1\u05D5\u05E8\u05D2\u05E8."]
-      ],
-      note: "\u05D4\u05EA\u05E4\u05E8\u05D9\u05D8 \u05DE\u05D5\u05E6\u05D2 \u05D1\u05DE\u05E1\u05DB\u05D9\u05DD \u05E6\u05E8\u05D9\u05DD \u05DE\u05BE1024 \u05E4\u05D9\u05E7\u05E1\u05DC\u05D9\u05DD."
-    },
-    {
-      name: "suppliers",
-      title: "\u05D4\u05D2\u05D3\u05E8\u05D5\u05EA \u05E1\u05E4\u05E7\u05D9\u05DD",
-      options: [
-        ["v1", "V1 \xB7 \u05D1\u05E8\u05D9\u05E8\u05EA \u05DE\u05D7\u05D3\u05DC", "\u05E8\u05D9\u05D1\u05D5\u05D9 \u05E1\u05E4\u05E7\u05D9\u05DD: \u05E1\u05D5\u05E4\u05E8 \u05D0\u05E9\u05DE\u05D5\u05E8\u05EA, \u05D7\u05D3 \u05E4\u05E2\u05DE\u05D9 \u05D5\u05DB\u05DC\u05D9 \u05D1\u05D9\u05EA, \u05E7\u05E0\u05D9\u05D5\u05DF \u05D0\u05E9\u05DE\u05D5\u05E8\u05EA \u05D5\u05DE\u05D1\u05E6\u05E2\u05D9\u05DD."],
-        ["v2", "V2", "\u05E1\u05E4\u05E7 \u05D0\u05D7\u05D3, \u05EA\u05D5\u05E6\u05E8\u05EA. \u05D4\u05EA\u05E4\u05E8\u05D9\u05D8, \u05E7\u05E8\u05D5\u05E1\u05DC\u05EA \u05D4\u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D5\u05EA \u05D5\u05E2\u05DE\u05D5\u05D3 \u05D4\u05D1\u05D9\u05EA \u05DC\u05E4\u05D9 \u05D4\u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D5\u05EA \u05D1\u05E7\u05D8\u05DC\u05D5\u05D2 \u05EA\u05D5\u05E6\u05E8\u05EA."]
-      ]
-    },
-    {
-      name: "palette",
-      title: "\u05E4\u05DC\u05D8\u05EA \u05E6\u05D1\u05E2\u05D9\u05DD",
-      options: [
-        ["grey", "\u05D0\u05E4\u05D5\u05E8\u05D9\u05DD", "\u05D2\u05D5\u05D5\u05E0\u05D9 \u05D4\u05D0\u05E4\u05D5\u05E8 \u05E9\u05DC \u05D4\u05BEGrey box.", ["#1f1f1f", "#e9e9e9", "#fff"]],
-        ["v1", "V1 \xB7 \u05D1\u05E8\u05D9\u05E8\u05EA \u05DE\u05D7\u05D3\u05DC", `\u05DB\u05D4\u05D4 <bdi dir="ltr">#282B4A</bdi>, \u05D1\u05D4\u05D9\u05E8 <bdi dir="ltr">#EEEBDA</bdi> \u05D5\u05DC\u05D1\u05DF.`, ["#282B4A", "#EEEBDA", "#fff"]]
-      ]
-    },
-    {
-      name: "logo",
-      title: "\u05DC\u05D5\u05D2\u05D5",
-      options: [
-        ["v1", "V1 \xB7 \u05D1\u05E8\u05D9\u05E8\u05EA \u05DE\u05D7\u05D3\u05DC", "MARKET \u05DE\u05D1\u05D9\u05EA \u05D0\u05E9\u05DE\u05D5\u05E8\u05EA, \u05E2\u05DD \u05E2\u05D2\u05DC\u05EA \u05E7\u05E0\u05D9\u05D5\u05EA."],
-        ["v2", "V2", "\u05D0\u05E9\u05DE\u05D5\u05E8\u05EA MARKET \u05E2\u05DD \u05D4\u05DC\u05D1."]
-      ],
-      note: "\u05D4\u05DC\u05D5\u05D2\u05D5 \u05DE\u05EA\u05D7\u05DC\u05E3 \u05D1\u05D4\u05D3\u05E8, \u05D1\u05EA\u05E4\u05E8\u05D9\u05D8 \u05D4\u05DE\u05D5\u05D1\u05D9\u05D9\u05DC \u05D5\u05D1\u05E4\u05D5\u05D8\u05E8."
-    }
-  ];
-  var state = load();
-  var markers = null;
-  var onHeroChange = () => {
-  };
-  var onSuppliersChange = () => {
-  };
-  function load() {
-    try {
-      const saved = JSON.parse(localStorage.getItem(KEY) || "{}");
-      const current = saved.rev >= 3;
-      return {
-        rev: REV,
-        header: current && saved.header === "v1" ? "v1" : defaults.header,
-        hero: saved.rev >= 6 && ["v1", "v2", "v3", "v4"].includes(saved.hero) ? saved.hero : defaults.hero,
-        categories: ["v1", "v2"].includes(saved.categories) ? saved.categories : defaults.categories,
-        featured: saved.rev >= 4 && saved.featured === "v1" ? "v1" : defaults.featured,
-        banners: saved.rev >= 5 && saved.banners === "v1" ? "v1" : defaults.banners,
-        mobileMenu: current && saved.mobileMenu === "v1" ? "v1" : defaults.mobileMenu,
-        suppliers: saved.suppliers === "v2" ? "v2" : defaults.suppliers,
-        palette: current && saved.palette === "grey" ? "grey" : defaults.palette,
-        logo: saved.logo === "v2" ? "v2" : defaults.logo,
-        wideHeader: typeof saved.wideHeader === "boolean" ? saved.wideHeader : defaults.wideHeader
-      };
-    } catch {
-      return { rev: REV, ...defaults };
-    }
-  }
-  function save() {
-    try {
-      localStorage.setItem(KEY, JSON.stringify(state));
-    } catch {
-    }
-  }
-  function getTheme() {
-    return state;
-  }
-  function applyPalette() {
-    const root = document.documentElement;
-    if (state.palette === "grey") delete root.dataset.palette;
-    else root.dataset.palette = state.palette;
-    const surface = getComputedStyle(root).getPropertyValue("--color-surface").trim();
-    document.querySelector('meta[name="theme-color"]')?.setAttribute("content", surface);
-  }
-  function applyLogo() {
-    const logo = logos[state.logo] || logos.v1;
-    document.documentElement.dataset.logo = state.logo;
-    document.querySelectorAll("[data-site-logo]").forEach((img) => {
-      if (img.getAttribute("src") === logo.src) return;
-      img.src = logo.src;
-      img.width = logo.width;
-      img.height = logo.height;
-    });
-  }
-  function applyMobileMenu() {
-    document.documentElement.dataset.mobileMenu = state.mobileMenu;
-    if (state.mobileMenu !== "v2") document.documentElement.classList.remove("is-menu-cover");
-  }
-  function applyHeader() {
-    const search = document.getElementById("search-slot");
-    const nav = document.querySelector("[data-main-nav]");
-    const topSlot = document.getElementById("topbar-search");
-    const tagline = document.getElementById("topbar-tagline");
-    const tools = document.querySelector(".header-bar .header-tools");
-    if (!search || !nav || !topSlot || !tools) return;
-    if (!markers) {
-      markers = { search: document.createComment("search-slot"), nav: document.createComment("main-nav") };
-      search.before(markers.search);
-      nav.before(markers.nav);
-    }
-    nav.megaClose?.();
-    document.documentElement.toggleAttribute("data-header-wide", state.wideHeader);
-    const moved = state.header === "v2" && desktop.matches;
-    document.documentElement.dataset.headerLayout = moved ? "v2" : "v1";
-    if (tagline) tagline.hidden = moved;
-    if (moved) topSlot.append(search);
-    else markers.search.after(search);
-    if (moved && state.suppliers !== "v2") tools.before(nav);
-    else markers.nav.after(nav);
-  }
-  function panelMarkup() {
-    return `<div class="theme-panel-head">
-    <h2 id="theme-panel-title" class="text-xl font-extrabold">\u05D0\u05E4\u05E9\u05E8\u05D5\u05D9\u05D5\u05EA \u05EA\u05D1\u05E0\u05D9\u05EA</h2>
-    <button class="auth-close" type="button" data-theme-close aria-label="\u05E1\u05D2\u05D9\u05E8\u05EA \u05D0\u05E4\u05E9\u05E8\u05D5\u05D9\u05D5\u05EA \u05D4\u05EA\u05D1\u05E0\u05D9\u05EA">\xD7</button>
-  </div>
-  <div class="theme-panel-body">
-    ${groups.map((group, index) => `<fieldset class="theme-group">
-      <legend><span class="theme-group-num" aria-hidden="true">${index + 1}</span><span class="theme-legend-icon">${groupIcons[group.name]}</span>${group.title}</legend>
-      ${group.options.map(([value, label, text, swatches]) => `<label class="theme-option">
-        <input type="radio" name="${group.name}" value="${value}" ${state[group.name] === value ? "checked" : ""} data-theme-option>
-        <span><strong>${label}</strong><small>${text}</small>${swatches ? `<span class="theme-swatches" aria-hidden="true">${swatches.map((color) => `<span style="background:${color}"></span>`).join("")}</span>` : ""}</span>
-      </label>`).join("")}
-      ${group.checkbox ? `<label class="theme-option">
-        <input type="checkbox" name="${group.checkbox[0]}" ${state[group.checkbox[0]] ? "checked" : ""} data-theme-toggle>
-        <span><strong class="theme-option-title"><span class="theme-legend-icon">${groupIcons[group.checkbox[0]]}</span>${group.checkbox[1]}</strong><small>${group.checkbox[2]}</small></span>
-      </label>` : ""}
-      ${group.note ? `<p class="theme-note">${group.note}</p>` : ""}
-    </fieldset>`).join("")}
-    <button class="btn btn-line theme-reset" type="button" data-theme-reset>\u05D0\u05D9\u05E4\u05D5\u05E1 \u05DC\u05D1\u05E8\u05D9\u05E8\u05EA \u05DE\u05D7\u05D3\u05DC</button>
-  </div>`;
-  }
-  function syncInputs(panel) {
-    panel.querySelectorAll("[data-theme-option]").forEach((input) => {
-      input.checked = state[input.name] === input.value;
-    });
-    panel.querySelectorAll("[data-theme-toggle]").forEach((input) => {
-      input.checked = state[input.name] === true;
-    });
-  }
-  function setOption(name, value, panel) {
-    if (state[name] === value) return;
-    state = { ...state, [name]: value };
-    save();
-    syncInputs(panel);
-    if (name === "header" || name === "wideHeader" || name === "suppliers") applyHeader();
-    if (name === "hero" || name === "categories" || name === "featured" || name === "banners") onHeroChange();
-    if (name === "mobileMenu") applyMobileMenu();
-    if (name === "suppliers") onSuppliersChange();
-    if (name === "palette") applyPalette();
-    if (name === "logo") applyLogo();
-  }
-  function bindThemeOptions({ heroChange, suppliersChange } = {}) {
-    onHeroChange = heroChange || onHeroChange;
-    onSuppliersChange = suppliersChange || onSuppliersChange;
-    const gear = document.createElement("button");
-    gear.type = "button";
-    gear.className = "theme-gear";
-    gear.setAttribute("aria-label", "\u05D0\u05E4\u05E9\u05E8\u05D5\u05D9\u05D5\u05EA \u05EA\u05D1\u05E0\u05D9\u05EA");
-    gear.setAttribute("aria-expanded", "false");
-    gear.setAttribute("aria-controls", "theme-panel");
-    gear.innerHTML = gearIcon;
-    const panel = document.createElement("aside");
-    panel.id = "theme-panel";
-    panel.className = "theme-panel";
-    panel.setAttribute("role", "dialog");
-    panel.setAttribute("aria-modal", "false");
-    panel.setAttribute("aria-labelledby", "theme-panel-title");
-    panel.inert = true;
-    panel.innerHTML = panelMarkup();
-    document.body.append(gear, panel);
-    const toggle = (open3) => {
-      panel.classList.toggle("is-open", open3);
-      panel.inert = !open3;
-      gear.setAttribute("aria-expanded", String(open3));
-      if (open3) panel.querySelector("[data-theme-option]:checked")?.focus();
-      else gear.focus();
-    };
-    gear.addEventListener("click", () => toggle(!panel.classList.contains("is-open")));
-    panel.addEventListener("click", (event) => {
-      if (event.target.closest("[data-theme-close]")) toggle(false);
-      if (event.target.closest("[data-theme-reset]")) {
-        setOption("header", defaults.header, panel);
-        setOption("hero", defaults.hero, panel);
-        setOption("categories", defaults.categories, panel);
-        setOption("featured", defaults.featured, panel);
-        setOption("banners", defaults.banners, panel);
-        setOption("mobileMenu", defaults.mobileMenu, panel);
-        setOption("suppliers", defaults.suppliers, panel);
-        setOption("palette", defaults.palette, panel);
-        setOption("logo", defaults.logo, panel);
-        setOption("wideHeader", defaults.wideHeader, panel);
-      }
-    });
-    panel.addEventListener("change", (event) => {
-      const input = event.target.closest("[data-theme-option]");
-      if (input) setOption(input.name, input.value, panel);
-      const toggle2 = event.target.closest("[data-theme-toggle]");
-      if (toggle2) setOption(toggle2.name, toggle2.checked, panel);
-    });
-    document.addEventListener("keydown", (event) => {
-      if (event.key === "Escape" && panel.classList.contains("is-open")) toggle(false);
-    });
-    document.addEventListener("pointerdown", (event) => {
-      if (!panel.classList.contains("is-open")) return;
-      if (panel.contains(event.target) || gear.contains(event.target)) return;
-      panel.classList.remove("is-open");
-      panel.inert = true;
-      gear.setAttribute("aria-expanded", "false");
-    });
-    desktop.addEventListener("change", applyHeader);
-    applyHeader();
-    applyMobileMenu();
-    applyPalette();
-    applyLogo();
   }
 
   // js/data/banners.js

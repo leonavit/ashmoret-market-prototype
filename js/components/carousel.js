@@ -1,4 +1,5 @@
 import { shelfCard } from "./product-card.js";
+import { getTheme } from "./theme-options.js";
 import { esc } from "../lib/format.js";
 import { prefersReducedMotion } from "../lib/format.js";
 
@@ -21,6 +22,7 @@ export function carousel(items, label) {
 export function mountCarousels(root) {
   const Embla = window.EmblaCarousel;
   if (!Embla) return;
+  const peek = getTheme().mobileCarousel === "v2";
   root.querySelectorAll("[data-carousel]").forEach((node) => {
     if (node.dataset.ready === "true") return;
     const viewport = node.querySelector(".embla__viewport");
@@ -30,6 +32,7 @@ export function mountCarousels(root) {
       align: "start",
       containScroll: false,
       dragFree: false,
+      breakpoints: peek ? { "(max-width: 767px)": { align: "center" } } : {},
     });
     node.dataset.ready = "true";
     const prev = node.querySelector("[data-carousel-prev]");
