@@ -26,13 +26,11 @@ import { openProductPopup } from "./components/product-popup.js";
 import { mountProductGalleries, mountProductTabs } from "./components/product-view.js";
 import { announce, confirmAction } from "./components/toast.js";
 import { playHero, pulseAdd, rollQty, sparkAt } from "./motion.js";
-import { addItem, clearCart, getCart, removeItem, setQty, subscribe } from "./state/cart.js";
+import { addItem, applyCoupon, cartTotals, clearCart, getCart, removeCoupon, removeItem, setQty, subscribe } from "./state/cart.js";
 import { createOrderId, saveOrder } from "./state/orders.js";
 import { getSession, subscribeSession, takeExpiredNotice } from "./state/session.js";
-import { deliveryFee, getCommerce } from "./data/commerce.js";
+import { getCommerce } from "./data/commerce.js";
 import { getProduct } from "./data/catalog.js";
-import { subtotal } from "./state/cart.js";
-
 const app = document.querySelector("#app");
 let checkoutDraft = null;
 let contactDraft = null;
@@ -180,6 +178,11 @@ document.addEventListener("click", async (event) => {
     return;
   }
 
+  if (event.target.closest("[data-coupon-remove]")) {
+    removeCoupon();
+    return;
+  }
+
   const step = event.target.closest("[data-cart-step]");
   if (step) {
     const item = getCart().items.find((row) => row.id === step.dataset.id);
@@ -248,6 +251,17 @@ document.addEventListener("change", (event) => {
 document.addEventListener("submit", (event) => {
   if (event.target.matches("[data-listing-form]")) event.preventDefault();
   const form = event.target;
+  if (form.matches("[data-coupon-form]")) {
+    event.preventDefault();
+    const input = form.elements.code;
+    if (applyCoupon(input.value)) return;
+    const message = form.querySelector("[data-coupon-message]");
+    message.textContent = input.value.trim() ? "הקוד לא תקין. כדאי לבדוק ולנסות שוב." : "יש להזין קוד קופון.";
+    message.classList.add("is-error");
+    input.setAttribute("aria-invalid", "true");
+    input.focus();
+    return;
+  }
   if (form.id === "contact-form") {
     event.preventDefault();
     const { values, errors } = validateContact(form);
@@ -278,7 +292,7 @@ document.addEventListener("submit", (event) => {
       return { id: product.id, name: product.name, qty: item.qty, price: commerce.price };
     })
     .filter(Boolean);
-  const goods = subtotal();
+  const totals = cartTotals();
   const order = {
     id: createOrderId(),
     createdAt: new Date().toISOString(),
@@ -291,9 +305,11 @@ document.addEventListener("submit", (event) => {
       note: String(data.note || "").trim(),
     },
     items,
-    subtotal: goods,
-    delivery: deliveryFee,
-    total: goods + deliveryFee,
+    subtotal: totals.goods,
+    discount: totals.discount,
+    coupon: totals.coupon?.code || null,
+    delivery: totals.delivery,
+    total: totals.total,
   };
   saveOrder(order);
   clearCart();

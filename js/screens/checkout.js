@@ -1,6 +1,7 @@
 import { getProduct } from "../data/catalog.js";
-import { getCommerce, deliveryFee } from "../data/commerce.js";
-import { getCart, subtotal } from "../state/cart.js";
+import { getCommerce } from "../data/commerce.js";
+import { cartTotals, getCart } from "../state/cart.js";
+import { savedNote } from "./cart.js";
 import { esc, money } from "../lib/format.js";
 import { itemCountLabel, orderLines } from "../components/order-lines.js";
 
@@ -47,7 +48,7 @@ export function renderCheckout(errors = {}, values = {}) {
   if (!rows.length) {
     return `<article class="wrap py-16 text-center"><h1 class="text-3xl font-extrabold">הסל ריק</h1><a class="btn mt-6" href="#/">לדף הבית</a></article>`;
   }
-  const goods = subtotal();
+  const totals = cartTotals();
   const program = payPrograms.some(([id]) => id === values.cardProgram) ? values.cardProgram : payPrograms[0][0];
   const lines = rows.map((item) => {
     const product = getProduct(item.id);
@@ -121,11 +122,13 @@ export function renderCheckout(errors = {}, values = {}) {
         </div>
         ${orderLines(lines, { scroll: true })}
         <dl class="summary-totals">
-          <div><dt>מוצרים</dt><dd>${money(goods)}</dd></div>
-          <div><dt>מחיר משלוח</dt><dd>${money(deliveryFee)}</dd></div>
-          <div class="is-total"><dt>לתשלום</dt><dd>${money(goods + deliveryFee)}</dd></div>
+          <div><dt>מוצרים</dt><dd>${money(totals.goods)}</dd></div>
+          ${totals.discount ? `<div class="cart-discount"><dt>קופון ${esc(totals.coupon.code)}</dt><dd>−${money(totals.discount)}</dd></div>` : ""}
+          <div><dt>מחיר משלוח</dt><dd>${money(totals.delivery)}</dd></div>
+          <div class="is-total"><dt>לתשלום</dt><dd>${money(totals.total)}</dd></div>
         </dl>
-        <button class="btn checkout-submit" type="submit">${lockIcon}תשלום ${money(goods + deliveryFee)} · הדגמה</button>
+        ${savedNote(totals.saved)}
+        <button class="btn checkout-submit" type="submit">${lockIcon}תשלום ${money(totals.total)} · הדגמה</button>
       </aside>
     </form>
   </article>`;

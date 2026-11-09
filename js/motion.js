@@ -22,15 +22,22 @@ export function sparkAt(event, target) {
   const burst = document.createElement("span");
   burst.className = "click-spark";
   burst.setAttribute("aria-hidden", "true");
-  burst.style.left = `${fromPointer ? event.clientX : rect.left + rect.width / 2}px`;
-  burst.style.top = `${fromPointer ? event.clientY : rect.top + rect.height / 2}px`;
+  const x = fromPointer ? event.clientX : rect.left + rect.width / 2;
+  const y = fromPointer ? event.clientY : rect.top + rect.height / 2;
+  burst.style.left = `${x}px`;
+  burst.style.top = `${y}px`;
   const rays = 8;
   for (let i = 0; i < rays; i += 1) {
     const ray = document.createElement("i");
     ray.style.setProperty("--spark-angle", `${(360 / rays) * i + Math.random() * 14 - 7}deg`);
     burst.appendChild(ray);
   }
-  document.body.appendChild(burst);
+  (target.closest("dialog[open]") || document.body).appendChild(burst);
+  const placed = burst.getBoundingClientRect();
+  if (Math.abs(placed.left - x) > 0.5 || Math.abs(placed.top - y) > 0.5) {
+    burst.style.left = `${2 * x - placed.left}px`;
+    burst.style.top = `${2 * y - placed.top}px`;
+  }
   window.setTimeout(() => burst.remove(), 600);
 }
 

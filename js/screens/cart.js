@@ -1,8 +1,29 @@
 import { getProduct } from "../data/catalog.js";
-import { getCommerce, deliveryFee } from "../data/commerce.js";
-import { getCart, lineTotal, subtotal } from "../state/cart.js";
-import { esc, money } from "../lib/format.js";
+import { getCommerce } from "../data/commerce.js";
+import { cartTotals, getCart, lineTotal } from "../state/cart.js";
+import { esc, money, moneyText } from "../lib/format.js";
 import { photoImg, productPhoto } from "../components/product-photo.js";
+
+const tagIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z"></path><circle cx="7.5" cy="7.5" r="1.5"></circle></svg>`;
+
+export function savedNote(saved) {
+  return saved > 0 ? `<p class="cart-saved">${tagIcon}<span>חסכת <strong>${money(saved)}</strong> בקנייה הזו</span></p>` : "";
+}
+
+export function couponForm(coupon, message = "") {
+  if (coupon) {
+    return `<div class="coupon-applied">
+      <span>${tagIcon}קופון <strong>${esc(coupon.code)}</strong> · ${esc(coupon.label)}</span>
+      <button type="button" class="coupon-remove" data-coupon-remove>הסרה</button>
+    </div>`;
+  }
+  return `<form class="coupon-form" data-coupon-form novalidate>
+      <label class="sr-only" for="coupon-code">קוד קופון</label>
+      <input id="coupon-code" name="code" autocomplete="off" placeholder="קוד קופון" aria-describedby="coupon-hint">
+      <button type="submit" class="btn btn-line">הפעלה</button>
+      <p id="coupon-hint" class="coupon-hint" data-coupon-message aria-live="polite">${esc(message || "להדגמה: ASHMORET10")}</p>
+    </form>`;
+}
 
 export function renderCart() {
   const items = getCart().items
@@ -17,8 +38,7 @@ export function renderCart() {
     </article>`;
   }
 
-  const goods = subtotal();
-  const total = goods + deliveryFee;
+  const totals = cartTotals();
 
   return `<article class="wrap py-8">
     <h1 class="text-3xl font-extrabold">סל הקניות</h1>
@@ -31,7 +51,7 @@ export function renderCart() {
           <div>
             <h2 class="font-extrabold"><a href="#/p/${esc(item.product.id)}">${esc(item.product.name)}</a></h2>
             <p class="text-sm text-muted">${esc(item.product.weight)}</p>
-            <p class="mt-1 font-bold">${money(item.commerce.price)}</p>
+            <p class="cart-price">${money(item.commerce.price)}${item.commerce.compareAt ? `<s aria-label="במקום ${moneyText(item.commerce.compareAt)}">${money(item.commerce.compareAt)}</s>` : ""}</p>
             <div class="mt-3 flex flex-wrap items-center gap-3">
               <div class="flex items-center rounded-full border border-line" dir="ltr">
                 <button type="button" class="icon-btn" data-cart-step="-1" data-id="${esc(item.product.id)}" aria-label="הפחתת כמות">−</button>
@@ -46,11 +66,14 @@ export function renderCart() {
       </ul>
       <aside class="rounded-2xl bg-paper p-5">
         <h2 class="text-lg font-extrabold">סיכום</h2>
+        ${couponForm(totals.coupon)}
         <dl class="mt-4 grid gap-2 text-sm">
-          <div class="flex justify-between"><dt>מוצרים</dt><dd>${money(goods)}</dd></div>
-          <div class="flex justify-between"><dt>מחיר משלוח</dt><dd>${money(deliveryFee)}</dd></div>
-          <div class="flex justify-between border-t border-line pt-2 text-base font-extrabold"><dt>לתשלום</dt><dd>${money(total)}</dd></div>
+          <div class="flex justify-between"><dt>מוצרים</dt><dd>${money(totals.goods)}</dd></div>
+          ${totals.discount ? `<div class="flex justify-between cart-discount"><dt>קופון ${esc(totals.coupon.code)}</dt><dd>−${money(totals.discount)}</dd></div>` : ""}
+          <div class="flex justify-between"><dt>מחיר משלוח</dt><dd>${money(totals.delivery)}</dd></div>
+          <div class="flex justify-between border-t border-line pt-2 text-base font-extrabold"><dt>לתשלום</dt><dd>${money(totals.total)}</dd></div>
         </dl>
+        ${savedNote(totals.saved)}
         <p class="mt-3 text-xs text-muted">המחירים ודמי המשלוח הם נתוני הדגמה, לא חישוב אמיתי.</p>
         <a class="btn mt-5 w-full" href="#/checkout">המשך לתשלום</a>
       </aside>

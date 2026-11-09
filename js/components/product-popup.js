@@ -1,5 +1,5 @@
 import { getProduct } from "../data/catalog.js";
-import { getCommerce } from "../data/commerce.js";
+import { getCommerce, saleLabel } from "../data/commerce.js";
 import { isElectronicsProduct } from "../data/departments.js";
 import { mountProductGalleries, productFolds, productGallery } from "./product-view.js";
 import { qtyStep } from "./product-card.js";
@@ -31,7 +31,7 @@ function markup(product) {
       <button type="button" class="auth-close" data-pop-close aria-label="סגירה">×</button>
     </div>
     <div class="product-pop-layout">
-      ${productGallery(product, commerce?.compareAt ? `<span class="sale-badge">במבצע</span>` : "")}
+      ${productGallery(product, commerce?.compareAt ? `<span class="sale-badge">${esc(saleLabel(commerce))}</span>` : "")}
       <div class="product-info">
         <div class="product-head">
           <h2 id="product-pop-title">${esc(product.name)}</h2>

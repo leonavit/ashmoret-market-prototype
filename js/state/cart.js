@@ -1,7 +1,16 @@
-import { getCommerce } from "../data/commerce.js";
+import { deliveryFee, getCommerce } from "../data/commerce.js";
 
 const KEY = "ashmoret-cart";
+const COUPON_KEY = "ashmoret-coupon";
+const coupons = {
+  ASHMORET10: { rate: 0.1, label: "10% הנחה על המוצרים" },
+};
 const listeners = new Set();
+
+function notify() {
+  const state = read();
+  listeners.forEach((listener) => listener(state));
+}
 
 function read() {
   try {
@@ -54,7 +63,49 @@ export function removeItem(id) {
 }
 
 export function clearCart() {
+  localStorage.removeItem(COUPON_KEY);
   write({ items: [] });
+}
+
+export function getCoupon() {
+  const code = localStorage.getItem(COUPON_KEY);
+  return code && coupons[code] ? { code, ...coupons[code] } : null;
+}
+
+export function applyCoupon(input) {
+  const code = String(input || "").trim().toUpperCase();
+  if (!coupons[code]) return false;
+  localStorage.setItem(COUPON_KEY, code);
+  notify();
+  return true;
+}
+
+export function removeCoupon() {
+  localStorage.removeItem(COUPON_KEY);
+  notify();
+}
+
+function roundMoney(amount) {
+  return Math.round(amount * 100) / 100;
+}
+
+export function cartTotals(state = read()) {
+  const goods = subtotal(state);
+  const sale = state.items.reduce((sum, item) => {
+    const commerce = getCommerce(item.id);
+    return commerce?.compareAt ? sum + (commerce.compareAt - commerce.price) * item.qty : sum;
+  }, 0);
+  const coupon = state.items.length ? getCoupon() : null;
+  const discount = coupon ? roundMoney(goods * coupon.rate) : 0;
+  const delivery = state.items.length ? deliveryFee : 0;
+  return {
+    goods,
+    coupon,
+    discount,
+    delivery,
+    saved: roundMoney(sale + discount),
+    total: roundMoney(goods - discount + delivery),
+  };
 }
 
 export function countItems(state = read()) {

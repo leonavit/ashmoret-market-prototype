@@ -2,15 +2,97 @@ import { deliveryFee } from "../data/commerce.js";
 import { esc, money } from "../lib/format.js";
 import { wait } from "../state/session.js";
 import { parseHash } from "../router.js";
-import { contactFields, validateContact } from "../screens/contact.js";
 import { showToast } from "./toast.js";
 
 const LOAD_MS = 700;
 
 const kinds = {
   delivery: { title: "משלוח עד הבית", path: "#/delivery", dialogId: "delivery-dialog", focus: "[data-service-focus]" },
-  service: { title: "שירות לקוחות", path: "#/service", dialogId: "service-dialog", focus: "select[name='topic']" },
+  service: { title: "שירות לקוחות", path: "#/service", dialogId: "service-dialog", focus: "[data-service-focus]" },
 };
+
+const topicIcon = (paths) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths}</svg>`;
+const chevron = `<svg class="service-topic-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg>`;
+const backIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg>`;
+
+const topics = {
+  status: {
+    title: "בירור סטטוס הזמנה",
+    text: "איפה ההזמנה שלי? מתי היא מגיעה?",
+    icon: topicIcon(`<path d="M2 6.5h11.5v9.5H2z"></path><path d="M13.5 9.5h4.2l3.3 3.6v2.9h-7.5"></path><circle cx="6" cy="17.5" r="1.8"></circle><circle cx="17" cy="17.5" r="1.8"></circle>`),
+    fields: ["order", "phone"],
+    submit: "בדיקת סטטוס",
+    done: "הבקשה נשמרה בהדגמה. בגרסה הפעילה יוצג כאן מצב ההזמנה, ונציג יחזור אליך בטלפון לפי הצורך.",
+  },
+  problem: {
+    title: "בעיה בהזמנה שהתקבלה",
+    text: "מוצר חסר, פגום, שגוי או תלונה על משלוח",
+    icon: topicIcon(`<path d="M21 8 12 3 3 8v8l9 5 9-5z"></path><path d="M3 8l9 5 9-5M12 13v8"></path><path d="M16.5 15.5l3 3M19.5 15.5l-3 3"></path>`),
+    fields: ["order", "issue", "name", "phone", "message"],
+    submit: "שליחת פנייה",
+    done: "הפנייה נשמרה בהדגמה. לא נשלח מייל אמיתי.",
+  },
+  return: {
+    title: "החזרה או החלפת מוצר",
+    text: "בקשת החזרה, החלפה או החזר כספי",
+    icon: topicIcon(`<path d="M20 11a8 8 0 0 0-14.3-4.9L4 8"></path><path d="M4 4v4h4"></path><path d="M4 13a8 8 0 0 0 14.3 4.9L20 16"></path><path d="M20 20v-4h-4"></path>`),
+    fields: ["order", "request", "product", "name", "phone", "message"],
+    submit: "שליחת בקשה",
+    done: "הבקשה נשמרה בהדגמה. לא נשלח מייל אמיתי.",
+  },
+  other: {
+    title: "פנייה בנושא אחר",
+    text: "שאלה על מוצר, תשלום או שירות כללי",
+    icon: topicIcon(`<path d="M20 12a8 8 0 0 1-11.6 7.1L4 20l1-4A8 8 0 1 1 20 12z"></path>`),
+    fields: ["subject", "name", "phone", "email", "message"],
+    submit: "שליחת פנייה",
+    done: "הפנייה נשמרה בהדגמה. לא נשלח מייל אמיתי.",
+  },
+};
+
+const fieldDefs = {
+  order: { label: "מספר הזמנה", attrs: `dir="ltr" autocomplete="off" placeholder="AM-1234"`, check: (value) => value.length >= 3 || "נא למלא מספר הזמנה." },
+  phone: { label: "טלפון", type: "tel", attrs: `dir="ltr" autocomplete="tel"`, check: (value) => /^0\d{8,9}$/.test(value.replace(/[^\d]/g, "")) || "נא למלא טלפון ישראלי." },
+  name: { label: "שם מלא", attrs: `autocomplete="name"`, check: (value) => value.length >= 2 || "נא למלא שם מלא." },
+  email: { label: "אימייל (לא חובה)", type: "email", attrs: `dir="ltr" autocomplete="email"`, check: (value) => !value || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) || "נא למלא אימייל תקין." },
+  issue: { label: "מה קרה?", options: ["מוצר חסר", "מוצר פגום", "מוצר שגוי", "תלונה על המשלוח"] },
+  request: { label: "סוג הבקשה", options: ["החזרה", "החלפה", "החזר כספי"] },
+  product: { label: "שם המוצר", check: (value) => value.length >= 2 || "נא למלא שם מוצר." },
+  subject: { label: "נושא", options: ["שאלה על מוצר", "תשלום", "שירות כללי"] },
+  message: { label: "פירוט", textarea: true, check: (value) => value.length >= 5 || "נא לכתוב כמה מילים." },
+};
+
+function serviceField(name, { values, errors }, prefix, first) {
+  const def = fieldDefs[name];
+  const id = `${prefix}${name}`;
+  const error = errors[name];
+  const aria = `aria-invalid="${error ? "true" : "false"}" ${error ? `aria-describedby="${id}-error"` : ""} ${first ? "data-service-focus" : ""}`;
+  const value = values[name] || "";
+  const control = def.options
+    ? `<select id="${id}" name="${name}" ${aria}><option value="">בחירה</option>${def.options.map((option) => `<option ${value === option ? "selected" : ""}>${esc(option)}</option>`).join("")}</select>`
+    : def.textarea
+      ? `<textarea id="${id}" name="${name}" rows="3" ${aria}>${esc(value)}</textarea>`
+      : `<input id="${id}" name="${name}" type="${def.type || "text"}" value="${esc(value)}" ${def.attrs || ""} ${aria}>`;
+  return `<label class="field" for="${id}">
+    <span class="text-sm font-semibold">${def.label}</span>
+    ${control}
+    ${error ? `<span id="${id}-error" class="field-error">${esc(error)}</span>` : ""}
+  </label>`;
+}
+
+function validateTopic(topic, form) {
+  const data = new FormData(form);
+  const values = {};
+  const errors = {};
+  topics[topic].fields.forEach((name) => {
+    const def = fieldDefs[name];
+    const value = String(data.get(name) || "").trim();
+    values[name] = value;
+    const result = def.options ? def.options.includes(value) || "נא לבחור אפשרות." : def.check(value);
+    if (result !== true) errors[name] = result;
+  });
+  return { values, errors };
+}
 
 const phoneIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3h2.5l1.2 3.2-1.7 1a12 12 0 0 0 6.8 6.8l1-1.7 3.2 1.2V16a2 2 0 0 1-2.2 2A16 16 0 0 1 6 6.2 2 2 0 0 1 8 4z"></path></svg>`;
 const whatsappIcon = `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3a9 9 0 0 0-7.8 13.4L3 21l4.7-1.2A9 9 0 1 0 12 3zm0 1.6a7.4 7.4 0 1 1-3.8 13.8l-.3-.2-2.6.7.7-2.5-.2-.3A7.4 7.4 0 0 1 12 4.6zm4.3 10.1c-.2-.1-1.4-.7-1.6-.8-.2-.1-.4-.1-.5.1l-.7.9c-.1.2-.3.2-.5.1a6 6 0 0 1-3-2.6c-.2-.4.2-.4.6-1.2.1-.1 0-.3 0-.4l-.7-1.7c-.2-.4-.4-.4-.5-.4h-.5a.9.9 0 0 0-.6.3 2.6 2.6 0 0 0-.8 1.9 4.5 4.5 0 0 0 1 2.4 10.3 10.3 0 0 0 3.9 3.5c1.5.6 2 .7 2.7.6a2.3 2.3 0 0 0 1.5-1.1 1.9 1.9 0 0 0 .1-1.1c0-.1-.2-.2-.4-.3z"></path></svg>`;
@@ -19,7 +101,7 @@ const pageIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" str
 
 const fresh = {
   delivery: () => ({ city: "", street: "", error: "", result: "", pending: false }),
-  service: () => ({ values: {}, errors: {}, sent: false, pending: false }),
+  service: () => ({ topic: null, values: {}, errors: {}, sent: false, pending: false }),
 };
 
 const state = { delivery: fresh.delivery(), service: fresh.service() };
@@ -86,20 +168,35 @@ function serviceBody(inPage) {
       <span class="service-contact-text"><strong>ווטסאפ</strong><small>שירות לקוחות</small></span>
     </a></li>
   </ul>`;
+  const topic = topics[service.topic];
+  if (!topic) {
+    return `${contact}
+    <h3 class="service-topics-title">במה אפשר לעזור?</h3>
+    <ul class="service-topics">
+      ${Object.entries(topics).map(([key, item], index) => `<li><button type="button" class="service-topic" data-service-topic="${key}" ${index === 0 ? "data-service-focus" : ""}>
+        <span class="service-topic-icon">${item.icon}</span>
+        <span class="service-topic-text"><strong>${item.title}</strong><small>${item.text}</small></span>
+        ${chevron}
+      </button></li>`).join("")}
+    </ul>`;
+  }
+  const back = `<button type="button" class="service-back" data-service-back>${backIcon}כל הנושאים</button>`;
+  const head = `<div class="service-topic-head">${back}<h3 class="service-topic-heading"><span class="service-topic-icon">${topic.icon}</span>${topic.title}</h3></div>`;
   if (service.sent) {
     const done = inPage
-      ? `<a class="btn mt-5" href="#/">חזרה לדף הבית</a>`
-      : `<button class="btn mt-5" type="button" data-service-close>סגירה</button>`;
-    return `${contact}
-    <p class="service-result mt-5" role="status">הפנייה נשמרה בהדגמה. לא נשלח מייל אמיתי.</p>
-    ${done}`;
+      ? `<a class="btn" href="#/">חזרה לדף הבית</a>`
+      : `<button class="btn" type="button" data-service-close>סגירה</button>`;
+    return `${head}
+    <p class="service-result mt-4" role="status">${topic.done}</p>
+    <div class="mt-5 flex flex-wrap gap-3">${done}<button class="btn btn-line" type="button" data-service-back data-service-focus>פנייה נוספת</button></div>`;
   }
-  return `${contact}
-  <form class="mt-5 grid gap-4" data-service-form="service" novalidate>
-    <h3 class="font-extrabold">השארת פנייה</h3>
-    ${contactFields(service, inPage ? "service-page-" : "service-")}
-    <button class="btn" type="submit" ${service.pending ? "disabled" : ""}>${service.pending ? "שולחים…" : "שליחת פנייה"}</button>
-  </form>`;
+  const prefix = inPage ? "service-page-" : "service-";
+  return `${head}
+  <form class="mt-4 grid gap-4" data-service-form="service" novalidate>
+    ${topic.fields.map((name, index) => serviceField(name, service, prefix, index === 0)).join("")}
+    <button class="btn" type="submit" ${service.pending ? "disabled" : ""}>${service.pending ? "שולחים…" : topic.submit}</button>
+  </form>
+  ${contact}`;
 }
 
 function markup(kind, inPage) {
@@ -195,6 +292,14 @@ export function bindServiceDialogs() {
     else if (event.target.closest("[data-open-service]")) openService();
     const share = event.target.closest("[data-share-link]");
     if (share) shareLink(share.dataset.shareLink);
+    const pick = event.target.closest("[data-service-topic]");
+    const back = event.target.closest("[data-service-back]");
+    if (pick || back) {
+      const root = (pick || back).closest("[data-service-root]");
+      const previous = state.service.topic;
+      state.service = { ...fresh.service(), topic: pick ? pick.dataset.serviceTopic : null };
+      paint(root, pick ? "[data-service-focus]" : `[data-service-topic="${previous}"]`);
+    }
   });
 
   document.addEventListener("submit", async (event) => {
@@ -230,8 +335,8 @@ export function bindServiceDialogs() {
     }
 
     const service = state.service;
-    if (service.pending) return;
-    const { values, errors } = validateContact(form);
+    if (service.pending || !topics[service.topic]) return;
+    const { values, errors } = validateTopic(service.topic, form);
     service.values = values;
     service.errors = errors;
     if (Object.keys(errors).length) {
@@ -242,7 +347,7 @@ export function bindServiceDialogs() {
     paint(root, "button[type='submit']");
     await wait(LOAD_MS);
     if (!live()) return;
-    state.service = { values: {}, errors: {}, sent: true, pending: false };
-    paint(root, ".btn");
+    state.service = { ...fresh.service(), topic: service.topic, sent: true };
+    paint(root, "[data-service-focus]");
   });
 }

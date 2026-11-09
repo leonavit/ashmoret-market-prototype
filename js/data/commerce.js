@@ -54,7 +54,7 @@ export const prices = {
   "p047": { "price": 10.90, "compareAt": null },
   "p048": { "price": 11.40, "compareAt": null },
   "p049": { "price": 7.90, "compareAt": null },
-  "p050": { "price": 6.90, "compareAt": 8.90 },
+  "p050": { "price": 6.90, "compareAt": 8.90, "badge": "2 ב-10 ₪" },
   "p051": { "price": 43.90, "compareAt": null },
   "p052": { "price": 44.40, "compareAt": null },
   "p053": { "price": 42.90, "compareAt": null },
@@ -259,4 +259,8 @@ export const prices = {
 
 export function getCommerce(id) {
   return prices[id] || null;
+}
+
+export function saleLabel(commerce) {
+  return commerce?.badge || "במבצע";
 }

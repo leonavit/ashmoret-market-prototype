@@ -1,5 +1,5 @@
 import { getProduct, productsByCategory } from "../data/catalog.js";
-import { getCommerce } from "../data/commerce.js";
+import { getCommerce, saleLabel } from "../data/commerce.js";
 import { carousel } from "../components/carousel.js";
 import { productBuy, productDescription, productGallery, productTabs } from "../components/product-view.js";
 import { esc, money } from "../lib/format.js";
@@ -27,7 +27,7 @@ export function renderProduct(id) {
       <span aria-current="page">${esc(product.name)}</span>
     </nav>
     <div class="product-layout">
-      ${productGallery(product, commerce?.compareAt ? `<span class="sale-badge">במבצע</span>` : "")}
+      ${productGallery(product, commerce?.compareAt ? `<span class="sale-badge">${esc(saleLabel(commerce))}</span>` : "")}
       <div class="product-info">
         <div class="product-head">
           <p class="product-brand">${esc(product.brand)}</p>

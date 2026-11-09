@@ -1,5 +1,5 @@
 import { isElectronicsProduct } from "../data/departments.js";
-import { getCommerce } from "../data/commerce.js";
+import { getCommerce, saleLabel } from "../data/commerce.js";
 import { esc, money } from "../lib/format.js";
 import { photoImg, productPhoto } from "./product-photo.js";
 
@@ -14,7 +14,7 @@ function productAnchor(product, attrs, inner) {
 
 function cardParts(product) {
   const commerce = getCommerce(product.id);
-  const badge = commerce?.compareAt ? `<span class="sale-badge">במבצע</span>` : "";
+  const badge = commerce?.compareAt ? `<span class="sale-badge">${esc(saleLabel(commerce))}</span>` : "";
   const price = commerce
     ? `<p class="price">${money(commerce.price)}${commerce.compareAt ? `<s>${money(commerce.compareAt)}</s>` : ""}</p>`
     : `<p class="text-sm font-semibold text-muted">מחיר יעודכן</p>`;

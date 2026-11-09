@@ -1,8 +1,9 @@
 import { getProduct } from "../data/catalog.js";
-import { deliveryFee, getCommerce } from "../data/commerce.js";
+import { getCommerce } from "../data/commerce.js";
 import { esc, money } from "../lib/format.js";
 import { parseHash } from "../router.js";
-import { countItems, getCart, lineTotal, subtotal } from "../state/cart.js";
+import { cartTotals, countItems, getCart, lineTotal } from "../state/cart.js";
+import { savedNote } from "../screens/cart.js";
 import { photoImg, productPhoto } from "./product-photo.js";
 
 const arrow = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg>`;
@@ -35,8 +36,7 @@ export function updateCartDock(routeName = parseHash().name) {
   if (!open) root.querySelector(".cart-dock-body")?.remove();
   root.classList.toggle("is-open", open && show);
   if (!show && root.childElementCount) return;
-  const goods = subtotal();
-  const total = goods + (count ? deliveryFee : 0);
+  const totals = cartTotals();
   const list = items.length
     ? `<ul class="cart-dock-list">${items.map((item) => `<li class="cart-dock-item">
         <a class="cart-dock-thumb${productPhoto(item.product) ? " has-photo" : ""}" href="#/p/${esc(item.product.id)}" tabindex="-1" aria-hidden="true">${photoImg(item.product)}</a>
@@ -49,12 +49,13 @@ export function updateCartDock(routeName = parseHash().name) {
               <span>${item.qty}</span>
               <button type="button" data-cart-step="1" data-id="${esc(item.product.id)}" aria-label="הגדלת כמות">+</button>
             </div>
-            <p class="cart-dock-price">${money(lineTotal(item))}</p>
+            <p class="cart-dock-price">${money(lineTotal(item))}${item.commerce.compareAt ? `<s>${money(item.commerce.compareAt * item.qty)}</s>` : ""}</p>
             <button type="button" class="cart-dock-remove" data-remove="${esc(item.product.id)}" aria-label="הסרה">${trashIcon}</button>
           </div>
         </div>
       </li>`).join("")}</ul>`
     : `<p class="cart-dock-empty">הסל ריק. אפשר להוסיף מוצרים מהקטלוג.</p>`;
+  const listScroll = root.querySelector(".cart-dock-list")?.scrollTop || 0;
   root.innerHTML = `<div class="cart-dock-bar">
       <button type="button" class="cart-dock-arrow" data-cart-toggle aria-expanded="${open}" aria-controls="cart-dock-body">
         ${arrow}
@@ -65,20 +66,24 @@ export function updateCartDock(routeName = parseHash().name) {
         ${count ? "" : `<p class="text-sm text-muted">הסל ריק</p>`}
       </div>
       ${count
-        ? `<a class="cart-dock-pay" href="#/checkout"><span>לתשלום:</span><strong>${money(total)}</strong></a>`
+        ? `<a class="cart-dock-pay" href="#/checkout"><span>לתשלום:</span><strong>${money(totals.total)}</strong></a>`
         : `<span class="cart-dock-pay is-disabled" aria-disabled="true"><span>לתשלום:</span><strong>${money(0)}</strong></span>`}
     </div>
     ${open ? `<div id="cart-dock-body" class="cart-dock-body">
       ${list}
       <div class="cart-dock-foot">
         <dl>
-          <div><dt>מוצרים</dt><dd>${money(goods)}</dd></div>
-          <div><dt>מחיר משלוח</dt><dd>${count ? money(deliveryFee) : money(0)}</dd></div>
-          <div class="is-total"><dt>לתשלום</dt><dd>${money(total)}</dd></div>
+          <div><dt>מוצרים</dt><dd>${money(totals.goods)}</dd></div>
+          ${totals.discount ? `<div class="cart-discount"><dt>קופון ${esc(totals.coupon.code)}</dt><dd>−${money(totals.discount)}</dd></div>` : ""}
+          <div><dt>מחיר משלוח</dt><dd>${money(totals.delivery)}</dd></div>
+          <div class="is-total"><dt>לתשלום</dt><dd>${money(totals.total)}</dd></div>
         </dl>
+        ${savedNote(totals.saved)}
         ${count ? `<a class="btn" href="#/checkout">המשך לתשלום</a>` : `<a class="btn btn-line" href="#/">להמשך קנייה</a>`}
       </div>
     </div>` : ""}`;
+  const listEl = root.querySelector(".cart-dock-list");
+  if (listEl) listEl.scrollTop = listScroll;
   placeDock();
 }
 

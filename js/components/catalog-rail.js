@@ -77,7 +77,14 @@ function selectTab(tabs, tab, panel, focus) {
     item.tabIndex = on ? 0 : -1;
   });
   panel.setAttribute("aria-labelledby", tab.id);
-  if (focus) tab.focus();
+  if (focus) tab.focus({ preventScroll: true });
+  const list = tab.parentElement;
+  if (list && list.scrollWidth > list.clientWidth) {
+    const tabBox = tab.getBoundingClientRect();
+    const listBox = list.getBoundingClientRect();
+    const offset = tabBox.left + tabBox.width / 2 - (listBox.left + listBox.width / 2);
+    list.scrollBy({ left: offset, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+  }
 }
 
 function bindTabKeys(tablist, tabs, activate) {

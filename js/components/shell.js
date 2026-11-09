@@ -116,6 +116,12 @@ export function bindShell(navigate) {
     document.documentElement.classList.toggle("is-menu-cover", open && cover);
     if (cover && open) menu.querySelector("[data-menu-close]")?.focus();
     else if (cover && wasOpen && !open) menuOpen.focus();
+    if (wasOpen && !open) {
+      menuOpen.classList.remove("is-unfolding");
+      void menuOpen.offsetWidth;
+      menuOpen.classList.add("is-unfolding");
+      window.setTimeout(() => menuOpen.classList.remove("is-unfolding"), 500);
+    }
     const gsap = window.gsap;
     if (open && gsap && !prefersReducedMotion()) {
       gsap.fromTo(menu, { y: cover ? 0 : -8, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: cover ? 0.2 : 0.28, ease: "power2.out" });
@@ -155,7 +161,32 @@ export function setCategoryBand(visible) {
 let categoryActive = "";
 let categoryCount = 0;
 let categoryFits = null;
+let categoryMobile = null;
+let categoryAutoplay = 0;
 let resizeTimer = 0;
+const mobileCategories = window.matchMedia("(max-width: 767px)");
+
+function stopCategoryAutoplay() {
+  window.clearInterval(categoryAutoplay);
+  categoryAutoplay = 0;
+}
+
+function markCenterSlide() {
+  if (!categoryCarousel) return;
+  const selected = categoryCarousel.selectedScrollSnap();
+  categoryCarousel.slideNodes().forEach((slide, index) => slide.classList.toggle("is-center", index === selected));
+}
+
+function startCategoryAutoplay(viewport) {
+  stopCategoryAutoplay();
+  if (prefersReducedMotion()) return;
+  categoryAutoplay = window.setInterval(() => {
+    const band = document.getElementById("category-band");
+    if (!categoryCarousel || document.hidden || band?.hidden || viewport.contains(document.activeElement)) return;
+    categoryCarousel.scrollNext();
+  }, 2800);
+  viewport.addEventListener("pointerdown", stopCategoryAutoplay, { once: true });
+}
 
 function categoriesFit(list, viewport, count) {
   const slide = list.querySelector(".cat-slide");
@@ -170,7 +201,7 @@ window.addEventListener("resize", () => {
     if (!band || band.hidden || categoryFits === null) return;
     const list = document.getElementById("category-nav");
     const viewport = document.getElementById("category-viewport");
-    if (categoriesFit(list, viewport, categoryCount) !== categoryFits) renderCategoryNav(categoryActive);
+    if (categoriesFit(list, viewport, categoryCount) !== categoryFits || mobileCategories.matches !== categoryMobile) renderCategoryNav(categoryActive);
   }, 150);
 });
 
@@ -196,10 +227,13 @@ export function renderCategoryNav(activeSlug) {
       return `<li class="cat-slide"><a class="cat-link" href="${esc(item.href)}"${current}${clone}>${thumb}<span>${esc(item.name)}</span></a></li>`;
     })
     .join("")).join("");
+  stopCategoryAutoplay();
   if (categoryCarousel) {
     categoryCarousel.destroy();
     categoryCarousel = null;
   }
+  categoryMobile = mobileCategories.matches;
+  band?.classList.toggle("is-auto", categoryMobile);
   list.innerHTML = markup(1);
   categoryFits = viewport ? categoriesFit(list, viewport, items.length) : null;
   band?.classList.toggle("is-static", Boolean(categoryFits));
@@ -210,13 +244,17 @@ export function renderCategoryNav(activeSlug) {
   categoryCarousel = Embla(viewport, {
     loop: true,
     direction: "rtl",
-    align: "start",
+    align: categoryMobile ? "center" : "start",
     containScroll: false,
     dragFree: false,
-    duration: prefersReducedMotion() ? 0 : 25,
+    duration: prefersReducedMotion() ? 0 : categoryMobile ? 32 : 25,
   });
   document.getElementById("cat-prev").disabled = false;
   document.getElementById("cat-next").disabled = false;
+  if (!categoryMobile) return;
+  categoryCarousel.on("select", markCenterSlide).on("reInit", markCenterSlide);
+  markCenterSlide();
+  startCategoryAutoplay(viewport);
 }
 
 function setActiveOption(options, index) {

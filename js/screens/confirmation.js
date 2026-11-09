@@ -33,6 +33,7 @@ export function renderConfirmation(id) {
       ${orderLines(lines)}
       <dl class="summary-totals">
         <div><dt>מוצרים</dt><dd>${money(order.subtotal)}</dd></div>
+        ${order.discount ? `<div class="cart-discount"><dt>קופון ${esc(order.coupon || "")}</dt><dd>−${money(order.discount)}</dd></div>` : ""}
         <div><dt>מחיר משלוח</dt><dd>${money(order.delivery)}</dd></div>
         <div class="is-total"><dt>סה״כ</dt><dd>${money(order.total)}</dd></div>
       </dl>
