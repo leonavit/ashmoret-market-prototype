@@ -71,7 +71,7 @@ export function renderCart() {
         <dl class="mt-4 grid gap-2 text-sm">
           <div class="flex justify-between"><dt>סה״כ:</dt><dd>${money(totals.goods)}</dd></div>
           ${totals.discount ? `<div class="flex justify-between cart-discount"><dt>קופון ${esc(totals.coupon.code)}</dt><dd>−${money(totals.discount)}</dd></div>` : ""}
-          <div class="flex justify-between"><dt>מחיר משלוח:</dt><dd>${money(totals.delivery)}</dd></div>
+          <div class="flex justify-between"><dt>עלות משלוח:</dt><dd>${money(totals.delivery)}</dd></div>
           <div class="flex justify-between border-t border-line pt-2 text-base font-extrabold"><dt>סה״כ לתשלום:</dt><dd>${money(totals.total)}</dd></div>
         </dl>
         ${savedNote(totals.saved)}

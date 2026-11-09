@@ -406,6 +406,14 @@
     -webkit-line-clamp: 2;
   }
 
+  @media (min-width: 1280px) {
+    .card-name {
+      min-height: 52px;
+      font-size: 20px;
+      line-height: 26px;
+    }
+  }
+
   .card-meta {
     color: var(--color-muted);
     font-size: 13px;
@@ -2378,7 +2386,7 @@
   @media (min-width: 1440px) {
     .header-bar > .main-nav .nav-row {
       column-gap: 1.75rem;
-      font-size: 1.35rem;
+      font-size: 1.25rem;
     }
   }
 

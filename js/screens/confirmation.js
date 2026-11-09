@@ -34,7 +34,7 @@ export function renderConfirmation(id) {
       <dl class="summary-totals">
         <div><dt>מוצרים</dt><dd>${money(order.subtotal)}</dd></div>
         ${order.discount ? `<div class="cart-discount"><dt>קופון ${esc(order.coupon || "")}</dt><dd>−${money(order.discount)}</dd></div>` : ""}
-        <div><dt>מחיר משלוח</dt><dd>${money(order.delivery)}</dd></div>
+        <div><dt>עלות משלוח</dt><dd>${money(order.delivery)}</dd></div>
         <div class="is-total"><dt>סה״כ</dt><dd>${money(order.total)}</dd></div>
       </dl>
       <p class="mt-4 text-sm text-muted">משלוח אל ${esc(order.customer.street)} ${esc(order.customer.house)}, ${esc(order.customer.city)}</p>

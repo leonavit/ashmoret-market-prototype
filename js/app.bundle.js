@@ -7554,8 +7554,8 @@
 
   // js/components/theme-options.js
   var KEY = "ashmoret-theme";
-  var REV = 6;
-  var defaults = { header: "v2", hero: "v4", categories: "v2", featured: "v2", banners: "v2", mobileMenu: "v2", mobileCarousel: "v1", suppliers: "v1", palette: "v1", logo: "v1", wideHeader: true };
+  var REV = 7;
+  var defaults = { header: "v2", hero: "v4", categories: "v2", featured: "v2", banners: "v2", mobileMenu: "v2", mobileCarousel: "v2", suppliers: "v1", palette: "v1", logo: "v1", wideHeader: true };
   var logos = {
     v1: { src: "assets/images/brand/logo-market-cart.png?v=2", width: 300, height: 80 },
     v2: { src: "assets/images/brand/logo-market.png", width: 1024, height: 344 }
@@ -7635,8 +7635,8 @@
       name: "mobileCarousel",
       title: "\u05E7\u05E8\u05D5\u05E1\u05DC\u05EA \u05DE\u05D5\u05E6\u05E8\u05D9\u05DD \u05D1\u05DE\u05D5\u05D1\u05D9\u05D9\u05DC",
       options: [
-        ["v1", "Grid 2 \xB7 \u05D1\u05E8\u05D9\u05E8\u05EA \u05DE\u05D7\u05D3\u05DC", "\u05E9\u05E0\u05D9 \u05DE\u05D5\u05E6\u05E8\u05D9\u05DD \u05D6\u05D4 \u05DC\u05E6\u05D3 \u05D6\u05D4, \u05E2\u05DD \u05D7\u05D9\u05E6\u05D9 \u05E0\u05D9\u05D5\u05D5\u05D8."],
-        ["v2", "Centered Peek", "\u05DE\u05D5\u05E6\u05E8 \u05D0\u05D7\u05D3 \u05D1\u05DE\u05E8\u05DB\u05D6, \u05E2\u05DD \u05D4\u05E6\u05E6\u05D4 \u05DC\u05DE\u05D5\u05E6\u05E8 \u05D4\u05E7\u05D5\u05D3\u05DD \u05D5\u05D4\u05D1\u05D0 \u05DE\u05E9\u05E0\u05D9 \u05D4\u05E6\u05D3\u05D3\u05D9\u05DD. \u05E0\u05D9\u05D5\u05D5\u05D8 \u05D1\u05D4\u05D7\u05DC\u05E7\u05D4."]
+        ["v1", "Grid 2", "\u05E9\u05E0\u05D9 \u05DE\u05D5\u05E6\u05E8\u05D9\u05DD \u05D6\u05D4 \u05DC\u05E6\u05D3 \u05D6\u05D4, \u05E2\u05DD \u05D7\u05D9\u05E6\u05D9 \u05E0\u05D9\u05D5\u05D5\u05D8."],
+        ["v2", "Centered Peek \xB7 \u05D1\u05E8\u05D9\u05E8\u05EA \u05DE\u05D7\u05D3\u05DC", "\u05DE\u05D5\u05E6\u05E8 \u05D0\u05D7\u05D3 \u05D1\u05DE\u05E8\u05DB\u05D6, \u05E2\u05DD \u05D4\u05E6\u05E6\u05D4 \u05DC\u05DE\u05D5\u05E6\u05E8 \u05D4\u05E7\u05D5\u05D3\u05DD \u05D5\u05D4\u05D1\u05D0 \u05DE\u05E9\u05E0\u05D9 \u05D4\u05E6\u05D3\u05D3\u05D9\u05DD. \u05E0\u05D9\u05D5\u05D5\u05D8 \u05D1\u05D4\u05D7\u05DC\u05E7\u05D4."]
       ],
       note: "\u05D7\u05DC \u05E2\u05DC \u05E7\u05E8\u05D5\u05E1\u05DC\u05D5\u05EA \u05D4\u05DE\u05D5\u05E6\u05E8\u05D9\u05DD \u05D1\u05DE\u05E1\u05DB\u05D9\u05DD \u05E6\u05E8\u05D9\u05DD \u05DE\u05BE768 \u05E4\u05D9\u05E7\u05E1\u05DC\u05D9\u05DD. \u05D1\u05D8\u05D0\u05D1\u05DC\u05D8 \u05D5\u05D1\u05DE\u05D7\u05E9\u05D1 \u05D4\u05EA\u05E6\u05D5\u05D2\u05D4 \u05E0\u05E9\u05D0\u05E8\u05EA \u05DB\u05DE\u05D5 \u05E9\u05D4\u05D9\u05D0."
     },
@@ -7684,7 +7684,7 @@
         featured: saved.rev >= 4 && saved.featured === "v1" ? "v1" : defaults.featured,
         banners: saved.rev >= 5 && saved.banners === "v1" ? "v1" : defaults.banners,
         mobileMenu: current && saved.mobileMenu === "v1" ? "v1" : defaults.mobileMenu,
-        mobileCarousel: saved.mobileCarousel === "v2" ? "v2" : defaults.mobileCarousel,
+        mobileCarousel: saved.rev >= 7 && saved.mobileCarousel === "v1" ? "v1" : defaults.mobileCarousel,
         suppliers: saved.suppliers === "v2" ? "v2" : defaults.suppliers,
         palette: current && saved.palette === "grey" ? "grey" : defaults.palette,
         logo: saved.logo === "v2" ? "v2" : defaults.logo,
@@ -8729,7 +8729,7 @@
   function productFolds(product, options = {}) {
     const descriptionOpen = options.openDescription === false ? "" : " open";
     const shipping = options.shipping === false ? "" : `<details class="product-fold">
-      <summary>\u05DE\u05D7\u05D9\u05E8 \u05DE\u05E9\u05DC\u05D5\u05D7</summary>
+      <summary>\u05E2\u05DC\u05D5\u05EA \u05DE\u05E9\u05DC\u05D5\u05D7</summary>
       <div class="product-fold-body">
         <p>\u05D1\u05D4\u05D3\u05D2\u05DE\u05D4 \u05DE\u05EA\u05D5\u05D5\u05E1\u05E3 \u05D3\u05DE\u05D9 \u05DE\u05E9\u05DC\u05D5\u05D7 \u05E9\u05DC ${money(deliveryFee)}. \u05D4\u05E9\u05D9\u05E8\u05D5\u05EA \u05D4\u05D5\u05D0 \u05E2\u05D3 \u05D4\u05D1\u05D9\u05EA, \u05D1\u05DC\u05D9 \u05D7\u05D9\u05D5\u05D1 \u05D0\u05DE\u05D9\u05EA\u05D9.</p>
       </div>
@@ -8807,7 +8807,7 @@
       ["delivery", "\u05DE\u05E9\u05DC\u05D5\u05D7 \u05D5\u05D0\u05E1\u05E4\u05E7\u05D4", `<div class="product-tab-cols">
         <div>
           <h3>\u05DE\u05E9\u05DC\u05D5\u05D7 \u05E2\u05D3 \u05D4\u05D1\u05D9\u05EA</h3>
-          <p>\u05D4\u05D4\u05D6\u05DE\u05E0\u05D4 \u05DE\u05D2\u05D9\u05E2\u05D4 \u05E2\u05D3 \u05D4\u05D3\u05DC\u05EA. \u05DE\u05D7\u05D9\u05E8 \u05DE\u05E9\u05DC\u05D5\u05D7 ${money(deliveryFee)} \u05DC\u05D4\u05D6\u05DE\u05E0\u05D4.</p>
+          <p>\u05D4\u05D4\u05D6\u05DE\u05E0\u05D4 \u05DE\u05D2\u05D9\u05E2\u05D4 \u05E2\u05D3 \u05D4\u05D3\u05DC\u05EA. \u05E2\u05DC\u05D5\u05EA \u05DE\u05E9\u05DC\u05D5\u05D7 ${money(deliveryFee)} \u05DC\u05D4\u05D6\u05DE\u05E0\u05D4.</p>
           <button type="button" class="product-tab-link" data-open-delivery>\u05D1\u05D3\u05D9\u05E7\u05EA \u05DB\u05EA\u05D5\u05D1\u05EA \u05DC\u05DE\u05E9\u05DC\u05D5\u05D7</button>
         </div>
         <div>
@@ -9106,7 +9106,7 @@
         <dl class="mt-4 grid gap-2 text-sm">
           <div class="flex justify-between"><dt>\u05E1\u05D4\u05F4\u05DB:</dt><dd>${money(totals.goods)}</dd></div>
           ${totals.discount ? `<div class="flex justify-between cart-discount"><dt>\u05E7\u05D5\u05E4\u05D5\u05DF ${esc(totals.coupon.code)}</dt><dd>\u2212${money(totals.discount)}</dd></div>` : ""}
-          <div class="flex justify-between"><dt>\u05DE\u05D7\u05D9\u05E8 \u05DE\u05E9\u05DC\u05D5\u05D7:</dt><dd>${money(totals.delivery)}</dd></div>
+          <div class="flex justify-between"><dt>\u05E2\u05DC\u05D5\u05EA \u05DE\u05E9\u05DC\u05D5\u05D7:</dt><dd>${money(totals.delivery)}</dd></div>
           <div class="flex justify-between border-t border-line pt-2 text-base font-extrabold"><dt>\u05E1\u05D4\u05F4\u05DB \u05DC\u05EA\u05E9\u05DC\u05D5\u05DD:</dt><dd>${money(totals.total)}</dd></div>
         </dl>
         ${savedNote(totals.saved)}
@@ -9248,7 +9248,7 @@
         <dl class="summary-totals">
           <div><dt>\u05DE\u05D5\u05E6\u05E8\u05D9\u05DD</dt><dd>${money(totals.goods)}</dd></div>
           ${totals.discount ? `<div class="cart-discount"><dt>\u05E7\u05D5\u05E4\u05D5\u05DF ${esc(totals.coupon.code)}</dt><dd>\u2212${money(totals.discount)}</dd></div>` : ""}
-          <div><dt>\u05DE\u05D7\u05D9\u05E8 \u05DE\u05E9\u05DC\u05D5\u05D7</dt><dd>${money(totals.delivery)}</dd></div>
+          <div><dt>\u05E2\u05DC\u05D5\u05EA \u05DE\u05E9\u05DC\u05D5\u05D7</dt><dd>${money(totals.delivery)}</dd></div>
           <div class="is-total"><dt>\u05DC\u05EA\u05E9\u05DC\u05D5\u05DD</dt><dd>${money(totals.total)}</dd></div>
         </dl>
         ${savedNote(totals.saved)}
@@ -9335,7 +9335,7 @@
       <dl class="summary-totals">
         <div><dt>\u05DE\u05D5\u05E6\u05E8\u05D9\u05DD</dt><dd>${money(order.subtotal)}</dd></div>
         ${order.discount ? `<div class="cart-discount"><dt>\u05E7\u05D5\u05E4\u05D5\u05DF ${esc(order.coupon || "")}</dt><dd>\u2212${money(order.discount)}</dd></div>` : ""}
-        <div><dt>\u05DE\u05D7\u05D9\u05E8 \u05DE\u05E9\u05DC\u05D5\u05D7</dt><dd>${money(order.delivery)}</dd></div>
+        <div><dt>\u05E2\u05DC\u05D5\u05EA \u05DE\u05E9\u05DC\u05D5\u05D7</dt><dd>${money(order.delivery)}</dd></div>
         <div class="is-total"><dt>\u05E1\u05D4\u05F4\u05DB</dt><dd>${money(order.total)}</dd></div>
       </dl>
       <p class="mt-4 text-sm text-muted">\u05DE\u05E9\u05DC\u05D5\u05D7 \u05D0\u05DC ${esc(order.customer.street)} ${esc(order.customer.house)}, ${esc(order.customer.city)}</p>
@@ -10207,7 +10207,7 @@
       <dl class="mt-4 grid gap-2 border-t border-line pt-3 text-sm">
         <div class="flex justify-between"><dt>\u05DE\u05D5\u05E6\u05E8\u05D9\u05DD</dt><dd>${money(order.subtotal)}</dd></div>
         ${order.discount ? `<div class="flex justify-between cart-discount"><dt>\u05E7\u05D5\u05E4\u05D5\u05DF ${esc(order.coupon || "")}</dt><dd>\u2212${money(order.discount)}</dd></div>` : ""}
-        <div class="flex justify-between"><dt>\u05DE\u05D7\u05D9\u05E8 \u05DE\u05E9\u05DC\u05D5\u05D7</dt><dd>${money(order.delivery)}</dd></div>
+        <div class="flex justify-between"><dt>\u05E2\u05DC\u05D5\u05EA \u05DE\u05E9\u05DC\u05D5\u05D7</dt><dd>${money(order.delivery)}</dd></div>
         <div class="flex justify-between font-extrabold"><dt>\u05E1\u05D4\u05F4\u05DB</dt><dd>${money(order.total)}</dd></div>
       </dl>
     </section>
@@ -10295,7 +10295,7 @@
       promo: {
         href: "#/d/home",
         title: "\u05DC\u05DB\u05DC \u05D4\u05DE\u05D5\u05E6\u05E8\u05D9\u05DD \u05D1\u05D7\u05D3 \u05E4\u05E2\u05DE\u05D9 \u05D5\u05DB\u05DC\u05D9 \u05D1\u05D9\u05EA",
-        image: "assets/images/banners/mega-all-home.webp?v=2"
+        image: "assets/images/banners/mega-all-home.webp?v=3"
       }
     },
     {
@@ -10856,7 +10856,7 @@
         <dl>
           <div><dt>\u05E1\u05D4\u05F4\u05DB:</dt><dd>${money(totals.goods)}</dd></div>
           ${totals.discount ? `<div class="cart-discount"><dt>\u05E7\u05D5\u05E4\u05D5\u05DF ${esc(totals.coupon.code)}</dt><dd>\u2212${money(totals.discount)}</dd></div>` : ""}
-          <div><dt>\u05DE\u05D7\u05D9\u05E8 \u05DE\u05E9\u05DC\u05D5\u05D7:</dt><dd>${money(totals.delivery)}</dd></div>
+          <div><dt>\u05E2\u05DC\u05D5\u05EA \u05DE\u05E9\u05DC\u05D5\u05D7:</dt><dd>${money(totals.delivery)}</dd></div>
           <div class="is-total"><dt>\u05E1\u05D4\u05F4\u05DB \u05DC\u05EA\u05E9\u05DC\u05D5\u05DD:</dt><dd>${money(totals.total)}</dd></div>
         </dl>
         ${savedNote(totals.saved)}

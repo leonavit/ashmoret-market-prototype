@@ -1,6 +1,6 @@
 const KEY = "ashmoret-theme";
-const REV = 6;
-const defaults = { header: "v2", hero: "v4", categories: "v2", featured: "v2", banners: "v2", mobileMenu: "v2", mobileCarousel: "v1", suppliers: "v1", palette: "v1", logo: "v1", wideHeader: true };
+const REV = 7;
+const defaults = { header: "v2", hero: "v4", categories: "v2", featured: "v2", banners: "v2", mobileMenu: "v2", mobileCarousel: "v2", suppliers: "v1", palette: "v1", logo: "v1", wideHeader: true };
 const logos = {
   v1: { src: "assets/images/brand/logo-market-cart.png?v=2", width: 300, height: 80 },
   v2: { src: "assets/images/brand/logo-market.png", width: 1024, height: 344 },
@@ -83,8 +83,8 @@ const groups = [
     name: "mobileCarousel",
     title: "קרוסלת מוצרים במובייל",
     options: [
-      ["v1", "Grid 2 · ברירת מחדל", "שני מוצרים זה לצד זה, עם חיצי ניווט."],
-      ["v2", "Centered Peek", "מוצר אחד במרכז, עם הצצה למוצר הקודם והבא משני הצדדים. ניווט בהחלקה."],
+      ["v1", "Grid 2", "שני מוצרים זה לצד זה, עם חיצי ניווט."],
+      ["v2", "Centered Peek · ברירת מחדל", "מוצר אחד במרכז, עם הצצה למוצר הקודם והבא משני הצדדים. ניווט בהחלקה."],
     ],
     note: "חל על קרוסלות המוצרים במסכים צרים מ־768 פיקסלים. בטאבלט ובמחשב התצוגה נשארת כמו שהיא.",
   },
@@ -132,7 +132,7 @@ function load() {
       featured: saved.rev >= 4 && saved.featured === "v1" ? "v1" : defaults.featured,
       banners: saved.rev >= 5 && saved.banners === "v1" ? "v1" : defaults.banners,
       mobileMenu: current && saved.mobileMenu === "v1" ? "v1" : defaults.mobileMenu,
-      mobileCarousel: saved.mobileCarousel === "v2" ? "v2" : defaults.mobileCarousel,
+      mobileCarousel: saved.rev >= 7 && saved.mobileCarousel === "v1" ? "v1" : defaults.mobileCarousel,
       suppliers: saved.suppliers === "v2" ? "v2" : defaults.suppliers,
       palette: current && saved.palette === "grey" ? "grey" : defaults.palette,
       logo: saved.logo === "v2" ? "v2" : defaults.logo,

@@ -38,7 +38,7 @@ export function productFolds(product, options = {}) {
   const shipping = options.shipping === false
     ? ""
     : `<details class="product-fold">
-      <summary>מחיר משלוח</summary>
+      <summary>עלות משלוח</summary>
       <div class="product-fold-body">
         <p>בהדגמה מתווסף דמי משלוח של ${money(deliveryFee)}. השירות הוא עד הבית, בלי חיוב אמיתי.</p>
       </div>
@@ -121,7 +121,7 @@ export function productTabs(product) {
     ["delivery", "משלוח ואספקה", `<div class="product-tab-cols">
         <div>
           <h3>משלוח עד הבית</h3>
-          <p>ההזמנה מגיעה עד הדלת. מחיר משלוח ${money(deliveryFee)} להזמנה.</p>
+          <p>ההזמנה מגיעה עד הדלת. עלות משלוח ${money(deliveryFee)} להזמנה.</p>
           <button type="button" class="product-tab-link" data-open-delivery>בדיקת כתובת למשלוח</button>
         </div>
         <div>

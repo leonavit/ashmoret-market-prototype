@@ -62,7 +62,7 @@ const menus = [
     promo: {
       href: "#/d/home",
       title: "לכל המוצרים בחד פעמי וכלי בית",
-      image: "assets/images/banners/mega-all-home.webp?v=2",
+      image: "assets/images/banners/mega-all-home.webp?v=3",
     },
   },
   {
