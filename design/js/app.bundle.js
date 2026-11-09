@@ -7264,7 +7264,7 @@
     "p047": { "price": 10.9, "compareAt": null },
     "p048": { "price": 11.4, "compareAt": null },
     "p049": { "price": 7.9, "compareAt": null },
-    "p050": { "price": 6.9, "compareAt": 8.9 },
+    "p050": { "price": 6.9, "compareAt": 8.9, "badge": "2 \u05D1-10 \u20AA" },
     "p051": { "price": 43.9, "compareAt": null },
     "p052": { "price": 44.4, "compareAt": null },
     "p053": { "price": 42.9, "compareAt": null },
@@ -7469,6 +7469,9 @@
   function getCommerce(id) {
     return prices[id] || null;
   }
+  function saleLabel(commerce) {
+    return commerce?.badge || "\u05D1\u05DE\u05D1\u05E6\u05E2";
+  }
 
   // js/lib/format.js
   function esc(value) {
@@ -7483,6 +7486,9 @@
   function money(amount) {
     const value = Number(amount).toFixed(2);
     return `<span dir="ltr">\u20AA${value}</span>`;
+  }
+  function moneyText(amount) {
+    return `\u20AA${Number(amount).toFixed(2)}`;
   }
   function prefersReducedMotion() {
     return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -7508,7 +7514,7 @@
   }
   function cardParts(product) {
     const commerce = getCommerce(product.id);
-    const badge = commerce?.compareAt ? `<span class="sale-badge">\u05D1\u05DE\u05D1\u05E6\u05E2</span>` : "";
+    const badge = commerce?.compareAt ? `<span class="sale-badge">${esc(saleLabel(commerce))}</span>` : "";
     const price = commerce ? `<p class="price">${money(commerce.price)}${commerce.compareAt ? `<s>${money(commerce.compareAt)}</s>` : ""}</p>` : `<p class="text-sm font-semibold text-muted">\u05DE\u05D7\u05D9\u05E8 \u05D9\u05E2\u05D5\u05D3\u05DB\u05DF</p>`;
     return { badge, price };
   }
@@ -7645,7 +7651,14 @@
       item.tabIndex = on ? 0 : -1;
     });
     panel.setAttribute("aria-labelledby", tab.id);
-    if (focus) tab.focus();
+    if (focus) tab.focus({ preventScroll: true });
+    const list = tab.parentElement;
+    if (list && list.scrollWidth > list.clientWidth) {
+      const tabBox = tab.getBoundingClientRect();
+      const listBox = list.getBoundingClientRect();
+      const offset = tabBox.left + tabBox.width / 2 - (listBox.left + listBox.width / 2);
+      list.scrollBy({ left: offset, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+    }
   }
   function bindTabKeys(tablist, tabs, activate) {
     tablist?.addEventListener("keydown", (event) => {
@@ -8877,7 +8890,7 @@
       <span aria-current="page">${esc(product.name)}</span>
     </nav>
     <div class="product-layout">
-      ${productGallery(product, commerce?.compareAt ? `<span class="sale-badge">\u05D1\u05DE\u05D1\u05E6\u05E2</span>` : "")}
+      ${productGallery(product, commerce?.compareAt ? `<span class="sale-badge">${esc(saleLabel(commerce))}</span>` : "")}
       <div class="product-info">
         <div class="product-head">
           <p class="product-brand">${esc(product.brand)}</p>
@@ -8895,7 +8908,15 @@
 
   // js/state/cart.js
   var KEY2 = "ashmoret-cart";
+  var COUPON_KEY = "ashmoret-coupon";
+  var coupons = {
+    ASHMORET10: { rate: 0.1, label: "10% \u05D4\u05E0\u05D7\u05D4 \u05E2\u05DC \u05D4\u05DE\u05D5\u05E6\u05E8\u05D9\u05DD" }
+  };
   var listeners = /* @__PURE__ */ new Set();
+  function notify() {
+    const state3 = read();
+    listeners.forEach((listener) => listener(state3));
+  }
   function read() {
     try {
       const data = JSON.parse(localStorage.getItem(KEY2) || '{"items":[]}');
@@ -8938,7 +8959,44 @@
     write(state3);
   }
   function clearCart() {
+    localStorage.removeItem(COUPON_KEY);
     write({ items: [] });
+  }
+  function getCoupon() {
+    const code = localStorage.getItem(COUPON_KEY);
+    return code && coupons[code] ? { code, ...coupons[code] } : null;
+  }
+  function applyCoupon(input) {
+    const code = String(input || "").trim().toUpperCase();
+    if (!coupons[code]) return false;
+    localStorage.setItem(COUPON_KEY, code);
+    notify();
+    return true;
+  }
+  function removeCoupon() {
+    localStorage.removeItem(COUPON_KEY);
+    notify();
+  }
+  function roundMoney(amount) {
+    return Math.round(amount * 100) / 100;
+  }
+  function cartTotals(state3 = read()) {
+    const goods = subtotal(state3);
+    const sale = state3.items.reduce((sum, item) => {
+      const commerce = getCommerce(item.id);
+      return commerce?.compareAt ? sum + (commerce.compareAt - commerce.price) * item.qty : sum;
+    }, 0);
+    const coupon = state3.items.length ? getCoupon() : null;
+    const discount = coupon ? roundMoney(goods * coupon.rate) : 0;
+    const delivery2 = state3.items.length ? deliveryFee : 0;
+    return {
+      goods,
+      coupon,
+      discount,
+      delivery: delivery2,
+      saved: roundMoney(sale + discount),
+      total: roundMoney(goods - discount + delivery2)
+    };
   }
   function countItems(state3 = read()) {
     return state3.items.reduce((sum, item) => sum + item.qty, 0);
@@ -8953,6 +9011,24 @@
   }
 
   // js/screens/cart.js
+  var tagIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z"></path><circle cx="7.5" cy="7.5" r="1.5"></circle></svg>`;
+  function savedNote(saved) {
+    return saved > 0 ? `<p class="cart-saved">${tagIcon}<span>\u05D7\u05E1\u05DB\u05EA <strong>${money(saved)}</strong> \u05D1\u05E7\u05E0\u05D9\u05D9\u05D4 \u05D4\u05D6\u05D5</span></p>` : "";
+  }
+  function couponForm(coupon, message = "") {
+    if (coupon) {
+      return `<div class="coupon-applied">
+      <span>${tagIcon}\u05E7\u05D5\u05E4\u05D5\u05DF <strong>${esc(coupon.code)}</strong> \xB7 ${esc(coupon.label)}</span>
+      <button type="button" class="coupon-remove" data-coupon-remove>\u05D4\u05E1\u05E8\u05D4</button>
+    </div>`;
+    }
+    return `<form class="coupon-form" data-coupon-form novalidate>
+      <label class="sr-only" for="coupon-code">\u05E7\u05D5\u05D3 \u05E7\u05D5\u05E4\u05D5\u05DF</label>
+      <input id="coupon-code" name="code" autocomplete="off" placeholder="\u05E7\u05D5\u05D3 \u05E7\u05D5\u05E4\u05D5\u05DF" aria-describedby="coupon-hint">
+      <button type="submit" class="btn btn-line">\u05D4\u05E4\u05E2\u05DC\u05D4</button>
+      <p id="coupon-hint" class="coupon-hint" data-coupon-message aria-live="polite">${esc(message || "\u05DC\u05D4\u05D3\u05D2\u05DE\u05D4: ASHMORET10")}</p>
+    </form>`;
+  }
   function renderCart() {
     const items = getCart().items.map((item) => ({ ...item, product: getProduct(item.id), commerce: getCommerce(item.id) })).filter((item) => item.product && item.commerce);
     if (!items.length) {
@@ -8962,8 +9038,7 @@
       <a class="btn mt-6" href="#/">\u05DC\u05D3\u05E3 \u05D4\u05D1\u05D9\u05EA</a>
     </article>`;
     }
-    const goods = subtotal();
-    const total = goods + deliveryFee;
+    const totals = cartTotals();
     return `<article class="wrap py-8">
     <h1 class="text-3xl font-extrabold">\u05E1\u05DC \u05D4\u05E7\u05E0\u05D9\u05D5\u05EA</h1>
     <div class="mt-6 grid items-start gap-8 lg:grid-cols-[1fr_320px]">
@@ -8975,7 +9050,7 @@
           <div>
             <h2 class="font-extrabold"><a href="#/p/${esc(item.product.id)}">${esc(item.product.name)}</a></h2>
             <p class="text-sm text-muted">${esc(item.product.weight)}</p>
-            <p class="mt-1 font-bold">${money(item.commerce.price)}</p>
+            <p class="cart-price">${money(item.commerce.price)}${item.commerce.compareAt ? `<s aria-label="\u05D1\u05DE\u05E7\u05D5\u05DD ${moneyText(item.commerce.compareAt)}">${money(item.commerce.compareAt)}</s>` : ""}</p>
             <div class="mt-3 flex flex-wrap items-center gap-3">
               <div class="flex items-center rounded-full border border-line" dir="ltr">
                 <button type="button" class="icon-btn" data-cart-step="-1" data-id="${esc(item.product.id)}" aria-label="\u05D4\u05E4\u05D7\u05EA\u05EA \u05DB\u05DE\u05D5\u05EA">\u2212</button>
@@ -8990,11 +9065,14 @@
       </ul>
       <aside class="rounded-2xl bg-paper p-5">
         <h2 class="text-lg font-extrabold">\u05E1\u05D9\u05DB\u05D5\u05DD</h2>
+        ${couponForm(totals.coupon)}
         <dl class="mt-4 grid gap-2 text-sm">
-          <div class="flex justify-between"><dt>\u05DE\u05D5\u05E6\u05E8\u05D9\u05DD</dt><dd>${money(goods)}</dd></div>
-          <div class="flex justify-between"><dt>\u05DE\u05D7\u05D9\u05E8 \u05DE\u05E9\u05DC\u05D5\u05D7</dt><dd>${money(deliveryFee)}</dd></div>
-          <div class="flex justify-between border-t border-line pt-2 text-base font-extrabold"><dt>\u05DC\u05EA\u05E9\u05DC\u05D5\u05DD</dt><dd>${money(total)}</dd></div>
+          <div class="flex justify-between"><dt>\u05DE\u05D5\u05E6\u05E8\u05D9\u05DD</dt><dd>${money(totals.goods)}</dd></div>
+          ${totals.discount ? `<div class="flex justify-between cart-discount"><dt>\u05E7\u05D5\u05E4\u05D5\u05DF ${esc(totals.coupon.code)}</dt><dd>\u2212${money(totals.discount)}</dd></div>` : ""}
+          <div class="flex justify-between"><dt>\u05DE\u05D7\u05D9\u05E8 \u05DE\u05E9\u05DC\u05D5\u05D7</dt><dd>${money(totals.delivery)}</dd></div>
+          <div class="flex justify-between border-t border-line pt-2 text-base font-extrabold"><dt>\u05DC\u05EA\u05E9\u05DC\u05D5\u05DD</dt><dd>${money(totals.total)}</dd></div>
         </dl>
+        ${savedNote(totals.saved)}
         <p class="mt-3 text-xs text-muted">\u05D4\u05DE\u05D7\u05D9\u05E8\u05D9\u05DD \u05D5\u05D3\u05DE\u05D9 \u05D4\u05DE\u05E9\u05DC\u05D5\u05D7 \u05D4\u05DD \u05E0\u05EA\u05D5\u05E0\u05D9 \u05D4\u05D3\u05D2\u05DE\u05D4, \u05DC\u05D0 \u05D7\u05D9\u05E9\u05D5\u05D1 \u05D0\u05DE\u05D9\u05EA\u05D9.</p>
         <a class="btn mt-5 w-full" href="#/checkout">\u05D4\u05DE\u05E9\u05DA \u05DC\u05EA\u05E9\u05DC\u05D5\u05DD</a>
       </aside>
@@ -9058,7 +9136,7 @@
     if (!rows2.length) {
       return `<article class="wrap py-16 text-center"><h1 class="text-3xl font-extrabold">\u05D4\u05E1\u05DC \u05E8\u05D9\u05E7</h1><a class="btn mt-6" href="#/">\u05DC\u05D3\u05E3 \u05D4\u05D1\u05D9\u05EA</a></article>`;
     }
-    const goods = subtotal();
+    const totals = cartTotals();
     const program = payPrograms.some(([id]) => id === values.cardProgram) ? values.cardProgram : payPrograms[0][0];
     const lines = rows2.map((item) => {
       const product = getProduct(item.id);
@@ -9131,11 +9209,13 @@
         </div>
         ${orderLines(lines, { scroll: true })}
         <dl class="summary-totals">
-          <div><dt>\u05DE\u05D5\u05E6\u05E8\u05D9\u05DD</dt><dd>${money(goods)}</dd></div>
-          <div><dt>\u05DE\u05D7\u05D9\u05E8 \u05DE\u05E9\u05DC\u05D5\u05D7</dt><dd>${money(deliveryFee)}</dd></div>
-          <div class="is-total"><dt>\u05DC\u05EA\u05E9\u05DC\u05D5\u05DD</dt><dd>${money(goods + deliveryFee)}</dd></div>
+          <div><dt>\u05DE\u05D5\u05E6\u05E8\u05D9\u05DD</dt><dd>${money(totals.goods)}</dd></div>
+          ${totals.discount ? `<div class="cart-discount"><dt>\u05E7\u05D5\u05E4\u05D5\u05DF ${esc(totals.coupon.code)}</dt><dd>\u2212${money(totals.discount)}</dd></div>` : ""}
+          <div><dt>\u05DE\u05D7\u05D9\u05E8 \u05DE\u05E9\u05DC\u05D5\u05D7</dt><dd>${money(totals.delivery)}</dd></div>
+          <div class="is-total"><dt>\u05DC\u05EA\u05E9\u05DC\u05D5\u05DD</dt><dd>${money(totals.total)}</dd></div>
         </dl>
-        <button class="btn checkout-submit" type="submit">${lockIcon}\u05EA\u05E9\u05DC\u05D5\u05DD ${money(goods + deliveryFee)} \xB7 \u05D4\u05D3\u05D2\u05DE\u05D4</button>
+        ${savedNote(totals.saved)}
+        <button class="btn checkout-submit" type="submit">${lockIcon}\u05EA\u05E9\u05DC\u05D5\u05DD ${money(totals.total)} \xB7 \u05D4\u05D3\u05D2\u05DE\u05D4</button>
       </aside>
     </form>
   </article>`;
@@ -9217,6 +9297,7 @@
       ${orderLines(lines)}
       <dl class="summary-totals">
         <div><dt>\u05DE\u05D5\u05E6\u05E8\u05D9\u05DD</dt><dd>${money(order.subtotal)}</dd></div>
+        ${order.discount ? `<div class="cart-discount"><dt>\u05E7\u05D5\u05E4\u05D5\u05DF ${esc(order.coupon || "")}</dt><dd>\u2212${money(order.discount)}</dd></div>` : ""}
         <div><dt>\u05DE\u05D7\u05D9\u05E8 \u05DE\u05E9\u05DC\u05D5\u05D7</dt><dd>${money(order.delivery)}</dd></div>
         <div class="is-total"><dt>\u05E1\u05D4\u05F4\u05DB</dt><dd>${money(order.total)}</dd></div>
       </dl>
@@ -9318,7 +9399,7 @@
     if (value.expiresAt <= Date.now()) {
       localStorage.removeItem(SESSION_KEY);
       expiredNotice = true;
-      notify();
+      notify2();
       return null;
     }
     return {
@@ -9371,7 +9452,7 @@
     const session = getSession();
     if (session) {
       localStorage.setItem(SESSION_KEY, JSON.stringify({ ...session, displayName: profile.displayName }));
-      notify();
+      notify2();
     }
     return profile;
   }
@@ -9385,12 +9466,12 @@
     };
     localStorage.setItem(SESSION_KEY, JSON.stringify(session));
     expiredNotice = false;
-    notify();
+    notify2();
     return session;
   }
   function logout() {
     localStorage.removeItem(SESSION_KEY);
-    notify();
+    notify2();
   }
   function subscribeSession(listener) {
     listeners2.add(listener);
@@ -9402,7 +9483,7 @@
     if (digits.length === 9) return `${digits.slice(0, 2)}-${digits.slice(2, 5)}-${digits.slice(5)}`;
     return String(value || "");
   }
-  function notify() {
+  function notify2() {
     listeners2.forEach((listener) => listener());
   }
   function wait(ms) {
@@ -10089,6 +10170,7 @@
       <ul class="mt-3 grid gap-2 text-sm">${items}</ul>
       <dl class="mt-4 grid gap-2 border-t border-line pt-3 text-sm">
         <div class="flex justify-between"><dt>\u05DE\u05D5\u05E6\u05E8\u05D9\u05DD</dt><dd>${money(order.subtotal)}</dd></div>
+        ${order.discount ? `<div class="flex justify-between cart-discount"><dt>\u05E7\u05D5\u05E4\u05D5\u05DF ${esc(order.coupon || "")}</dt><dd>\u2212${money(order.discount)}</dd></div>` : ""}
         <div class="flex justify-between"><dt>\u05DE\u05D7\u05D9\u05E8 \u05DE\u05E9\u05DC\u05D5\u05D7</dt><dd>${money(order.delivery)}</dd></div>
         <div class="flex justify-between font-extrabold"><dt>\u05E1\u05D4\u05F4\u05DB</dt><dd>${money(order.total)}</dd></div>
       </dl>
@@ -10483,6 +10565,12 @@
       document.documentElement.classList.toggle("is-menu-cover", open3 && cover);
       if (cover && open3) menu.querySelector("[data-menu-close]")?.focus();
       else if (cover && wasOpen && !open3) menuOpen.focus();
+      if (wasOpen && !open3) {
+        menuOpen.classList.remove("is-unfolding");
+        void menuOpen.offsetWidth;
+        menuOpen.classList.add("is-unfolding");
+        window.setTimeout(() => menuOpen.classList.remove("is-unfolding"), 500);
+      }
       const gsap = window.gsap;
       if (open3 && gsap && !prefersReducedMotion()) {
         gsap.fromTo(menu, { y: cover ? 0 : -8, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: cover ? 0.2 : 0.28, ease: "power2.out" });
@@ -10516,7 +10604,29 @@
   var categoryActive = "";
   var categoryCount = 0;
   var categoryFits = null;
+  var categoryMobile = null;
+  var categoryAutoplay = 0;
   var resizeTimer = 0;
+  var mobileCategories = window.matchMedia("(max-width: 767px)");
+  function stopCategoryAutoplay() {
+    window.clearInterval(categoryAutoplay);
+    categoryAutoplay = 0;
+  }
+  function markCenterSlide() {
+    if (!categoryCarousel) return;
+    const selected = categoryCarousel.selectedScrollSnap();
+    categoryCarousel.slideNodes().forEach((slide, index) => slide.classList.toggle("is-center", index === selected));
+  }
+  function startCategoryAutoplay(viewport) {
+    stopCategoryAutoplay();
+    if (prefersReducedMotion()) return;
+    categoryAutoplay = window.setInterval(() => {
+      const band = document.getElementById("category-band");
+      if (!categoryCarousel || document.hidden || band?.hidden || viewport.contains(document.activeElement)) return;
+      categoryCarousel.scrollNext();
+    }, 2800);
+    viewport.addEventListener("pointerdown", stopCategoryAutoplay, { once: true });
+  }
   function categoriesFit(list, viewport, count) {
     const slide = list.querySelector(".cat-slide");
     const width = viewport.getBoundingClientRect().width;
@@ -10529,7 +10639,7 @@
       if (!band || band.hidden || categoryFits === null) return;
       const list = document.getElementById("category-nav");
       const viewport = document.getElementById("category-viewport");
-      if (categoriesFit(list, viewport, categoryCount) !== categoryFits) renderCategoryNav(categoryActive);
+      if (categoriesFit(list, viewport, categoryCount) !== categoryFits || mobileCategories.matches !== categoryMobile) renderCategoryNav(categoryActive);
     }, 150);
   });
   function renderCategoryNav(activeSlug) {
@@ -10546,10 +10656,13 @@
       const thumb = icon3 ? `<span class="thumb has-photo is-icon"><img src="${esc(item.icon)}" alt="" decoding="async"></span>` : item.image ? `<span class="thumb has-photo"><img src="${esc(item.image)}" alt="" decoding="async"></span>` : `<span class="thumb"></span>`;
       return `<li class="cat-slide"><a class="cat-link" href="${esc(item.href)}"${current}${clone}>${thumb}<span>${esc(item.name)}</span></a></li>`;
     }).join("")).join("");
+    stopCategoryAutoplay();
     if (categoryCarousel) {
       categoryCarousel.destroy();
       categoryCarousel = null;
     }
+    categoryMobile = mobileCategories.matches;
+    band?.classList.toggle("is-auto", categoryMobile);
     list.innerHTML = markup6(1);
     categoryFits = viewport ? categoriesFit(list, viewport, items.length) : null;
     band?.classList.toggle("is-static", Boolean(categoryFits));
@@ -10560,13 +10673,17 @@
     categoryCarousel = Embla(viewport, {
       loop: true,
       direction: "rtl",
-      align: "start",
+      align: categoryMobile ? "center" : "start",
       containScroll: false,
       dragFree: false,
-      duration: prefersReducedMotion() ? 0 : 25
+      duration: prefersReducedMotion() ? 0 : categoryMobile ? 32 : 25
     });
     document.getElementById("cat-prev").disabled = false;
     document.getElementById("cat-next").disabled = false;
+    if (!categoryMobile) return;
+    categoryCarousel.on("select", markCenterSlide).on("reInit", markCenterSlide);
+    markCenterSlide();
+    startCategoryAutoplay(viewport);
   }
   function setActiveOption(options, index) {
     const input = document.getElementById("search-input");
@@ -10619,8 +10736,7 @@
     if (!open) root.querySelector(".cart-dock-body")?.remove();
     root.classList.toggle("is-open", open && show);
     if (!show && root.childElementCount) return;
-    const goods = subtotal();
-    const total = goods + (count ? deliveryFee : 0);
+    const totals = cartTotals();
     const list = items.length ? `<ul class="cart-dock-list">${items.map((item) => `<li class="cart-dock-item">
         <a class="cart-dock-thumb${productPhoto(item.product) ? " has-photo" : ""}" href="#/p/${esc(item.product.id)}" tabindex="-1" aria-hidden="true">${photoImg(item.product)}</a>
         <div class="min-w-0">
@@ -10632,11 +10748,12 @@
               <span>${item.qty}</span>
               <button type="button" data-cart-step="1" data-id="${esc(item.product.id)}" aria-label="\u05D4\u05D2\u05D3\u05DC\u05EA \u05DB\u05DE\u05D5\u05EA">+</button>
             </div>
-            <p class="cart-dock-price">${money(lineTotal(item))}</p>
+            <p class="cart-dock-price">${money(lineTotal(item))}${item.commerce.compareAt ? `<s>${money(item.commerce.compareAt * item.qty)}</s>` : ""}</p>
             <button type="button" class="cart-dock-remove" data-remove="${esc(item.product.id)}" aria-label="\u05D4\u05E1\u05E8\u05D4">${trashIcon}</button>
           </div>
         </div>
       </li>`).join("")}</ul>` : `<p class="cart-dock-empty">\u05D4\u05E1\u05DC \u05E8\u05D9\u05E7. \u05D0\u05E4\u05E9\u05E8 \u05DC\u05D4\u05D5\u05E1\u05D9\u05E3 \u05DE\u05D5\u05E6\u05E8\u05D9\u05DD \u05DE\u05D4\u05E7\u05D8\u05DC\u05D5\u05D2.</p>`;
+    const listScroll = root.querySelector(".cart-dock-list")?.scrollTop || 0;
     root.innerHTML = `<div class="cart-dock-bar">
       <button type="button" class="cart-dock-arrow" data-cart-toggle aria-expanded="${open}" aria-controls="cart-dock-body">
         ${arrow2}
@@ -10646,19 +10763,23 @@
         <p class="cart-dock-title"><span class="cart-dock-mark">${cartIcon}${count ? `<span class="cart-dock-badge">${count}</span>` : ""}</span><span>\u05D4\u05E2\u05D2\u05DC\u05D4 \u05E9\u05DC\u05D9</span></p>
         ${count ? "" : `<p class="text-sm text-muted">\u05D4\u05E1\u05DC \u05E8\u05D9\u05E7</p>`}
       </div>
-      ${count ? `<a class="cart-dock-pay" href="#/checkout"><span>\u05DC\u05EA\u05E9\u05DC\u05D5\u05DD:</span><strong>${money(total)}</strong></a>` : `<span class="cart-dock-pay is-disabled" aria-disabled="true"><span>\u05DC\u05EA\u05E9\u05DC\u05D5\u05DD:</span><strong>${money(0)}</strong></span>`}
+      ${count ? `<a class="cart-dock-pay" href="#/checkout"><span>\u05DC\u05EA\u05E9\u05DC\u05D5\u05DD:</span><strong>${money(totals.total)}</strong></a>` : `<span class="cart-dock-pay is-disabled" aria-disabled="true"><span>\u05DC\u05EA\u05E9\u05DC\u05D5\u05DD:</span><strong>${money(0)}</strong></span>`}
     </div>
     ${open ? `<div id="cart-dock-body" class="cart-dock-body">
       ${list}
       <div class="cart-dock-foot">
         <dl>
-          <div><dt>\u05DE\u05D5\u05E6\u05E8\u05D9\u05DD</dt><dd>${money(goods)}</dd></div>
-          <div><dt>\u05DE\u05D7\u05D9\u05E8 \u05DE\u05E9\u05DC\u05D5\u05D7</dt><dd>${count ? money(deliveryFee) : money(0)}</dd></div>
-          <div class="is-total"><dt>\u05DC\u05EA\u05E9\u05DC\u05D5\u05DD</dt><dd>${money(total)}</dd></div>
+          <div><dt>\u05DE\u05D5\u05E6\u05E8\u05D9\u05DD</dt><dd>${money(totals.goods)}</dd></div>
+          ${totals.discount ? `<div class="cart-discount"><dt>\u05E7\u05D5\u05E4\u05D5\u05DF ${esc(totals.coupon.code)}</dt><dd>\u2212${money(totals.discount)}</dd></div>` : ""}
+          <div><dt>\u05DE\u05D7\u05D9\u05E8 \u05DE\u05E9\u05DC\u05D5\u05D7</dt><dd>${money(totals.delivery)}</dd></div>
+          <div class="is-total"><dt>\u05DC\u05EA\u05E9\u05DC\u05D5\u05DD</dt><dd>${money(totals.total)}</dd></div>
         </dl>
+        ${savedNote(totals.saved)}
         ${count ? `<a class="btn" href="#/checkout">\u05D4\u05DE\u05E9\u05DA \u05DC\u05EA\u05E9\u05DC\u05D5\u05DD</a>` : `<a class="btn btn-line" href="#/">\u05DC\u05D4\u05DE\u05E9\u05DA \u05E7\u05E0\u05D9\u05D9\u05D4</a>`}
       </div>
     </div>` : ""}`;
+    const listEl = root.querySelector(".cart-dock-list");
+    if (listEl) listEl.scrollTop = listScroll;
     placeDock();
   }
   function toggleCartDock(force) {
@@ -10799,15 +10920,89 @@
   var LOAD_MS2 = 700;
   var kinds = {
     delivery: { title: "\u05DE\u05E9\u05DC\u05D5\u05D7 \u05E2\u05D3 \u05D4\u05D1\u05D9\u05EA", path: "#/delivery", dialogId: "delivery-dialog", focus: "[data-service-focus]" },
-    service: { title: "\u05E9\u05D9\u05E8\u05D5\u05EA \u05DC\u05E7\u05D5\u05D7\u05D5\u05EA", path: "#/service", dialogId: "service-dialog", focus: "select[name='topic']" }
+    service: { title: "\u05E9\u05D9\u05E8\u05D5\u05EA \u05DC\u05E7\u05D5\u05D7\u05D5\u05EA", path: "#/service", dialogId: "service-dialog", focus: "[data-service-focus]" }
   };
+  var topicIcon = (paths) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths}</svg>`;
+  var chevron2 = `<svg class="service-topic-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg>`;
+  var backIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg>`;
+  var topics = {
+    status: {
+      title: "\u05D1\u05D9\u05E8\u05D5\u05E8 \u05E1\u05D8\u05D8\u05D5\u05E1 \u05D4\u05D6\u05DE\u05E0\u05D4",
+      text: "\u05D0\u05D9\u05E4\u05D4 \u05D4\u05D4\u05D6\u05DE\u05E0\u05D4 \u05E9\u05DC\u05D9? \u05DE\u05EA\u05D9 \u05D4\u05D9\u05D0 \u05DE\u05D2\u05D9\u05E2\u05D4?",
+      icon: topicIcon(`<path d="M2 6.5h11.5v9.5H2z"></path><path d="M13.5 9.5h4.2l3.3 3.6v2.9h-7.5"></path><circle cx="6" cy="17.5" r="1.8"></circle><circle cx="17" cy="17.5" r="1.8"></circle>`),
+      fields: ["order", "phone"],
+      submit: "\u05D1\u05D3\u05D9\u05E7\u05EA \u05E1\u05D8\u05D8\u05D5\u05E1",
+      done: "\u05D4\u05D1\u05E7\u05E9\u05D4 \u05E0\u05E9\u05DE\u05E8\u05D4 \u05D1\u05D4\u05D3\u05D2\u05DE\u05D4. \u05D1\u05D2\u05E8\u05E1\u05D4 \u05D4\u05E4\u05E2\u05D9\u05DC\u05D4 \u05D9\u05D5\u05E6\u05D2 \u05DB\u05D0\u05DF \u05DE\u05E6\u05D1 \u05D4\u05D4\u05D6\u05DE\u05E0\u05D4, \u05D5\u05E0\u05E6\u05D9\u05D2 \u05D9\u05D7\u05D6\u05D5\u05E8 \u05D0\u05DC\u05D9\u05DA \u05D1\u05D8\u05DC\u05E4\u05D5\u05DF \u05DC\u05E4\u05D9 \u05D4\u05E6\u05D5\u05E8\u05DA."
+    },
+    problem: {
+      title: "\u05D1\u05E2\u05D9\u05D4 \u05D1\u05D4\u05D6\u05DE\u05E0\u05D4 \u05E9\u05D4\u05EA\u05E7\u05D1\u05DC\u05D4",
+      text: "\u05DE\u05D5\u05E6\u05E8 \u05D7\u05E1\u05E8, \u05E4\u05D2\u05D5\u05DD, \u05E9\u05D2\u05D5\u05D9 \u05D0\u05D5 \u05EA\u05DC\u05D5\u05E0\u05D4 \u05E2\u05DC \u05DE\u05E9\u05DC\u05D5\u05D7",
+      icon: topicIcon(`<path d="M21 8 12 3 3 8v8l9 5 9-5z"></path><path d="M3 8l9 5 9-5M12 13v8"></path><path d="M16.5 15.5l3 3M19.5 15.5l-3 3"></path>`),
+      fields: ["order", "issue", "name", "phone", "message"],
+      submit: "\u05E9\u05DC\u05D9\u05D7\u05EA \u05E4\u05E0\u05D9\u05D9\u05D4",
+      done: "\u05D4\u05E4\u05E0\u05D9\u05D9\u05D4 \u05E0\u05E9\u05DE\u05E8\u05D4 \u05D1\u05D4\u05D3\u05D2\u05DE\u05D4. \u05DC\u05D0 \u05E0\u05E9\u05DC\u05D7 \u05DE\u05D9\u05D9\u05DC \u05D0\u05DE\u05D9\u05EA\u05D9."
+    },
+    return: {
+      title: "\u05D4\u05D7\u05D6\u05E8\u05D4 \u05D0\u05D5 \u05D4\u05D7\u05DC\u05E4\u05EA \u05DE\u05D5\u05E6\u05E8",
+      text: "\u05D1\u05E7\u05E9\u05EA \u05D4\u05D7\u05D6\u05E8\u05D4, \u05D4\u05D7\u05DC\u05E4\u05D4 \u05D0\u05D5 \u05D4\u05D7\u05D6\u05E8 \u05DB\u05E1\u05E4\u05D9",
+      icon: topicIcon(`<path d="M20 11a8 8 0 0 0-14.3-4.9L4 8"></path><path d="M4 4v4h4"></path><path d="M4 13a8 8 0 0 0 14.3 4.9L20 16"></path><path d="M20 20v-4h-4"></path>`),
+      fields: ["order", "request", "product", "name", "phone", "message"],
+      submit: "\u05E9\u05DC\u05D9\u05D7\u05EA \u05D1\u05E7\u05E9\u05D4",
+      done: "\u05D4\u05D1\u05E7\u05E9\u05D4 \u05E0\u05E9\u05DE\u05E8\u05D4 \u05D1\u05D4\u05D3\u05D2\u05DE\u05D4. \u05DC\u05D0 \u05E0\u05E9\u05DC\u05D7 \u05DE\u05D9\u05D9\u05DC \u05D0\u05DE\u05D9\u05EA\u05D9."
+    },
+    other: {
+      title: "\u05E4\u05E0\u05D9\u05D9\u05D4 \u05D1\u05E0\u05D5\u05E9\u05D0 \u05D0\u05D7\u05E8",
+      text: "\u05E9\u05D0\u05DC\u05D4 \u05E2\u05DC \u05DE\u05D5\u05E6\u05E8, \u05EA\u05E9\u05DC\u05D5\u05DD \u05D0\u05D5 \u05E9\u05D9\u05E8\u05D5\u05EA \u05DB\u05DC\u05DC\u05D9",
+      icon: topicIcon(`<path d="M20 12a8 8 0 0 1-11.6 7.1L4 20l1-4A8 8 0 1 1 20 12z"></path>`),
+      fields: ["subject", "name", "phone", "email", "message"],
+      submit: "\u05E9\u05DC\u05D9\u05D7\u05EA \u05E4\u05E0\u05D9\u05D9\u05D4",
+      done: "\u05D4\u05E4\u05E0\u05D9\u05D9\u05D4 \u05E0\u05E9\u05DE\u05E8\u05D4 \u05D1\u05D4\u05D3\u05D2\u05DE\u05D4. \u05DC\u05D0 \u05E0\u05E9\u05DC\u05D7 \u05DE\u05D9\u05D9\u05DC \u05D0\u05DE\u05D9\u05EA\u05D9."
+    }
+  };
+  var fieldDefs = {
+    order: { label: "\u05DE\u05E1\u05E4\u05E8 \u05D4\u05D6\u05DE\u05E0\u05D4", attrs: `dir="ltr" autocomplete="off" placeholder="AM-1234"`, check: (value) => value.length >= 3 || "\u05E0\u05D0 \u05DC\u05DE\u05DC\u05D0 \u05DE\u05E1\u05E4\u05E8 \u05D4\u05D6\u05DE\u05E0\u05D4." },
+    phone: { label: "\u05D8\u05DC\u05E4\u05D5\u05DF", type: "tel", attrs: `dir="ltr" autocomplete="tel"`, check: (value) => /^0\d{8,9}$/.test(value.replace(/[^\d]/g, "")) || "\u05E0\u05D0 \u05DC\u05DE\u05DC\u05D0 \u05D8\u05DC\u05E4\u05D5\u05DF \u05D9\u05E9\u05E8\u05D0\u05DC\u05D9." },
+    name: { label: "\u05E9\u05DD \u05DE\u05DC\u05D0", attrs: `autocomplete="name"`, check: (value) => value.length >= 2 || "\u05E0\u05D0 \u05DC\u05DE\u05DC\u05D0 \u05E9\u05DD \u05DE\u05DC\u05D0." },
+    email: { label: "\u05D0\u05D9\u05DE\u05D9\u05D9\u05DC (\u05DC\u05D0 \u05D7\u05D5\u05D1\u05D4)", type: "email", attrs: `dir="ltr" autocomplete="email"`, check: (value) => !value || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) || "\u05E0\u05D0 \u05DC\u05DE\u05DC\u05D0 \u05D0\u05D9\u05DE\u05D9\u05D9\u05DC \u05EA\u05E7\u05D9\u05DF." },
+    issue: { label: "\u05DE\u05D4 \u05E7\u05E8\u05D4?", options: ["\u05DE\u05D5\u05E6\u05E8 \u05D7\u05E1\u05E8", "\u05DE\u05D5\u05E6\u05E8 \u05E4\u05D2\u05D5\u05DD", "\u05DE\u05D5\u05E6\u05E8 \u05E9\u05D2\u05D5\u05D9", "\u05EA\u05DC\u05D5\u05E0\u05D4 \u05E2\u05DC \u05D4\u05DE\u05E9\u05DC\u05D5\u05D7"] },
+    request: { label: "\u05E1\u05D5\u05D2 \u05D4\u05D1\u05E7\u05E9\u05D4", options: ["\u05D4\u05D7\u05D6\u05E8\u05D4", "\u05D4\u05D7\u05DC\u05E4\u05D4", "\u05D4\u05D7\u05D6\u05E8 \u05DB\u05E1\u05E4\u05D9"] },
+    product: { label: "\u05E9\u05DD \u05D4\u05DE\u05D5\u05E6\u05E8", check: (value) => value.length >= 2 || "\u05E0\u05D0 \u05DC\u05DE\u05DC\u05D0 \u05E9\u05DD \u05DE\u05D5\u05E6\u05E8." },
+    subject: { label: "\u05E0\u05D5\u05E9\u05D0", options: ["\u05E9\u05D0\u05DC\u05D4 \u05E2\u05DC \u05DE\u05D5\u05E6\u05E8", "\u05EA\u05E9\u05DC\u05D5\u05DD", "\u05E9\u05D9\u05E8\u05D5\u05EA \u05DB\u05DC\u05DC\u05D9"] },
+    message: { label: "\u05E4\u05D9\u05E8\u05D5\u05D8", textarea: true, check: (value) => value.length >= 5 || "\u05E0\u05D0 \u05DC\u05DB\u05EA\u05D5\u05D1 \u05DB\u05DE\u05D4 \u05DE\u05D9\u05DC\u05D9\u05DD." }
+  };
+  function serviceField(name, { values, errors }, prefix, first) {
+    const def = fieldDefs[name];
+    const id = `${prefix}${name}`;
+    const error = errors[name];
+    const aria = `aria-invalid="${error ? "true" : "false"}" ${error ? `aria-describedby="${id}-error"` : ""} ${first ? "data-service-focus" : ""}`;
+    const value = values[name] || "";
+    const control = def.options ? `<select id="${id}" name="${name}" ${aria}><option value="">\u05D1\u05D7\u05D9\u05E8\u05D4</option>${def.options.map((option) => `<option ${value === option ? "selected" : ""}>${esc(option)}</option>`).join("")}</select>` : def.textarea ? `<textarea id="${id}" name="${name}" rows="3" ${aria}>${esc(value)}</textarea>` : `<input id="${id}" name="${name}" type="${def.type || "text"}" value="${esc(value)}" ${def.attrs || ""} ${aria}>`;
+    return `<label class="field" for="${id}">
+    <span class="text-sm font-semibold">${def.label}</span>
+    ${control}
+    ${error ? `<span id="${id}-error" class="field-error">${esc(error)}</span>` : ""}
+  </label>`;
+  }
+  function validateTopic(topic, form) {
+    const data = new FormData(form);
+    const values = {};
+    const errors = {};
+    topics[topic].fields.forEach((name) => {
+      const def = fieldDefs[name];
+      const value = String(data.get(name) || "").trim();
+      values[name] = value;
+      const result = def.options ? def.options.includes(value) || "\u05E0\u05D0 \u05DC\u05D1\u05D7\u05D5\u05E8 \u05D0\u05E4\u05E9\u05E8\u05D5\u05EA." : def.check(value);
+      if (result !== true) errors[name] = result;
+    });
+    return { values, errors };
+  }
   var phoneIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3h2.5l1.2 3.2-1.7 1a12 12 0 0 0 6.8 6.8l1-1.7 3.2 1.2V16a2 2 0 0 1-2.2 2A16 16 0 0 1 6 6.2 2 2 0 0 1 8 4z"></path></svg>`;
   var whatsappIcon = `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3a9 9 0 0 0-7.8 13.4L3 21l4.7-1.2A9 9 0 1 0 12 3zm0 1.6a7.4 7.4 0 1 1-3.8 13.8l-.3-.2-2.6.7.7-2.5-.2-.3A7.4 7.4 0 0 1 12 4.6zm4.3 10.1c-.2-.1-1.4-.7-1.6-.8-.2-.1-.4-.1-.5.1l-.7.9c-.1.2-.3.2-.5.1a6 6 0 0 1-3-2.6c-.2-.4.2-.4.6-1.2.1-.1 0-.3 0-.4l-.7-1.7c-.2-.4-.4-.4-.5-.4h-.5a.9.9 0 0 0-.6.3 2.6 2.6 0 0 0-.8 1.9 4.5 4.5 0 0 0 1 2.4 10.3 10.3 0 0 0 3.9 3.5c1.5.6 2 .7 2.7.6a2.3 2.3 0 0 0 1.5-1.1 1.9 1.9 0 0 0 .1-1.1c0-.1-.2-.2-.4-.3z"></path></svg>`;
   var shareIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"></path><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"></path></svg>`;
   var pageIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg>`;
   var fresh = {
     delivery: () => ({ city: "", street: "", error: "", result: "", pending: false }),
-    service: () => ({ values: {}, errors: {}, sent: false, pending: false })
+    service: () => ({ topic: null, values: {}, errors: {}, sent: false, pending: false })
   };
   var state2 = { delivery: fresh.delivery(), service: fresh.service() };
   function serviceTitle(kind) {
@@ -10868,18 +11063,33 @@
       <span class="service-contact-text"><strong>\u05D5\u05D5\u05D8\u05E1\u05D0\u05E4</strong><small>\u05E9\u05D9\u05E8\u05D5\u05EA \u05DC\u05E7\u05D5\u05D7\u05D5\u05EA</small></span>
     </a></li>
   </ul>`;
-    if (service.sent) {
-      const done = inPage ? `<a class="btn mt-5" href="#/">\u05D7\u05D6\u05E8\u05D4 \u05DC\u05D3\u05E3 \u05D4\u05D1\u05D9\u05EA</a>` : `<button class="btn mt-5" type="button" data-service-close>\u05E1\u05D2\u05D9\u05E8\u05D4</button>`;
+    const topic = topics[service.topic];
+    if (!topic) {
       return `${contact}
-    <p class="service-result mt-5" role="status">\u05D4\u05E4\u05E0\u05D9\u05D9\u05D4 \u05E0\u05E9\u05DE\u05E8\u05D4 \u05D1\u05D4\u05D3\u05D2\u05DE\u05D4. \u05DC\u05D0 \u05E0\u05E9\u05DC\u05D7 \u05DE\u05D9\u05D9\u05DC \u05D0\u05DE\u05D9\u05EA\u05D9.</p>
-    ${done}`;
+    <h3 class="service-topics-title">\u05D1\u05DE\u05D4 \u05D0\u05E4\u05E9\u05E8 \u05DC\u05E2\u05D6\u05D5\u05E8?</h3>
+    <ul class="service-topics">
+      ${Object.entries(topics).map(([key, item], index) => `<li><button type="button" class="service-topic" data-service-topic="${key}" ${index === 0 ? "data-service-focus" : ""}>
+        <span class="service-topic-icon">${item.icon}</span>
+        <span class="service-topic-text"><strong>${item.title}</strong><small>${item.text}</small></span>
+        ${chevron2}
+      </button></li>`).join("")}
+    </ul>`;
     }
-    return `${contact}
-  <form class="mt-5 grid gap-4" data-service-form="service" novalidate>
-    <h3 class="font-extrabold">\u05D4\u05E9\u05D0\u05E8\u05EA \u05E4\u05E0\u05D9\u05D9\u05D4</h3>
-    ${contactFields(service, inPage ? "service-page-" : "service-")}
-    <button class="btn" type="submit" ${service.pending ? "disabled" : ""}>${service.pending ? "\u05E9\u05D5\u05DC\u05D7\u05D9\u05DD\u2026" : "\u05E9\u05DC\u05D9\u05D7\u05EA \u05E4\u05E0\u05D9\u05D9\u05D4"}</button>
-  </form>`;
+    const back = `<button type="button" class="service-back" data-service-back>${backIcon}\u05DB\u05DC \u05D4\u05E0\u05D5\u05E9\u05D0\u05D9\u05DD</button>`;
+    const head = `<div class="service-topic-head">${back}<h3 class="service-topic-heading"><span class="service-topic-icon">${topic.icon}</span>${topic.title}</h3></div>`;
+    if (service.sent) {
+      const done = inPage ? `<a class="btn" href="#/">\u05D7\u05D6\u05E8\u05D4 \u05DC\u05D3\u05E3 \u05D4\u05D1\u05D9\u05EA</a>` : `<button class="btn" type="button" data-service-close>\u05E1\u05D2\u05D9\u05E8\u05D4</button>`;
+      return `${head}
+    <p class="service-result mt-4" role="status">${topic.done}</p>
+    <div class="mt-5 flex flex-wrap gap-3">${done}<button class="btn btn-line" type="button" data-service-back data-service-focus>\u05E4\u05E0\u05D9\u05D9\u05D4 \u05E0\u05D5\u05E1\u05E4\u05EA</button></div>`;
+    }
+    const prefix = inPage ? "service-page-" : "service-";
+    return `${head}
+  <form class="mt-4 grid gap-4" data-service-form="service" novalidate>
+    ${topic.fields.map((name, index) => serviceField(name, service, prefix, index === 0)).join("")}
+    <button class="btn" type="submit" ${service.pending ? "disabled" : ""}>${service.pending ? "\u05E9\u05D5\u05DC\u05D7\u05D9\u05DD\u2026" : topic.submit}</button>
+  </form>
+  ${contact}`;
   }
   function markup2(kind, inPage) {
     const body = kind === "delivery" ? deliveryBody() : serviceBody(inPage);
@@ -10965,6 +11175,14 @@
       else if (event.target.closest("[data-open-service]")) openService();
       const share = event.target.closest("[data-share-link]");
       if (share) shareLink(share.dataset.shareLink);
+      const pick = event.target.closest("[data-service-topic]");
+      const back = event.target.closest("[data-service-back]");
+      if (pick || back) {
+        const root = (pick || back).closest("[data-service-root]");
+        const previous = state2.service.topic;
+        state2.service = { ...fresh.service(), topic: pick ? pick.dataset.serviceTopic : null };
+        paint2(root, pick ? "[data-service-focus]" : `[data-service-topic="${previous}"]`);
+      }
     });
     document.addEventListener("submit", async (event) => {
       const form = event.target;
@@ -10997,8 +11215,8 @@
         return;
       }
       const service = state2.service;
-      if (service.pending) return;
-      const { values, errors } = validateContact(form);
+      if (service.pending || !topics[service.topic]) return;
+      const { values, errors } = validateTopic(service.topic, form);
       service.values = values;
       service.errors = errors;
       if (Object.keys(errors).length) {
@@ -11009,8 +11227,8 @@
       paint2(root, "button[type='submit']");
       await wait(LOAD_MS2);
       if (!live()) return;
-      state2.service = { values: {}, errors: {}, sent: true, pending: false };
-      paint2(root, ".btn");
+      state2.service = { ...fresh.service(), topic: service.topic, sent: true };
+      paint2(root, "[data-service-focus]");
     });
   }
 
@@ -11323,7 +11541,7 @@
       <button type="button" class="auth-close" data-pop-close aria-label="\u05E1\u05D2\u05D9\u05E8\u05D4">\xD7</button>
     </div>
     <div class="product-pop-layout">
-      ${productGallery(product, commerce?.compareAt ? `<span class="sale-badge">\u05D1\u05DE\u05D1\u05E6\u05E2</span>` : "")}
+      ${productGallery(product, commerce?.compareAt ? `<span class="sale-badge">${esc(saleLabel(commerce))}</span>` : "")}
       <div class="product-info">
         <div class="product-head">
           <h2 id="product-pop-title">${esc(product.name)}</h2>
@@ -11371,15 +11589,22 @@
     const burst = document.createElement("span");
     burst.className = "click-spark";
     burst.setAttribute("aria-hidden", "true");
-    burst.style.left = `${fromPointer ? event.clientX : rect.left + rect.width / 2}px`;
-    burst.style.top = `${fromPointer ? event.clientY : rect.top + rect.height / 2}px`;
+    const x = fromPointer ? event.clientX : rect.left + rect.width / 2;
+    const y = fromPointer ? event.clientY : rect.top + rect.height / 2;
+    burst.style.left = `${x}px`;
+    burst.style.top = `${y}px`;
     const rays = 8;
     for (let i = 0; i < rays; i += 1) {
       const ray = document.createElement("i");
       ray.style.setProperty("--spark-angle", `${360 / rays * i + Math.random() * 14 - 7}deg`);
       burst.appendChild(ray);
     }
-    document.body.appendChild(burst);
+    (target.closest("dialog[open]") || document.body).appendChild(burst);
+    const placed = burst.getBoundingClientRect();
+    if (Math.abs(placed.left - x) > 0.5 || Math.abs(placed.top - y) > 0.5) {
+      burst.style.left = `${2 * x - placed.left}px`;
+      burst.style.top = `${2 * y - placed.top}px`;
+    }
     window.setTimeout(() => burst.remove(), 600);
   }
   function pulseAdd(button) {
@@ -11524,6 +11749,10 @@
       input.value = String(next);
       return;
     }
+    if (event.target.closest("[data-coupon-remove]")) {
+      removeCoupon();
+      return;
+    }
     const step = event.target.closest("[data-cart-step]");
     if (step) {
       const item = getCart().items.find((row) => row.id === step.dataset.id);
@@ -11588,6 +11817,17 @@
   document.addEventListener("submit", (event) => {
     if (event.target.matches("[data-listing-form]")) event.preventDefault();
     const form = event.target;
+    if (form.matches("[data-coupon-form]")) {
+      event.preventDefault();
+      const input = form.elements.code;
+      if (applyCoupon(input.value)) return;
+      const message = form.querySelector("[data-coupon-message]");
+      message.textContent = input.value.trim() ? "\u05D4\u05E7\u05D5\u05D3 \u05DC\u05D0 \u05EA\u05E7\u05D9\u05DF. \u05DB\u05D3\u05D0\u05D9 \u05DC\u05D1\u05D3\u05D5\u05E7 \u05D5\u05DC\u05E0\u05E1\u05D5\u05EA \u05E9\u05D5\u05D1." : "\u05D9\u05E9 \u05DC\u05D4\u05D6\u05D9\u05DF \u05E7\u05D5\u05D3 \u05E7\u05D5\u05E4\u05D5\u05DF.";
+      message.classList.add("is-error");
+      input.setAttribute("aria-invalid", "true");
+      input.focus();
+      return;
+    }
     if (form.id === "contact-form") {
       event.preventDefault();
       const { values, errors: errors2 } = validateContact(form);
@@ -11616,7 +11856,7 @@
       if (!product || !commerce) return null;
       return { id: product.id, name: product.name, qty: item.qty, price: commerce.price };
     }).filter(Boolean);
-    const goods = subtotal();
+    const totals = cartTotals();
     const order = {
       id: createOrderId(),
       createdAt: (/* @__PURE__ */ new Date()).toISOString(),
@@ -11629,9 +11869,11 @@
         note: String(data.note || "").trim()
       },
       items,
-      subtotal: goods,
-      delivery: deliveryFee,
-      total: goods + deliveryFee
+      subtotal: totals.goods,
+      discount: totals.discount,
+      coupon: totals.coupon?.code || null,
+      delivery: totals.delivery,
+      total: totals.total
     };
     saveOrder(order);
     clearCart();
