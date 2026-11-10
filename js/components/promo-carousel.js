@@ -8,9 +8,9 @@ let mounted = [];
 
 const heroSlides = [
   {
-    image: "assets/images/banners/hero-pantry.webp",
-    size: [1024, 539],
-    fade: "#f7f2e9",
+    image: "assets/images/banners/hero-pantry.webp?v=2",
+    size: [1024, 512],
+    fade: "#ffffff",
     kicker: "מוצרי מזווה",
     title: "כל מה שצריך",
     sub: "למזווה במקום אחד",
@@ -18,9 +18,9 @@ const heroSlides = [
     cta: { href: "#/d/super", label: "לקנייה עכשיו" },
   },
   {
-    image: "assets/images/banners/hero-home.webp",
-    size: [1024, 539],
-    fade: "#f7f2e9",
+    image: "assets/images/banners/hero-home.webp?v=2",
+    size: [1024, 512],
+    fade: "#ffffff",
     kicker: "לבית ולמטבח",
     title: `<span class="whitespace-nowrap">חד־פעמי</span> וכלי בית`,
     sub: "לשימוש יומיומי ולאירוח",
@@ -28,9 +28,9 @@ const heroSlides = [
     cta: { href: "#/d/home", label: "למגוון המלא" },
   },
   {
-    image: "assets/images/banners/hero-appliances.webp",
-    size: [1024, 539],
-    fade: "#f7f2e9",
+    image: "assets/images/banners/hero-appliances.webp?v=2",
+    size: [1024, 512],
+    fade: "#ffffff",
     kicker: "מכשירי חשמל",
     title: "מכשירי חשמל",
     sub: "שמשדרגים את הבית",
@@ -95,7 +95,8 @@ function carouselControls(count) {
 
 export function promoCarousel() {
   const slides = heroSlides.map(heroSlide).join("");
-  return `<div class="home-block promo-carousel overflow-hidden rounded-[12px] border border-line bg-surface lg:col-span-2 lg:row-span-2 lg:min-h-[520px]" data-promo-carousel aria-roledescription="קרוסלה" aria-label="אייטמים מקודמים">
+  const fade = getTheme().heroEffect === "v2" ? " data-promo-fade" : "";
+  return `<div class="home-block promo-carousel${fade ? " is-fade" : ""} overflow-hidden rounded-[12px] border border-line bg-surface lg:col-span-2 lg:row-span-2 lg:min-h-[520px]" data-promo-carousel${fade} aria-roledescription="קרוסלה" aria-label="אייטמים מקודמים">
     <div class="promo-viewport"><div class="promo-track">${slides}</div></div>
     ${carouselControls(SLIDES)}
   </div>`;

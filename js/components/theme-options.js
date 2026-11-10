@@ -1,6 +1,6 @@
 const KEY = "ashmoret-theme";
-const REV = 7;
-const defaults = { header: "v2", hero: "v4", categories: "v2", featured: "v2", banners: "v2", mobileMenu: "v2", mobileCarousel: "v2", suppliers: "v1", palette: "v1", logo: "v1", wideHeader: true };
+const REV = 8;
+const defaults = { header: "v2", hero: "v4", heroEffect: "v2", categories: "v2", featured: "v2", banners: "v2", mobileMenu: "v2", mobileCarousel: "v2", suppliers: "v1", palette: "v1", logo: "v1", wideHeader: true };
 const logos = {
   v1: { src: "assets/images/brand/logo-market-cart.png?v=2", width: 300, height: 80 },
   v2: { src: "assets/images/brand/logo-market.png", width: 1024, height: 344 },
@@ -13,6 +13,7 @@ const groupIcon = (paths) => `<svg viewBox="0 0 24 24" fill="none" stroke="curre
 const groupIcons = {
   header: groupIcon(`<rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="M3 9h18M6.5 6.5h3M15 6.5h2.5"></path>`),
   hero: groupIcon(`<rect x="3" y="5" width="18" height="14" rx="2"></rect><circle cx="15.5" cy="9.5" r="1.5"></circle><path d="m3 16 5-4.5 4 3.5 3-2 6 4"></path>`),
+  heroEffect: groupIcon(`<rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M9 9.5l-2.5 2.5L9 14.5M15 9.5l2.5 2.5-2.5 2.5"></path>`),
   categories: groupIcon(`<rect x="3" y="4" width="7" height="7" rx="1.5"></rect><rect x="14" y="4" width="7" height="7" rx="1.5"></rect><rect x="3" y="13" width="7" height="7" rx="1.5"></rect><rect x="14" y="13" width="7" height="7" rx="1.5"></rect>`),
   featured: groupIcon(`<circle cx="7" cy="8" r="3"></circle><circle cx="17" cy="8" r="3"></circle><circle cx="7" cy="17" r="3"></circle><circle cx="17" cy="17" r="3"></circle>`),
   banners: groupIcon(`<rect x="3" y="5" width="8" height="14" rx="1.5"></rect><rect x="13" y="5" width="8" height="14" rx="1.5"></rect><path d="m9 2-2 2 2 2M15 18l2 2-2 2"></path>`),
@@ -44,6 +45,15 @@ const groups = [
       ["v3", "V3", "שלושת הבאנרים למעלה, ומתחתיהם קרוסלת הקטגוריות עם הכותרת «קטגוריות נבחרות»."],
       ["v4", "V4 · ברירת מחדל", "כמו V3, ובצד במקום שני באנרים משניים, באנר אחד עם תמונות מתחלפות וקישור."],
     ],
+  },
+  {
+    name: "heroEffect",
+    title: "אפקט סלייד Hero",
+    options: [
+      ["v1", "V1", "החלקה אופקית בין השקופיות."],
+      ["v2", "V2 · Fade · ברירת מחדל", "מעבר עמעום רך בין השקופיות, במקום החלקה."],
+    ],
+    note: "חל על הסליידר הגדול ב־Hero V3 ו־V4.",
   },
   {
     name: "categories",
@@ -128,6 +138,7 @@ function load() {
       rev: REV,
       header: current && saved.header === "v1" ? "v1" : defaults.header,
       hero: saved.rev >= 6 && ["v1", "v2", "v3", "v4"].includes(saved.hero) ? saved.hero : defaults.hero,
+      heroEffect: saved.rev >= 8 && saved.heroEffect === "v1" ? "v1" : defaults.heroEffect,
       categories: ["v1", "v2"].includes(saved.categories) ? saved.categories : defaults.categories,
       featured: saved.rev >= 4 && saved.featured === "v1" ? "v1" : defaults.featured,
       banners: saved.rev >= 5 && saved.banners === "v1" ? "v1" : defaults.banners,
@@ -243,7 +254,7 @@ function setOption(name, value, panel) {
   save();
   syncInputs(panel);
   if (name === "header" || name === "wideHeader" || name === "suppliers") applyHeader();
-  if (name === "hero" || name === "categories" || name === "featured" || name === "banners") onHeroChange();
+  if (name === "hero" || name === "heroEffect" || name === "categories" || name === "featured" || name === "banners") onHeroChange();
   if (name === "mobileMenu") applyMobileMenu();
   if (name === "mobileCarousel") {
     applyMobileCarousel();
@@ -291,6 +302,7 @@ export function bindThemeOptions({ heroChange, suppliersChange } = {}) {
     if (event.target.closest("[data-theme-reset]")) {
       setOption("header", defaults.header, panel);
       setOption("hero", defaults.hero, panel);
+      setOption("heroEffect", defaults.heroEffect, panel);
       setOption("categories", defaults.categories, panel);
       setOption("featured", defaults.featured, panel);
       setOption("banners", defaults.banners, panel);

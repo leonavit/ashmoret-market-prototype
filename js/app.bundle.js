@@ -7554,8 +7554,8 @@
 
   // js/components/theme-options.js
   var KEY = "ashmoret-theme";
-  var REV = 7;
-  var defaults = { header: "v2", hero: "v4", categories: "v2", featured: "v2", banners: "v2", mobileMenu: "v2", mobileCarousel: "v2", suppliers: "v1", palette: "v1", logo: "v1", wideHeader: true };
+  var REV = 8;
+  var defaults = { header: "v2", hero: "v4", heroEffect: "v2", categories: "v2", featured: "v2", banners: "v2", mobileMenu: "v2", mobileCarousel: "v2", suppliers: "v1", palette: "v1", logo: "v1", wideHeader: true };
   var logos = {
     v1: { src: "assets/images/brand/logo-market-cart.png?v=2", width: 300, height: 80 },
     v2: { src: "assets/images/brand/logo-market.png", width: 1024, height: 344 }
@@ -7566,6 +7566,7 @@
   var groupIcons = {
     header: groupIcon(`<rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="M3 9h18M6.5 6.5h3M15 6.5h2.5"></path>`),
     hero: groupIcon(`<rect x="3" y="5" width="18" height="14" rx="2"></rect><circle cx="15.5" cy="9.5" r="1.5"></circle><path d="m3 16 5-4.5 4 3.5 3-2 6 4"></path>`),
+    heroEffect: groupIcon(`<rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M9 9.5l-2.5 2.5L9 14.5M15 9.5l2.5 2.5-2.5 2.5"></path>`),
     categories: groupIcon(`<rect x="3" y="4" width="7" height="7" rx="1.5"></rect><rect x="14" y="4" width="7" height="7" rx="1.5"></rect><rect x="3" y="13" width="7" height="7" rx="1.5"></rect><rect x="14" y="13" width="7" height="7" rx="1.5"></rect>`),
     featured: groupIcon(`<circle cx="7" cy="8" r="3"></circle><circle cx="17" cy="8" r="3"></circle><circle cx="7" cy="17" r="3"></circle><circle cx="17" cy="17" r="3"></circle>`),
     banners: groupIcon(`<rect x="3" y="5" width="8" height="14" rx="1.5"></rect><rect x="13" y="5" width="8" height="14" rx="1.5"></rect><path d="m9 2-2 2 2 2M15 18l2 2-2 2"></path>`),
@@ -7596,6 +7597,15 @@
         ["v3", "V3", "\u05E9\u05DC\u05D5\u05E9\u05EA \u05D4\u05D1\u05D0\u05E0\u05E8\u05D9\u05DD \u05DC\u05DE\u05E2\u05DC\u05D4, \u05D5\u05DE\u05EA\u05D7\u05EA\u05D9\u05D4\u05DD \u05E7\u05E8\u05D5\u05E1\u05DC\u05EA \u05D4\u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D5\u05EA \u05E2\u05DD \u05D4\u05DB\u05D5\u05EA\u05E8\u05EA \xAB\u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D5\u05EA \u05E0\u05D1\u05D7\u05E8\u05D5\u05EA\xBB."],
         ["v4", "V4 \xB7 \u05D1\u05E8\u05D9\u05E8\u05EA \u05DE\u05D7\u05D3\u05DC", "\u05DB\u05DE\u05D5 V3, \u05D5\u05D1\u05E6\u05D3 \u05D1\u05DE\u05E7\u05D5\u05DD \u05E9\u05E0\u05D9 \u05D1\u05D0\u05E0\u05E8\u05D9\u05DD \u05DE\u05E9\u05E0\u05D9\u05D9\u05DD, \u05D1\u05D0\u05E0\u05E8 \u05D0\u05D7\u05D3 \u05E2\u05DD \u05EA\u05DE\u05D5\u05E0\u05D5\u05EA \u05DE\u05EA\u05D7\u05DC\u05E4\u05D5\u05EA \u05D5\u05E7\u05D9\u05E9\u05D5\u05E8."]
       ]
+    },
+    {
+      name: "heroEffect",
+      title: "\u05D0\u05E4\u05E7\u05D8 \u05E1\u05DC\u05D9\u05D9\u05D3 Hero",
+      options: [
+        ["v1", "V1", "\u05D4\u05D7\u05DC\u05E7\u05D4 \u05D0\u05D5\u05E4\u05E7\u05D9\u05EA \u05D1\u05D9\u05DF \u05D4\u05E9\u05E7\u05D5\u05E4\u05D9\u05D5\u05EA."],
+        ["v2", "V2 \xB7 Fade \xB7 \u05D1\u05E8\u05D9\u05E8\u05EA \u05DE\u05D7\u05D3\u05DC", "\u05DE\u05E2\u05D1\u05E8 \u05E2\u05DE\u05E2\u05D5\u05DD \u05E8\u05DA \u05D1\u05D9\u05DF \u05D4\u05E9\u05E7\u05D5\u05E4\u05D9\u05D5\u05EA, \u05D1\u05DE\u05E7\u05D5\u05DD \u05D4\u05D7\u05DC\u05E7\u05D4."]
+      ],
+      note: "\u05D7\u05DC \u05E2\u05DC \u05D4\u05E1\u05DC\u05D9\u05D9\u05D3\u05E8 \u05D4\u05D2\u05D3\u05D5\u05DC \u05D1\u05BEHero V3 \u05D5\u05BEV4."
     },
     {
       name: "categories",
@@ -7680,6 +7690,7 @@
         rev: REV,
         header: current && saved.header === "v1" ? "v1" : defaults.header,
         hero: saved.rev >= 6 && ["v1", "v2", "v3", "v4"].includes(saved.hero) ? saved.hero : defaults.hero,
+        heroEffect: saved.rev >= 8 && saved.heroEffect === "v1" ? "v1" : defaults.heroEffect,
         categories: ["v1", "v2"].includes(saved.categories) ? saved.categories : defaults.categories,
         featured: saved.rev >= 4 && saved.featured === "v1" ? "v1" : defaults.featured,
         banners: saved.rev >= 5 && saved.banners === "v1" ? "v1" : defaults.banners,
@@ -7784,7 +7795,7 @@
     save();
     syncInputs(panel);
     if (name === "header" || name === "wideHeader" || name === "suppliers") applyHeader();
-    if (name === "hero" || name === "categories" || name === "featured" || name === "banners") onHeroChange();
+    if (name === "hero" || name === "heroEffect" || name === "categories" || name === "featured" || name === "banners") onHeroChange();
     if (name === "mobileMenu") applyMobileMenu();
     if (name === "mobileCarousel") {
       applyMobileCarousel();
@@ -7826,6 +7837,7 @@
       if (event.target.closest("[data-theme-reset]")) {
         setOption("header", defaults.header, panel);
         setOption("hero", defaults.hero, panel);
+        setOption("heroEffect", defaults.heroEffect, panel);
         setOption("categories", defaults.categories, panel);
         setOption("featured", defaults.featured, panel);
         setOption("banners", defaults.banners, panel);
@@ -8077,9 +8089,9 @@
   var mounted = [];
   var heroSlides = [
     {
-      image: "assets/images/banners/hero-pantry.webp",
-      size: [1024, 539],
-      fade: "#f7f2e9",
+      image: "assets/images/banners/hero-pantry.webp?v=2",
+      size: [1024, 512],
+      fade: "#ffffff",
       kicker: "\u05DE\u05D5\u05E6\u05E8\u05D9 \u05DE\u05D6\u05D5\u05D5\u05D4",
       title: "\u05DB\u05DC \u05DE\u05D4 \u05E9\u05E6\u05E8\u05D9\u05DA",
       sub: "\u05DC\u05DE\u05D6\u05D5\u05D5\u05D4 \u05D1\u05DE\u05E7\u05D5\u05DD \u05D0\u05D7\u05D3",
@@ -8087,9 +8099,9 @@
       cta: { href: "#/d/super", label: "\u05DC\u05E7\u05E0\u05D9\u05D9\u05D4 \u05E2\u05DB\u05E9\u05D9\u05D5" }
     },
     {
-      image: "assets/images/banners/hero-home.webp",
-      size: [1024, 539],
-      fade: "#f7f2e9",
+      image: "assets/images/banners/hero-home.webp?v=2",
+      size: [1024, 512],
+      fade: "#ffffff",
       kicker: "\u05DC\u05D1\u05D9\u05EA \u05D5\u05DC\u05DE\u05D8\u05D1\u05D7",
       title: `<span class="whitespace-nowrap">\u05D7\u05D3\u05BE\u05E4\u05E2\u05DE\u05D9</span> \u05D5\u05DB\u05DC\u05D9 \u05D1\u05D9\u05EA`,
       sub: "\u05DC\u05E9\u05D9\u05DE\u05D5\u05E9 \u05D9\u05D5\u05DE\u05D9\u05D5\u05DE\u05D9 \u05D5\u05DC\u05D0\u05D9\u05E8\u05D5\u05D7",
@@ -8097,9 +8109,9 @@
       cta: { href: "#/d/home", label: "\u05DC\u05DE\u05D2\u05D5\u05D5\u05DF \u05D4\u05DE\u05DC\u05D0" }
     },
     {
-      image: "assets/images/banners/hero-appliances.webp",
-      size: [1024, 539],
-      fade: "#f7f2e9",
+      image: "assets/images/banners/hero-appliances.webp?v=2",
+      size: [1024, 512],
+      fade: "#ffffff",
       kicker: "\u05DE\u05DB\u05E9\u05D9\u05E8\u05D9 \u05D7\u05E9\u05DE\u05DC",
       title: "\u05DE\u05DB\u05E9\u05D9\u05E8\u05D9 \u05D7\u05E9\u05DE\u05DC",
       sub: "\u05E9\u05DE\u05E9\u05D3\u05E8\u05D2\u05D9\u05DD \u05D0\u05EA \u05D4\u05D1\u05D9\u05EA",
@@ -8156,7 +8168,8 @@
   }
   function promoCarousel() {
     const slides2 = heroSlides.map(heroSlide).join("");
-    return `<div class="home-block promo-carousel overflow-hidden rounded-[12px] border border-line bg-surface lg:col-span-2 lg:row-span-2 lg:min-h-[520px]" data-promo-carousel aria-roledescription="\u05E7\u05E8\u05D5\u05E1\u05DC\u05D4" aria-label="\u05D0\u05D9\u05D9\u05D8\u05DE\u05D9\u05DD \u05DE\u05E7\u05D5\u05D3\u05DE\u05D9\u05DD">
+    const fade = getTheme().heroEffect === "v2" ? " data-promo-fade" : "";
+    return `<div class="home-block promo-carousel${fade ? " is-fade" : ""} overflow-hidden rounded-[12px] border border-line bg-surface lg:col-span-2 lg:row-span-2 lg:min-h-[520px]" data-promo-carousel${fade} aria-roledescription="\u05E7\u05E8\u05D5\u05E1\u05DC\u05D4" aria-label="\u05D0\u05D9\u05D9\u05D8\u05DE\u05D9\u05DD \u05DE\u05E7\u05D5\u05D3\u05DE\u05D9\u05DD">
     <div class="promo-viewport"><div class="promo-track">${slides2}</div></div>
     ${carouselControls(SLIDES)}
   </div>`;
