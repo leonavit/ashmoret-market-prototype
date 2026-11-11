@@ -5,7 +5,7 @@ import { photoImg, productPhoto } from "./product-photo.js";
 import { getCart } from "../state/cart.js";
 
 const cartTitle = "נמצא בסל";
-const cartLabel = "קיים בסל";
+const cartLabel = `<span class="buy-add-long">קיים </span>בסל`;
 const cartCheck = `<span class="buy-add-check" data-lottie="check-circle" data-lottie-play="once" aria-hidden="true"></span>`;
 
 function inCart(id) {

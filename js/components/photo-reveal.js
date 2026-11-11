@@ -1,5 +1,11 @@
 import { prefersReducedMotion } from "../lib/format.js";
 
+const seen = new Set();
+
+export function isPhotoSeen(src) {
+  return seen.has(src);
+}
+
 function skeletonOf(img) {
   const prev = img.previousElementSibling;
   return prev?.matches(".photo-skeleton") ? prev : null;
@@ -14,6 +20,7 @@ function reveal(img) {
   if (img.classList.contains("is-loaded")) return;
   const skeleton = skeletonOf(img);
   const gsap = window.gsap;
+  seen.add(img.getAttribute("src"));
   if (!gsap || prefersReducedMotion() || !skeleton) {
     settle(img);
     return;
@@ -28,7 +35,9 @@ function reveal(img) {
 }
 
 function settleCached(img) {
-  if (!img.classList.contains("is-loaded") && img.complete && img.naturalWidth) settle(img);
+  if (img.classList.contains("is-loaded") || !img.complete || !img.naturalWidth) return;
+  seen.add(img.getAttribute("src"));
+  settle(img);
 }
 
 function scan(root) {

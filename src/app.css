@@ -545,6 +545,12 @@
     background: color-mix(in srgb, #5cb94f 88%, #000);
   }
 
+  @media (max-width: 767px) {
+    .buy-add-long {
+      display: none;
+    }
+  }
+
   .buy-add:has(.buy-add-check) {
     display: inline-flex;
     align-items: center;
