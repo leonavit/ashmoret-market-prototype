@@ -180,12 +180,16 @@ function markCenterSlide() {
 function startCategoryAutoplay(viewport) {
   stopCategoryAutoplay();
   if (prefersReducedMotion()) return;
+  let touchedAt = 0;
+  viewport.onpointerdown = () => {
+    touchedAt = Date.now();
+  };
   categoryAutoplay = window.setInterval(() => {
     const band = document.getElementById("category-band");
     if (!categoryCarousel || document.hidden || band?.hidden || viewport.contains(document.activeElement)) return;
+    if (Date.now() - touchedAt < 5000) return;
     categoryCarousel.scrollNext();
   }, 2800);
-  viewport.addEventListener("pointerdown", stopCategoryAutoplay, { once: true });
 }
 
 function startCategoryGlow(list, viewport) {

@@ -411,6 +411,14 @@
     -webkit-line-clamp: 2;
   }
 
+  @media (max-width: 767px) {
+    .card-name {
+      min-height: 48px;
+      font-size: 16.8px;
+      line-height: 24px;
+    }
+  }
+
   @media (min-width: 1280px) {
     .card-name {
       min-height: 52px;
@@ -688,6 +696,13 @@
     line-height: 1.35;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
+  }
+
+  @media (max-width: 767px) {
+    .deal-body h3 {
+      min-height: 3.24rem;
+      font-size: 1.14rem;
+    }
   }
 
   .deal-foot {
