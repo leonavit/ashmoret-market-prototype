@@ -11,7 +11,7 @@ export const dealBanners = [
   { href: "#/p/p146", label: "שמן זית כתית מעולה, לרכישה עכשיו", image: "assets/images/banners/deal-olive-2.webp", size: [1024, 341] },
   { href: "#/p/p001", label: "פירורי לחם מתובלים תוצרת, לרכישה עכשיו", image: "assets/images/banners/deal-breadcrumbs.webp", size: [1024, 341] },
   { href: "#/p/p146", label: "שמן זית כתית מעולה, לרכישה עכשיו", image: "assets/images/banners/deal-olive-3.webp", size: [1024, 341] },
-  { href: "#/p/p147", label: "שמן קנולה תוצרת, לרכישה עכשיו", image: "assets/images/banners/deal-canola.webp", size: [1024, 341] },
+  { href: "#/c/oils", label: "שמן קנולה תוצרת, לרכישה עכשיו", image: "assets/images/banners/deal-canola.webp", size: [1024, 341] },
 ];
 
 export const sideBanners = [

@@ -2,8 +2,20 @@ import lottie from "lottie-web/build/player/lottie_light.min.js";
 import truckDelivery from "../../assets/animations/truck-delivery.json";
 import customerService from "../../assets/animations/customer-service.json";
 import calculatorCoins from "../../assets/animations/calculator-coins.json";
+import boxMagnifier from "../../assets/animations/box-magnifier.json";
+import boxDamage from "../../assets/animations/box-damage.json";
+import boxRecycle from "../../assets/animations/box-recycle.json";
+import chatQuestion from "../../assets/animations/chat-question.json";
 
-const animations = { "truck-delivery": truckDelivery, "customer-service": customerService, "calculator-coins": calculatorCoins };
+const animations = {
+  "truck-delivery": truckDelivery,
+  "customer-service": customerService,
+  "calculator-coins": calculatorCoins,
+  "box-magnifier": boxMagnifier,
+  "box-damage": boxDamage,
+  "box-recycle": boxRecycle,
+  "chat-question": chatQuestion,
+};
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 let live = [];
 

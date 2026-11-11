@@ -1,5 +1,5 @@
 import { categories, getCategory, products, productsByCategory, searchProducts } from "../data/catalog.js";
-import { getDepartment } from "../data/departments.js";
+import { departmentOf, getDepartment } from "../data/departments.js";
 import { getCommerce } from "../data/commerce.js";
 import { getManufacturer } from "../data/manufacturers.js";
 import { applyListing, listingControls, visibleSlice } from "../components/filters.js";
@@ -13,6 +13,15 @@ function crumbs(items) {
       ? `<span aria-current="page">${esc(item.label)}</span>`
       : `<a class="font-semibold text-blue" href="${esc(item.href)}">${esc(item.label)}</a>`)
     .join('<span aria-hidden="true"> / </span>')}</nav>`;
+}
+
+function departmentChips(department, activeSlug = "") {
+  const sections = (department.slugs || []).map((slug) => getCategory(slug)).filter(Boolean);
+  if (sections.length < 2) return "";
+  return `<ul class="mt-5 flex flex-wrap gap-2">${sections.map((section) => {
+    const current = section.slug === activeSlug ? ' aria-current="page"' : "";
+    return `<li><a class="listing-chip" href="#/c/${esc(section.slug)}"${current}>${esc(section.name)}</a></li>`;
+  }).join("")}</ul>`;
 }
 
 function listingHero(content) {
@@ -39,11 +48,17 @@ export function renderCategory(slug, query) {
   const source = productsByCategory(slug);
   const items = applyListing(source, query);
   const view = visibleSlice(items, query);
+  const department = departmentOf(slug);
   return `<article>
     ${listingHero(`
-      ${crumbs([{ href: "#/", label: "דף הבית" }, { label: category.name }])}
+      ${crumbs([
+        { href: "#/", label: "דף הבית" },
+        ...(department ? [{ href: `#/d/${department.id}`, label: department.name }] : []),
+        { label: category.name },
+      ])}
       <h1 class="text-3xl font-extrabold">${esc(category.name)}</h1>
       <p class="mt-2 text-muted">${items.length} מוצרים בקטלוג תוצרת</p>
+      ${department ? departmentChips(department, slug) : ""}
     `)}
     <div class="wrap pt-6 pb-8">
       ${listingControls({ categories: null, query })}
@@ -99,9 +114,6 @@ export function renderManufacturer(id, query) {
 export function renderDepartment(id, query) {
   const department = getDepartment(id);
   if (!department) return renderMissing("המחלקה לא נמצאה");
-  const sections = department.slugs
-    .map((slug) => getCategory(slug))
-    .filter(Boolean);
   const source = department.offers
     ? products.filter((product) => getCommerce(product.id)?.compareAt)
     : department.slugs.flatMap((slug) => productsByCategory(slug));
@@ -114,9 +126,7 @@ export function renderDepartment(id, query) {
   }
   const items = applyListing(source, query);
   const view = visibleSlice(items, query);
-  const chips = sections.length > 1
-    ? `<ul class="mt-5 flex flex-wrap gap-2">${sections.map((section) => `<li><a class="listing-chip" href="#/c/${esc(section.slug)}">${esc(section.name)}</a></li>`).join("")}</ul>`
-    : "";
+  const chips = departmentChips(department);
   return `<article>
     ${listingHero(`
       ${crumbs([{ href: "#/", label: "דף הבית" }, { label: department.name }])}

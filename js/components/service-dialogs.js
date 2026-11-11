@@ -3,6 +3,7 @@ import { esc, money } from "../lib/format.js";
 import { wait } from "../state/session.js";
 import { parseHash } from "../router.js";
 import { showToast } from "./toast.js";
+import { mountLottieIcons } from "./topbar-icons.js";
 
 const LOAD_MS = 700;
 
@@ -11,7 +12,7 @@ const kinds = {
   service: { title: "שירות לקוחות", path: "#/service", dialogId: "service-dialog", focus: "[data-service-focus]" },
 };
 
-const topicIcon = (paths) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths}</svg>`;
+const topicIcon = (name) => `<span class="service-lottie" data-lottie="${name}" aria-hidden="true"></span>`;
 const chevron = `<svg class="service-topic-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg>`;
 const backIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg>`;
 
@@ -19,7 +20,7 @@ const topics = {
   status: {
     title: "בירור סטטוס הזמנה",
     text: "איפה ההזמנה שלי? מתי היא מגיעה?",
-    icon: topicIcon(`<path d="M2 6.5h11.5v9.5H2z"></path><path d="M13.5 9.5h4.2l3.3 3.6v2.9h-7.5"></path><circle cx="6" cy="17.5" r="1.8"></circle><circle cx="17" cy="17.5" r="1.8"></circle>`),
+    icon: topicIcon("box-magnifier"),
     fields: ["order", "phone"],
     submit: "בדיקת סטטוס",
     done: "הבקשה נשמרה בהדגמה. בגרסה הפעילה יוצג כאן מצב ההזמנה, ונציג יחזור אליך בטלפון לפי הצורך.",
@@ -27,7 +28,7 @@ const topics = {
   problem: {
     title: "בעיה בהזמנה שהתקבלה",
     text: "מוצר חסר, פגום, שגוי או תלונה על משלוח",
-    icon: topicIcon(`<path d="M21 8 12 3 3 8v8l9 5 9-5z"></path><path d="M3 8l9 5 9-5M12 13v8"></path><path d="M16.5 15.5l3 3M19.5 15.5l-3 3"></path>`),
+    icon: topicIcon("box-damage"),
     fields: ["order", "issue", "name", "phone", "message"],
     submit: "שליחת פנייה",
     done: "הפנייה נשמרה בהדגמה. לא נשלח מייל אמיתי.",
@@ -35,7 +36,7 @@ const topics = {
   return: {
     title: "החזרה או החלפת מוצר",
     text: "בקשת החזרה, החלפה או החזר כספי",
-    icon: topicIcon(`<path d="M20 11a8 8 0 0 0-14.3-4.9L4 8"></path><path d="M4 4v4h4"></path><path d="M4 13a8 8 0 0 0 14.3 4.9L20 16"></path><path d="M20 20v-4h-4"></path>`),
+    icon: topicIcon("box-recycle"),
     fields: ["order", "request", "product", "name", "phone", "message"],
     submit: "שליחת בקשה",
     done: "הבקשה נשמרה בהדגמה. לא נשלח מייל אמיתי.",
@@ -43,7 +44,7 @@ const topics = {
   other: {
     title: "פנייה בנושא אחר",
     text: "שאלה על מוצר, תשלום או שירות כללי",
-    icon: topicIcon(`<path d="M20 12a8 8 0 0 1-11.6 7.1L4 20l1-4A8 8 0 1 1 20 12z"></path>`),
+    icon: topicIcon("chat-question"),
     fields: ["subject", "name", "phone", "email", "message"],
     submit: "שליחת פנייה",
     done: "הפנייה נשמרה בהדגמה. לא נשלח מייל אמיתי.",
@@ -197,6 +198,7 @@ function markup(kind, inPage) {
 
 function paint(root, focus) {
   root.innerHTML = markup(root.dataset.serviceRoot, root.dataset.serviceMode === "page");
+  mountLottieIcons(root);
   if (focus) root.querySelector(focus)?.focus();
 }
 

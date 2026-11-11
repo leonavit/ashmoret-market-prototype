@@ -188,6 +188,25 @@ function startCategoryAutoplay(viewport) {
   viewport.addEventListener("pointerdown", stopCategoryAutoplay, { once: true });
 }
 
+function startCategoryGlow(list, viewport) {
+  stopCategoryAutoplay();
+  if (prefersReducedMotion() || !list || !viewport) return;
+  let lit = null;
+  categoryAutoplay = window.setInterval(() => {
+    const band = document.getElementById("category-band");
+    if (document.hidden || band?.hidden || band?.matches(":hover") || viewport.contains(document.activeElement)) return;
+    const box = viewport.getBoundingClientRect();
+    const visible = [...list.querySelectorAll(".cat-slide")].filter((slide) => {
+      const rect = slide.getBoundingClientRect();
+      return slide !== lit && rect.width > 0 && rect.left >= box.left - 1 && rect.right <= box.right + 1;
+    });
+    if (!visible.length) return;
+    lit?.classList.remove("is-lit");
+    lit = visible[Math.floor(Math.random() * visible.length)];
+    lit.classList.add("is-lit");
+  }, 2200);
+}
+
 function categoriesFit(list, viewport, count) {
   const slide = list.querySelector(".cat-slide");
   const width = viewport.getBoundingClientRect().width;
@@ -237,6 +256,7 @@ export function renderCategoryNav(activeSlug) {
   list.innerHTML = markup(1);
   categoryFits = viewport ? categoriesFit(list, viewport, items.length) : null;
   band?.classList.toggle("is-static", Boolean(categoryFits));
+  if (!categoryMobile) startCategoryGlow(list, viewport);
   if (categoryFits) return;
   list.innerHTML = markup(4);
   const Embla = window.EmblaCarousel;

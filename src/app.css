@@ -376,6 +376,11 @@
     border-radius: var(--radius-md);
   }
 
+  .card-shelf .sale-badge {
+    top: 0;
+    inset-inline-start: 0;
+  }
+
   @media (max-width: 767px) {
     .card.card-shelf .card-media {
       overflow: visible;
@@ -722,6 +727,65 @@
     text-underline-offset: 4px;
   }
 
+  .catalog-title {
+    display: flex;
+    min-width: 0;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0 0.6rem;
+  }
+
+  .catalog-sub {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: var(--color-muted);
+    font-size: 17px;
+    font-weight: 600;
+    white-space: nowrap;
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .catalog-sub svg {
+    width: 1rem;
+    height: 1rem;
+    flex: 0 0 auto;
+  }
+
+  .catalog-sub span {
+    position: relative;
+  }
+
+  .catalog-sub span::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    bottom: -0.12em;
+    left: 0;
+    height: max(1px, 0.08em);
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+  }
+
+  .catalog-sub:hover {
+    color: var(--color-ink);
+  }
+
+  .catalog-sub:hover span::after {
+    transform: scaleX(1);
+    transform-origin: right;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .catalog-sub span::after {
+      transition: none;
+    }
+  }
+
   .catalog-tabs {
     display: flex;
     flex-wrap: wrap;
@@ -955,6 +1019,16 @@
 
     html[data-mobile-carousel="v2"] .catalog-rail .cat-arrow {
       display: none;
+    }
+
+    html[data-mobile-carousel="v2"] .catalog-rail .card-shelf,
+    html[data-mobile-carousel="v2"] .catalog-rail .card-shelf:hover {
+      border-color: var(--color-line);
+      transition: border-color 0.25s ease;
+    }
+
+    html[data-mobile-carousel="v2"] .catalog-rail .embla__slide.is-center .card-shelf {
+      border-color: var(--color-ink);
     }
   }
 
@@ -1280,6 +1354,17 @@
   @media (min-width: 1280px) {
     .cat-slide {
       flex-basis: calc(100cqw / 9);
+    }
+  }
+
+  @media (min-width: 768px) {
+    #category-band .cat-link span.thumb {
+      transition: border-color 0.5s ease, box-shadow 0.5s ease;
+    }
+
+    #category-band .cat-slide.is-lit span.thumb {
+      border-color: #c9230d;
+      box-shadow: inset 0 0 0 1px #c9230d;
     }
   }
 
@@ -2053,6 +2138,12 @@
 
   .listing-chip:hover {
     border-color: var(--color-ink);
+  }
+
+  .listing-chip[aria-current="page"] {
+    border-color: var(--color-action);
+    background: var(--color-action);
+    color: var(--color-white);
   }
 
   .cookie-notice {
@@ -4753,6 +4844,31 @@
     height: 1.3rem;
   }
 
+  .service-topic .service-topic-icon {
+    transition: background-color 0.2s ease;
+  }
+
+  .service-topic:hover .service-topic-icon,
+  .service-topic:focus-visible .service-topic-icon {
+    background: var(--color-white);
+  }
+
+  .service-topic-icon .service-lottie {
+    display: block;
+    width: 2.3rem;
+    height: 2.3rem;
+  }
+
+  .service-topic-icon .service-lottie svg {
+    width: 100% !important;
+    height: 100% !important;
+  }
+
+  .service-topic-heading .service-topic-icon .service-lottie {
+    width: 2rem;
+    height: 2rem;
+  }
+
   .service-topic-text {
     display: grid;
     min-width: 0;
@@ -4881,6 +4997,12 @@
 
   .service-call {
     display: none;
+  }
+
+  @media (min-width: 768px) {
+    .service-dialog .share-link {
+      display: none;
+    }
   }
 
   @media (max-width: 767px) {
@@ -6126,6 +6248,16 @@
   .home-page .card-shelf:hover,
   .home-page .deal-card:hover {
     border-color: var(--color-ink);
+  }
+
+  @media (max-width: 767px) {
+    html[data-mobile-carousel="v2"] .catalog-rail .card-shelf:hover {
+      border-color: var(--color-line);
+    }
+
+    html[data-mobile-carousel="v2"] .catalog-rail .embla__slide.is-center .card-shelf {
+      border-color: var(--color-ink);
+    }
   }
 }
 

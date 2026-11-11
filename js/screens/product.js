@@ -3,6 +3,7 @@ import { getCommerce, saleLabel } from "../data/commerce.js";
 import { carousel } from "../components/carousel.js";
 import { productBuy, productDescription, productGallery, productTabs } from "../components/product-view.js";
 import { kosherMark } from "../components/kosher-mark.js";
+import { departmentOf } from "../data/departments.js";
 import { esc, money } from "../lib/format.js";
 
 const sep = `<svg class="product-sep" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg>`;
@@ -13,6 +14,7 @@ export function renderProduct(id) {
     return `<article class="wrap py-16 text-center"><h1 class="text-3xl font-extrabold">המוצר לא נמצא</h1><a class="btn mt-6" href="#/">חזרה לדף הבית</a></article>`;
   }
   const commerce = getCommerce(product.id);
+  const department = departmentOf(product.categorySlug);
   const siblings = productsByCategory(product.categorySlug);
   const related = siblings.filter((item) => item.id !== product.id).slice(0, 8);
   const price = commerce
@@ -23,6 +25,7 @@ export function renderProduct(id) {
     <nav class="product-crumbs" aria-label="מיקום">
       <a href="#/">דף הבית</a>
       ${sep}
+      ${department ? `<a href="#/d/${esc(department.id)}">${esc(department.name)}</a>${sep}` : ""}
       <a href="#/c/${esc(product.categorySlug)}">${esc(product.categoryName)}</a>
       ${sep}
       <span aria-current="page">${esc(product.name)}</span>

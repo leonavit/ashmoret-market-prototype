@@ -98,6 +98,20 @@ function bindTabKeys(tablist, tabs, activate) {
   });
 }
 
+const subChevron = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg>`;
+
+function showCatalogSub(grid, button) {
+  const sub = grid.querySelector("[data-catalog-sub]");
+  if (!sub) return;
+  sub.href = `#/c/${button.dataset.catalogGridTab}`;
+  sub.querySelector("[data-catalog-sub-name]").textContent = button.textContent.trim();
+  const gsap = window.gsap;
+  if (!gsap || prefersReducedMotion()) return;
+  gsap.fromTo(sub,
+    { opacity: 0, x: -28, skewX: 18 },
+    { opacity: 1, x: 0, skewX: 0, duration: 0.55, ease: "power3.out", overwrite: true, clearProps: "transform,opacity" });
+}
+
 export function catalogGridSection({ id, title, href, tabs, className = "pb-12", layout = "grid", showTabs = true, icon = "" }) {
   const mark = icon ? `<span class="nav-icon is-${esc(icon)}" aria-hidden="true"></span>` : `<span class="cat-heart" aria-hidden="true"></span>`;
   const first = tabs[0]?.[0];
@@ -105,9 +119,15 @@ export function catalogGridSection({ id, title, href, tabs, className = "pb-12",
   const tabList = showTabs && tabs.length
     ? `<div class="catalog-tabs" role="tablist" aria-label="קטגוריות ${esc(title)}">${catalogTabButtons(tabs, "data-catalog-grid-tab", id)}</div>`
     : "";
+  const subLink = showTabs && first
+    ? `<a class="catalog-sub" href="#/c/${esc(first)}" data-catalog-sub>${subChevron}<span data-catalog-sub-name>${esc(tabs[0][1])}</span></a>`
+    : "";
   return `<section class="${esc(className)}" data-catalog-grid data-catalog-layout="${esc(layout)}" data-catalog-label="${esc(title)}" aria-labelledby="${esc(id)}">
     <div class="catalog-head">
-      <h2 id="${esc(id)}"><a href="${esc(href)}">${mark}${esc(title)}</a></h2>
+      <div class="catalog-title">
+        <h2 id="${esc(id)}"><a href="${esc(href)}">${mark}${esc(title)}</a></h2>
+        ${subLink}
+      </div>
       ${tabList}
     </div>
     <div data-catalog-grid-panel ${showTabs ? panelAttrs(id, tabs) : ""}>${panel}</div>
@@ -187,6 +207,7 @@ function bindCatalogGrid(grid) {
     const { catalogLayout: layout, catalogLabel: label } = grid.dataset;
     panel.innerHTML = panelHtml(layout, button.dataset.catalogGridTab, label);
     if (layout === "rail") mountCarousels(panel);
+    showCatalogSub(grid, button);
   };
   tabs.forEach((button) => button.addEventListener("click", () => activate(button, false)));
   bindTabKeys(grid.querySelector("[role=tablist]"), tabs, activate);

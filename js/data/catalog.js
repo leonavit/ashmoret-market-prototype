@@ -51,12 +51,6 @@ export const categories = [
     "placeholder": false
   },
   {
-    "slug": "more",
-    "name": "מוצרים נוספים",
-    "image": "assets/images/products/p-honey.jpg",
-    "placeholder": false
-  },
-  {
     "slug": "disposables",
     "name": "חד פעמי",
     "image": null,
@@ -260,8 +254,8 @@ export const products = [
     "barcode": "7290003470525",
     "catalogPage": 5,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-barley-500.jpg",
+    "placeholder": false
   },
   {
     "id": "p013",
@@ -274,8 +268,8 @@ export const products = [
     "barcode": "7290003470242",
     "catalogPage": 5,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-buckwheat-500.jpg",
+    "placeholder": false
   },
   {
     "id": "p014",
@@ -288,8 +282,8 @@ export const products = [
     "barcode": "7290003470280",
     "catalogPage": 5,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-bulgur-fine-500.jpg",
+    "placeholder": false
   },
   {
     "id": "p015",
@@ -302,8 +296,8 @@ export const products = [
     "barcode": "7290003470297",
     "catalogPage": 5,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-wheat-500.jpg",
+    "placeholder": false
   },
   {
     "id": "p016",
@@ -316,8 +310,8 @@ export const products = [
     "barcode": "7290019894018",
     "catalogPage": 5,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-bulgur-coarse-500.jpg",
+    "placeholder": false
   },
   {
     "id": "p017",
@@ -330,8 +324,8 @@ export const products = [
     "barcode": "7296079000246",
     "catalogPage": 5,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-millet.jpg",
+    "placeholder": false
   },
   {
     "id": "p018",
@@ -344,8 +338,8 @@ export const products = [
     "barcode": "7296079000802",
     "catalogPage": 5,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-corn-flour.jpg",
+    "placeholder": false
   },
   {
     "id": "p019",
@@ -358,8 +352,8 @@ export const products = [
     "barcode": "7296079000758",
     "catalogPage": 5,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-quinoa-red.jpg",
+    "placeholder": false
   },
   {
     "id": "p020",
@@ -372,8 +366,8 @@ export const products = [
     "barcode": "7290003470570",
     "catalogPage": 5,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-popcorn.jpg",
+    "placeholder": false
   },
   {
     "id": "p021",
@@ -386,8 +380,8 @@ export const products = [
     "barcode": "7296079000222",
     "catalogPage": 5,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-quinoa-white.jpg",
+    "placeholder": false
   },
   {
     "id": "p022",
@@ -400,8 +394,8 @@ export const products = [
     "barcode": "7296079000185",
     "catalogPage": 5,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-pearl-barley.jpg",
+    "placeholder": false
   },
   {
     "id": "p023",
@@ -414,8 +408,8 @@ export const products = [
     "barcode": "7290003470563",
     "catalogPage": 6,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-split-peas-500.jpg",
+    "placeholder": false
   },
   {
     "id": "p024",
@@ -428,8 +422,8 @@ export const products = [
     "barcode": "7290003470266",
     "catalogPage": 6,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-chickpeas-500.jpg",
+    "placeholder": false
   },
   {
     "id": "p025",
@@ -442,8 +436,8 @@ export const products = [
     "barcode": "7290003470518",
     "catalogPage": 6,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-lentils-green-500.jpg",
+    "placeholder": false
   },
   {
     "id": "p026",
@@ -456,8 +450,8 @@ export const products = [
     "barcode": "7290003470419",
     "catalogPage": 6,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-lentils-red-500.jpg",
+    "placeholder": false
   },
   {
     "id": "p027",
@@ -470,8 +464,8 @@ export const products = [
     "barcode": "7296079000161",
     "catalogPage": 6,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-chickpeas-giant-500.jpg",
+    "placeholder": false
   },
   {
     "id": "p028",
@@ -484,8 +478,8 @@ export const products = [
     "barcode": "7290003470587",
     "catalogPage": 6,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-beans-white-500.jpg",
+    "placeholder": false
   },
   {
     "id": "p029",
@@ -498,8 +492,8 @@ export const products = [
     "barcode": "7290003470167",
     "catalogPage": 6,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-beans-lima.jpg",
+    "placeholder": false
   },
   {
     "id": "p030",
@@ -512,8 +506,8 @@ export const products = [
     "barcode": "7296079000017",
     "catalogPage": 6,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-beans-hamin.jpg",
+    "placeholder": false
   },
   {
     "id": "p031",
@@ -526,8 +520,8 @@ export const products = [
     "barcode": "7296079000116",
     "catalogPage": 6,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-beans-mung.jpg",
+    "placeholder": false
   },
   {
     "id": "p032",
@@ -540,8 +534,8 @@ export const products = [
     "barcode": "7290003470341",
     "catalogPage": 6,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-beans-red.jpg",
+    "placeholder": false
   },
   {
     "id": "p033",
@@ -554,8 +548,8 @@ export const products = [
     "barcode": "7296079000482",
     "catalogPage": 6,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-lentils-black.jpg",
+    "placeholder": false
   },
   {
     "id": "p034",
@@ -568,8 +562,8 @@ export const products = [
     "barcode": "7296079000628",
     "catalogPage": 6,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-beans-black.jpg",
+    "placeholder": false
   },
   {
     "id": "p035",
@@ -582,8 +576,8 @@ export const products = [
     "barcode": "7290003470075",
     "catalogPage": 7,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-bulgur-fine-1kg.jpg",
+    "placeholder": false
   },
   {
     "id": "p036",
@@ -596,8 +590,8 @@ export const products = [
     "barcode": "7290019894025",
     "catalogPage": 7,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-bulgur-coarse-1kg.jpg",
+    "placeholder": false
   },
   {
     "id": "p037",
@@ -610,8 +604,8 @@ export const products = [
     "barcode": "7290003470501",
     "catalogPage": 7,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-wheat-1kg.jpg",
+    "placeholder": false
   },
   {
     "id": "p038",
@@ -624,8 +618,8 @@ export const products = [
     "barcode": "7290003470150",
     "catalogPage": 7,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-barley-1kg.jpg",
+    "placeholder": false
   },
   {
     "id": "p039",
@@ -638,8 +632,8 @@ export const products = [
     "barcode": "7290003470372",
     "catalogPage": 7,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-buckwheat-1kg.jpg",
+    "placeholder": false
   },
   {
     "id": "p040",
@@ -652,8 +646,8 @@ export const products = [
     "barcode": "7290003470754",
     "catalogPage": 7,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-chickpeas-1kg.jpg",
+    "placeholder": false
   },
   {
     "id": "p041",
@@ -666,8 +660,8 @@ export const products = [
     "barcode": "7290003470228",
     "catalogPage": 7,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-chickpeas-giant-900.jpg",
+    "placeholder": false
   },
   {
     "id": "p042",
@@ -680,8 +674,8 @@ export const products = [
     "barcode": "7290003470495",
     "catalogPage": 7,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-split-peas-1kg.jpg",
+    "placeholder": false
   },
   {
     "id": "p043",
@@ -694,8 +688,8 @@ export const products = [
     "barcode": "7290003470235",
     "catalogPage": 7,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-lentils-green-1kg.jpg",
+    "placeholder": false
   },
   {
     "id": "p044",
@@ -708,8 +702,8 @@ export const products = [
     "barcode": "7290003470204",
     "catalogPage": 7,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-beans-white-1kg.jpg",
+    "placeholder": false
   },
   {
     "id": "p045",
@@ -722,8 +716,8 @@ export const products = [
     "barcode": "7296079000147",
     "catalogPage": 7,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-lentils-red-1kg.jpg",
+    "placeholder": false
   },
   {
     "id": "p046",
@@ -736,8 +730,8 @@ export const products = [
     "barcode": "7296079000499",
     "catalogPage": 8,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-oats-fine.jpg",
+    "placeholder": false
   },
   {
     "id": "p047",
@@ -750,8 +744,8 @@ export const products = [
     "barcode": "7296079000505",
     "catalogPage": 8,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-oats-quick-750.jpg",
+    "placeholder": false
   },
   {
     "id": "p048",
@@ -764,8 +758,8 @@ export const products = [
     "barcode": "7290003470815",
     "catalogPage": 8,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-oats-thick.jpg",
+    "placeholder": false
   },
   {
     "id": "p049",
@@ -778,8 +772,8 @@ export const products = [
     "barcode": "7290003470051",
     "catalogPage": 8,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-oats-200.jpg",
+    "placeholder": false
   },
   {
     "id": "p050",
@@ -796,314 +790,6 @@ export const products = [
     "placeholder": false
   },
   {
-    "id": "p051",
-    "manufacturerId": "tozeret",
-    "name": "כוסמת",
-    "categoryName": "דגנים וקטניות",
-    "categorySlug": "grains",
-    "weight": "5 ק״ג",
-    "unitsPerPack": 1,
-    "barcode": "7290018546369",
-    "catalogPage": 9,
-    "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
-  },
-  {
-    "id": "p052",
-    "manufacturerId": "tozeret",
-    "name": "חיטה",
-    "categoryName": "דגנים וקטניות",
-    "categorySlug": "grains",
-    "weight": "5 ק״ג",
-    "unitsPerPack": 1,
-    "barcode": "7290018546352",
-    "catalogPage": 9,
-    "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
-  },
-  {
-    "id": "p053",
-    "manufacturerId": "tozeret",
-    "name": "גריסי פנינה",
-    "categoryName": "דגנים וקטניות",
-    "categorySlug": "grains",
-    "weight": "5 ק״ג",
-    "unitsPerPack": 1,
-    "barcode": "7290018546314",
-    "catalogPage": 9,
-    "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
-  },
-  {
-    "id": "p054",
-    "manufacturerId": "tozeret",
-    "name": "בורגול עבה",
-    "categoryName": "דגנים וקטניות",
-    "categorySlug": "grains",
-    "weight": "5 ק״ג",
-    "unitsPerPack": 1,
-    "barcode": "7290018546307",
-    "catalogPage": 9,
-    "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
-  },
-  {
-    "id": "p055",
-    "manufacturerId": "tozeret",
-    "name": "בורגול דק",
-    "categoryName": "דגנים וקטניות",
-    "categorySlug": "grains",
-    "weight": "5 ק״ג",
-    "unitsPerPack": 1,
-    "barcode": "7290018546291",
-    "catalogPage": 9,
-    "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
-  },
-  {
-    "id": "p056",
-    "manufacturerId": "tozeret",
-    "name": "גרגרי תירס (פופקורן)",
-    "categoryName": "דגנים וקטניות",
-    "categorySlug": "grains",
-    "weight": "5 ק״ג",
-    "unitsPerPack": 1,
-    "barcode": "7290018546413",
-    "catalogPage": 9,
-    "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
-  },
-  {
-    "id": "p057",
-    "manufacturerId": "tozeret",
-    "name": "שיבולת שועל עבה",
-    "categoryName": "דגנים וקטניות",
-    "categorySlug": "grains",
-    "weight": "5 ק״ג",
-    "unitsPerPack": 1,
-    "barcode": "7290018546475",
-    "catalogPage": 9,
-    "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
-  },
-  {
-    "id": "p058",
-    "manufacturerId": "tozeret",
-    "name": "שיבולת שועל דקה",
-    "categoryName": "דגנים וקטניות",
-    "categorySlug": "grains",
-    "weight": "5 ק״ג",
-    "unitsPerPack": 1,
-    "barcode": "7290018546468",
-    "catalogPage": 9,
-    "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
-  },
-  {
-    "id": "p059",
-    "manufacturerId": "tozeret",
-    "name": "קינואה לבנה",
-    "categoryName": "דגנים וקטניות",
-    "categorySlug": "grains",
-    "weight": "5 ק״ג",
-    "unitsPerPack": 1,
-    "barcode": "7290018546451",
-    "catalogPage": 9,
-    "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
-  },
-  {
-    "id": "p060",
-    "manufacturerId": "tozeret",
-    "name": "קינואה שחורה",
-    "categoryName": "דגנים וקטניות",
-    "categorySlug": "grains",
-    "weight": "5 ק״ג",
-    "unitsPerPack": 1,
-    "barcode": "7290018546512",
-    "catalogPage": 9,
-    "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
-  },
-  {
-    "id": "p061",
-    "manufacturerId": "tozeret",
-    "name": "גריסים",
-    "categoryName": "דגנים וקטניות",
-    "categorySlug": "grains",
-    "weight": "5 ק״ג",
-    "unitsPerPack": 1,
-    "barcode": "7290018546321",
-    "catalogPage": 9,
-    "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
-  },
-  {
-    "id": "p062",
-    "manufacturerId": "tozeret",
-    "name": "קינואה אדומה",
-    "categoryName": "דגנים וקטניות",
-    "categorySlug": "grains",
-    "weight": "5 ק״ג",
-    "unitsPerPack": 1,
-    "barcode": "7290018546444",
-    "catalogPage": 9,
-    "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
-  },
-  {
-    "id": "p063",
-    "manufacturerId": "tozeret",
-    "name": "שעועית אדומה",
-    "categoryName": "דגנים וקטניות",
-    "categorySlug": "grains",
-    "weight": "5 ק״ג",
-    "unitsPerPack": 1,
-    "barcode": "7290018546482",
-    "catalogPage": 10,
-    "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
-  },
-  {
-    "id": "p064",
-    "manufacturerId": "tozeret",
-    "name": "שעועית לבנה",
-    "categoryName": "דגנים וקטניות",
-    "categorySlug": "grains",
-    "weight": "5 ק״ג",
-    "unitsPerPack": 1,
-    "barcode": "7290018546499",
-    "catalogPage": 10,
-    "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
-  },
-  {
-    "id": "p065",
-    "manufacturerId": "tozeret",
-    "name": "חומוס ענק",
-    "categoryName": "דגנים וקטניות",
-    "categorySlug": "grains",
-    "weight": "5 ק״ג",
-    "unitsPerPack": 1,
-    "barcode": "7290018546345",
-    "catalogPage": 10,
-    "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
-  },
-  {
-    "id": "p066",
-    "manufacturerId": "tozeret",
-    "name": "חומוס",
-    "categoryName": "דגנים וקטניות",
-    "categorySlug": "grains",
-    "weight": "25 ק״ג",
-    "unitsPerPack": 1,
-    "barcode": "7290018546338",
-    "catalogPage": 10,
-    "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
-  },
-  {
-    "id": "p067",
-    "manufacturerId": "tozeret",
-    "name": "שעועית שחורה",
-    "categoryName": "דגנים וקטניות",
-    "categorySlug": "grains",
-    "weight": "5 ק״ג",
-    "unitsPerPack": 1,
-    "barcode": "7290018546505",
-    "catalogPage": 10,
-    "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
-  },
-  {
-    "id": "p068",
-    "manufacturerId": "tozeret",
-    "name": "אפונה",
-    "categoryName": "דגנים וקטניות",
-    "categorySlug": "grains",
-    "weight": "5 ק״ג",
-    "unitsPerPack": 1,
-    "barcode": "7290018546277",
-    "catalogPage": 10,
-    "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
-  },
-  {
-    "id": "p069",
-    "manufacturerId": "tozeret",
-    "name": "עדשים אדומות",
-    "categoryName": "דגנים וקטניות",
-    "categorySlug": "grains",
-    "weight": "5 ק״ג",
-    "unitsPerPack": 1,
-    "barcode": "7290018546376",
-    "catalogPage": 10,
-    "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
-  },
-  {
-    "id": "p070",
-    "manufacturerId": "tozeret",
-    "name": "עדשים שחורות",
-    "categoryName": "דגנים וקטניות",
-    "categorySlug": "grains",
-    "weight": "5 ק״ג",
-    "unitsPerPack": 1,
-    "barcode": "7290018546390",
-    "catalogPage": 10,
-    "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
-  },
-  {
-    "id": "p071",
-    "manufacturerId": "tozeret",
-    "name": "עדשים ירוקות",
-    "categoryName": "דגנים וקטניות",
-    "categorySlug": "grains",
-    "weight": "5 ק״ג",
-    "unitsPerPack": 1,
-    "barcode": "7290018546383",
-    "catalogPage": 10,
-    "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
-  },
-  {
-    "id": "p072",
-    "manufacturerId": "tozeret",
-    "name": "קוסקוס בינוני",
-    "categoryName": "דגנים וקטניות",
-    "categorySlug": "grains",
-    "weight": "5 ק״ג",
-    "unitsPerPack": 1,
-    "barcode": "7290018546758",
-    "catalogPage": 10,
-    "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
-  },
-  {
     "id": "p073",
     "manufacturerId": "tozeret",
     "name": "אורז יסמין",
@@ -1114,8 +800,8 @@ export const products = [
     "barcode": "7296079000109",
     "catalogPage": 12,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-rice-jasmine.jpg",
+    "placeholder": false
   },
   {
     "id": "p074",
@@ -1142,8 +828,8 @@ export const products = [
     "barcode": "7296079000192",
     "catalogPage": 12,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-rice-brown.jpg",
+    "placeholder": false
   },
   {
     "id": "p076",
@@ -1170,8 +856,8 @@ export const products = [
     "barcode": "7290003470143",
     "catalogPage": 12,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-rice-round.jpg",
+    "placeholder": false
   },
   {
     "id": "p078",
@@ -1184,64 +870,8 @@ export const products = [
     "barcode": "7290019894056",
     "catalogPage": 12,
     "brand": "בראל",
-    "image": null,
-    "placeholder": true
-  },
-  {
-    "id": "p079",
-    "manufacturerId": "tozeret",
-    "name": "אורז יסמין",
-    "categoryName": "אורז",
-    "categorySlug": "rice",
-    "weight": "25 ק״ג",
-    "unitsPerPack": 1,
-    "barcode": "7290017406749",
-    "catalogPage": 12,
-    "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
-  },
-  {
-    "id": "p080",
-    "manufacturerId": "tozeret",
-    "name": "אורז בסמטי",
-    "categoryName": "אורז",
-    "categorySlug": "rice",
-    "weight": "5 ק״ג",
-    "unitsPerPack": 1,
-    "barcode": "7290017408453",
-    "catalogPage": 12,
-    "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
-  },
-  {
-    "id": "p081",
-    "manufacturerId": "tozeret",
-    "name": "אורז פרסי",
-    "categoryName": "אורז",
-    "categorySlug": "rice",
-    "weight": "25 ק״ג",
-    "unitsPerPack": 1,
-    "barcode": "7290017406756",
-    "catalogPage": 12,
-    "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
-  },
-  {
-    "id": "p082",
-    "manufacturerId": "tozeret",
-    "name": "אורז עגול",
-    "categoryName": "אורז",
-    "categorySlug": "rice",
-    "weight": "5 ק״ג",
-    "unitsPerPack": 1,
-    "barcode": "720019894407",
-    "catalogPage": 12,
-    "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-barel-persian.jpg",
+    "placeholder": false
   },
   {
     "id": "p083",
@@ -1254,8 +884,8 @@ export const products = [
     "barcode": "7290019894179",
     "catalogPage": 14,
     "brand": "Lafarella",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-lafarella-penne.jpg",
+    "placeholder": false
   },
   {
     "id": "p084",
@@ -1268,8 +898,8 @@ export const products = [
     "barcode": "7290019894223",
     "catalogPage": 14,
     "brand": "Lafarella",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-lafarella-spaghetti.jpg",
+    "placeholder": false
   },
   {
     "id": "p085",
@@ -1282,22 +912,8 @@ export const products = [
     "barcode": "7290019894230",
     "catalogPage": 14,
     "brand": "Lafarella",
-    "image": null,
-    "placeholder": true
-  },
-  {
-    "id": "p086",
-    "manufacturerId": "tozeret",
-    "name": "פתיתים בצורת אורז Lafarella",
-    "categoryName": "פסטות ופתיתים",
-    "categorySlug": "pasta",
-    "weight": "400 גרם",
-    "unitsPerPack": 20,
-    "barcode": "7290019894322",
-    "catalogPage": 14,
-    "brand": "Lafarella",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-lafarella-vermicelli.jpg",
+    "placeholder": false
   },
   {
     "id": "p087",
@@ -1310,8 +926,8 @@ export const products = [
     "barcode": "7290019894247",
     "catalogPage": 14,
     "brand": "Lafarella",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-lafarella-elbows.jpg",
+    "placeholder": false
   },
   {
     "id": "p088",
@@ -1324,92 +940,8 @@ export const products = [
     "barcode": "7290019894155",
     "catalogPage": 14,
     "brand": "Lafarella",
-    "image": null,
-    "placeholder": true
-  },
-  {
-    "id": "p089",
-    "manufacturerId": "tozeret",
-    "name": "פסטה פנה Lafarella",
-    "categoryName": "פסטות ופתיתים",
-    "categorySlug": "pasta",
-    "weight": "5 ק״ג",
-    "unitsPerPack": 2,
-    "barcode": "7290019894285",
-    "catalogPage": 14,
-    "brand": "Lafarella",
-    "image": null,
-    "placeholder": true
-  },
-  {
-    "id": "p090",
-    "manufacturerId": "tozeret",
-    "name": "פסטה ספגטי Lafarella",
-    "categoryName": "פסטות ופתיתים",
-    "categorySlug": "pasta",
-    "weight": "5 ק״ג",
-    "unitsPerPack": 2,
-    "barcode": "7290019894131",
-    "catalogPage": 14,
-    "brand": "Lafarella",
-    "image": null,
-    "placeholder": true
-  },
-  {
-    "id": "p091",
-    "manufacturerId": "tozeret",
-    "name": "פסטה ורמיצ׳לי Lafarella",
-    "categoryName": "פסטות ופתיתים",
-    "categorySlug": "pasta",
-    "weight": "5 ק״ג",
-    "unitsPerPack": 2,
-    "barcode": "7290019894278",
-    "catalogPage": 14,
-    "brand": "Lafarella",
-    "image": null,
-    "placeholder": true
-  },
-  {
-    "id": "p092",
-    "manufacturerId": "tozeret",
-    "name": "פתיתים בצורת אורז Lafarella",
-    "categoryName": "פסטות ופתיתים",
-    "categorySlug": "pasta",
-    "weight": "5 ק״ג",
-    "unitsPerPack": 2,
-    "barcode": "7290019894452",
-    "catalogPage": 14,
-    "brand": "Lafarella",
-    "image": null,
-    "placeholder": true
-  },
-  {
-    "id": "p093",
-    "manufacturerId": "tozeret",
-    "name": "פסטה קרניים Lafarella",
-    "categoryName": "פסטות ופתיתים",
-    "categorySlug": "pasta",
-    "weight": "5 ק״ג",
-    "unitsPerPack": 2,
-    "barcode": "7290019894209",
-    "catalogPage": 14,
-    "brand": "Lafarella",
-    "image": null,
-    "placeholder": true
-  },
-  {
-    "id": "p094",
-    "manufacturerId": "tozeret",
-    "name": "פסטה פוזילי Lafarella",
-    "categoryName": "פסטות ופתיתים",
-    "categorySlug": "pasta",
-    "weight": "5 ק״ג",
-    "unitsPerPack": 2,
-    "barcode": "7290019894292",
-    "catalogPage": 14,
-    "brand": "Lafarella",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-lafarella-fusilli.jpg",
+    "placeholder": false
   },
   {
     "id": "p095",
@@ -1506,8 +1038,8 @@ export const products = [
     "barcode": "7290019894834",
     "catalogPage": 15,
     "brand": "Vittale",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-stars.jpg",
+    "placeholder": false
   },
   {
     "id": "p102",
@@ -1520,8 +1052,8 @@ export const products = [
     "barcode": "7290020505156",
     "catalogPage": 16,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-noodles-wide-200.jpg",
+    "placeholder": false
   },
   {
     "id": "p103",
@@ -1534,8 +1066,8 @@ export const products = [
     "barcode": "7290020505163",
     "catalogPage": 16,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-noodles-thin-200.jpg",
+    "placeholder": false
   },
   {
     "id": "p104",
@@ -1548,8 +1080,8 @@ export const products = [
     "barcode": "7290019894827",
     "catalogPage": 16,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-noodles-wide-400.jpg",
+    "placeholder": false
   },
   {
     "id": "p105",
@@ -1562,8 +1094,8 @@ export const products = [
     "barcode": "7290019894810",
     "catalogPage": 16,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-noodles-thin-400.jpg",
+    "placeholder": false
   },
   {
     "id": "p106",
@@ -1576,22 +1108,8 @@ export const products = [
     "barcode": "7290020505385",
     "catalogPage": 16,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
-  },
-  {
-    "id": "p107",
-    "manufacturerId": "tozeret",
-    "name": "ניוקי תפוחי אדמה",
-    "categoryName": "פסטות ופתיתים",
-    "categorySlug": "pasta",
-    "weight": "500 גרם",
-    "unitsPerPack": 12,
-    "barcode": "7290019894667",
-    "catalogPage": 16,
-    "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-gnocchi-gf.jpg",
+    "placeholder": false
   },
   {
     "id": "p108",
@@ -1604,8 +1122,8 @@ export const products = [
     "barcode": "7290019894216",
     "catalogPage": 18,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-tortilla-28.jpg",
+    "placeholder": false
   },
   {
     "id": "p109",
@@ -1618,8 +1136,8 @@ export const products = [
     "barcode": "7290017406978",
     "catalogPage": 18,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-tortilla-25.jpg",
+    "placeholder": false
   },
   {
     "id": "p110",
@@ -1632,8 +1150,8 @@ export const products = [
     "barcode": "7290020505361",
     "catalogPage": 18,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-tortilla-gf.jpg",
+    "placeholder": false
   },
   {
     "id": "p111",
@@ -1646,8 +1164,8 @@ export const products = [
     "barcode": "7290017406961",
     "catalogPage": 18,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-tortilla-20.jpg",
+    "placeholder": false
   },
   {
     "id": "p112",
@@ -1660,8 +1178,8 @@ export const products = [
     "barcode": "7290019894605",
     "catalogPage": 20,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-beans-white-can.jpg",
+    "placeholder": false
   },
   {
     "id": "p113",
@@ -1674,8 +1192,8 @@ export const products = [
     "barcode": "7290019894506",
     "catalogPage": 20,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-chickpeas-can.jpg",
+    "placeholder": false
   },
   {
     "id": "p114",
@@ -1688,8 +1206,8 @@ export const products = [
     "barcode": "7290020505491",
     "catalogPage": 20,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-baby-corn.jpg",
+    "placeholder": false
   },
   {
     "id": "p115",
@@ -1702,8 +1220,8 @@ export const products = [
     "barcode": "7290019894643",
     "catalogPage": 20,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-peas-can.jpg",
+    "placeholder": false
   },
   {
     "id": "p116",
@@ -1734,20 +1252,6 @@ export const products = [
     "placeholder": false
   },
   {
-    "id": "p118",
-    "manufacturerId": "tozeret",
-    "name": "עגבניות חתוכות דק במיץ עגבניות",
-    "categoryName": "שימורים",
-    "categorySlug": "cans",
-    "weight": "400 גרם",
-    "unitsPerPack": 24,
-    "barcode": "7290019894469",
-    "catalogPage": 20,
-    "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
-  },
-  {
     "id": "p119",
     "manufacturerId": "tozeret",
     "name": "פטריות שמפניון שלמות",
@@ -1762,34 +1266,6 @@ export const products = [
     "placeholder": false
   },
   {
-    "id": "p120",
-    "manufacturerId": "tozeret",
-    "name": "קוביות עגבניות במיץ עגבניות",
-    "categoryName": "שימורים",
-    "categorySlug": "cans",
-    "weight": "400 גרם",
-    "unitsPerPack": 24,
-    "barcode": "7290019894483",
-    "catalogPage": 20,
-    "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
-  },
-  {
-    "id": "p121",
-    "manufacturerId": "tozeret",
-    "name": "גרעיני תירס מתוק",
-    "categoryName": "שימורים",
-    "categorySlug": "cans",
-    "weight": "550 גרם",
-    "unitsPerPack": 24,
-    "barcode": "7290019894513",
-    "catalogPage": 20,
-    "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
-  },
-  {
     "id": "p122",
     "manufacturerId": "tozeret",
     "name": "שעועית לבנה ברוטב עגבניות",
@@ -1800,8 +1276,8 @@ export const products = [
     "barcode": "7920019894612",
     "catalogPage": 20,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-beans-tomato-can.jpg",
+    "placeholder": false
   },
   {
     "id": "p123",
@@ -1814,8 +1290,8 @@ export const products = [
     "barcode": "7290019894506",
     "catalogPage": 20,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-peas-carrots-can.jpg",
+    "placeholder": false
   },
   {
     "id": "p124",
@@ -1832,48 +1308,6 @@ export const products = [
     "placeholder": false
   },
   {
-    "id": "p125",
-    "manufacturerId": "tozeret",
-    "name": "גרעיני תירס מתוק",
-    "categoryName": "שימורים",
-    "categorySlug": "cans",
-    "weight": "1.95 ק״ג",
-    "unitsPerPack": 6,
-    "barcode": "7290019894186",
-    "catalogPage": 21,
-    "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
-  },
-  {
-    "id": "p126",
-    "manufacturerId": "tozeret",
-    "name": "פטריות שמפניון חתוכות",
-    "categoryName": "שימורים",
-    "categorySlug": "cans",
-    "weight": "2250 גרם",
-    "unitsPerPack": 6,
-    "barcode": "7290019894391",
-    "catalogPage": 21,
-    "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
-  },
-  {
-    "id": "p127",
-    "manufacturerId": "tozeret",
-    "name": "פטריות שמפניון שלמות",
-    "categoryName": "שימורים",
-    "categorySlug": "cans",
-    "weight": "2250 גרם",
-    "unitsPerPack": 6,
-    "barcode": "7290019894384",
-    "catalogPage": 21,
-    "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
-  },
-  {
     "id": "p128",
     "manufacturerId": "tozeret",
     "name": "עלי גפן ממולאים באורז",
@@ -1884,36 +1318,8 @@ export const products = [
     "barcode": "7290019894896",
     "catalogPage": 21,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
-  },
-  {
-    "id": "p129",
-    "manufacturerId": "tozeret",
-    "name": "עגבניות חתוכות דק במיץ עגבניות",
-    "categoryName": "שימורים",
-    "categorySlug": "cans",
-    "weight": "2.5 ק״ג",
-    "unitsPerPack": 6,
-    "barcode": "7290019894537",
-    "catalogPage": 21,
-    "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
-  },
-  {
-    "id": "p130",
-    "manufacturerId": "tozeret",
-    "name": "קוביות עגבניות במיץ עגבניות",
-    "categoryName": "שימורים",
-    "categorySlug": "cans",
-    "weight": "2.5 ק״ג",
-    "unitsPerPack": 6,
-    "barcode": "7290019894544",
-    "catalogPage": 21,
-    "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-vine-large.jpg",
+    "placeholder": false
   },
   {
     "id": "p131",
@@ -1926,8 +1332,8 @@ export const products = [
     "barcode": "7290020505255",
     "catalogPage": 21,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-pickles.jpg",
+    "placeholder": false
   },
   {
     "id": "p132",
@@ -1940,8 +1346,8 @@ export const products = [
     "barcode": "7290020505460",
     "catalogPage": 21,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-pickles-small.jpg",
+    "placeholder": false
   },
   {
     "id": "p133",
@@ -1954,8 +1360,8 @@ export const products = [
     "barcode": "7290020505378",
     "catalogPage": 21,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-palm-whole.jpg",
+    "placeholder": false
   },
   {
     "id": "p134",
@@ -1968,8 +1374,8 @@ export const products = [
     "barcode": "7290020505415",
     "catalogPage": 21,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-palm-sliced.jpg",
+    "placeholder": false
   },
   {
     "id": "p135",
@@ -1982,36 +1388,8 @@ export const products = [
     "barcode": "7290020505170",
     "catalogPage": 21,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
-  },
-  {
-    "id": "p136",
-    "manufacturerId": "tozeret",
-    "name": "שמן זית כתית מעולה",
-    "categoryName": "שמנים ורטבים",
-    "categorySlug": "oils",
-    "weight": "3 ליטר",
-    "unitsPerPack": 4,
-    "barcode": "7290019894674",
-    "catalogPage": 23,
-    "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
-  },
-  {
-    "id": "p137",
-    "manufacturerId": "tozeret",
-    "name": "שמן זית כתית מעולה",
-    "categoryName": "שמנים ורטבים",
-    "categorySlug": "oils",
-    "weight": "3 ליטר",
-    "unitsPerPack": 4,
-    "barcode": "7290019894162",
-    "catalogPage": 23,
-    "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-corn-triple.jpg",
+    "placeholder": false
   },
   {
     "id": "p138",
@@ -2066,8 +1444,8 @@ export const products = [
     "barcode": "7290020505019",
     "catalogPage": 23,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-mayo-squeeze.jpg",
+    "placeholder": false
   },
   {
     "id": "p142",
@@ -2080,22 +1458,8 @@ export const products = [
     "barcode": "7290019894889",
     "catalogPage": 23,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
-  },
-  {
-    "id": "p143",
-    "manufacturerId": "tozeret",
-    "name": "חרדל דיז'ון צרפתי עם גרגירים",
-    "categoryName": "שמנים ורטבים",
-    "categorySlug": "oils",
-    "weight": "5 ק״ג",
-    "unitsPerPack": 2,
-    "barcode": "7290018546208",
-    "catalogPage": 23,
-    "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-mayo-jar.jpg",
+    "placeholder": false
   },
   {
     "id": "p144",
@@ -2112,20 +1476,6 @@ export const products = [
     "placeholder": false
   },
   {
-    "id": "p145",
-    "manufacturerId": "tozeret",
-    "name": "חרדל דיז'ון צרפתי",
-    "categoryName": "שמנים ורטבים",
-    "categorySlug": "oils",
-    "weight": "5 ק״ג",
-    "unitsPerPack": 2,
-    "barcode": "7290018546215",
-    "catalogPage": 23,
-    "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
-  },
-  {
     "id": "p146",
     "manufacturerId": "tozeret",
     "name": "שמן זית כתית מעולה",
@@ -2140,20 +1490,6 @@ export const products = [
     "placeholder": false
   },
   {
-    "id": "p147",
-    "manufacturerId": "tozeret",
-    "name": "שמן קנולה",
-    "categoryName": "שמנים ורטבים",
-    "categorySlug": "oils",
-    "weight": "1 ליטר",
-    "unitsPerPack": 15,
-    "barcode": "7290019894438",
-    "catalogPage": 23,
-    "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
-  },
-  {
     "id": "p148",
     "manufacturerId": "tozeret",
     "name": "כוסברה",
@@ -2164,8 +1500,8 @@ export const products = [
     "barcode": "7290019894919",
     "catalogPage": 25,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-coriander.jpg",
+    "placeholder": false
   },
   {
     "id": "p149",
@@ -2178,8 +1514,8 @@ export const products = [
     "barcode": "7290019894995",
     "catalogPage": 25,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-citric-acid.jpg",
+    "placeholder": false
   },
   {
     "id": "p150",
@@ -2220,8 +1556,8 @@ export const products = [
     "barcode": "7290020505330",
     "catalogPage": 25,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-parsley.jpg",
+    "placeholder": false
   },
   {
     "id": "p153",
@@ -2234,8 +1570,8 @@ export const products = [
     "barcode": "7290020505132",
     "catalogPage": 25,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-garlic.jpg",
+    "placeholder": false
   },
   {
     "id": "p154",
@@ -2262,8 +1598,8 @@ export const products = [
     "barcode": "7290020505064",
     "catalogPage": 25,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-cinnamon.jpg",
+    "placeholder": false
   },
   {
     "id": "p156",
@@ -2276,8 +1612,8 @@ export const products = [
     "barcode": "7290020505347",
     "catalogPage": 25,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-oregano.jpg",
+    "placeholder": false
   },
   {
     "id": "p157",
@@ -2290,8 +1626,8 @@ export const products = [
     "barcode": "7290020505316",
     "catalogPage": 25,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-thyme.jpg",
+    "placeholder": false
   },
   {
     "id": "p158",
@@ -2304,8 +1640,8 @@ export const products = [
     "barcode": "7290020505323",
     "catalogPage": 25,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-basil.jpg",
+    "placeholder": false
   },
   {
     "id": "p159",
@@ -2318,8 +1654,8 @@ export const products = [
     "barcode": "7290019894902",
     "catalogPage": 25,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-cumin.jpg",
+    "placeholder": false
   },
   {
     "id": "p160",
@@ -2332,8 +1668,8 @@ export const products = [
     "barcode": "7290020505057",
     "catalogPage": 26,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-spice-meatballs.jpg",
+    "placeholder": false
   },
   {
     "id": "p161",
@@ -2346,8 +1682,8 @@ export const products = [
     "barcode": "7290020505088",
     "catalogPage": 26,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-chili-mexican.jpg",
+    "placeholder": false
   },
   {
     "id": "p162",
@@ -2360,8 +1696,8 @@ export const products = [
     "barcode": "7290020505309",
     "catalogPage": 26,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-spice-philadelphia.jpg",
+    "placeholder": false
   },
   {
     "id": "p163",
@@ -2374,8 +1710,8 @@ export const products = [
     "barcode": "7290020505309",
     "catalogPage": 26,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-spice-tuscany.jpg",
+    "placeholder": false
   },
   {
     "id": "p164",
@@ -2388,8 +1724,8 @@ export const products = [
     "barcode": "7290019894933",
     "catalogPage": 26,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-zaatar.jpg",
+    "placeholder": false
   },
   {
     "id": "p165",
@@ -2402,8 +1738,8 @@ export const products = [
     "barcode": "7290020505149",
     "catalogPage": 26,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-ras-el-hanout.jpg",
+    "placeholder": false
   },
   {
     "id": "p166",
@@ -2416,8 +1752,8 @@ export const products = [
     "barcode": "7290020505071",
     "catalogPage": 26,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-curry-masala.jpg",
+    "placeholder": false
   },
   {
     "id": "p167",
@@ -2430,8 +1766,8 @@ export const products = [
     "barcode": "7290019894926",
     "catalogPage": 26,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-hawaij.jpg",
+    "placeholder": false
   },
   {
     "id": "p168",
@@ -2444,8 +1780,8 @@ export const products = [
     "barcode": "7290019894971",
     "catalogPage": 26,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-spice-grill.jpg",
+    "placeholder": false
   },
   {
     "id": "p169",
@@ -2458,36 +1794,8 @@ export const products = [
     "barcode": "7290019894988",
     "catalogPage": 26,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
-  },
-  {
-    "id": "p170",
-    "manufacturerId": "tozeret",
-    "name": "פפריקה מתוקה בשמן",
-    "categoryName": "תבלינים",
-    "categorySlug": "spices",
-    "weight": "350 גרם",
-    "unitsPerPack": 15,
-    "barcode": "7290002862048",
-    "catalogPage": 27,
-    "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
-  },
-  {
-    "id": "p171",
-    "manufacturerId": "tozeret",
-    "name": "פפריקה מתוקה בשמן (שקית)",
-    "categoryName": "תבלינים",
-    "categorySlug": "spices",
-    "weight": "400 גרם",
-    "unitsPerPack": 20,
-    "barcode": "7290002862352",
-    "catalogPage": 27,
-    "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-spice-chicken.jpg",
+    "placeholder": false
   },
   {
     "id": "p172",
@@ -2535,141 +1843,127 @@ export const products = [
     "id": "p175",
     "manufacturerId": "tozeret",
     "name": "קוקוס טחון",
-    "categoryName": "מוצרים נוספים",
-    "categorySlug": "more",
+    "categoryName": "דגנים וקטניות",
+    "categorySlug": "grains",
     "weight": "700 גרם",
     "unitsPerPack": 15,
     "barcode": "7296079000819",
     "catalogPage": 29,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-coconut-700.jpg",
+    "placeholder": false
   },
   {
     "id": "p176",
     "manufacturerId": "tozeret",
     "name": "קוקוס טחון",
-    "categoryName": "מוצרים נוספים",
-    "categorySlug": "more",
+    "categoryName": "דגנים וקטניות",
+    "categorySlug": "grains",
     "weight": "150 גרם",
     "unitsPerPack": 36,
     "barcode": "7290003470129",
     "catalogPage": 29,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-coconut-150.jpg",
+    "placeholder": false
   },
   {
     "id": "p177",
     "manufacturerId": "tozeret",
-    "name": "זרעי צי'ה",
-    "categoryName": "מוצרים נוספים",
-    "categorySlug": "more",
+    "name": "זרעי צ'יה",
+    "categoryName": "דגנים וקטניות",
+    "categorySlug": "grains",
     "weight": "200 גרם",
     "unitsPerPack": 30,
     "barcode": "7296079000772",
     "catalogPage": 29,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-chia.jpg",
+    "placeholder": false
   },
   {
     "id": "p178",
     "manufacturerId": "tozeret",
     "name": "סוכר דמררה",
-    "categoryName": "מוצרים נוספים",
-    "categorySlug": "more",
+    "categoryName": "דגנים וקטניות",
+    "categorySlug": "grains",
     "weight": "1 ק״ג",
     "unitsPerPack": 15,
     "barcode": "7296079000253",
     "catalogPage": 29,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-demerara.jpg",
+    "placeholder": false
   },
   {
     "id": "p179",
     "manufacturerId": "tozeret",
     "name": "פרג",
-    "categoryName": "מוצרים נוספים",
-    "categorySlug": "more",
+    "categoryName": "דגנים וקטניות",
+    "categorySlug": "grains",
     "weight": "200 גרם",
     "unitsPerPack": 30,
     "barcode": "7290003470433",
     "catalogPage": 29,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-poppy.jpg",
+    "placeholder": false
   },
   {
     "id": "p180",
     "manufacturerId": "tozeret",
     "name": "זרעי פשתן",
-    "categoryName": "מוצרים נוספים",
-    "categorySlug": "more",
+    "categoryName": "דגנים וקטניות",
+    "categorySlug": "grains",
     "weight": "200 גרם",
     "unitsPerPack": 36,
     "barcode": "7296079000833",
     "catalogPage": 29,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-flax.jpg",
+    "placeholder": false
   },
   {
     "id": "p181",
     "manufacturerId": "tozeret",
     "name": "שומשום",
-    "categoryName": "מוצרים נוספים",
-    "categorySlug": "more",
+    "categoryName": "דגנים וקטניות",
+    "categorySlug": "grains",
     "weight": "200 גרם",
     "unitsPerPack": 36,
     "barcode": "7290003470389",
     "catalogPage": 29,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
-  },
-  {
-    "id": "p182",
-    "manufacturerId": "tozeret",
-    "name": "שומשום",
-    "categoryName": "מוצרים נוספים",
-    "categorySlug": "more",
-    "weight": "25 ק״ג",
-    "unitsPerPack": 15,
-    "barcode": "7296079000093",
-    "catalogPage": 29,
-    "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-sesame-200.jpg",
+    "placeholder": false
   },
   {
     "id": "p183",
     "manufacturerId": "tozeret",
     "name": "קורנפלקס",
-    "categoryName": "מוצרים נוספים",
-    "categorySlug": "more",
+    "categoryName": "דגנים וקטניות",
+    "categorySlug": "grains",
     "weight": "850 גרם",
     "unitsPerPack": 12,
     "barcode": "7290020505217",
     "catalogPage": 29,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-cornflakes.jpg",
+    "placeholder": false
   },
   {
     "id": "p184",
     "manufacturerId": "tozeret",
     "name": "קורנפלקס ללא גלוטן",
-    "categoryName": "מוצרים נוספים",
-    "categorySlug": "more",
+    "categoryName": "דגנים וקטניות",
+    "categorySlug": "grains",
     "weight": "500 גרם",
     "unitsPerPack": 10,
     "barcode": "7290020505354",
     "catalogPage": 29,
     "brand": "תוצרת",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-cornflakes-gf.jpg",
+    "placeholder": false
   },
   {
     "id": "p185",
@@ -2752,8 +2046,8 @@ export const products = [
     "barcode": "להדגמה",
     "catalogPage": "להדגמה",
     "brand": "טעמי אסיה",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-chopsticks.webp",
+    "placeholder": false
   },
   {
     "id": "p191",
@@ -2766,8 +2060,8 @@ export const products = [
     "barcode": "להדגמה",
     "catalogPage": "להדגמה",
     "brand": "איקאה",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-storage-box-small.webp",
+    "placeholder": false
   },
   {
     "id": "p192",
@@ -2780,8 +2074,8 @@ export const products = [
     "barcode": "להדגמה",
     "catalogPage": "להדגמה",
     "brand": "איקאה",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-storage-box-large.webp",
+    "placeholder": false
   },
   {
     "id": "p193",
@@ -2794,8 +2088,8 @@ export const products = [
     "barcode": "להדגמה",
     "catalogPage": "להדגמה",
     "brand": "איקאה",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-storage-dots.webp",
+    "placeholder": false
   },
   {
     "id": "p194",
@@ -2804,54 +2098,54 @@ export const products = [
     "categoryName": "כלי בית",
     "categorySlug": "household",
     "weight": "1 ליטר",
-    "unitsPerPack": 3,
+    "unitsPerPack": 1,
     "barcode": "להדגמה",
     "catalogPage": "להדגמה",
-    "brand": "איקאה",
-    "image": null,
-    "placeholder": true
+    "brand": "KlicBox",
+    "image": "assets/images/products/p-food-box-klic.webp",
+    "placeholder": false
   },
   {
     "id": "p195",
     "manufacturerId": "sample-a",
-    "name": "נוזל כלים לימון 24%",
+    "name": "נוזל כלים פריחת הלימון",
     "categoryName": "ניקיון",
     "categorySlug": "cleaning",
     "weight": "750 מ״ל",
     "unitsPerPack": 1,
     "barcode": "להדגמה",
     "catalogPage": "להדגמה",
-    "brand": "רמי לוי",
-    "image": null,
-    "placeholder": true
+    "brand": "Palmolive",
+    "image": "assets/images/products/p-dish-palmolive.webp",
+    "placeholder": false
   },
   {
     "id": "p196",
     "manufacturerId": "sample-a",
-    "name": "שקיות אשפה",
+    "name": "שקיות אשפה לפחים בינוניים",
     "categoryName": "ניקיון",
     "categorySlug": "cleaning",
-    "weight": "25 יחידות",
-    "unitsPerPack": 25,
+    "weight": "45 יחידות",
+    "unitsPerPack": 45,
     "barcode": "להדגמה",
     "catalogPage": "להדגמה",
-    "brand": "רמי לוי",
-    "image": null,
-    "placeholder": true
+    "brand": "ניקול",
+    "image": "assets/images/products/p-trash-bags-nikol.webp",
+    "placeholder": false
   },
   {
     "id": "p197",
     "manufacturerId": "sample-a",
-    "name": "נוזל רצפות",
+    "name": "מנקה רצפות מאסק",
     "categoryName": "ניקיון",
     "categorySlug": "cleaning",
-    "weight": "2 ליטר",
+    "weight": "4 ליטר",
     "unitsPerPack": 1,
     "barcode": "להדגמה",
     "catalogPage": "להדגמה",
     "brand": "רמי לוי",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-floor-cleaner.webp",
+    "placeholder": false
   },
   {
     "id": "p198",
@@ -2968,16 +2262,16 @@ export const products = [
   {
     "id": "p206",
     "manufacturerId": "sample-a",
-    "name": "סוללות AA נטענות",
+    "name": "סוללות AAA נטענות",
     "categoryName": "אלקטרוניקה",
     "categorySlug": "gadgets",
-    "weight": "2450mAh",
+    "weight": "700mAh",
     "unitsPerPack": 4,
     "barcode": "להדגמה",
     "catalogPage": "להדגמה",
-    "brand": "איקאה",
-    "image": "assets/images/products/mall/p206.webp",
-    "placeholder": true
+    "brand": "Panasonic",
+    "image": "assets/images/products/p-batteries-panasonic-aaa.webp",
+    "placeholder": false
   },
   {
     "id": "p207",
@@ -2986,12 +2280,12 @@ export const products = [
     "categoryName": "אלקטרוניקה",
     "categorySlug": "gadgets",
     "weight": "1400mAh",
-    "unitsPerPack": 12,
+    "unitsPerPack": 8,
     "barcode": "להדגמה",
     "catalogPage": "להדגמה",
-    "brand": "Zeero",
-    "image": null,
-    "placeholder": true
+    "brand": "Mupoer",
+    "image": "assets/images/products/p-batteries-mupoer.webp",
+    "placeholder": false
   },
   {
     "id": "p208",
@@ -3000,12 +2294,12 @@ export const products = [
     "categoryName": "כלי בית",
     "categorySlug": "household",
     "weight": "45×60 ס״מ",
-    "unitsPerPack": 4,
+    "unitsPerPack": 3,
     "barcode": "להדגמה",
     "catalogPage": "להדגמה",
     "brand": "איקאה",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-kitchen-towels-solid.webp",
+    "placeholder": false
   },
   {
     "id": "p209",
@@ -3018,22 +2312,22 @@ export const products = [
     "barcode": "להדגמה",
     "catalogPage": "להדגמה",
     "brand": "רמי לוי",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-paper-towels-6.webp",
+    "placeholder": false
   },
   {
     "id": "p210",
     "manufacturerId": "sample-a",
-    "name": "מגבות נייר",
+    "name": "מגבות נייר Maxi גליל ארוך",
     "categoryName": "ניקיון",
     "categorySlug": "cleaning",
-    "weight": "8 גלילים",
-    "unitsPerPack": 8,
+    "weight": "240 דפים",
+    "unitsPerPack": 1,
     "barcode": "להדגמה",
     "catalogPage": "להדגמה",
-    "brand": "רמי לוי",
-    "image": null,
-    "placeholder": true
+    "brand": "Liv",
+    "image": "assets/images/products/p-paper-towels-liv.webp",
+    "placeholder": false
   },
   {
     "id": "p211",
@@ -3060,8 +2354,8 @@ export const products = [
     "barcode": "להדגמה",
     "catalogPage": "להדגמה",
     "brand": "אלקטרו חנן",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-emergency-lantern.webp",
+    "placeholder": false
   },
   {
     "id": "p213",
@@ -3069,13 +2363,13 @@ export const products = [
     "name": "נורת חירום נטענת",
     "categoryName": "תאורה",
     "categorySlug": "lighting",
-    "weight": "E27",
+    "weight": "24 נורות LED",
     "unitsPerPack": 1,
     "barcode": "להדגמה",
     "catalogPage": "להדגמה",
     "brand": "LED",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-emergency-led.webp",
+    "placeholder": false
   },
   {
     "id": "p214",
@@ -3102,8 +2396,8 @@ export const products = [
     "barcode": "להדגמה",
     "catalogPage": "להדגמה",
     "brand": "Clip On",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-earbuds-clip.webp",
+    "placeholder": false
   },
   {
     "id": "p216",
@@ -3116,8 +2410,8 @@ export const products = [
     "barcode": "להדגמה",
     "catalogPage": "להדגמה",
     "brand": "שקדיה",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-tortilla-shkedia-700.webp",
+    "placeholder": false
   },
   {
     "id": "p217",
@@ -3129,9 +2423,9 @@ export const products = [
     "unitsPerPack": 50,
     "barcode": "להדגמה",
     "catalogPage": "להדגמה",
-    "brand": "סנו סושי",
-    "image": null,
-    "placeholder": true
+    "brand": "הנמל",
+    "image": "assets/images/products/p-teaspoons.webp",
+    "placeholder": false
   },
   {
     "id": "p218",
@@ -3143,9 +2437,9 @@ export const products = [
     "unitsPerPack": 50,
     "barcode": "להדגמה",
     "catalogPage": "להדגמה",
-    "brand": "אירוח",
-    "image": null,
-    "placeholder": true
+    "brand": "הנמל",
+    "image": "assets/images/products/p-forks.webp",
+    "placeholder": false
   },
   {
     "id": "p219",
@@ -3157,9 +2451,9 @@ export const products = [
     "unitsPerPack": 50,
     "barcode": "להדגמה",
     "catalogPage": "להדגמה",
-    "brand": "אירוח",
-    "image": null,
-    "placeholder": true
+    "brand": "הנמל",
+    "image": "assets/images/products/p-knives.webp",
+    "placeholder": false
   },
   {
     "id": "p220",
@@ -3168,12 +2462,12 @@ export const products = [
     "categoryName": "חד פעמי",
     "categorySlug": "disposables",
     "weight": "40×40 ס״מ",
-    "unitsPerPack": 50,
+    "unitsPerPack": 100,
     "barcode": "להדגמה",
     "catalogPage": "להדגמה",
     "brand": "סנו סושי",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-napkins.webp",
+    "placeholder": false
   },
   {
     "id": "p221",
@@ -3200,22 +2494,22 @@ export const products = [
     "barcode": "להדגמה",
     "catalogPage": "להדגמה",
     "brand": "איקאה",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-mug-red.webp",
+    "placeholder": false
   },
   {
     "id": "p223",
     "manufacturerId": "sample-a",
-    "name": "צלחת אובלית",
-    "categoryName": "כלי בית",
-    "categorySlug": "household",
-    "weight": "31×19 ס״מ",
-    "unitsPerPack": 1,
+    "name": "צלחות אובליות ענקיות",
+    "categoryName": "חד פעמי",
+    "categorySlug": "disposables",
+    "weight": "25 יחידות",
+    "unitsPerPack": 25,
     "barcode": "להדגמה",
     "catalogPage": "להדגמה",
-    "brand": "איקאה",
-    "image": null,
-    "placeholder": true
+    "brand": "הוסטס",
+    "image": "assets/images/products/p-oval-plates.webp",
+    "placeholder": false
   },
   {
     "id": "p224",
@@ -3248,7 +2542,7 @@ export const products = [
   {
     "id": "p226",
     "manufacturerId": "sample-a",
-    "name": "נייר טואלט",
+    "name": "נייר טואלט Soft דו שכבתי",
     "categoryName": "ניקיון",
     "categorySlug": "cleaning",
     "weight": "32 גלילים",
@@ -3256,64 +2550,64 @@ export const products = [
     "barcode": "להדגמה",
     "catalogPage": "להדגמה",
     "brand": "סנו",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-toilet-paper-sano.webp",
+    "placeholder": false
   },
   {
     "id": "p227",
     "manufacturerId": "sample-a",
-    "name": "נייר טואלט תלת שכבתי",
+    "name": "נייר טואלט Soft תלת שכבתי",
     "categoryName": "ניקיון",
     "categorySlug": "cleaning",
     "weight": "32 גלילים",
     "unitsPerPack": 32,
     "barcode": "להדגמה",
     "catalogPage": "להדגמה",
-    "brand": "טאצ׳",
-    "image": null,
-    "placeholder": true
+    "brand": "סנו",
+    "image": "assets/images/products/p-toilet-paper-sano-3.webp",
+    "placeholder": false
   },
   {
     "id": "p228",
     "manufacturerId": "sample-a",
-    "name": "נייר טואלט",
+    "name": "נייר טואלט extra love",
     "categoryName": "ניקיון",
     "categorySlug": "cleaning",
-    "weight": "32 גלילים",
-    "unitsPerPack": 32,
+    "weight": "30 גלילים",
+    "unitsPerPack": 30,
     "barcode": "להדגמה",
     "catalogPage": "להדגמה",
-    "brand": "לילי",
-    "image": null,
-    "placeholder": true
+    "brand": "Molett",
+    "image": "assets/images/products/p-toilet-paper-molett.webp",
+    "placeholder": false
   },
   {
     "id": "p229",
     "manufacturerId": "sample-a",
-    "name": "נוזל כלים 24%",
+    "name": "נוזל כלים בניחוח תפוח",
     "categoryName": "ניקיון",
     "categorySlug": "cleaning",
     "weight": "750 מ״ל",
     "unitsPerPack": 1,
     "barcode": "להדגמה",
     "catalogPage": "להדגמה",
-    "brand": "סאסאטק",
-    "image": null,
-    "placeholder": true
+    "brand": "XPO",
+    "image": "assets/images/products/p-dish-xpo.webp",
+    "placeholder": false
   },
   {
     "id": "p230",
     "manufacturerId": "sample-a",
-    "name": "שקיות אשפה כחולות",
+    "name": "שקיות אשפה ג׳מבו",
     "categoryName": "ניקיון",
     "categorySlug": "cleaning",
     "weight": "75×90 ס״מ",
-    "unitsPerPack": 1,
+    "unitsPerPack": 25,
     "barcode": "להדגמה",
     "catalogPage": "להדגמה",
-    "brand": "מארז",
-    "image": null,
-    "placeholder": true
+    "brand": "נופר",
+    "image": "assets/images/products/p-trash-bags-nofar.webp",
+    "placeholder": false
   },
   {
     "id": "p231",
@@ -3326,8 +2620,8 @@ export const products = [
     "barcode": "להדגמה",
     "catalogPage": "להדגמה",
     "brand": "USB",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-usb-fan.webp",
+    "placeholder": false
   },
   {
     "id": "p232",
@@ -3461,13 +2755,13 @@ export const products = [
     "name": "אוזניות חוטיות",
     "categoryName": "אלקטרוניקה",
     "categorySlug": "gadgets",
-    "weight": "USB-C",
+    "weight": "חיבור 3.5 מ״מ",
     "unitsPerPack": 1,
     "barcode": "להדגמה",
     "catalogPage": "להדגמה",
     "brand": "JBL",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-earphones-jbl.webp",
+    "placeholder": false
   },
   {
     "id": "p242",
@@ -3480,8 +2774,8 @@ export const products = [
     "barcode": "להדגמה",
     "catalogPage": "להדגמה",
     "brand": "Connekto",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-earphones-connekto.webp",
+    "placeholder": false
   },
   {
     "id": "p243",
@@ -3503,13 +2797,13 @@ export const products = [
     "name": "מטען קיר עם כבל",
     "categoryName": "אלקטרוניקה",
     "categorySlug": "gadgets",
-    "weight": "20 וואט",
+    "weight": "100 וואט",
     "unitsPerPack": 1,
     "barcode": "להדגמה",
     "catalogPage": "להדגמה",
-    "brand": "MiraCase",
-    "image": null,
-    "placeholder": true
+    "brand": "Xiaomi",
+    "image": "assets/images/products/p-charger-xiaomi.webp",
+    "placeholder": false
   },
   {
     "id": "p245",
@@ -3559,13 +2853,13 @@ export const products = [
     "name": "טורטייה מקמח חיטה",
     "categoryName": "טורטיות",
     "categorySlug": "tortillas",
-    "weight": "700 גרם",
-    "unitsPerPack": 1,
+    "weight": "540 גרם",
+    "unitsPerPack": 12,
     "barcode": "להדגמה",
     "catalogPage": "להדגמה",
-    "brand": "מארז",
-    "image": null,
-    "placeholder": true
+    "brand": "שקדיה",
+    "image": "assets/images/products/p-tortilla-shkedia-540.webp",
+    "placeholder": false
   },
   {
     "id": "p249",
@@ -3594,6 +2888,20 @@ export const products = [
     "brand": "מארז",
     "image": null,
     "placeholder": true
+  },
+  {
+    "id": "p251",
+    "manufacturerId": "tozeret",
+    "name": "שומשום",
+    "categoryName": "דגנים וקטניות",
+    "categorySlug": "grains",
+    "weight": "1 ק״ג",
+    "unitsPerPack": 12,
+    "barcode": "להדגמה",
+    "catalogPage": "להדגמה",
+    "brand": "תוצרת",
+    "image": "assets/images/products/p-sesame-1kg.jpg",
+    "placeholder": false
   }
 ];
 

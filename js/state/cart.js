@@ -18,7 +18,7 @@ function read() {
     if (!Array.isArray(data.items)) return { items: [] };
     return {
       items: data.items
-        .filter((item) => item && item.id && item.qty > 0)
+        .filter((item) => item && item.id && item.qty > 0 && getCommerce(item.id))
         .map((item) => ({ id: item.id, qty: Number(item.qty) })),
     };
   } catch {

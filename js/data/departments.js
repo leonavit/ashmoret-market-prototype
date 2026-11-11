@@ -25,6 +25,10 @@ export function getDepartment(id) {
   return departments.find((department) => department.id === id) || null;
 }
 
+export function departmentOf(slug) {
+  return departments.find((department) => department.slugs?.includes(slug)) || null;
+}
+
 export function isElectronicsProduct(product) {
   const electronics = departments.find((department) => department.id === "electronics");
   return Boolean(product && electronics?.slugs.includes(product.categorySlug));

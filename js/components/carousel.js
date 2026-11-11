@@ -40,6 +40,8 @@ export function mountCarousels(root) {
     const sync = () => {
       prev.disabled = !carousel.canScrollPrev();
       next.disabled = !carousel.canScrollNext();
+      const selected = carousel.selectedScrollSnap();
+      carousel.slideNodes().forEach((slide, index) => slide.classList.toggle("is-center", index === selected));
     };
     prev.addEventListener("click", () => carousel.scrollPrev());
     next.addEventListener("click", () => carousel.scrollNext());
