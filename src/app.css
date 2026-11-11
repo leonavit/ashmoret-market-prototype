@@ -2223,8 +2223,7 @@
   }
 
   .listing-hero {
-    border-bottom: 1px solid var(--color-line);
-    background: var(--color-surface);
+    background: linear-gradient(to bottom, var(--color-white), #f7f6ee);
   }
 
   .listing-chips {
@@ -2769,6 +2768,37 @@
     width: 0;
     height: 0;
     pointer-events: none;
+  }
+
+  .fly-layer {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    overflow: visible;
+    border: 0;
+    background: transparent;
+    padding: 0;
+    pointer-events: none;
+  }
+
+  .fly-layer::backdrop {
+    display: none;
+  }
+
+  .fly-ghost {
+    position: fixed;
+    z-index: 95;
+    margin: 0;
+    border-radius: var(--radius-md);
+    background: var(--color-white);
+    padding: 0.25rem;
+    box-shadow: 0 10px 28px rgb(31 31 31 / 0.18);
+    object-fit: contain;
+    pointer-events: none;
+    transition: none;
+    will-change: transform;
   }
 
   .click-spark i {
@@ -5462,33 +5492,29 @@
 
     .footer-main > * {
       display: grid;
-      justify-content: center;
-      justify-items: start;
+      justify-items: center;
       padding: 1rem 1.1rem;
       border-radius: var(--radius-md);
       background: #f4f2e8;
+      text-align: center;
+    }
+
+    .footer-social {
+      justify-content: center;
+    }
+
+    .footer-lines {
+      text-align: start;
+    }
+
+    .footer-col a {
+      margin-inline: auto;
     }
   }
 
   @media (min-width: 640px) {
     .footer-main {
       grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-  }
-
-  @media (max-width: 639px) {
-    .footer-main {
-      grid-template-columns: 1fr fit-content(100%) 1fr;
-      column-gap: 0;
-    }
-
-    .footer-main > * {
-      grid-column: 1 / -1;
-      grid-template-columns: subgrid;
-    }
-
-    .footer-main > * > * {
-      grid-column: 2;
     }
   }
 
@@ -6093,13 +6119,15 @@
     inset-inline-start: calc(0.85rem + 0.5rem);
   }
 
-  .product-pop-bar .auth-close {
+  .product-pop-bar .auth-close,
+  .service-dialog .auth-close {
     background: var(--color-action);
     color: var(--color-white);
     font-size: 1.4rem;
   }
 
-  .product-pop-bar .auth-close:hover {
+  .product-pop-bar .auth-close:hover,
+  .service-dialog .auth-close:hover {
     background: var(--color-action-hover);
   }
 

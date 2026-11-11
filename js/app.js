@@ -26,7 +26,7 @@ import { mountCatalog } from "./components/catalog-rail.js";
 import { openProductPopup } from "./components/product-popup.js";
 import { mountProductGalleries, mountProductTabs } from "./components/product-view.js";
 import { announce, confirmAction } from "./components/toast.js";
-import { playHero, pulseAdd, revealLogo, rollQty, shimmerButtons, sparkAt } from "./motion.js";
+import { flyToCart, playHero, pulseAdd, revealLogo, rollQty, shimmerButtons, sparkAt } from "./motion.js";
 import { addItem, applyCoupon, cartTotals, clearCart, getCart, removeCoupon, removeItem, setQty, subscribe } from "./state/cart.js";
 import { createOrderId, saveOrder } from "./state/orders.js";
 import { getSession, subscribeSession, takeExpiredNotice } from "./state/session.js";
@@ -255,6 +255,7 @@ document.addEventListener("click", async (event) => {
     updateCartBadge(true);
     pulseAdd(add);
     sparkAt(event, add);
+    flyToCart(add);
     window.clearTimeout(Number(add.dataset.addedTimer));
     add.dataset.addedTimer = String(window.setTimeout(() => {
       add.classList.remove("is-added");

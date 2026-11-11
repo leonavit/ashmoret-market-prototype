@@ -186,8 +186,6 @@ export const prices = {
   "p229": { "price": 11.90, "compareAt": null },
   "p230": { "price": 12.90, "compareAt": null },
   "p231": { "price": 10.00, "compareAt": null },
-  "p232": { "price": 79.00, "compareAt": null },
-  "p233": { "price": 107.00, "compareAt": null },
   "p234": { "price": 148.00, "compareAt": null },
   "p235": { "price": 39.90, "compareAt": null },
   "p236": { "price": 15.00, "compareAt": null },

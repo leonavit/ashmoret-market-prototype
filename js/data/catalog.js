@@ -2624,34 +2624,6 @@ export const products = [
     "placeholder": false
   },
   {
-    "id": "p232",
-    "manufacturerId": "sample-a",
-    "name": "טוסטר לחיצה",
-    "categoryName": "מכשירי חשמל",
-    "categorySlug": "appliances",
-    "weight": "2 פרוסות",
-    "unitsPerPack": 1,
-    "barcode": "להדגמה",
-    "catalogPage": "להדגמה",
-    "brand": "Sauter",
-    "image": "assets/images/products/p-contact-grill.webp",
-    "placeholder": true
-  },
-  {
-    "id": "p233",
-    "manufacturerId": "sample-a",
-    "name": "טוסטר לחיצה",
-    "categoryName": "מכשירי חשמל",
-    "categorySlug": "appliances",
-    "weight": "2 פרוסות",
-    "unitsPerPack": 1,
-    "barcode": "להדגמה",
-    "catalogPage": "להדגמה",
-    "brand": "Morphy Richards",
-    "image": "assets/images/products/p-contact-grill.webp",
-    "placeholder": true
-  },
-  {
     "id": "p234",
     "manufacturerId": "sample-a",
     "name": "טוסטר לחיצה עם פלטות",

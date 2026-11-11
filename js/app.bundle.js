@@ -3482,7 +3482,7 @@
       ]
     },
     "rules-social": {
-      title: "\u05EA\u05E7\u05E0\u05D5\u05DF \u05E4\u05E2\u05D9\u05DC\u05D5\u05EA \u05E8\u05E9\u05EA\u05D5\u05EA \u05D7\u05D1\u05E8\u05EA\u05D9\u05D5\u05EA",
+      title: "\u05EA\u05E7\u05E0\u05D5\u05DF \u05E4\u05E2\u05D9\u05DC\u05D5\u05EA \u05E1\u05D5\u05E9\u05D9\u05D0\u05DC",
       lead: "\u05E2\u05DE\u05D5\u05D3 \u05EA\u05D5\u05DB\u05DF \u05DC\u05D4\u05D3\u05D2\u05DE\u05D4. \u05D0\u05D9\u05E0\u05D5 \u05EA\u05E7\u05E0\u05D5\u05DF \u05DE\u05D7\u05D9\u05D9\u05D1.",
       body: [
         "\u05D1\u05D4\u05D3\u05D2\u05DE\u05D4 \u05D0\u05D9\u05DF \u05E4\u05E2\u05D9\u05DC\u05D5\u05EA \u05D0\u05DE\u05D9\u05EA\u05D9\u05EA \u05D1\u05E8\u05E9\u05EA\u05D5\u05EA \u05D4\u05D7\u05D1\u05E8\u05EA\u05D9\u05D5\u05EA.",
@@ -6192,34 +6192,6 @@
       "placeholder": false
     },
     {
-      "id": "p232",
-      "manufacturerId": "sample-a",
-      "name": "\u05D8\u05D5\u05E1\u05D8\u05E8 \u05DC\u05D7\u05D9\u05E6\u05D4",
-      "categoryName": "\u05DE\u05DB\u05E9\u05D9\u05E8\u05D9 \u05D7\u05E9\u05DE\u05DC",
-      "categorySlug": "appliances",
-      "weight": "2 \u05E4\u05E8\u05D5\u05E1\u05D5\u05EA",
-      "unitsPerPack": 1,
-      "barcode": "\u05DC\u05D4\u05D3\u05D2\u05DE\u05D4",
-      "catalogPage": "\u05DC\u05D4\u05D3\u05D2\u05DE\u05D4",
-      "brand": "Sauter",
-      "image": "assets/images/products/p-contact-grill.webp",
-      "placeholder": true
-    },
-    {
-      "id": "p233",
-      "manufacturerId": "sample-a",
-      "name": "\u05D8\u05D5\u05E1\u05D8\u05E8 \u05DC\u05D7\u05D9\u05E6\u05D4",
-      "categoryName": "\u05DE\u05DB\u05E9\u05D9\u05E8\u05D9 \u05D7\u05E9\u05DE\u05DC",
-      "categorySlug": "appliances",
-      "weight": "2 \u05E4\u05E8\u05D5\u05E1\u05D5\u05EA",
-      "unitsPerPack": 1,
-      "barcode": "\u05DC\u05D4\u05D3\u05D2\u05DE\u05D4",
-      "catalogPage": "\u05DC\u05D4\u05D3\u05D2\u05DE\u05D4",
-      "brand": "Morphy Richards",
-      "image": "assets/images/products/p-contact-grill.webp",
-      "placeholder": true
-    },
-    {
       "id": "p234",
       "manufacturerId": "sample-a",
       "name": "\u05D8\u05D5\u05E1\u05D8\u05E8 \u05DC\u05D7\u05D9\u05E6\u05D4 \u05E2\u05DD \u05E4\u05DC\u05D8\u05D5\u05EA",
@@ -6707,8 +6679,6 @@
     "p229": { "price": 11.9, "compareAt": null },
     "p230": { "price": 12.9, "compareAt": null },
     "p231": { "price": 10, "compareAt": null },
-    "p232": { "price": 79, "compareAt": null },
-    "p233": { "price": 107, "compareAt": null },
     "p234": { "price": 148, "compareAt": null },
     "p235": { "price": 39.9, "compareAt": null },
     "p236": { "price": 15, "compareAt": null },
@@ -11128,6 +11098,61 @@
     }
     window.setTimeout(() => burst.remove(), 600);
   }
+  function visibleCartIcon() {
+    const icon3 = document.querySelector(".cart-dock-icon");
+    const box = icon3?.getBoundingClientRect();
+    return box && box.width && box.bottom > 0 && box.top < window.innerHeight ? icon3 : null;
+  }
+  function flyLayer(button) {
+    const dialog = button.closest("dialog[open]");
+    if (!dialog) return document.body;
+    if (typeof HTMLElement.prototype.showPopover !== "function") return dialog;
+    const layer = document.createElement("div");
+    layer.className = "fly-layer";
+    layer.popover = "manual";
+    document.body.appendChild(layer);
+    layer.showPopover();
+    return layer;
+  }
+  function flyToCart(button) {
+    const gsap = window.gsap;
+    if (!gsap || !button || prefersReducedMotion()) return;
+    const source = button.closest(".card, .deal-card, .product-pop, .product-page")?.querySelector("img[data-photo]");
+    const target = visibleCartIcon();
+    if (!source || !target) return;
+    const from = source.getBoundingClientRect();
+    const to = target.getBoundingClientRect();
+    if (!from.width || !from.height) return;
+    const size = Math.min(from.width, from.height);
+    const ghost = source.cloneNode();
+    ghost.removeAttribute("loading");
+    ghost.removeAttribute("data-photo");
+    ghost.className = "fly-ghost";
+    ghost.setAttribute("aria-hidden", "true");
+    Object.assign(ghost.style, {
+      left: `${from.left + (from.width - size) / 2}px`,
+      top: `${from.top + (from.height - size) / 2}px`,
+      width: `${size}px`,
+      height: `${size}px`,
+      transition: "none"
+    });
+    const layer = flyLayer(button);
+    layer.appendChild(ghost);
+    const placed = ghost.getBoundingClientRect();
+    ghost.style.left = `${2 * parseFloat(ghost.style.left) - placed.left}px`;
+    ghost.style.top = `${2 * parseFloat(ghost.style.top) - placed.top}px`;
+    const dx = to.left + to.width / 2 - (from.left + from.width / 2);
+    const dy = to.top + to.height / 2 - (from.top + from.height / 2);
+    const end = Math.max(0.08, to.width * 0.9 / size);
+    gsap.timeline({
+      onComplete: () => {
+        ghost.remove();
+        if (layer.matches(".fly-layer")) layer.remove();
+        const mark2 = visibleCartIcon()?.closest(".cart-dock-mark");
+        if (mark2) gsap.fromTo(mark2, { scale: 1 }, { scale: 1.3, duration: 0.14, ease: "power2.out", yoyo: true, repeat: 1, transformOrigin: "50% 50%", clearProps: "transform" });
+      }
+    }).to(ghost, { scale: 1.12, duration: 0.18, ease: "power2.out" }).to(ghost, { x: dx, duration: 0.75, ease: "power1.inOut" }, ">").to(ghost, { y: dy, duration: 0.75, ease: "power3.in" }, "<").to(ghost, { scale: end, opacity: 0.85, duration: 0.75, ease: "power2.in" }, "<");
+  }
   function pulseAdd(button) {
     const gsap = window.gsap;
     if (!gsap || !button || prefersReducedMotion()) return;
@@ -11336,6 +11361,7 @@
       updateCartBadge(true);
       pulseAdd(add);
       sparkAt(event, add);
+      flyToCart(add);
       window.clearTimeout(Number(add.dataset.addedTimer));
       add.dataset.addedTimer = String(window.setTimeout(() => {
         add.classList.remove("is-added");
