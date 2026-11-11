@@ -32,6 +32,7 @@ import { createOrderId, saveOrder } from "./state/orders.js";
 import { getSession, subscribeSession, takeExpiredNotice } from "./state/session.js";
 import { getCommerce } from "./data/commerce.js";
 import { getProduct } from "./data/catalog.js";
+import { prefersReducedMotion } from "./lib/format.js";
 import { cartCheck, cartTitle, inCart } from "./components/product-card.js";
 const app = document.querySelector("#app");
 let checkoutDraft = null;
@@ -58,6 +59,18 @@ function centerActiveChip() {
   const chipBox = chip.getBoundingClientRect();
   const listBox = list.getBoundingClientRect();
   list.scrollLeft += chipBox.left + chipBox.width / 2 - (listBox.left + listBox.width / 2);
+}
+
+let accountJump = false;
+
+function jumpToAccountMain() {
+  accountJump = false;
+  const main = app.querySelector(".account-main");
+  const side = app.querySelector(".account-side");
+  if (!main || !side || main.getBoundingClientRect().top < side.getBoundingClientRect().bottom) return;
+  const header = document.querySelector(".site-header")?.offsetHeight || 0;
+  const top = main.getBoundingClientRect().top + window.scrollY - header - 12;
+  window.scrollTo({ top, behavior: prefersReducedMotion() ? "instant" : "smooth" });
 }
 
 function navigate(hash) {
@@ -126,6 +139,7 @@ function render({ focus = true, scrollTop = false } = {}) {
   updateCartDock(route.name);
   playHero(heroOnTop() ? document.getElementById("hero-top") : app);
   if (scrollTop) window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+  if (accountJump) jumpToAccountMain();
   const input = document.getElementById("search-input");
   if (route.name === "search" && document.activeElement !== input) input.value = route.query.q || "";
   if (!focus || document.getElementById("auth-dialog")?.open) return;
@@ -179,6 +193,12 @@ function titleFor(route) {
 }
 
 document.addEventListener("click", async (event) => {
+  const accountLink = event.target.closest(".account-menu a[href]");
+  if (accountLink) {
+    accountJump = true;
+    if (accountLink.getAttribute("href") === location.hash) jumpToAccountMain();
+  }
+
   const popLink = event.target.closest("[data-product-pop]");
   if (popLink && event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey) {
     event.preventDefault();
