@@ -7,7 +7,7 @@ import { photoImg, productPhoto } from "../components/product-photo.js";
 const tagIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z"></path><circle cx="7.5" cy="7.5" r="1.5"></circle></svg>`;
 
 export function savedNote(saved) {
-  const icon = tagIcon.replace("<svg ", `<svg class="cart-saved-icon" data-lottie="coins-jump" data-lottie-play="loop" `);
+  const icon = tagIcon.replace("<svg ", `<svg class="cart-saved-icon" data-lottie="calculator-coins" data-lottie-play="loop" `);
   return saved > 0 ? `<p class="cart-saved">${icon}<span>חסכת <strong>${money(saved)}</strong> בקנייה הזו</span></p>` : "";
 }
 

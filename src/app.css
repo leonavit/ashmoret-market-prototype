@@ -558,6 +558,12 @@
     .buy-add-long {
       display: none;
     }
+
+    @container (max-width: 170px) {
+      .buy-add-in-long {
+        display: none;
+      }
+    }
   }
 
   .buy-add:has(.buy-add-check) {

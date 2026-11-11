@@ -1,7 +1,7 @@
 import lottie from "lottie-web/build/player/lottie_light.min.js";
 import truckDelivery from "../../assets/animations/truck-delivery.json";
 import customerService from "../../assets/animations/customer-service.json";
-import coinsJump from "../../assets/animations/coins-jump.json";
+import calculatorCoins from "../../assets/animations/calculator-coins.json";
 import boxMagnifier from "../../assets/animations/box-magnifier.json";
 import boxDamage from "../../assets/animations/box-damage.json";
 import boxRecycle from "../../assets/animations/box-recycle.json";
@@ -11,7 +11,7 @@ import checkCircle from "../../assets/animations/check-circle.json";
 const animations = {
   "truck-delivery": truckDelivery,
   "customer-service": customerService,
-  "coins-jump": coinsJump,
+  "calculator-coins": calculatorCoins,
   "box-magnifier": boxMagnifier,
   "box-damage": boxDamage,
   "box-recycle": boxRecycle,
