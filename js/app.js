@@ -32,9 +32,33 @@ import { createOrderId, saveOrder } from "./state/orders.js";
 import { getSession, subscribeSession, takeExpiredNotice } from "./state/session.js";
 import { getCommerce } from "./data/commerce.js";
 import { getProduct } from "./data/catalog.js";
+import { cartCheck, cartTitle, inCart } from "./components/product-card.js";
 const app = document.querySelector("#app");
 let checkoutDraft = null;
 let contactDraft = null;
+
+function syncCartChecks() {
+  document.querySelectorAll(".buy-add[data-add]").forEach((button) => {
+    const icon = button.querySelector(".buy-add-check");
+    if (!inCart(button.dataset.add)) {
+      icon?.remove();
+      button.removeAttribute("title");
+    } else if (!icon && !button.classList.contains("is-added")) {
+      button.insertAdjacentHTML("afterbegin", cartCheck);
+      button.title = cartTitle;
+      mountLottieIcons(button);
+    }
+  });
+}
+
+function centerActiveChip() {
+  const chip = app.querySelector(".listing-chip[aria-current]");
+  const list = chip?.closest(".listing-chips");
+  if (!list || list.scrollWidth <= list.clientWidth) return;
+  const chipBox = chip.getBoundingClientRect();
+  const listBox = list.getBoundingClientRect();
+  list.scrollLeft += chipBox.left + chipBox.width / 2 - (listBox.left + listBox.width / 2);
+}
 
 function navigate(hash) {
   if (location.hash === hash) render();
@@ -97,6 +121,7 @@ function render({ focus = true, scrollTop = false } = {}) {
   mountCatalog(app);
   mountProductGalleries(app);
   mountProductTabs(app);
+  centerActiveChip();
   updateAccountSlot();
   updateCartDock(route.name);
   playHero(heroOnTop() ? document.getElementById("hero-top") : app);
@@ -213,20 +238,16 @@ document.addEventListener("click", async (event) => {
     if (!product || !getCommerce(product.id)) return;
     const input = add.closest("[data-buy]")?.querySelector("[data-qty-input]");
     const qty = Math.max(1, Math.min(99, Number(input?.value || 1)));
+    add.classList.add("is-added");
     addItem(product.id, qty);
     updateCartBadge(true);
     pulseAdd(add);
     sparkAt(event, add);
-    if (add.dataset.addedLabel) {
-      add.dataset.label ??= add.textContent;
-      add.textContent = add.dataset.addedLabel;
-    }
-    add.classList.add("is-added");
     window.clearTimeout(Number(add.dataset.addedTimer));
     add.dataset.addedTimer = String(window.setTimeout(() => {
-      if (add.dataset.label) add.textContent = add.dataset.label;
       add.classList.remove("is-added");
-    }, 2000));
+      syncCartChecks();
+    }, 1000));
     announce(`${product.name} נוסף לסל`);
   }
 });
@@ -340,6 +361,7 @@ subscribeSession(() => updateAccountSlot());
 subscribe(() => {
   updateCartBadge(true);
   updateCartDock();
+  syncCartChecks();
   const route = parseHash();
   if (route.name === "cart") render({ focus: false });
 });

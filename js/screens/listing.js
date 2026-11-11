@@ -18,7 +18,7 @@ function crumbs(items) {
 function departmentChips(department, activeSlug = "") {
   const sections = (department.slugs || []).map((slug) => getCategory(slug)).filter(Boolean);
   if (sections.length < 2) return "";
-  return `<ul class="mt-5 flex flex-wrap gap-2">${sections.map((section) => {
+  return `<ul class="listing-chips mt-5">${sections.map((section) => {
     const current = section.slug === activeSlug ? ' aria-current="page"' : "";
     return `<li><a class="listing-chip" href="#/c/${esc(section.slug)}"${current}>${esc(section.name)}</a></li>`;
   }).join("")}</ul>`;

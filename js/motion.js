@@ -17,19 +17,17 @@ export function revealLogo() {
     root.classList.remove("is-logo-curtain");
     return;
   }
-  const curtains = ["is-red", "is-ink"].map((tone) => {
-    const curtain = document.createElement("span");
-    curtain.className = `logo-curtain ${tone}`;
-    curtain.setAttribute("aria-hidden", "true");
-    link.append(curtain);
-    return curtain;
-  });
-  gsap.timeline({ delay: 0.15, onComplete: () => curtains.forEach((curtain) => curtain.remove()) })
-    .fromTo(curtains, { scaleX: 0, transformOrigin: "100% 50%" }, { scaleX: 1, duration: 0.45, ease: "power3.inOut", stagger: 0.08 })
-    .add(() => root.classList.remove("is-logo-curtain"))
-    .set(curtains, { transformOrigin: "0% 50%" })
-    .to(curtains, { scaleX: 0, duration: 0.55, ease: "power3.inOut", stagger: { each: 0.08, from: "end" } })
-    .fromTo(img, { x: 14 }, { x: 0, duration: 0.7, ease: "power3.out", clearProps: "transform" }, "<");
+  const curtain = document.createElement("span");
+  curtain.className = "logo-curtain";
+  curtain.setAttribute("aria-hidden", "true");
+  curtain.innerHTML = `<span class="logo-curtain-half is-left"></span><span class="logo-curtain-half is-right"></span>`;
+  link.append(curtain);
+  gsap.set(img, { opacity: 0 });
+  root.classList.remove("is-logo-curtain");
+  gsap.timeline({ delay: 0.15, onComplete: () => curtain.remove() })
+    .to(curtain.querySelector(".is-left"), { xPercent: -100, duration: 1, ease: "power3.inOut" }, 0)
+    .to(curtain.querySelector(".is-right"), { xPercent: 100, duration: 1, ease: "power3.inOut" }, 0)
+    .fromTo(img, { scale: 0.5, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.6, ease: "back.out(1.7)", clearProps: "opacity,transform" }, 0.5);
 }
 
 let shimmers = [];

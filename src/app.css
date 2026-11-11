@@ -540,6 +540,31 @@
     background: #1f7a3d;
   }
 
+  .buy-add:has(.buy-add-check) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.3rem;
+    padding-inline-start: 0.6rem;
+  }
+
+  .buy-add-check {
+    display: block;
+    width: 1.25rem;
+    height: 1.25rem;
+    flex: 0 0 auto;
+    margin-block: -0.25rem;
+  }
+
+  .buy-add-check svg {
+    width: 100% !important;
+    height: 100% !important;
+  }
+
+  .buy-add-check svg path {
+    fill: #6fdc8c;
+  }
+
   @container (max-width: 230px) {
     .buy-add {
       padding-inline: 0.75rem;
@@ -2154,6 +2179,37 @@
     background: var(--color-surface);
   }
 
+  .listing-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  @media (max-width: 767px) {
+    .listing-chips {
+      flex-wrap: nowrap;
+      margin-bottom: -6px;
+      overflow-x: auto;
+      overscroll-behavior-x: contain;
+      padding-bottom: 6px;
+      padding-inline-end: 2.5rem;
+      scrollbar-width: none;
+      mask-image: linear-gradient(to left, #000 calc(100% - 2.5rem), transparent);
+    }
+
+    .listing-chips::-webkit-scrollbar {
+      display: none;
+    }
+
+    .listing-chips li {
+      flex: 0 0 auto;
+    }
+
+    .listing-chip {
+      white-space: nowrap;
+    }
+  }
+
   .listing-chip {
     display: inline-flex;
     min-height: 2.5rem;
@@ -3543,17 +3599,24 @@
   .logo-curtain {
     position: absolute;
     inset: 0;
+    overflow: hidden;
     border-radius: var(--radius-md);
     pointer-events: none;
-    transform: scaleX(0);
   }
 
-  .logo-curtain.is-red {
-    background: #c9230d;
+  .logo-curtain-half {
+    position: absolute;
+    inset-block: 0;
+    width: 50.5%;
+    background: #f7f6ee;
   }
 
-  .logo-curtain.is-ink {
-    background: var(--color-ink);
+  .logo-curtain-half.is-left {
+    left: 0;
+  }
+
+  .logo-curtain-half.is-right {
+    right: 0;
   }
 
   html.is-logo-curtain .header-logo img {
@@ -6024,6 +6087,11 @@
     min-height: var(--control-h);
     font-size: 1rem;
     transition: background-color 0.2s ease;
+  }
+
+  .pop-buy .pop-add .buy-add-check {
+    width: 1.5rem;
+    height: 1.5rem;
   }
 
   .pop-buy .qty-step {

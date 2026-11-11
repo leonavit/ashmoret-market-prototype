@@ -2,6 +2,14 @@ import { isElectronicsProduct } from "../data/departments.js";
 import { getCommerce, saleLabel } from "../data/commerce.js";
 import { esc, money } from "../lib/format.js";
 import { photoImg, productPhoto } from "./product-photo.js";
+import { getCart } from "../state/cart.js";
+
+export const cartTitle = "נמצא בסל";
+export const cartCheck = `<span class="buy-add-check" data-lottie="check-circle" data-lottie-play="once" aria-hidden="true"></span>`;
+
+export function inCart(id) {
+  return getCart().items.some((item) => item.id === id);
+}
 
 function mediaClass(base, product) {
   return productPhoto(product) ? `${base} has-photo` : base;
@@ -33,7 +41,7 @@ export function qtyStep() {
 export function buyRow(id, { flat = false } = {}) {
   return `<div class="buy-row${flat ? " is-flat" : ""}" data-buy>
     ${qtyStep()}
-    <button type="button" class="buy-add" data-add="${esc(id)}">הוספה</button>
+    <button type="button" class="buy-add" data-add="${esc(id)}"${inCart(id) ? ` title="${cartTitle}"` : ""}>${inCart(id) ? cartCheck : ""}הוספה</button>
   </div>`;
 }
 

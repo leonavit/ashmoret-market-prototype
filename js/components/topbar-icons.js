@@ -6,6 +6,7 @@ import boxMagnifier from "../../assets/animations/box-magnifier.json";
 import boxDamage from "../../assets/animations/box-damage.json";
 import boxRecycle from "../../assets/animations/box-recycle.json";
 import chatQuestion from "../../assets/animations/chat-question.json";
+import checkCircle from "../../assets/animations/check-circle.json";
 
 const animations = {
   "truck-delivery": truckDelivery,
@@ -15,6 +16,7 @@ const animations = {
   "box-damage": boxDamage,
   "box-recycle": boxRecycle,
   "chat-question": chatQuestion,
+  "check-circle": checkCircle,
 };
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 let live = [];
@@ -23,6 +25,7 @@ function mountIcon(icon) {
   const animationData = animations[icon.dataset.lottie];
   if (!animationData) return;
   const loop = icon.dataset.lottiePlay === "loop";
+  const once = icon.dataset.lottiePlay === "once";
   const box = document.createElement("span");
   box.className = `${icon.getAttribute("class")} is-lottie`;
   box.setAttribute("aria-hidden", "true");
@@ -31,11 +34,11 @@ function mountIcon(icon) {
     container: box,
     renderer: "svg",
     loop,
-    autoplay: loop && !reduceMotion.matches,
+    autoplay: (loop || once) && !reduceMotion.matches,
     animationData: structuredClone(animationData),
   });
   live.push(animation);
-  if (loop) return;
+  if (loop || once) return;
   const play = () => {
     if (!reduceMotion.matches && animation.isPaused) animation.goToAndPlay(0, true);
   };

@@ -2,6 +2,7 @@ import { productsByCategory } from "../data/catalog.js";
 import { shelfCard } from "./product-card.js";
 import { carousel, mountCarousels } from "./carousel.js";
 import { esc } from "../lib/format.js";
+import { mountLottieIcons } from "./topbar-icons.js";
 import { prefersReducedMotion } from "../lib/format.js";
 
 export const catalogTabs = [
@@ -188,6 +189,7 @@ function bindCatalogRail(section) {
     selectTab(tabs, button, panel, focus);
     if (!changed) return;
     track.innerHTML = slidesHtml(button.dataset.catalogTab);
+    mountLottieIcons(track);
     start();
   };
   tabs.forEach((button) => button.addEventListener("click", () => activate(button, false)));
@@ -206,6 +208,7 @@ function bindCatalogGrid(grid) {
     if (!changed) return;
     const { catalogLayout: layout, catalogLabel: label } = grid.dataset;
     panel.innerHTML = panelHtml(layout, button.dataset.catalogGridTab, label);
+    mountLottieIcons(panel);
     if (layout === "rail") mountCarousels(panel);
     showCatalogSub(grid, button);
   };
