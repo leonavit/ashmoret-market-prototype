@@ -536,8 +536,13 @@
   }
 
   .buy-add.is-added,
-  .buy-add.is-added:hover {
-    background: #1f7a3d;
+  .buy-add.is-added:hover,
+  .buy-add.is-in-cart {
+    background: #5cb94f;
+  }
+
+  .buy-add.is-in-cart:hover {
+    background: color-mix(in srgb, #5cb94f 88%, #000);
   }
 
   .buy-add:has(.buy-add-check) {
@@ -559,10 +564,6 @@
   .buy-add-check svg {
     width: 100% !important;
     height: 100% !important;
-  }
-
-  .buy-add-check svg path {
-    fill: #6fdc8c;
   }
 
   @container (max-width: 230px) {

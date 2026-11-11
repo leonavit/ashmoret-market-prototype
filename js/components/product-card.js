@@ -4,11 +4,31 @@ import { esc, money } from "../lib/format.js";
 import { photoImg, productPhoto } from "./product-photo.js";
 import { getCart } from "../state/cart.js";
 
-export const cartTitle = "נמצא בסל";
-export const cartCheck = `<span class="buy-add-check" data-lottie="check-circle" data-lottie-play="once" aria-hidden="true"></span>`;
+const cartTitle = "נמצא בסל";
+const cartLabel = "קיים בסל";
+const cartCheck = `<span class="buy-add-check" data-lottie="check-circle" data-lottie-play="once" aria-hidden="true"></span>`;
 
-export function inCart(id) {
+function inCart(id) {
   return getCart().items.some((item) => item.id === id);
+}
+
+export function addButton(id, label, extraClass = "") {
+  const added = inCart(id);
+  return `<button type="button" class="buy-add${extraClass ? ` ${extraClass}` : ""}${added ? " is-in-cart" : ""}" data-add="${esc(id)}" data-label="${esc(label)}"${added ? ` title="${cartTitle}"` : ""}>${added ? `${cartCheck}${cartLabel}` : esc(label)}</button>`;
+}
+
+export function paintAddButton(button) {
+  const added = inCart(button.dataset.add);
+  if (added === button.classList.contains("is-in-cart")) return false;
+  button.classList.toggle("is-in-cart", added);
+  if (added) {
+    button.innerHTML = `${cartCheck}${cartLabel}`;
+    button.title = cartTitle;
+  } else {
+    button.textContent = button.dataset.label;
+    button.removeAttribute("title");
+  }
+  return added;
 }
 
 function mediaClass(base, product) {
@@ -41,7 +61,7 @@ export function qtyStep() {
 export function buyRow(id, { flat = false } = {}) {
   return `<div class="buy-row${flat ? " is-flat" : ""}" data-buy>
     ${qtyStep()}
-    <button type="button" class="buy-add" data-add="${esc(id)}"${inCart(id) ? ` title="${cartTitle}"` : ""}>${inCart(id) ? cartCheck : ""}הוספה</button>
+    ${addButton(id, "הוספה")}
   </div>`;
 }
 

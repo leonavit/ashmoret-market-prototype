@@ -2,7 +2,7 @@ import { getProduct } from "../data/catalog.js";
 import { getCommerce, saleLabel } from "../data/commerce.js";
 import { isElectronicsProduct } from "../data/departments.js";
 import { mountProductGalleries, productFolds, productGallery } from "./product-view.js";
-import { cartCheck, cartTitle, inCart, qtyStep } from "./product-card.js";
+import { addButton, qtyStep } from "./product-card.js";
 import { mountLottieIcons } from "./topbar-icons.js";
 import { kosherMark } from "./kosher-mark.js";
 import { esc, money } from "../lib/format.js";
@@ -43,7 +43,7 @@ function markup(product) {
           ${kosherMark(product)}
         </div>
         <div class="pop-buy" data-buy>
-          <button type="button" class="buy-add pop-add" data-add="${esc(product.id)}"${inCart(product.id) ? ` title="${cartTitle}"` : ""}>${inCart(product.id) ? cartCheck : ""}הוספה לסל</button>
+          ${addButton(product.id, "הוספה לסל", "pop-add")}
           ${qtyStep()}
         </div>
         ${productFolds(product, { openDescription: false, shipping: false })}

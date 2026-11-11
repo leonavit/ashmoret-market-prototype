@@ -33,22 +33,14 @@ import { getSession, subscribeSession, takeExpiredNotice } from "./state/session
 import { getCommerce } from "./data/commerce.js";
 import { getProduct } from "./data/catalog.js";
 import { prefersReducedMotion } from "./lib/format.js";
-import { cartCheck, cartTitle, inCart } from "./components/product-card.js";
+import { paintAddButton } from "./components/product-card.js";
 const app = document.querySelector("#app");
 let checkoutDraft = null;
 let contactDraft = null;
 
 function syncCartChecks() {
-  document.querySelectorAll(".buy-add[data-add]").forEach((button) => {
-    const icon = button.querySelector(".buy-add-check");
-    if (!inCart(button.dataset.add)) {
-      icon?.remove();
-      button.removeAttribute("title");
-    } else if (!icon && !button.classList.contains("is-added")) {
-      button.insertAdjacentHTML("afterbegin", cartCheck);
-      button.title = cartTitle;
-      mountLottieIcons(button);
-    }
+  document.querySelectorAll(".buy-add[data-add]:not(.is-added)").forEach((button) => {
+    if (paintAddButton(button)) mountLottieIcons(button);
   });
 }
 

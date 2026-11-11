@@ -59,9 +59,9 @@ export function renderCheckout(errors = {}, values = {}) {
     <input name="${name}" type="${type}" autocomplete="${extra}" value="${esc(values[name] || "")}" aria-invalid="${errors[name] ? "true" : "false"}" ${errors[name] ? `aria-describedby="${name}-error"` : ""}>
     ${errors[name] ? `<span id="${name}-error" class="field-error">${esc(errors[name])}</span>` : ""}
   </label>`;
-  const payField = (name, label, attrs, keep = false) => `<label class="field">
+  const payField = (name, label, attrs) => `<label class="field">
     <span class="text-sm font-semibold">${label}</span>
-    <input name="${name}" ${attrs} dir="ltr" value="${keep ? esc(values[name] || "") : ""}" aria-invalid="${errors[name] ? "true" : "false"}" ${errors[name] ? `aria-describedby="${name}-error"` : ""}>
+    <input name="${name}" ${attrs} dir="ltr" value="${esc(values[name] || "")}" aria-invalid="${errors[name] ? "true" : "false"}" ${errors[name] ? `aria-describedby="${name}-error"` : ""}>
     ${errors[name] ? `<span id="${name}-error" class="field-error">${esc(errors[name])}</span>` : ""}
   </label>`;
 
@@ -102,12 +102,12 @@ export function renderCheckout(errors = {}, values = {}) {
               <input type="hidden" name="cardProgram" value="${program}" data-pay-program>
               <span class="proto-label" aria-hidden="true">טופס Hyp · הדגמה</span>
               <div class="form-row">
-                ${payField("ccName", "שם בעל הכרטיס", `type="text" autocomplete="cc-name"`, true)}
+                ${payField("ccName", "שם בעל הכרטיס", `type="text" autocomplete="cc-name"`)}
                 ${payField("ccId", "תעודת זהות של בעל הכרטיס", `type="text" inputmode="numeric" autocomplete="off" maxlength="9"`)}
               </div>
               ${payField("ccNumber", "מספר כרטיס", `type="text" inputmode="numeric" autocomplete="cc-number" maxlength="23" placeholder="0000 0000 0000 0000"`)}
               <div class="form-row">
-                ${payField("ccExp", "תוקף", `type="text" inputmode="numeric" autocomplete="cc-exp" maxlength="5" placeholder="MM/YY"`, true)}
+                ${payField("ccExp", "תוקף", `type="text" inputmode="numeric" autocomplete="cc-exp" maxlength="5" placeholder="MM/YY"`)}
                 ${payField("ccCvv", "CVV", `type="password" inputmode="numeric" autocomplete="cc-csc" maxlength="4"`)}
               </div>
             </div>
