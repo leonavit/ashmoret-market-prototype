@@ -2959,8 +2959,8 @@
 
     .cart-dock-badge {
       z-index: 4;
-      top: -0.95rem;
-      inset-inline-end: -1.1rem;
+      top: -0.79rem;
+      inset-inline-end: -0.94rem;
       box-shadow: 0 0 0 2px var(--color-white);
       pointer-events: none;
     }
@@ -2972,8 +2972,8 @@
     }
 
     .cart-dock-icon {
-      width: 1.3rem;
-      height: 1.3rem;
+      width: 1.625rem;
+      height: 1.625rem;
     }
 
     .cart-dock.is-open .cart-dock-body {
@@ -4662,6 +4662,7 @@
 
   .service-dialog {
     width: min(34rem, calc(100% - 1.5rem));
+    border: 1px dashed var(--color-ink);
   }
 
   .news-dialog {
