@@ -6763,7 +6763,7 @@
   function photoImg(product, { alt = "", eager = false } = {}) {
     const src = productPhoto(product);
     if (!src) return "";
-    return `<img src="${esc(src)}" alt="${esc(alt)}" ${eager ? "" : `loading="lazy" `}decoding="async">`;
+    return `<span class="photo-skeleton" aria-hidden="true"></span><img data-photo src="${esc(src)}" alt="${esc(alt)}" ${eager ? "" : `loading="lazy" `}decoding="async">`;
   }
 
   // js/components/product-card.js
@@ -10905,6 +10905,54 @@
     document.body.appendChild(notice);
   }
 
+  // js/components/photo-reveal.js
+  function skeletonOf(img) {
+    const prev = img.previousElementSibling;
+    return prev?.matches(".photo-skeleton") ? prev : null;
+  }
+  function settle(img) {
+    img.classList.add("is-loaded");
+    skeletonOf(img)?.remove();
+  }
+  function reveal(img) {
+    if (img.classList.contains("is-loaded")) return;
+    const skeleton = skeletonOf(img);
+    const gsap = window.gsap;
+    if (!gsap || prefersReducedMotion() || !skeleton) {
+      settle(img);
+      return;
+    }
+    img.classList.add("is-loaded");
+    gsap.timeline({ onComplete: () => skeleton.remove() }).to(skeleton, { opacity: 0, scale: 1.04, duration: 0.35, ease: "power1.out" }, 0).fromTo(
+      img,
+      { opacity: 0, scale: 0.94, filter: "blur(8px)" },
+      { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.6, ease: "power3.out", clearProps: "opacity,transform,filter" },
+      0.05
+    );
+  }
+  function settleCached(img) {
+    if (!img.classList.contains("is-loaded") && img.complete && img.naturalWidth) settle(img);
+  }
+  function scan(root) {
+    if (root.matches?.("img[data-photo]")) settleCached(root);
+    root.querySelectorAll?.("img[data-photo]").forEach(settleCached);
+  }
+  function bindPhotoReveal() {
+    const onLoad = (event) => {
+      if (event.target instanceof HTMLImageElement && event.target.matches("[data-photo]")) reveal(event.target);
+    };
+    document.addEventListener("load", onLoad, true);
+    document.addEventListener("error", (event) => {
+      if (event.target instanceof HTMLImageElement && event.target.matches("[data-photo]")) settle(event.target);
+    }, true);
+    new MutationObserver((records) => {
+      records.forEach((record) => record.addedNodes.forEach((node) => {
+        if (node.nodeType === 1) scan(node);
+      }));
+    }).observe(document.body, { childList: true, subtree: true });
+    scan(document);
+  }
+
   // js/components/product-popup.js
   function ensureDialog4() {
     let dialog = document.getElementById("product-pop");
@@ -10962,6 +11010,25 @@
     const copy = root.querySelector("[data-hero-copy]");
     if (!gsap || !copy || prefersReducedMotion()) return;
     gsap.fromTo(copy, { y: 22, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.7, ease: "power2.out" });
+  }
+  function revealLogo() {
+    const root = document.documentElement;
+    if (!root.classList.contains("is-logo-curtain")) return;
+    const gsap = window.gsap;
+    const link = document.querySelector(".header-logo");
+    const img = link?.querySelector("img");
+    if (!gsap || !img || prefersReducedMotion()) {
+      root.classList.remove("is-logo-curtain");
+      return;
+    }
+    const curtains = ["is-red", "is-ink"].map((tone) => {
+      const curtain = document.createElement("span");
+      curtain.className = `logo-curtain ${tone}`;
+      curtain.setAttribute("aria-hidden", "true");
+      link.append(curtain);
+      return curtain;
+    });
+    gsap.timeline({ delay: 0.15, onComplete: () => curtains.forEach((curtain) => curtain.remove()) }).fromTo(curtains, { scaleX: 0, transformOrigin: "100% 50%" }, { scaleX: 1, duration: 0.45, ease: "power3.inOut", stagger: 0.08 }).add(() => root.classList.remove("is-logo-curtain")).set(curtains, { transformOrigin: "0% 50%" }).to(curtains, { scaleX: 0, duration: 0.55, ease: "power3.inOut", stagger: { each: 0.08, from: "end" } }).fromTo(img, { x: 14 }, { x: 0, duration: 0.7, ease: "power3.out", clearProps: "transform" }, "<");
   }
   var shimmers = [];
   function shimmerButtons(root) {
@@ -11292,6 +11359,7 @@
     navigate2(`#/order/${order.id}`);
   });
   bindShell(navigate2);
+  bindPhotoReveal();
   bindThemeOptions({
     heroChange: () => render({ focus: false }),
     suppliersChange: () => {
@@ -11317,4 +11385,5 @@
   window.addEventListener("hashchange", () => render({ scrollTop: true }));
   if ("scrollRestoration" in history) history.scrollRestoration = "manual";
   render();
+  revealLogo();
 })();

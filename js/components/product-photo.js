@@ -7,5 +7,5 @@ export function productPhoto(product) {
 export function photoImg(product, { alt = "", eager = false } = {}) {
   const src = productPhoto(product);
   if (!src) return "";
-  return `<img src="${esc(src)}" alt="${esc(alt)}" ${eager ? "" : `loading="lazy" `}decoding="async">`;
+  return `<span class="photo-skeleton" aria-hidden="true"></span><img data-photo src="${esc(src)}" alt="${esc(alt)}" ${eager ? "" : `loading="lazy" `}decoding="async">`;
 }

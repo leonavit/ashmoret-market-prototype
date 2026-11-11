@@ -20,12 +20,13 @@ import { mountPromoCarousels } from "./components/promo-carousel.js";
 import { bindNewsletter } from "./components/newsletter-popup.js";
 import { bindCookieNotice } from "./components/cookie-notice.js";
 import { mountLottieIcons } from "./components/topbar-icons.js";
+import { bindPhotoReveal } from "./components/photo-reveal.js";
 import { mountCarousels } from "./components/carousel.js";
 import { mountCatalog } from "./components/catalog-rail.js";
 import { openProductPopup } from "./components/product-popup.js";
 import { mountProductGalleries, mountProductTabs } from "./components/product-view.js";
 import { announce, confirmAction } from "./components/toast.js";
-import { playHero, pulseAdd, rollQty, shimmerButtons, sparkAt } from "./motion.js";
+import { playHero, pulseAdd, revealLogo, rollQty, shimmerButtons, sparkAt } from "./motion.js";
 import { addItem, applyCoupon, cartTotals, clearCart, getCart, removeCoupon, removeItem, setQty, subscribe } from "./state/cart.js";
 import { createOrderId, saveOrder } from "./state/orders.js";
 import { getSession, subscribeSession, takeExpiredNotice } from "./state/session.js";
@@ -319,6 +320,7 @@ document.addEventListener("submit", (event) => {
 });
 
 bindShell(navigate);
+bindPhotoReveal();
 bindThemeOptions({
   heroChange: () => render({ focus: false }),
   suppliersChange: () => {
@@ -344,3 +346,4 @@ subscribe(() => {
 window.addEventListener("hashchange", () => render({ scrollTop: true }));
 if ("scrollRestoration" in history) history.scrollRestoration = "manual";
 render();
+revealLogo();

@@ -7,6 +7,31 @@ export function playHero(root) {
   gsap.fromTo(copy, { y: 22, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.7, ease: "power2.out" });
 }
 
+export function revealLogo() {
+  const root = document.documentElement;
+  if (!root.classList.contains("is-logo-curtain")) return;
+  const gsap = window.gsap;
+  const link = document.querySelector(".header-logo");
+  const img = link?.querySelector("img");
+  if (!gsap || !img || prefersReducedMotion()) {
+    root.classList.remove("is-logo-curtain");
+    return;
+  }
+  const curtains = ["is-red", "is-ink"].map((tone) => {
+    const curtain = document.createElement("span");
+    curtain.className = `logo-curtain ${tone}`;
+    curtain.setAttribute("aria-hidden", "true");
+    link.append(curtain);
+    return curtain;
+  });
+  gsap.timeline({ delay: 0.15, onComplete: () => curtains.forEach((curtain) => curtain.remove()) })
+    .fromTo(curtains, { scaleX: 0, transformOrigin: "100% 50%" }, { scaleX: 1, duration: 0.45, ease: "power3.inOut", stagger: 0.08 })
+    .add(() => root.classList.remove("is-logo-curtain"))
+    .set(curtains, { transformOrigin: "0% 50%" })
+    .to(curtains, { scaleX: 0, duration: 0.55, ease: "power3.inOut", stagger: { each: 0.08, from: "end" } })
+    .fromTo(img, { x: 14 }, { x: 0, duration: 0.7, ease: "power3.out", clearProps: "transform" }, "<");
+}
+
 let shimmers = [];
 
 export function shimmerButtons(root) {

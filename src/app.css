@@ -1094,6 +1094,37 @@
     object-fit: contain;
   }
 
+  .card-media.has-photo,
+  .product-thumb-face.has-photo,
+  .order-line-thumb.has-photo,
+  .cart-dock-thumb.has-photo {
+    position: relative;
+  }
+
+  .photo-skeleton {
+    position: absolute;
+    inset: 10%;
+    border-radius: var(--radius-md);
+    background: linear-gradient(100deg, var(--color-fill) 35%, var(--color-white) 50%, var(--color-fill) 65%) 0 0 / 250% 100%;
+    animation: photo-shimmer 1.4s linear infinite;
+    pointer-events: none;
+  }
+
+  img[data-photo]:not(.is-loaded) {
+    opacity: 0;
+  }
+
+  @keyframes photo-shimmer {
+    from { background-position: 100% 0; }
+    to { background-position: 0 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .photo-skeleton {
+      animation: none;
+    }
+  }
+
   .placeholder {
     display: grid;
     height: 100%;
@@ -3505,7 +3536,33 @@
 
   .header-logo {
     grid-area: logo;
+    position: relative;
     display: block;
+  }
+
+  .logo-curtain {
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius-md);
+    pointer-events: none;
+    transform: scaleX(0);
+  }
+
+  .logo-curtain.is-red {
+    background: #c9230d;
+  }
+
+  .logo-curtain.is-ink {
+    background: var(--color-ink);
+  }
+
+  html.is-logo-curtain .header-logo img {
+    visibility: hidden;
+    animation: logo-failsafe 0s 2.5s forwards;
+  }
+
+  @keyframes logo-failsafe {
+    to { visibility: visible; }
   }
 
   .header-logo img,
@@ -5293,6 +5350,9 @@
     }
 
     .footer-main > * {
+      display: grid;
+      justify-content: center;
+      justify-items: start;
       padding: 1rem 1.1rem;
       border-radius: var(--radius-md);
       background: #f4f2e8;
@@ -5302,6 +5362,22 @@
   @media (min-width: 640px) {
     .footer-main {
       grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 639px) {
+    .footer-main {
+      grid-template-columns: 1fr fit-content(100%) 1fr;
+      column-gap: 0;
+    }
+
+    .footer-main > * {
+      grid-column: 1 / -1;
+      grid-template-columns: subgrid;
+    }
+
+    .footer-main > * > * {
+      grid-column: 2;
     }
   }
 
