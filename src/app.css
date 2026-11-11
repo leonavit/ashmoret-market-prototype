@@ -3688,7 +3688,7 @@
     min-height: 38px;
     align-items: center;
     gap: 0.4rem;
-    border: 1px solid var(--color-line-strong);
+    border: 1px dashed var(--color-line-strong);
     border-radius: var(--radius-pill);
     background: var(--color-white);
     padding: 0 0.6rem 0 0.95rem;
@@ -3734,7 +3734,7 @@
       height: 2.25rem;
       min-height: 0;
       place-items: center;
-      border: 0;
+      border: 1px dashed var(--color-ink);
       border-radius: var(--radius-pill);
       background: rgb(255 255 255 / 0.55);
       padding: 0;
@@ -4668,7 +4668,6 @@
 
   .service-dialog {
     width: min(34rem, calc(100% - 1.5rem));
-    border: 1px dashed var(--color-ink);
   }
 
   .news-dialog {
