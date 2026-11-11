@@ -1315,10 +1315,10 @@
     border-radius: var(--radius-lg);
     border: 1px solid var(--color-line);
     background-color: #fff;
-    background-image: url("../images/brand/placeholder-cart.png");
+    background-image: url("../images/brand/placeholder-cart.png"), linear-gradient(to bottom, var(--color-white), #eeebda);
     background-repeat: no-repeat;
     background-position: center;
-    background-size: auto var(--ph-mark);
+    background-size: auto var(--ph-mark), 100% 100%;
   }
 
   .cat-link:hover span.thumb {
@@ -1334,7 +1334,7 @@
 
   .cat-link span.thumb.has-photo {
     position: relative;
-    background: #fff;
+    background: linear-gradient(to bottom, var(--color-white), #eeebda);
   }
 
   .cat-link span.thumb.is-icon img {
