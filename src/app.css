@@ -3747,14 +3747,14 @@
 
   .topbar-icon.is-lottie {
     display: block;
-    width: 1.712rem;
-    height: 1.712rem;
+    width: 1.969rem;
+    height: 1.969rem;
     margin-block: -0.15rem;
   }
 
   .topbar-icon.is-lottie.is-small {
-    width: 1.391rem;
-    height: 1.391rem;
+    width: 1.6rem;
+    height: 1.6rem;
   }
 
   @media (max-width: 639px) {
@@ -5149,6 +5149,61 @@
     gap: 0.35rem;
   }
 
+  .service-dialog .auth-dialog-bar {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    align-items: center;
+  }
+
+  .service-dialog .service-dialog-actions {
+    justify-self: end;
+  }
+
+  .service-dialog-title {
+    font-size: 1.5rem;
+    line-height: 2rem;
+  }
+
+  .service-dialog-mark {
+    display: block;
+    width: 5.5rem;
+    height: 5.5rem;
+  }
+
+  .service-dialog-mark svg {
+    width: 100% !important;
+    height: 100% !important;
+  }
+
+  @media (max-width: 639px) {
+    .service-dialog .auth-dialog-bar {
+      grid-template-columns: auto auto auto;
+      justify-content: space-between;
+      gap: 0.25rem;
+    }
+
+    .service-dialog-title {
+      font-size: 1.125rem;
+      line-height: 1.5rem;
+    }
+
+    .service-dialog-mark {
+      width: calc(1.66rem + 5px);
+      height: calc(1.66rem + 5px);
+    }
+
+    .service-dialog-mark.is-small {
+      width: calc(1.445rem + 5px);
+      height: calc(1.445rem + 5px);
+    }
+  }
+
+  @media (max-width: 380px) {
+    .service-dialog-title .service-title-link svg {
+      display: none;
+    }
+  }
+
   .service-title-link {
     display: inline-flex;
     align-items: center;
@@ -5509,6 +5564,24 @@
 
     .footer-col a {
       margin-inline: auto;
+      font-size: 16.8px;
+    }
+
+    .footer-col h2,
+    .footer-contact h2 {
+      font-size: 20.4px;
+    }
+
+    .footer-lines strong {
+      font-size: 1.26rem;
+    }
+
+    .footer-lines small {
+      font-size: 0.9rem;
+    }
+
+    .footer-legal a {
+      font-size: 1.08rem;
     }
   }
 

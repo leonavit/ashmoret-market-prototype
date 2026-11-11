@@ -118,12 +118,15 @@ function shareButton(kind) {
   return `<button type="button" class="share-link" data-share-link="${kind}">${shareIcon}<span>שליחת קישור</span></button>`;
 }
 
+const dialogIcons = { delivery: "truck-delivery", service: "customer-service" };
+
 function dialogHead(kind) {
   const { title, path, dialogId } = kinds[kind];
   return `<div class="auth-dialog-bar">
     <div>
-      <h2 id="${dialogId}-title" class="text-2xl font-extrabold"><a class="service-title-link" href="${path}">${title}${pageIcon}</a></h2>
+      <h2 id="${dialogId}-title" class="service-dialog-title font-extrabold"><a class="service-title-link" href="${path}">${title}${pageIcon}</a></h2>
     </div>
+    <span class="service-dialog-mark${kind === "service" ? " is-small" : ""}" data-lottie="${dialogIcons[kind]}" data-lottie-play="loop" aria-hidden="true"></span>
     <div class="service-dialog-actions">
       ${callButton(kind)}
       ${shareButton(kind)}
