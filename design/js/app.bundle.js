@@ -6936,7 +6936,7 @@
   }
   function addButton(id, label, extraClass = "") {
     const added = inCart(id);
-    return `<button type="button" class="buy-add${extraClass ? ` ${extraClass}` : ""}${added ? " is-in-cart" : ""}" data-add="${esc(id)}" data-label="${esc(label)}"${added ? ` title="${cartTitle}"` : ""}>${added ? `${cartCheck}${cartLabel}` : esc(label)}</button>`;
+    return `<button type="button" class="buy-add${extraClass ? ` ${extraClass}` : ""}${added ? " is-in-cart" : ""}" data-add="${esc(id)}" data-label="${esc(label)}"${added ? ` title="${cartTitle}"` : ""}>${added ? `${cartCheck}${cartLabel}` : label}</button>`;
   }
   function paintAddButton(button) {
     const added = inCart(button.dataset.add);
@@ -6946,7 +6946,7 @@
       button.innerHTML = `${cartCheck}${cartLabel}`;
       button.title = cartTitle;
     } else {
-      button.textContent = button.dataset.label;
+      button.innerHTML = button.dataset.label;
       button.removeAttribute("title");
     }
     return added;
@@ -6975,7 +6975,7 @@
   function buyRow(id, { flat = false } = {}) {
     return `<div class="buy-row${flat ? " is-flat" : ""}" data-buy>
     ${qtyStep()}
-    ${addButton(id, "\u05D4\u05D5\u05E1\u05E4\u05D4")}
+    ${addButton(id, `\u05D4\u05D5\u05E1\u05E4\u05D4<span class="buy-add-long"> \u05DC\u05E1\u05DC</span>`)}
   </div>`;
   }
   function shelfCard(product) {
