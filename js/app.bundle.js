@@ -6370,8 +6370,8 @@
       "barcode": "\u05DC\u05D4\u05D3\u05D2\u05DE\u05D4",
       "catalogPage": "\u05DC\u05D4\u05D3\u05D2\u05DE\u05D4",
       "brand": "\u05DE\u05D0\u05E8\u05D6",
-      "image": null,
-      "placeholder": true
+      "image": "assets/images/products/p-tortilla-shkedia-540.webp",
+      "placeholder": false
     },
     {
       "id": "p247",
@@ -6384,8 +6384,8 @@
       "barcode": "\u05DC\u05D4\u05D3\u05D2\u05DE\u05D4",
       "catalogPage": "\u05DC\u05D4\u05D3\u05D2\u05DE\u05D4",
       "brand": "\u05DE\u05D0\u05E1\u05D8\u05E8 \u05E9\u05E3",
-      "image": null,
-      "placeholder": true
+      "image": "assets/images/products/p-tortilla-shkedia-700.webp",
+      "placeholder": false
     },
     {
       "id": "p248",
@@ -6412,8 +6412,8 @@
       "barcode": "\u05DC\u05D4\u05D3\u05D2\u05DE\u05D4",
       "catalogPage": "\u05DC\u05D4\u05D3\u05D2\u05DE\u05D4",
       "brand": "\u05DE\u05D0\u05E8\u05D6",
-      "image": null,
-      "placeholder": true
+      "image": "assets/images/products/p-tortilla-gf.jpg",
+      "placeholder": false
     },
     {
       "id": "p250",
@@ -6426,8 +6426,8 @@
       "barcode": "\u05DC\u05D4\u05D3\u05D2\u05DE\u05D4",
       "catalogPage": "\u05DC\u05D4\u05D3\u05D2\u05DE\u05D4",
       "brand": "\u05DE\u05D0\u05E8\u05D6",
-      "image": null,
-      "placeholder": true
+      "image": "assets/images/products/p-tortilla-20.jpg",
+      "placeholder": false
     },
     {
       "id": "p251",
@@ -10232,6 +10232,15 @@
   function categoryLink(category) {
     return `<a class="mega-trigger text-ink" href="#/c/${esc(category.slug)}"><span class="cat-heart" aria-hidden="true"></span>${esc(category.name)}</a>`;
   }
+  function syncNavCurrent(route) {
+    let id = null;
+    if (route?.name === "category") id = departmentOf(route.slug)?.id || null;
+    else if (route?.name === "department") id = route.id || null;
+    document.querySelectorAll("[data-mega-open], [data-mega-mobile]").forEach((el) => {
+      const key = el.dataset.megaOpen || el.dataset.megaMobile;
+      el.classList.toggle("is-nav-current", Boolean(id) && key === id);
+    });
+  }
   function renderSupplierNav() {
     const nav = document.querySelector("[data-main-nav]");
     const multi = nav?.querySelector("[data-nav-multi]");
@@ -11384,6 +11393,44 @@
     document.body.appendChild(notice);
   }
 
+  // js/components/particles.js
+  var tweens = [];
+  var rand = (min, max) => min + Math.random() * (max - min);
+  function mountParticleField(root) {
+    tweens.forEach((tween) => tween.kill());
+    tweens = [];
+    const hero = root.querySelector(".listing-hero");
+    if (!hero) return;
+    const field2 = document.createElement("div");
+    field2.className = "particle-field";
+    field2.setAttribute("aria-hidden", "true");
+    const count = window.matchMedia("(max-width: 767px)").matches ? 16 : 30;
+    for (let i = 0; i < count; i += 1) {
+      const dot = document.createElement("span");
+      const size = rand(4, 14);
+      dot.className = "particle";
+      dot.style.width = `${size}px`;
+      dot.style.height = `${size}px`;
+      dot.style.left = `${rand(0, 100)}%`;
+      dot.style.top = `${rand(35, 100)}%`;
+      field2.append(dot);
+    }
+    hero.prepend(field2);
+    const gsap = window.gsap;
+    if (!gsap || prefersReducedMotion()) return;
+    field2.querySelectorAll(".particle").forEach((dot) => {
+      gsap.set(dot, { opacity: rand(0.15, 0.35) });
+      tweens.push(gsap.to(dot, {
+        y: gsap.utils.random(-150, -50),
+        x: gsap.utils.random(-30, 30),
+        opacity: 0,
+        duration: gsap.utils.random(3, 6),
+        delay: rand(0, 3),
+        repeat: -1
+      }));
+    });
+  }
+
   // js/components/product-popup.js
   function ensureDialog4() {
     let dialog = document.getElementById("product-pop");
@@ -11682,10 +11729,12 @@
     mountProductGalleries(app);
     mountProductTabs(app);
     centerActiveChip();
+    mountParticleField(app);
     updateAccountSlot();
     updateCartDock(route.name);
     playHero(heroOnTop() ? document.getElementById("hero-top") : app);
     updateAdSlots(route, adSettings());
+    syncNavCurrent(route);
     if (scrollTop) window.scrollTo({ top: 0, left: 0, behavior: "instant" });
     if (accountJump) jumpToAccountMain();
     const input = document.getElementById("search-input");
@@ -11903,6 +11952,7 @@
     suppliersChange: () => {
       renderSupplierNav();
       render({ focus: false });
+      syncNavCurrent(parseHash());
     },
     adsChange: () => updateAdSlots(parseHash(), adSettings()),
     adsReplay: () => replayAdSlots(parseHash(), adSettings())

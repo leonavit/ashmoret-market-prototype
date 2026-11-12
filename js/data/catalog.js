@@ -2802,8 +2802,8 @@ export const products = [
     "barcode": "להדגמה",
     "catalogPage": "להדגמה",
     "brand": "מארז",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-tortilla-shkedia-540.webp",
+    "placeholder": false
   },
   {
     "id": "p247",
@@ -2816,8 +2816,8 @@ export const products = [
     "barcode": "להדגמה",
     "catalogPage": "להדגמה",
     "brand": "מאסטר שף",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-tortilla-shkedia-700.webp",
+    "placeholder": false
   },
   {
     "id": "p248",
@@ -2844,8 +2844,8 @@ export const products = [
     "barcode": "להדגמה",
     "catalogPage": "להדגמה",
     "brand": "מארז",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-tortilla-gf.jpg",
+    "placeholder": false
   },
   {
     "id": "p250",
@@ -2858,8 +2858,8 @@ export const products = [
     "barcode": "להדגמה",
     "catalogPage": "להדגמה",
     "brand": "מארז",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-tortilla-20.jpg",
+    "placeholder": false
   },
   {
     "id": "p251",

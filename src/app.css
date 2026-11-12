@@ -1069,10 +1069,6 @@
     font-weight: 700;
   }
 
-  .listing-count-num {
-    color: #c9230d;
-  }
-
   .listing-sort {
     margin-inline-start: auto;
   }
@@ -2658,7 +2654,25 @@
   }
 
   .listing-hero {
+    position: relative;
+    overflow: hidden;
     background: linear-gradient(to bottom, var(--color-white), #f7f6ee);
+  }
+
+  .listing-hero > .wrap {
+    position: relative;
+  }
+
+  .particle-field {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .particle {
+    position: absolute;
+    border-radius: 50%;
+    background: var(--color-ink);
   }
 
   .listing-chips {
@@ -3885,7 +3899,25 @@
     width: 0.8em;
     height: 0.8em;
     flex: 0 0 auto;
-    transition: transform 0.16s ease;
+    transition: transform 0.16s ease, color 0.16s ease;
+  }
+
+  .mega-trigger.is-nav-current .mega-chevron {
+    color: #7ecf72;
+    animation: nav-chevron-pulse 1.8s ease-in-out infinite;
+  }
+
+  @keyframes nav-chevron-pulse {
+    0%, 100% { color: #7ecf72; opacity: 1; }
+    50% { color: #5cb94f; opacity: 0.45; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .mega-trigger.is-nav-current .mega-chevron {
+      animation: none;
+      color: #7ecf72;
+      opacity: 1;
+    }
   }
 
   .mega-trigger[aria-expanded="true"] .mega-chevron {

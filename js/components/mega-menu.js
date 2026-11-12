@@ -1,5 +1,6 @@
 import { esc, prefersReducedMotion } from "../lib/format.js";
 import { dealBanners } from "../data/banners.js";
+import { departmentOf } from "../data/departments.js";
 import { isSingleSupplier, supplierCategories } from "./suppliers.js";
 
 const mark = "assets/images/brand/placeholder-cart.png";
@@ -165,6 +166,16 @@ export function megaPanel(id) {
 
 function categoryLink(category) {
   return `<a class="mega-trigger text-ink" href="#/c/${esc(category.slug)}"><span class="cat-heart" aria-hidden="true"></span>${esc(category.name)}</a>`;
+}
+
+export function syncNavCurrent(route) {
+  let id = null;
+  if (route?.name === "category") id = departmentOf(route.slug)?.id || null;
+  else if (route?.name === "department") id = route.id || null;
+  document.querySelectorAll("[data-mega-open], [data-mega-mobile]").forEach((el) => {
+    const key = el.dataset.megaOpen || el.dataset.megaMobile;
+    el.classList.toggle("is-nav-current", Boolean(id) && key === id);
+  });
 }
 
 export function renderSupplierNav() {
