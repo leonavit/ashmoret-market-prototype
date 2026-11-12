@@ -8,10 +8,10 @@ export const prices = {
   "p001": { "price": 9.90, "compareAt": null },
   "p002": { "price": 8.40, "compareAt": null },
   "p003": { "price": 8.90, "compareAt": null },
-  "p004": { "price": 11.40, "compareAt": null },
+  "p004": { "price": 11.40, "compareAt": null, "outOfStock": true },
   "p005": { "price": 9.90, "compareAt": null },
   "p006": { "price": 15.40, "compareAt": null },
-  "p007": { "price": 90.90, "compareAt": null },
+  "p007": { "price": 90.90, "compareAt": null, "outOfStock": true },
   "p008": { "price": 91.40, "compareAt": null },
   "p009": { "price": 14.90, "compareAt": null },
   "p010": { "price": 12.90, "compareAt": 16.90 },
@@ -208,6 +208,10 @@ export const prices = {
 
 export function getCommerce(id) {
   return prices[id] || null;
+}
+
+export function isOutOfStock(id) {
+  return Boolean(prices[id]?.outOfStock);
 }
 
 export function saleLabel(commerce) {

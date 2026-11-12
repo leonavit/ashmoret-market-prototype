@@ -6501,10 +6501,10 @@
     "p001": { "price": 9.9, "compareAt": null },
     "p002": { "price": 8.4, "compareAt": null },
     "p003": { "price": 8.9, "compareAt": null },
-    "p004": { "price": 11.4, "compareAt": null },
+    "p004": { "price": 11.4, "compareAt": null, "outOfStock": true },
     "p005": { "price": 9.9, "compareAt": null },
     "p006": { "price": 15.4, "compareAt": null },
-    "p007": { "price": 90.9, "compareAt": null },
+    "p007": { "price": 90.9, "compareAt": null, "outOfStock": true },
     "p008": { "price": 91.4, "compareAt": null },
     "p009": { "price": 14.9, "compareAt": null },
     "p010": { "price": 12.9, "compareAt": 16.9 },
@@ -6700,6 +6700,9 @@
   };
   function getCommerce(id) {
     return prices[id] || null;
+  }
+  function isOutOfStock(id) {
+    return Boolean(prices[id]?.outOfStock);
   }
   function saleLabel(commerce) {
     return commerce?.badge || "\u05D1\u05DE\u05D1\u05E6\u05E2";
@@ -6905,6 +6908,7 @@
     return getCart().items.some((item) => item.id === id);
   }
   function addButton(id, label, extraClass = "") {
+    if (isOutOfStock(id)) return `<button type="button" class="buy-add${extraClass ? ` ${extraClass}` : ""} is-out" disabled>\u05D7\u05E1\u05E8 \u05D1\u05DE\u05DC\u05D0\u05D9</button>`;
     const added = inCart(id);
     return `<button type="button" class="buy-add${extraClass ? ` ${extraClass}` : ""}${added ? " is-in-cart" : ""}" data-add="${esc(id)}" data-label="${esc(label)}"${added ? ` title="${cartTitle}"` : ""}>${added ? `${cartCheck}${cartLabel}` : label}</button>`;
   }
@@ -6934,17 +6938,18 @@
     const price = commerce ? `<p class="price">${money(commerce.price)}${commerce.compareAt ? `<s>${money(commerce.compareAt)}</s>` : ""}</p>` : `<p class="text-sm font-semibold text-muted">\u05DE\u05D7\u05D9\u05E8 \u05D9\u05E2\u05D5\u05D3\u05DB\u05DF</p>`;
     return { badge, price };
   }
-  function qtyStep() {
-    return `<div class="qty-step" dir="ltr">
-      <button type="button" data-qty="-1" aria-label="\u05D4\u05E4\u05D7\u05EA\u05EA \u05DB\u05DE\u05D5\u05EA">\u2212</button>
+  function qtyStep(disabled = false) {
+    const off = disabled ? " disabled" : "";
+    return `<div class="qty-step${disabled ? " is-disabled" : ""}" dir="ltr">
+      <button type="button" data-qty="-1" aria-label="\u05D4\u05E4\u05D7\u05EA\u05EA \u05DB\u05DE\u05D5\u05EA"${off}>\u2212</button>
       <span class="qty-unit">\u05D9\u05D7\u05F3</span>
-      <input data-qty-input inputmode="numeric" maxlength="2" value="1" aria-label="\u05DB\u05DE\u05D5\u05EA">
-      <button type="button" data-qty="1" aria-label="\u05D4\u05D2\u05D3\u05DC\u05EA \u05DB\u05DE\u05D5\u05EA">+</button>
+      <input data-qty-input inputmode="numeric" maxlength="2" value="1" aria-label="\u05DB\u05DE\u05D5\u05EA"${off}>
+      <button type="button" data-qty="1" aria-label="\u05D4\u05D2\u05D3\u05DC\u05EA \u05DB\u05DE\u05D5\u05EA"${off}>+</button>
     </div>`;
   }
   function buyRow(id, { flat = false } = {}) {
     return `<div class="buy-row${flat ? " is-flat" : ""}" data-buy>
-    ${qtyStep()}
+    ${qtyStep(isOutOfStock(id))}
     ${addButton(id, `\u05D4\u05D5\u05E1\u05E4\u05D4<span class="buy-add-long"> \u05DC\u05E1\u05DC</span>`)}
   </div>`;
   }
@@ -8306,13 +8311,15 @@
     return `<div><dt>${esc(label)}</dt><dd dir="auto">${esc(value)}</dd></div>`;
   }
   function productBuy(product) {
+    const out = isOutOfStock(product.id);
+    const off = out ? " disabled" : "";
     return `<div class="product-buy" data-buy>
-    <div class="product-qty" dir="ltr">
-      <button type="button" data-qty="-1" aria-label="\u05D4\u05E4\u05D7\u05EA\u05EA \u05DB\u05DE\u05D5\u05EA">\u2212</button>
-      <input data-qty-input inputmode="numeric" maxlength="2" value="1" aria-label="\u05DB\u05DE\u05D5\u05EA">
-      <button type="button" data-qty="1" aria-label="\u05D4\u05D2\u05D3\u05DC\u05EA \u05DB\u05DE\u05D5\u05EA">+</button>
+    <div class="product-qty${out ? " is-disabled" : ""}" dir="ltr">
+      <button type="button" data-qty="-1" aria-label="\u05D4\u05E4\u05D7\u05EA\u05EA \u05DB\u05DE\u05D5\u05EA"${off}>\u2212</button>
+      <input data-qty-input inputmode="numeric" maxlength="2" value="1" aria-label="\u05DB\u05DE\u05D5\u05EA"${off}>
+      <button type="button" data-qty="1" aria-label="\u05D4\u05D2\u05D3\u05DC\u05EA \u05DB\u05DE\u05D5\u05EA"${off}>+</button>
     </div>
-    <button type="button" class="product-add" data-add="${esc(product.id)}">\u05D4\u05D5\u05E1\u05E4\u05D4 \u05DC\u05E1\u05DC</button>
+    ${out ? `<button type="button" class="product-add is-out" disabled>\u05D7\u05E1\u05E8 \u05D1\u05DE\u05DC\u05D0\u05D9</button>` : `<button type="button" class="product-add" data-add="${esc(product.id)}">\u05D4\u05D5\u05E1\u05E4\u05D4 \u05DC\u05E1\u05DC</button>`}
   </div>`;
   }
   function productDescription(product) {
@@ -10114,13 +10121,14 @@
       const box = viewport.getBoundingClientRect();
       const visible = [...list.querySelectorAll(".cat-slide")].filter((slide) => {
         const rect = slide.getBoundingClientRect();
-        return slide !== lit && rect.width > 0 && rect.left >= box.left - 1 && rect.right <= box.right + 1;
-      });
+        return rect.width > 0 && rect.left >= box.left - 1 && rect.right <= box.right + 1;
+      }).sort((a, b) => b.getBoundingClientRect().right - a.getBoundingClientRect().right);
       if (!visible.length) return;
+      const next = visible[(visible.indexOf(lit) + 1) % visible.length];
       lit?.classList.remove("is-lit");
-      lit = visible[Math.floor(Math.random() * visible.length)];
+      lit = next;
       lit.classList.add("is-lit");
-    }, 2200);
+    }, 1600);
   }
   function categoriesFit(list, viewport, count) {
     const slide = list.querySelector(".cat-slide");
@@ -10510,17 +10518,14 @@
   function shareButton(kind) {
     return `<button type="button" class="share-link" data-share-link="${kind}">${shareIcon}<span>\u05E9\u05DC\u05D9\u05D7\u05EA \u05E7\u05D9\u05E9\u05D5\u05E8</span></button>`;
   }
-  var dialogIcons = { delivery: "truck-delivery", service: "customer-service" };
   function dialogHead(kind) {
     const { title, path, dialogId } = kinds[kind];
     return `<div class="auth-dialog-bar">
     <div>
       <h2 id="${dialogId}-title" class="service-dialog-title font-extrabold"><a class="service-title-link" href="${path}">${title}${pageIcon}</a></h2>
     </div>
-    <span class="service-dialog-mark${kind === "service" ? " is-small" : ""}" data-lottie="${dialogIcons[kind]}" data-lottie-play="loop" aria-hidden="true"></span>
     <div class="service-dialog-actions">
-      ${callButton(kind)}
-      ${shareButton(kind)}
+      ${kind === "service" ? "" : shareButton(kind)}
       <button class="auth-close" type="button" data-service-close aria-label="\u05E1\u05D2\u05D9\u05E8\u05D4">\xD7</button>
     </div>
   </div>`;
@@ -11002,7 +11007,7 @@
         </div>
         <div class="pop-buy" data-buy>
           ${addButton(product.id, "\u05D4\u05D5\u05E1\u05E4\u05D4 \u05DC\u05E1\u05DC", "pop-add")}
-          ${qtyStep()}
+          ${qtyStep(isOutOfStock(product.id))}
         </div>
         ${productFolds(product, { openDescription: false, shipping: false })}
       </div>

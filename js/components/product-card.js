@@ -1,5 +1,5 @@
 import { isElectronicsProduct } from "../data/departments.js";
-import { getCommerce, saleLabel } from "../data/commerce.js";
+import { getCommerce, isOutOfStock, saleLabel } from "../data/commerce.js";
 import { esc, money } from "../lib/format.js";
 import { photoImg, productPhoto } from "./product-photo.js";
 import { getCart } from "../state/cart.js";
@@ -13,6 +13,7 @@ function inCart(id) {
 }
 
 export function addButton(id, label, extraClass = "") {
+  if (isOutOfStock(id)) return `<button type="button" class="buy-add${extraClass ? ` ${extraClass}` : ""} is-out" disabled>חסר במלאי</button>`;
   const added = inCart(id);
   return `<button type="button" class="buy-add${extraClass ? ` ${extraClass}` : ""}${added ? " is-in-cart" : ""}" data-add="${esc(id)}" data-label="${esc(label)}"${added ? ` title="${cartTitle}"` : ""}>${added ? `${cartCheck}${cartLabel}` : label}</button>`;
 }
@@ -49,18 +50,19 @@ function cardParts(product) {
   return { badge, price };
 }
 
-export function qtyStep() {
-  return `<div class="qty-step" dir="ltr">
-      <button type="button" data-qty="-1" aria-label="הפחתת כמות">−</button>
+export function qtyStep(disabled = false) {
+  const off = disabled ? " disabled" : "";
+  return `<div class="qty-step${disabled ? " is-disabled" : ""}" dir="ltr">
+      <button type="button" data-qty="-1" aria-label="הפחתת כמות"${off}>−</button>
       <span class="qty-unit">יח׳</span>
-      <input data-qty-input inputmode="numeric" maxlength="2" value="1" aria-label="כמות">
-      <button type="button" data-qty="1" aria-label="הגדלת כמות">+</button>
+      <input data-qty-input inputmode="numeric" maxlength="2" value="1" aria-label="כמות"${off}>
+      <button type="button" data-qty="1" aria-label="הגדלת כמות"${off}>+</button>
     </div>`;
 }
 
 export function buyRow(id, { flat = false } = {}) {
   return `<div class="buy-row${flat ? " is-flat" : ""}" data-buy>
-    ${qtyStep()}
+    ${qtyStep(isOutOfStock(id))}
     ${addButton(id, `הוספה<span class="buy-add-long"> לסל</span>`)}
   </div>`;
 }

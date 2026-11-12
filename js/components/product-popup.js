@@ -1,5 +1,5 @@
 import { getProduct } from "../data/catalog.js";
-import { getCommerce, saleLabel } from "../data/commerce.js";
+import { getCommerce, isOutOfStock, saleLabel } from "../data/commerce.js";
 import { isElectronicsProduct } from "../data/departments.js";
 import { mountProductGalleries, productFolds, productGallery } from "./product-view.js";
 import { addButton, qtyStep } from "./product-card.js";
@@ -44,7 +44,7 @@ function markup(product) {
         </div>
         <div class="pop-buy" data-buy>
           ${addButton(product.id, "הוספה לסל", "pop-add")}
-          ${qtyStep()}
+          ${qtyStep(isOutOfStock(product.id))}
         </div>
         ${productFolds(product, { openDescription: false, shipping: false })}
       </div>

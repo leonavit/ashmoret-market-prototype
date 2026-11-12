@@ -1496,12 +1496,15 @@
     }
 
     #category-band .cat-slide.is-lit span.thumb {
-      border-color: #c9230d;
-      box-shadow: inset 0 0 0 1px #c9230d;
+      border-color: var(--color-ink);
+      box-shadow: inset 0 0 0 1px var(--color-ink);
     }
 
     #category-band .cat-slide.is-lit .cat-label {
-      border-color: #c9230d;
+      border-color: var(--color-ink);
+      background: var(--color-ink);
+      color: var(--color-white);
+      transform: translateY(4px);
     }
   }
 
@@ -5189,59 +5192,9 @@
     gap: 0.35rem;
   }
 
-  .service-dialog .auth-dialog-bar {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
-    align-items: center;
-  }
-
-  .service-dialog .service-dialog-actions {
-    justify-self: end;
-  }
-
   .service-dialog-title {
     font-size: 1.5rem;
     line-height: 2rem;
-  }
-
-  .service-dialog-mark {
-    display: block;
-    width: 5.5rem;
-    height: 5.5rem;
-  }
-
-  .service-dialog-mark svg {
-    width: 100% !important;
-    height: 100% !important;
-  }
-
-  @media (max-width: 639px) {
-    .service-dialog .auth-dialog-bar {
-      grid-template-columns: auto auto auto;
-      justify-content: space-between;
-      gap: 0.25rem;
-    }
-
-    .service-dialog-title {
-      font-size: 1.125rem;
-      line-height: 1.5rem;
-    }
-
-    .service-dialog-mark {
-      width: calc(1.66rem + 5px);
-      height: calc(1.66rem + 5px);
-    }
-
-    .service-dialog-mark.is-small {
-      width: calc(1.445rem + 5px);
-      height: calc(1.445rem + 5px);
-    }
-  }
-
-  @media (max-width: 380px) {
-    .service-dialog-title .service-title-link svg {
-      display: none;
-    }
   }
 
   .service-title-link {
@@ -5920,6 +5873,27 @@
 
   .product-add:hover {
     background: var(--color-action-hover);
+  }
+
+  .buy-add.is-out,
+  .buy-add.is-out:hover,
+  .product-add.is-out,
+  .product-add.is-out:hover {
+    background: transparent;
+    color: #c9230d;
+    cursor: not-allowed;
+  }
+
+  .qty-step.is-disabled,
+  .product-qty.is-disabled {
+    opacity: 0.45;
+  }
+
+  .qty-step.is-disabled button,
+  .qty-step.is-disabled input,
+  .product-qty.is-disabled button,
+  .product-qty.is-disabled input {
+    cursor: not-allowed;
   }
 
   .product-description h2 {

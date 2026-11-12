@@ -200,15 +200,18 @@ function startCategoryGlow(list, viewport) {
     const band = document.getElementById("category-band");
     if (document.hidden || band?.hidden || band?.matches(":hover") || viewport.contains(document.activeElement)) return;
     const box = viewport.getBoundingClientRect();
-    const visible = [...list.querySelectorAll(".cat-slide")].filter((slide) => {
-      const rect = slide.getBoundingClientRect();
-      return slide !== lit && rect.width > 0 && rect.left >= box.left - 1 && rect.right <= box.right + 1;
-    });
+    const visible = [...list.querySelectorAll(".cat-slide")]
+      .filter((slide) => {
+        const rect = slide.getBoundingClientRect();
+        return rect.width > 0 && rect.left >= box.left - 1 && rect.right <= box.right + 1;
+      })
+      .sort((a, b) => b.getBoundingClientRect().right - a.getBoundingClientRect().right);
     if (!visible.length) return;
+    const next = visible[(visible.indexOf(lit) + 1) % visible.length];
     lit?.classList.remove("is-lit");
-    lit = visible[Math.floor(Math.random() * visible.length)];
+    lit = next;
     lit.classList.add("is-lit");
-  }, 2200);
+  }, 1600);
 }
 
 function categoriesFit(list, viewport, count) {

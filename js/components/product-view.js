@@ -1,4 +1,4 @@
-import { deliveryFee } from "../data/commerce.js";
+import { deliveryFee, isOutOfStock } from "../data/commerce.js";
 import { esc, money } from "../lib/format.js";
 import { photoImg, productPhoto } from "./product-photo.js";
 
@@ -79,13 +79,17 @@ function spec(label, value) {
 }
 
 export function productBuy(product) {
+  const out = isOutOfStock(product.id);
+  const off = out ? " disabled" : "";
   return `<div class="product-buy" data-buy>
-    <div class="product-qty" dir="ltr">
-      <button type="button" data-qty="-1" aria-label="הפחתת כמות">−</button>
-      <input data-qty-input inputmode="numeric" maxlength="2" value="1" aria-label="כמות">
-      <button type="button" data-qty="1" aria-label="הגדלת כמות">+</button>
+    <div class="product-qty${out ? " is-disabled" : ""}" dir="ltr">
+      <button type="button" data-qty="-1" aria-label="הפחתת כמות"${off}>−</button>
+      <input data-qty-input inputmode="numeric" maxlength="2" value="1" aria-label="כמות"${off}>
+      <button type="button" data-qty="1" aria-label="הגדלת כמות"${off}>+</button>
     </div>
-    <button type="button" class="product-add" data-add="${esc(product.id)}">הוספה לסל</button>
+    ${out
+      ? `<button type="button" class="product-add is-out" disabled>חסר במלאי</button>`
+      : `<button type="button" class="product-add" data-add="${esc(product.id)}">הוספה לסל</button>`}
   </div>`;
 }
 
