@@ -10232,15 +10232,6 @@
   function categoryLink(category) {
     return `<a class="mega-trigger text-ink" href="#/c/${esc(category.slug)}"><span class="cat-heart" aria-hidden="true"></span>${esc(category.name)}</a>`;
   }
-  function syncNavCurrent(route) {
-    let id = null;
-    if (route?.name === "category") id = departmentOf(route.slug)?.id || null;
-    else if (route?.name === "department") id = route.id || null;
-    document.querySelectorAll("[data-mega-open], [data-mega-mobile]").forEach((el) => {
-      const key = el.dataset.megaOpen || el.dataset.megaMobile;
-      el.classList.toggle("is-nav-current", Boolean(id) && key === id);
-    });
-  }
   function renderSupplierNav() {
     const nav = document.querySelector("[data-main-nav]");
     const multi = nav?.querySelector("[data-nav-multi]");
@@ -10378,8 +10369,27 @@
     if (bound2) return;
     bound2 = true;
     const header = document.querySelector(".site-header");
-    const markScrolled = () => header?.classList.toggle("is-scrolled", window.scrollY > 0);
+    const topbar = header?.querySelector(".topbar");
+    const mobileHeader = window.matchMedia("(max-width: 1023px)");
+    let lastY = window.scrollY;
+    const syncTopbar = () => {
+      if (!header || !topbar) return;
+      const y = Math.max(0, window.scrollY);
+      const delta = y - lastY;
+      if (!mobileHeader.matches || y <= 50) header.classList.remove("is-topbar-hidden");
+      else if (delta > 4) {
+        header.style.setProperty("--topbar-h", `${topbar.offsetHeight}px`);
+        header.classList.add("is-topbar-hidden");
+      } else if (delta < -4) header.classList.remove("is-topbar-hidden");
+      else return;
+      lastY = y;
+    };
+    const markScrolled = () => {
+      header?.classList.toggle("is-scrolled", window.scrollY > 0);
+      syncTopbar();
+    };
     window.addEventListener("scroll", markScrolled, { passive: true });
+    mobileHeader.addEventListener("change", syncTopbar);
     markScrolled();
     const form = document.getElementById("search-form");
     const input = document.getElementById("search-input");
@@ -10453,8 +10463,8 @@
       const open3 = typeof force === "boolean" ? force : !wasOpen;
       const cover = document.documentElement.dataset.mobileMenu === "v2";
       if (open3 && cover) {
-        const topbar = document.querySelector(".site-header .topbar");
-        const top = topbar?.getBoundingClientRect().bottom || 0;
+        const topbar2 = document.querySelector(".site-header .topbar");
+        const top = topbar2?.getBoundingClientRect().bottom || 0;
         const button = menuOpen.getBoundingClientRect();
         const rowCenter = button.top + button.height / 2 - top;
         document.documentElement.style.setProperty("--menu-cover-top", `${top}px`);
@@ -11734,7 +11744,6 @@
     updateCartDock(route.name);
     playHero(heroOnTop() ? document.getElementById("hero-top") : app);
     updateAdSlots(route, adSettings());
-    syncNavCurrent(route);
     if (scrollTop) window.scrollTo({ top: 0, left: 0, behavior: "instant" });
     if (accountJump) jumpToAccountMain();
     const input = document.getElementById("search-input");
@@ -11952,7 +11961,6 @@
     suppliersChange: () => {
       renderSupplierNav();
       render({ focus: false });
-      syncNavCurrent(parseHash());
     },
     adsChange: () => updateAdSlots(parseHash(), adSettings()),
     adsReplay: () => replayAdSlots(parseHash(), adSettings())
