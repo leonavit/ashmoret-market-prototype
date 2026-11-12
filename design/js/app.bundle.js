@@ -10149,7 +10149,7 @@
       const clone = copy === 0 ? "" : ' tabindex="-1" aria-hidden="true"';
       const icon3 = getTheme().featured === "v2" && item.icon;
       const thumb = icon3 ? `<span class="thumb has-photo is-icon"><img src="${esc(item.icon)}" alt="" decoding="async"></span>` : item.image ? `<span class="thumb has-photo"><img src="${esc(item.image)}" alt="" decoding="async"></span>` : `<span class="thumb"></span>`;
-      return `<li class="cat-slide"><a class="cat-link" href="${esc(item.href)}"${current}${clone}>${thumb}<span>${esc(item.name)}</span></a></li>`;
+      return `<li class="cat-slide"><a class="cat-link" href="${esc(item.href)}"${current}${clone}>${thumb}<span class="cat-label">${esc(item.name)}</span></a></li>`;
     }).join("")).join("");
     stopCategoryAutoplay();
     if (categoryCarousel) {
@@ -11151,7 +11151,9 @@
         ghost.remove();
         if (layer.matches(".fly-layer")) layer.remove();
         const mark2 = visibleCartIcon()?.closest(".cart-dock-mark");
-        if (mark2) gsap.fromTo(mark2, { scale: 1 }, { scale: 1.3, duration: 0.14, ease: "power2.out", yoyo: true, repeat: 1, transformOrigin: "50% 50%", clearProps: "transform" });
+        if (!mark2) return;
+        sparkAt({ detail: 0 }, mark2);
+        gsap.fromTo(mark2, { scale: 1 }, { scale: 1.3, duration: 0.14, delay: 0.08, ease: "power2.out", yoyo: true, repeat: 1, transformOrigin: "50% 50%", clearProps: "transform" });
       }
     }).to(ghost, { scale: 1.12, duration: 0.18, ease: "power2.out" }).to(ghost, { x: dx, duration: 0.75, ease: "power1.inOut" }, ">").to(ghost, { y: dy, duration: 0.75, ease: "power3.in" }, "<").to(ghost, { scale: end, opacity: 0.85, duration: 0.75, ease: "power2.in" }, "<");
   }
