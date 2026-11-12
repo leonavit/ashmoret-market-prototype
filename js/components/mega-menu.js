@@ -1,4 +1,4 @@
-import { esc } from "../lib/format.js";
+import { esc, prefersReducedMotion } from "../lib/format.js";
 import { dealBanners } from "../data/banners.js";
 import { isSingleSupplier, supplierCategories } from "./suppliers.js";
 
@@ -189,6 +189,21 @@ export function renderSupplierNav() {
     </div>`).join("");
 }
 
+function revealBlockPhotos(root) {
+  const gsap = window.gsap;
+  const photos = root.querySelectorAll(".mega-block-photo");
+  if (!gsap || !photos.length || prefersReducedMotion()) return;
+  gsap.fromTo(photos, { yPercent: 100, opacity: 0 }, {
+    yPercent: 0,
+    opacity: 1,
+    duration: 0.45,
+    ease: "back.out(1.6)",
+    stagger: 0.08,
+    delay: 0.05,
+    clearProps: "transform,opacity",
+  });
+}
+
 export function mountMega() {
   const nav = document.querySelector("[data-main-nav]");
   const mega = document.getElementById("mega");
@@ -215,6 +230,7 @@ export function mountMega() {
     if (mega.dataset.open !== id) {
       body.innerHTML = megaPanel(id);
       mega.dataset.open = id;
+      revealBlockPhotos(body);
     }
     mega.hidden = false;
     mega.setAttribute("aria-labelledby", link.id);

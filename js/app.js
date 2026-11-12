@@ -13,7 +13,8 @@ import { bindAccount, renderAccount, renderAccountDetails, renderOrderDetail, re
 import { bindShell, closePanels, renderCategoryNav, setCategoryBand, updateAccountSlot, updateCartBadge } from "./components/shell.js";
 import { mountCartDock, updateCartDock } from "./components/cart-dock.js";
 import { bindServiceDialogs, renderServicePage, serviceTitle } from "./components/service-dialogs.js";
-import { bindThemeOptions, getTheme } from "./components/theme-options.js";
+import { adSettings, bindThemeOptions, getTheme } from "./components/theme-options.js";
+import { replayAdSlots, updateAdSlots } from "./components/ad-slots.js";
 import { setHeroSlider } from "./components/hero-slider.js";
 import { renderSupplierNav } from "./components/mega-menu.js";
 import { mountPromoCarousels } from "./components/promo-carousel.js";
@@ -130,6 +131,7 @@ function render({ focus = true, scrollTop = false } = {}) {
   updateAccountSlot();
   updateCartDock(route.name);
   playHero(heroOnTop() ? document.getElementById("hero-top") : app);
+  updateAdSlots(route, adSettings());
   if (scrollTop) window.scrollTo({ top: 0, left: 0, behavior: "instant" });
   if (accountJump) jumpToAccountMain();
   const input = document.getElementById("search-input");
@@ -276,11 +278,14 @@ document.addEventListener("change", (event) => {
   const route = parseHash();
   const params = new URLSearchParams();
   if (route.query.q) params.set("q", route.query.q);
-  ["category", "brand", "sort"].forEach((key) => {
-    const value = String(new FormData(form).get(key) || "");
+  const data = new FormData(form);
+  ["category", "brand"].forEach((key) => {
+    const value = String(data.get(key) || "");
     if (value) params.set(key, value);
   });
-  if (new FormData(form).get("offers")) params.set("offers", "1");
+  const sort = String(data.get("sort") || "");
+  if (sort === "offers") params.set("offers", "1");
+  else if (sort) params.set("sort", sort);
   const query = params.toString();
   navigate(`#${pathFor(route)}${query ? `?${query}` : ""}`);
 });
@@ -361,6 +366,8 @@ bindThemeOptions({
     renderSupplierNav();
     render({ focus: false });
   },
+  adsChange: () => updateAdSlots(parseHash(), adSettings()),
+  adsReplay: () => replayAdSlots(parseHash(), adSettings()),
 });
 bindLogin(navigate);
 bindServiceDialogs();

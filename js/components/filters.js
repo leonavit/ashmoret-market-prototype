@@ -15,7 +15,7 @@ export function applyListing(list, query) {
   return items;
 }
 
-export function listingControls({ categories, query }) {
+export function listingControls({ categories, query, count }) {
   const categoryOptions = categories
     ? [`<option value="">כל הקטגוריות</option>`]
         .concat(categories.map((category) => `<option value="${esc(category.slug)}"${query.category === category.slug ? " selected" : ""}>${esc(category.name)}</option>`))
@@ -25,18 +25,17 @@ export function listingControls({ categories, query }) {
     ["name", "שם"],
     ["price-asc", "מחיר, מהנמוך"],
     ["price-desc", "מחיר, מהגבוה"],
+    ["offers", "מבצעים בלבד"],
   ];
+  const current = query.offers === "1" ? "offers" : query.sort || "name";
 
   return `<form class="listing-bar" data-listing-form>
     <div class="listing-filters">
       ${categories ? `<label class="listing-select"><span>קטגוריה</span><select name="category">${categoryOptions}</select></label>` : ""}
-      <label class="listing-check">
-        <input type="checkbox" name="offers" value="1"${query.offers === "1" ? " checked" : ""}>
-        מבצעים בלבד
-      </label>
+      ${count ? `<p class="listing-count"><span class="listing-count-num">(${count.total})</span> ${count.total === 1 ? "מוצר" : "מוצרים"} ${count.where}</p>` : ""}
     </div>
     <label class="listing-select listing-sort"><span>מיון</span><select name="sort">${sorts
-      .map(([value, label]) => `<option value="${value}"${(query.sort || "name") === value ? " selected" : ""}>${label}</option>`)
+      .map(([value, label]) => `<option value="${value}"${current === value ? " selected" : ""}>${label}</option>`)
       .join("")}</select></label>
   </form>`;
 }

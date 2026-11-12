@@ -1,6 +1,10 @@
+import { adSlots } from "./ad-slots.js";
+
 const KEY = "ashmoret-theme";
-const REV = 9;
-const defaults = { header: "v2", hero: "v4", heroEffect: "v2", categories: "v2", featured: "v1", banners: "v2", mobileMenu: "v2", mobileCarousel: "v2", suppliers: "v1", palette: "v1", logo: "v1", wideHeader: true };
+const REV = 10;
+const adKey = (id) => `ad-${id}`;
+const adDefaults = { ...Object.fromEntries(adSlots.map((slot) => [adKey(slot.id), slot.enabled])), adTimers: true };
+const defaults = { header: "v2", hero: "v4", heroEffect: "v2", categories: "v2", featured: "v1", banners: "v2", mobileMenu: "v2", mobileCarousel: "v2", suppliers: "v1", palette: "v1", logo: "v1", wideHeader: true, listingCenter: true, ...adDefaults };
 const logos = {
   v1: { src: "assets/images/brand/logo-market-cart.png?v=2", width: 300, height: 80 },
   v2: { src: "assets/images/brand/logo-market.png", width: 1024, height: 344 },
@@ -23,6 +27,8 @@ const groupIcons = {
   palette: groupIcon(`<path d="M12 3a9 9 0 1 0 0 18c1.1 0 1.8-.9 1.8-1.9 0-.5-.2-.9-.5-1.3-.3-.3-.5-.8-.5-1.2 0-1 .8-1.8 1.8-1.8H16a5 5 0 0 0 5-5c0-3.9-4-6.8-9-6.8z"></path><circle cx="7.5" cy="11" r="1.2"></circle><circle cx="10.5" cy="7" r="1.2"></circle><circle cx="15" cy="7.5" r="1.2"></circle>`),
   logo: groupIcon(`<path d="M3 4h2l2.4 10.2a1.5 1.5 0 0 0 1.5 1.1h8.6a1.5 1.5 0 0 0 1.4-1.1L21 8H6.2"></path><circle cx="9.5" cy="19.5" r="1.3"></circle><circle cx="17" cy="19.5" r="1.3"></circle>`),
   wideHeader: groupIcon(`<path d="M3 12h18"></path><path d="m7 8-4 4 4 4M17 8l4 4-4 4"></path>`),
+  listingHero: groupIcon(`<rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="M8 8h8M6 12h12M9 16h6"></path>`),
+  adLayout: groupIcon(`<rect x="3" y="3" width="18" height="18" rx="2"></rect><path d="M3 7h18M7 17h10"></path><path d="M15 11h3v3h-3z"></path>`),
 };
 
 const groups = [
@@ -123,12 +129,35 @@ const groups = [
     ],
     note: "הלוגו מתחלף בהדר, בתפריט המובייל ובפוטר.",
   },
+  {
+    name: "listingHero",
+    title: "חלק עליון עמוד קטגוריה",
+    toggles: [
+      ["listingCenter", "מרכוז", "פירורי הלחם, הכותרת ובועות תתי הקטגוריות במרכז (ברירת מחדל). כבוי: מיושרים לימין."],
+    ],
+  },
+  {
+    name: "adLayout",
+    title: "הגדרות פריסת באנרים",
+    toggles: [
+      [adKey("top-strip"), "סטריפ עליון", "פס צר מעל ההדר. נפתח בגלישה ודוחף את התוכן למטה."],
+      [adKey("corner-peek"), "פינה מבצבצת", "בלוק בפינה הימנית התחתונה: קודם מבצבצת לשונית ואז הוא נכנס. במובייל בר בתחתית המסך."],
+      [adKey("bottom-center"), "באנר תחתון", "באנר רחב בתחתית ובמרכז המסך, עולה מלמטה."],
+      [adKey("interstitial"), "מסך מלא", "פופאפ עם שכבה כהה. מהדף השני בביקור ואחרי 4 שניות לפחות. <span class=\"theme-warn\">כבוי במובייל.</span>"],
+      [adKey("pre-footer"), "לפני הפוטר", "סטריפ בתוך הדף, ממש מעל הפוטר."],
+      ["adTimers", "טיימר סגירה", "דולק: ספירה לאחור וקו התקדמות. כבוי: נסגר רק ב־X."],
+    ],
+    action: ["data-ads-replay", "הצג שוב"],
+    note: "בכל ביקור מוצג רק באנר פולשני אחד, פינה או מסך מלא. כדי לראות את המסך המלא, כבו את הפינה ולחצו «הצג שוב». באנרים צפים לא מוצגים בתשלום, בהתחברות, באישור הזמנה ובעמודים המשפטיים.",
+  },
 ];
 
 let state = load();
 let markers = null;
 let onHeroChange = () => {};
 let onSuppliersChange = () => {};
+let onAdsChange = () => {};
+let onAdsReplay = () => {};
 
 function load() {
   try {
@@ -148,6 +177,8 @@ function load() {
       palette: current && saved.palette === "grey" ? "grey" : defaults.palette,
       logo: saved.logo === "v2" ? "v2" : defaults.logo,
       wideHeader: typeof saved.wideHeader === "boolean" ? saved.wideHeader : defaults.wideHeader,
+      listingCenter: saved.rev >= 10 && saved.listingCenter === false ? false : defaults.listingCenter,
+      ...Object.fromEntries(Object.keys(adDefaults).map((key) => [key, typeof saved[key] === "boolean" ? saved[key] : adDefaults[key]])),
     };
   } catch {
     return { rev: REV, ...defaults };
@@ -164,6 +195,13 @@ function save() {
 
 export function getTheme() {
   return state;
+}
+
+export function adSettings() {
+  return {
+    enabled: Object.fromEntries(adSlots.map((slot) => [slot.id, state[adKey(slot.id)] === true])),
+    timers: state.adTimers === true,
+  };
 }
 
 function applyPalette() {
@@ -188,6 +226,10 @@ function applyLogo() {
 function applyMobileMenu() {
   document.documentElement.dataset.mobileMenu = state.mobileMenu;
   if (state.mobileMenu !== "v2") document.documentElement.classList.remove("is-menu-cover");
+}
+
+function applyListingHero() {
+  document.documentElement.toggleAttribute("data-listing-center", state.listingCenter);
 }
 
 function applyMobileCarousel() {
@@ -225,7 +267,7 @@ function panelMarkup() {
   <div class="theme-panel-body">
     ${groups.map((group, index) => `<fieldset class="theme-group">
       <legend><span class="theme-group-num" aria-hidden="true">${index + 1}</span><span class="theme-legend-icon">${groupIcons[group.name]}</span>${group.title}</legend>
-      ${group.options.map(([value, label, text, swatches]) => `<label class="theme-option">
+      ${(group.options || []).map(([value, label, text, swatches]) => `<label class="theme-option">
         <input type="radio" name="${group.name}" value="${value}" ${state[group.name] === value ? "checked" : ""} data-theme-option>
         <span><strong>${label}</strong><small>${text}</small>${swatches ? `<span class="theme-swatches" aria-hidden="true">${swatches.map((color) => `<span style="background:${color}"></span>`).join("")}</span>` : ""}</span>
       </label>`).join("")}
@@ -233,6 +275,11 @@ function panelMarkup() {
         <input type="checkbox" name="${group.checkbox[0]}" ${state[group.checkbox[0]] ? "checked" : ""} data-theme-toggle>
         <span><strong class="theme-option-title"><span class="theme-legend-icon">${groupIcons[group.checkbox[0]]}</span>${group.checkbox[1]}</strong><small>${group.checkbox[2]}</small></span>
       </label>` : ""}
+      ${(group.toggles || []).map(([name, label, text]) => `<label class="theme-option">
+        <input type="checkbox" name="${name}" ${state[name] ? "checked" : ""} data-theme-toggle>
+        <span><strong>${label}</strong><small>${text}</small></span>
+      </label>`).join("")}
+      ${group.action ? `<button class="btn btn-line theme-action" type="button" ${group.action[0]}>${group.action[1]}</button>` : ""}
       ${group.note ? `<p class="theme-note">${group.note}</p>` : ""}
     </fieldset>`).join("")}
     <button class="btn btn-line theme-reset" type="button" data-theme-reset>איפוס לברירת מחדל</button>
@@ -263,11 +310,15 @@ function setOption(name, value, panel) {
   if (name === "suppliers") onSuppliersChange();
   if (name === "palette") applyPalette();
   if (name === "logo") applyLogo();
+  if (name === "listingCenter") applyListingHero();
+  if (name in adDefaults) onAdsChange();
 }
 
-export function bindThemeOptions({ heroChange, suppliersChange } = {}) {
+export function bindThemeOptions({ heroChange, suppliersChange, adsChange, adsReplay } = {}) {
   onHeroChange = heroChange || onHeroChange;
   onSuppliersChange = suppliersChange || onSuppliersChange;
+  onAdsChange = adsChange || onAdsChange;
+  onAdsReplay = adsReplay || onAdsReplay;
 
   const gear = document.createElement("button");
   gear.type = "button";
@@ -299,7 +350,9 @@ export function bindThemeOptions({ heroChange, suppliersChange } = {}) {
   gear.addEventListener("click", () => toggle(!panel.classList.contains("is-open")));
   panel.addEventListener("click", (event) => {
     if (event.target.closest("[data-theme-close]")) toggle(false);
+    if (event.target.closest("[data-ads-replay]")) onAdsReplay();
     if (event.target.closest("[data-theme-reset]")) {
+      Object.keys(adDefaults).forEach((key) => setOption(key, adDefaults[key], panel));
       setOption("header", defaults.header, panel);
       setOption("hero", defaults.hero, panel);
       setOption("heroEffect", defaults.heroEffect, panel);
@@ -312,6 +365,7 @@ export function bindThemeOptions({ heroChange, suppliersChange } = {}) {
       setOption("palette", defaults.palette, panel);
       setOption("logo", defaults.logo, panel);
       setOption("wideHeader", defaults.wideHeader, panel);
+      setOption("listingCenter", defaults.listingCenter, panel);
     }
   });
   panel.addEventListener("change", (event) => {
@@ -335,6 +389,7 @@ export function bindThemeOptions({ heroChange, suppliersChange } = {}) {
   applyHeader();
   applyMobileMenu();
   applyMobileCarousel();
+  applyListingHero();
   applyPalette();
   applyLogo();
 }

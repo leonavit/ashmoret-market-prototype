@@ -6973,10 +6973,358 @@
     return `<ul class="grid grid-cols-2 product-grid md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">${items.map((product) => `<li>${shelfCard(product)}</li>`).join("")}</ul>`;
   }
 
+  // js/components/ad-slots.js
+  var FLOATING_EXCLUDE = ["checkout", "login", "order", "legal"];
+  var STORE = "ashmoret-ad";
+  var VIEWS = `${STORE}-views`;
+  var INTRUSIVE = `${STORE}-intrusive`;
+  var mobile = window.matchMedia("(max-width: 767px)");
+  var adSlots = [
+    { id: "top-strip", type: "strip", label: "\u05D1\u05D0\u05E0\u05E8 \u05E2\u05DC\u05D9\u05D5\u05DF 1/1", enabled: true, delayMs: 400, autoCloseSec: 0, frequency: "session", excludeRoutes: [] },
+    { id: "corner-peek", type: "peek", label: "\u05D1\u05D0\u05E0\u05E8 \u05E4\u05D9\u05E0\u05D4 1/1", enabled: true, delayMs: 3e3, autoCloseSec: 5, frequency: "session", excludeRoutes: FLOATING_EXCLUDE, intrusive: true },
+    { id: "bottom-center", type: "bottom", label: "\u05D1\u05D0\u05E0\u05E8 \u05EA\u05D7\u05EA\u05D5\u05DF 1/1", enabled: false, delayMs: 1500, autoCloseSec: 5, frequency: "session", excludeRoutes: FLOATING_EXCLUDE },
+    { id: "interstitial", type: "modal", label: "\u05D1\u05D0\u05E0\u05E8 \u05DE\u05E1\u05DA \u05DE\u05DC\u05D0 1/1", enabled: true, delayMs: 4e3, autoCloseSec: 5, frequency: "day", excludeRoutes: FLOATING_EXCLUDE, intrusive: true, onMobile: false, skipFirstView: true },
+    { id: "pre-footer", type: "inline", label: "\u05D1\u05D0\u05E0\u05E8 \u05DC\u05E4\u05E0\u05D9 \u05D4\u05E4\u05D5\u05D8\u05E8 1/1", enabled: true, delayMs: 0, autoCloseSec: 0, frequency: "always", excludeRoutes: [] }
+  ];
+  var closeIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg>`;
+  var tabIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg>`;
+  var live = /* @__PURE__ */ new Map();
+  var pending = /* @__PURE__ */ new Map();
+  var dismissed = /* @__PURE__ */ new Set();
+  var settings = { enabled: {}, timers: true };
+  var lastHash = null;
+  var lastRoute = null;
+  var bound = false;
+  function storage(slot) {
+    return slot.frequency === "day" ? localStorage : sessionStorage;
+  }
+  function today() {
+    return (/* @__PURE__ */ new Date()).toISOString().slice(0, 10);
+  }
+  function wasClosed(slot) {
+    if (slot.frequency === "always") return dismissed.has(slot.id);
+    try {
+      const value = storage(slot).getItem(`${STORE}:${slot.id}`);
+      return slot.frequency === "day" ? value === today() : value === "1";
+    } catch {
+      return false;
+    }
+  }
+  function rememberClosed(slot) {
+    if (slot.frequency === "always") {
+      dismissed.add(slot.id);
+      return;
+    }
+    try {
+      storage(slot).setItem(`${STORE}:${slot.id}`, slot.frequency === "day" ? today() : "1");
+    } catch {
+    }
+  }
+  function readSession(key) {
+    try {
+      return sessionStorage.getItem(key);
+    } catch {
+      return null;
+    }
+  }
+  function writeSession(key, value) {
+    try {
+      sessionStorage.setItem(key, value);
+    } catch {
+    }
+  }
+  function eligible(slot, route) {
+    if (!settings.enabled[slot.id]) return false;
+    if (slot.excludeRoutes.includes(route.name)) return false;
+    if (slot.onMobile === false && mobile.matches) return false;
+    if (slot.skipFirstView && Number(readSession(VIEWS) || 0) < 2) return false;
+    if (slot.intrusive) {
+      const lock = readSession(INTRUSIVE);
+      if (lock && lock !== slot.id) return false;
+    }
+    return !wasClosed(slot);
+  }
+  function timerSec(slot) {
+    return settings.timers ? slot.autoCloseSec : 0;
+  }
+  function cardMarkup(slot) {
+    const seconds = timerSec(slot);
+    const bar = seconds && !prefersReducedMotion() ? `<span class="ad-progress" aria-hidden="true"><span></span></span>` : "";
+    const count = seconds ? `<span class="ad-count" data-ad-count>\u05D9\u05D9\u05E1\u05D2\u05E8 \u05D1\u05E2\u05D5\u05D3 ${seconds}</span>` : "";
+    const titleId = `ad-${slot.id}-title`;
+    return `<div class="ad-card">
+    <span class="proto-label">${slot.label}</span>
+    <div class="ad-copy">
+      <p class="ad-title" id="${titleId}">\u05E9\u05D8\u05D7 \u05E4\u05E8\u05E1\u05D5\u05DD</p>
+      <p class="ad-text">\u05DB\u05D0\u05DF \u05D9\u05D5\u05E4\u05D9\u05E2 \u05D1\u05D0\u05E0\u05E8 \u05E9\u05DC \u05DE\u05D1\u05E6\u05E2 \u05D0\u05D5 \u05DE\u05D5\u05EA\u05D2.</p>
+      <a class="ad-link" href="#/d/offers">\u05DC\u05DE\u05D1\u05E6\u05E2\u05D9\u05DD</a>
+    </div>
+    <div class="ad-tools">${count}<button type="button" class="ad-close" data-ad-close aria-label="\u05E1\u05D2\u05D9\u05E8\u05D4">${closeIcon}</button></div>
+    ${bar}
+  </div>`;
+  }
+  function build(slot) {
+    const el = document.createElement(slot.type === "modal" ? "div" : "aside");
+    el.className = `ad-slot ad-${slot.type}`;
+    el.dataset.adSlot = slot.id;
+    if (slot.type === "modal") {
+      el.innerHTML = `<div class="ad-modal-box" role="dialog" aria-modal="true" aria-labelledby="ad-${slot.id}-title" tabindex="-1">${cardMarkup(slot)}</div>`;
+    } else {
+      el.setAttribute("aria-label", "\u05E4\u05E8\u05E1\u05D5\u05DE\u05EA");
+      if (slot.type === "inline") el.classList.add("wrap");
+      const inner = slot.type === "strip" ? `<div class="ad-strip-inner"><div class="wrap">${cardMarkup(slot)}</div></div>` : slot.type === "inline" ? `<div class="ad-inline-inner">${cardMarkup(slot)}</div>` : cardMarkup(slot);
+      el.innerHTML = slot.type === "peek" ? `<button type="button" class="ad-peek-tab" data-ad-open aria-label="\u05E4\u05EA\u05D9\u05D7\u05EA \u05D4\u05D1\u05D0\u05E0\u05E8">${tabIcon}</button>${inner}` : inner;
+    }
+    return el;
+  }
+  function mountPoint(slot, el) {
+    if (slot.type === "strip") document.querySelector(".site-header")?.before(el);
+    else if (slot.type === "inline") document.querySelector(".site-footer")?.before(el);
+    else document.body.append(el);
+  }
+  function layoutStack() {
+    const root = document.documentElement;
+    const center = live.get("bottom-center");
+    const peek = live.get("corner-peek");
+    const centerH = center?.open ? center.el.offsetHeight + parseFloat(getComputedStyle(center.el).bottom) + 12 : 0;
+    const peekBar = peek?.open && mobile.matches ? peek.el.getBoundingClientRect().height : 0;
+    root.style.setProperty("--ad-center-h", `${centerH}px`);
+    root.style.setProperty("--ad-stack", `${centerH + peekBar}px`);
+  }
+  function startTimer(inst) {
+    const seconds = timerSec(inst.slot);
+    if (!seconds) return;
+    const total = seconds * 1e3;
+    const count = inst.el.querySelector("[data-ad-count]");
+    const fill = inst.el.querySelector(".ad-progress > span");
+    let elapsed = 0;
+    let last = performance.now();
+    let paused2 = false;
+    let shown = seconds;
+    const card2 = inst.el.querySelector(".ad-card");
+    const pause = () => {
+      paused2 = true;
+    };
+    const resume = (event) => {
+      if (event?.relatedTarget && card2.contains(event.relatedTarget)) return;
+      if (card2.matches(":hover") || card2.contains(document.activeElement)) return;
+      paused2 = false;
+    };
+    card2.addEventListener("pointerenter", pause);
+    card2.addEventListener("focusin", pause);
+    card2.addEventListener("pointerleave", resume);
+    card2.addEventListener("focusout", resume);
+    const tick = (now) => {
+      const delta = Math.min(now - last, 100);
+      last = now;
+      if (!paused2) elapsed += delta;
+      const left = Math.max(0, total - elapsed);
+      const next = Math.ceil(left / 1e3);
+      if (next !== shown && count) {
+        shown = next;
+        count.textContent = `\u05D9\u05D9\u05E1\u05D2\u05E8 \u05D1\u05E2\u05D5\u05D3 ${next}`;
+      }
+      if (fill) fill.style.transform = `scaleX(${Math.min(1, elapsed / total)})`;
+      if (left <= 0) {
+        close(inst.slot.id, "timer");
+        return;
+      }
+      inst.raf = requestAnimationFrame(tick);
+    };
+    inst.raf = requestAnimationFrame((now) => {
+      last = now;
+      tick(now);
+    });
+  }
+  function focusables(root) {
+    return [...root.querySelectorAll('a[href], button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])')].filter((item) => item.getClientRects().length);
+  }
+  function openModal(inst) {
+    const box = inst.el.querySelector(".ad-modal-box");
+    inst.returnFocus = document.activeElement;
+    document.documentElement.classList.add("ad-scroll-lock");
+    inst.el.addEventListener("click", (event) => {
+      if (event.target === inst.el) close(inst.slot.id, "overlay");
+    });
+    inst.el.addEventListener("keydown", (event) => {
+      if (event.key !== "Tab") return;
+      const items = focusables(box);
+      if (!items.length) return;
+      const first = items[0];
+      const lastItem = items[items.length - 1];
+      if (event.shiftKey && (document.activeElement === first || document.activeElement === box)) {
+        event.preventDefault();
+        lastItem.focus();
+      } else if (!event.shiftKey && document.activeElement === lastItem) {
+        event.preventDefault();
+        first.focus();
+      }
+    });
+    box.focus({ preventScroll: true });
+  }
+  function show(slot) {
+    pending.delete(slot.id);
+    if (live.has(slot.id) || !lastRoute || !eligible(slot, lastRoute)) return;
+    if (slot.type !== "strip" && slot.type !== "inline" && document.querySelector(".cookie-notice")) {
+      waitForCookieNotice(slot);
+      return;
+    }
+    if (slot.intrusive) writeSession(INTRUSIVE, slot.id);
+    const el = build(slot);
+    const inst = { slot, el, open: false, raf: 0 };
+    live.set(slot.id, inst);
+    mountPoint(slot, el);
+    el.addEventListener("click", (event) => {
+      if (event.target.closest("[data-ad-close]")) close(slot.id, "button");
+      if (event.target.closest("[data-ad-open]")) expand(inst);
+    });
+    const reduce = prefersReducedMotion();
+    void el.offsetWidth;
+    if (slot.type === "peek") {
+      el.classList.add("is-peek");
+      inst.expandTimer = window.setTimeout(() => expand(inst), reduce ? 0 : 900);
+      return;
+    }
+    el.classList.add("is-open");
+    inst.open = true;
+    if (slot.type === "modal") openModal(inst);
+    layoutStack();
+    startTimer(inst);
+  }
+  function expand(inst) {
+    window.clearTimeout(inst.expandTimer);
+    if (inst.open) return;
+    inst.open = true;
+    inst.el.classList.remove("is-peek");
+    inst.el.classList.add("is-open");
+    layoutStack();
+    startTimer(inst);
+  }
+  function waitForCookieNotice(slot) {
+    const observer = new MutationObserver(() => {
+      if (document.querySelector(".cookie-notice")) return;
+      observer.disconnect();
+      pending.delete(slot.id);
+      schedule(slot, 600);
+    });
+    observer.observe(document.body, { childList: true });
+    pending.set(slot.id, { cancel: () => observer.disconnect() });
+  }
+  function schedule(slot, delay = slot.delayMs) {
+    if (pending.has(slot.id) || live.has(slot.id)) return;
+    const id = window.setTimeout(() => show(slot), delay);
+    pending.set(slot.id, { cancel: () => window.clearTimeout(id) });
+  }
+  function unschedule(id) {
+    pending.get(id)?.cancel();
+    pending.delete(id);
+  }
+  function teardown(inst, animate) {
+    cancelAnimationFrame(inst.raf);
+    window.clearTimeout(inst.expandTimer);
+    live.delete(inst.slot.id);
+    const { el } = inst;
+    if (inst.slot.type === "modal") {
+      document.documentElement.classList.remove("ad-scroll-lock");
+      if (inst.returnFocus?.isConnected) inst.returnFocus.focus({ preventScroll: true });
+    } else if (el.contains(document.activeElement)) {
+      (document.querySelector("#app h1") || document.getElementById("app"))?.focus({ preventScroll: true });
+    }
+    layoutStack();
+    if (!animate || prefersReducedMotion()) {
+      el.remove();
+      return;
+    }
+    el.classList.remove("is-open", "is-peek");
+    el.classList.add("is-closing");
+    window.setTimeout(() => el.remove(), 400);
+  }
+  function close(id, reason) {
+    const inst = live.get(id);
+    if (!inst) return;
+    if (reason) rememberClosed(inst.slot);
+    teardown(inst, true);
+  }
+  function topmostOpen() {
+    const order = ["interstitial", "bottom-center", "corner-peek"];
+    return order.find((id) => live.get(id)?.open);
+  }
+  function onKeydown(event) {
+    if (event.key !== "Escape") return;
+    const modal = live.get("interstitial");
+    if (modal) {
+      event.preventDefault();
+      close("interstitial", "escape");
+      return;
+    }
+    const owner = document.activeElement?.closest?.("[data-ad-slot]");
+    if (owner) {
+      close(owner.dataset.adSlot, "escape");
+      return;
+    }
+    if (document.querySelector("dialog[open], .theme-panel.is-open, .mobile-menu.is-open, .cart-dock.is-open")) return;
+    const id = topmostOpen();
+    if (id) close(id, "escape");
+  }
+  function bind() {
+    if (bound) return;
+    bound = true;
+    document.addEventListener("keydown", onKeydown);
+    mobile.addEventListener("change", () => {
+      layoutStack();
+      if (lastRoute) updateAdSlots(lastRoute, settings);
+    });
+    window.addEventListener("resize", layoutStack);
+  }
+  function updateAdSlots(route, next = settings) {
+    bind();
+    settings = next;
+    const hash = location.hash || "#/";
+    const routeChanged = hash !== lastHash;
+    if (routeChanged) {
+      lastHash = hash;
+      dismissed.clear();
+      writeSession(VIEWS, String(Number(readSession(VIEWS) || 0) + 1));
+    }
+    lastRoute = route;
+    adSlots.forEach((slot) => {
+      const ok = live.has(slot.id) ? settings.enabled[slot.id] && !slot.excludeRoutes.includes(route.name) : eligible(slot, route);
+      if (!ok) {
+        unschedule(slot.id);
+        const inst = live.get(slot.id);
+        if (inst) teardown(inst, false);
+        return;
+      }
+      schedule(slot);
+    });
+  }
+  function replayAdSlots(route, next = settings) {
+    adSlots.forEach((slot) => {
+      unschedule(slot.id);
+      const inst = live.get(slot.id);
+      if (inst) teardown(inst, false);
+      try {
+        sessionStorage.removeItem(`${STORE}:${slot.id}`);
+        localStorage.removeItem(`${STORE}:${slot.id}`);
+      } catch {
+      }
+    });
+    try {
+      sessionStorage.removeItem(INTRUSIVE);
+      sessionStorage.setItem(VIEWS, String(Math.max(2, Number(readSession(VIEWS) || 0))));
+    } catch {
+    }
+    dismissed.clear();
+    lastHash = location.hash || "#/";
+    updateAdSlots(route, next);
+  }
+
   // js/components/theme-options.js
   var KEY2 = "ashmoret-theme";
-  var REV = 9;
-  var defaults = { header: "v2", hero: "v4", heroEffect: "v2", categories: "v2", featured: "v1", banners: "v2", mobileMenu: "v2", mobileCarousel: "v2", suppliers: "v1", palette: "v1", logo: "v1", wideHeader: true };
+  var REV = 10;
+  var adKey = (id) => `ad-${id}`;
+  var adDefaults = { ...Object.fromEntries(adSlots.map((slot) => [adKey(slot.id), slot.enabled])), adTimers: true };
+  var defaults = { header: "v2", hero: "v4", heroEffect: "v2", categories: "v2", featured: "v1", banners: "v2", mobileMenu: "v2", mobileCarousel: "v2", suppliers: "v1", palette: "v1", logo: "v1", wideHeader: true, listingCenter: true, ...adDefaults };
   var logos = {
     v1: { src: "assets/images/brand/logo-market-cart.png?v=2", width: 300, height: 80 },
     v2: { src: "assets/images/brand/logo-market.png", width: 1024, height: 344 }
@@ -6996,7 +7344,9 @@
     suppliers: groupIcon(`<path d="M3 9 4.5 4h15L21 9"></path><path d="M4 9v11h16V9"></path><path d="M3 9h18"></path><path d="M9.5 20v-5.5h5V20"></path>`),
     palette: groupIcon(`<path d="M12 3a9 9 0 1 0 0 18c1.1 0 1.8-.9 1.8-1.9 0-.5-.2-.9-.5-1.3-.3-.3-.5-.8-.5-1.2 0-1 .8-1.8 1.8-1.8H16a5 5 0 0 0 5-5c0-3.9-4-6.8-9-6.8z"></path><circle cx="7.5" cy="11" r="1.2"></circle><circle cx="10.5" cy="7" r="1.2"></circle><circle cx="15" cy="7.5" r="1.2"></circle>`),
     logo: groupIcon(`<path d="M3 4h2l2.4 10.2a1.5 1.5 0 0 0 1.5 1.1h8.6a1.5 1.5 0 0 0 1.4-1.1L21 8H6.2"></path><circle cx="9.5" cy="19.5" r="1.3"></circle><circle cx="17" cy="19.5" r="1.3"></circle>`),
-    wideHeader: groupIcon(`<path d="M3 12h18"></path><path d="m7 8-4 4 4 4M17 8l4 4-4 4"></path>`)
+    wideHeader: groupIcon(`<path d="M3 12h18"></path><path d="m7 8-4 4 4 4M17 8l4 4-4 4"></path>`),
+    listingHero: groupIcon(`<rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="M8 8h8M6 12h12M9 16h6"></path>`),
+    adLayout: groupIcon(`<rect x="3" y="3" width="18" height="18" rx="2"></rect><path d="M3 7h18M7 17h10"></path><path d="M15 11h3v3h-3z"></path>`)
   };
   var groups = [
     {
@@ -7095,6 +7445,27 @@
         ["v2", "V2", "\u05D0\u05E9\u05DE\u05D5\u05E8\u05EA MARKET \u05E2\u05DD \u05D4\u05DC\u05D1."]
       ],
       note: "\u05D4\u05DC\u05D5\u05D2\u05D5 \u05DE\u05EA\u05D7\u05DC\u05E3 \u05D1\u05D4\u05D3\u05E8, \u05D1\u05EA\u05E4\u05E8\u05D9\u05D8 \u05D4\u05DE\u05D5\u05D1\u05D9\u05D9\u05DC \u05D5\u05D1\u05E4\u05D5\u05D8\u05E8."
+    },
+    {
+      name: "listingHero",
+      title: "\u05D7\u05DC\u05E7 \u05E2\u05DC\u05D9\u05D5\u05DF \u05E2\u05DE\u05D5\u05D3 \u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D4",
+      toggles: [
+        ["listingCenter", "\u05DE\u05E8\u05DB\u05D5\u05D6", "\u05E4\u05D9\u05E8\u05D5\u05E8\u05D9 \u05D4\u05DC\u05D7\u05DD, \u05D4\u05DB\u05D5\u05EA\u05E8\u05EA \u05D5\u05D1\u05D5\u05E2\u05D5\u05EA \u05EA\u05EA\u05D9 \u05D4\u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D5\u05EA \u05D1\u05DE\u05E8\u05DB\u05D6 (\u05D1\u05E8\u05D9\u05E8\u05EA \u05DE\u05D7\u05D3\u05DC). \u05DB\u05D1\u05D5\u05D9: \u05DE\u05D9\u05D5\u05E9\u05E8\u05D9\u05DD \u05DC\u05D9\u05DE\u05D9\u05DF."]
+      ]
+    },
+    {
+      name: "adLayout",
+      title: "\u05D4\u05D2\u05D3\u05E8\u05D5\u05EA \u05E4\u05E8\u05D9\u05E1\u05EA \u05D1\u05D0\u05E0\u05E8\u05D9\u05DD",
+      toggles: [
+        [adKey("top-strip"), "\u05E1\u05D8\u05E8\u05D9\u05E4 \u05E2\u05DC\u05D9\u05D5\u05DF", "\u05E4\u05E1 \u05E6\u05E8 \u05DE\u05E2\u05DC \u05D4\u05D4\u05D3\u05E8. \u05E0\u05E4\u05EA\u05D7 \u05D1\u05D2\u05DC\u05D9\u05E9\u05D4 \u05D5\u05D3\u05D5\u05D7\u05E3 \u05D0\u05EA \u05D4\u05EA\u05D5\u05DB\u05DF \u05DC\u05DE\u05D8\u05D4."],
+        [adKey("corner-peek"), "\u05E4\u05D9\u05E0\u05D4 \u05DE\u05D1\u05E6\u05D1\u05E6\u05EA", "\u05D1\u05DC\u05D5\u05E7 \u05D1\u05E4\u05D9\u05E0\u05D4 \u05D4\u05D9\u05DE\u05E0\u05D9\u05EA \u05D4\u05EA\u05D7\u05EA\u05D5\u05E0\u05D4: \u05E7\u05D5\u05D3\u05DD \u05DE\u05D1\u05E6\u05D1\u05E6\u05EA \u05DC\u05E9\u05D5\u05E0\u05D9\u05EA \u05D5\u05D0\u05D6 \u05D4\u05D5\u05D0 \u05E0\u05DB\u05E0\u05E1. \u05D1\u05DE\u05D5\u05D1\u05D9\u05D9\u05DC \u05D1\u05E8 \u05D1\u05EA\u05D7\u05EA\u05D9\u05EA \u05D4\u05DE\u05E1\u05DA."],
+        [adKey("bottom-center"), "\u05D1\u05D0\u05E0\u05E8 \u05EA\u05D7\u05EA\u05D5\u05DF", "\u05D1\u05D0\u05E0\u05E8 \u05E8\u05D7\u05D1 \u05D1\u05EA\u05D7\u05EA\u05D9\u05EA \u05D5\u05D1\u05DE\u05E8\u05DB\u05D6 \u05D4\u05DE\u05E1\u05DA, \u05E2\u05D5\u05DC\u05D4 \u05DE\u05DC\u05DE\u05D8\u05D4."],
+        [adKey("interstitial"), "\u05DE\u05E1\u05DA \u05DE\u05DC\u05D0", '\u05E4\u05D5\u05E4\u05D0\u05E4 \u05E2\u05DD \u05E9\u05DB\u05D1\u05D4 \u05DB\u05D4\u05D4. \u05DE\u05D4\u05D3\u05E3 \u05D4\u05E9\u05E0\u05D9 \u05D1\u05D1\u05D9\u05E7\u05D5\u05E8 \u05D5\u05D0\u05D7\u05E8\u05D9 4 \u05E9\u05E0\u05D9\u05D5\u05EA \u05DC\u05E4\u05D7\u05D5\u05EA. <span class="theme-warn">\u05DB\u05D1\u05D5\u05D9 \u05D1\u05DE\u05D5\u05D1\u05D9\u05D9\u05DC.</span>'],
+        [adKey("pre-footer"), "\u05DC\u05E4\u05E0\u05D9 \u05D4\u05E4\u05D5\u05D8\u05E8", "\u05E1\u05D8\u05E8\u05D9\u05E4 \u05D1\u05EA\u05D5\u05DA \u05D4\u05D3\u05E3, \u05DE\u05DE\u05E9 \u05DE\u05E2\u05DC \u05D4\u05E4\u05D5\u05D8\u05E8."],
+        ["adTimers", "\u05D8\u05D9\u05D9\u05DE\u05E8 \u05E1\u05D2\u05D9\u05E8\u05D4", "\u05D3\u05D5\u05DC\u05E7: \u05E1\u05E4\u05D9\u05E8\u05D4 \u05DC\u05D0\u05D7\u05D5\u05E8 \u05D5\u05E7\u05D5 \u05D4\u05EA\u05E7\u05D3\u05DE\u05D5\u05EA. \u05DB\u05D1\u05D5\u05D9: \u05E0\u05E1\u05D2\u05E8 \u05E8\u05E7 \u05D1\u05BEX."]
+      ],
+      action: ["data-ads-replay", "\u05D4\u05E6\u05D2 \u05E9\u05D5\u05D1"],
+      note: "\u05D1\u05DB\u05DC \u05D1\u05D9\u05E7\u05D5\u05E8 \u05DE\u05D5\u05E6\u05D2 \u05E8\u05E7 \u05D1\u05D0\u05E0\u05E8 \u05E4\u05D5\u05DC\u05E9\u05E0\u05D9 \u05D0\u05D7\u05D3, \u05E4\u05D9\u05E0\u05D4 \u05D0\u05D5 \u05DE\u05E1\u05DA \u05DE\u05DC\u05D0. \u05DB\u05D3\u05D9 \u05DC\u05E8\u05D0\u05D5\u05EA \u05D0\u05EA \u05D4\u05DE\u05E1\u05DA \u05D4\u05DE\u05DC\u05D0, \u05DB\u05D1\u05D5 \u05D0\u05EA \u05D4\u05E4\u05D9\u05E0\u05D4 \u05D5\u05DC\u05D7\u05E6\u05D5 \xAB\u05D4\u05E6\u05D2 \u05E9\u05D5\u05D1\xBB. \u05D1\u05D0\u05E0\u05E8\u05D9\u05DD \u05E6\u05E4\u05D9\u05DD \u05DC\u05D0 \u05DE\u05D5\u05E6\u05D2\u05D9\u05DD \u05D1\u05EA\u05E9\u05DC\u05D5\u05DD, \u05D1\u05D4\u05EA\u05D7\u05D1\u05E8\u05D5\u05EA, \u05D1\u05D0\u05D9\u05E9\u05D5\u05E8 \u05D4\u05D6\u05DE\u05E0\u05D4 \u05D5\u05D1\u05E2\u05DE\u05D5\u05D3\u05D9\u05DD \u05D4\u05DE\u05E9\u05E4\u05D8\u05D9\u05D9\u05DD."
     }
   ];
   var state = load();
@@ -7102,6 +7473,10 @@
   var onHeroChange = () => {
   };
   var onSuppliersChange = () => {
+  };
+  var onAdsChange = () => {
+  };
+  var onAdsReplay = () => {
   };
   function load() {
     try {
@@ -7120,7 +7495,9 @@
         suppliers: saved.suppliers === "v2" ? "v2" : defaults.suppliers,
         palette: current && saved.palette === "grey" ? "grey" : defaults.palette,
         logo: saved.logo === "v2" ? "v2" : defaults.logo,
-        wideHeader: typeof saved.wideHeader === "boolean" ? saved.wideHeader : defaults.wideHeader
+        wideHeader: typeof saved.wideHeader === "boolean" ? saved.wideHeader : defaults.wideHeader,
+        listingCenter: saved.rev >= 10 && saved.listingCenter === false ? false : defaults.listingCenter,
+        ...Object.fromEntries(Object.keys(adDefaults).map((key) => [key, typeof saved[key] === "boolean" ? saved[key] : adDefaults[key]]))
       };
     } catch {
       return { rev: REV, ...defaults };
@@ -7134,6 +7511,12 @@
   }
   function getTheme() {
     return state;
+  }
+  function adSettings() {
+    return {
+      enabled: Object.fromEntries(adSlots.map((slot) => [slot.id, state[adKey(slot.id)] === true])),
+      timers: state.adTimers === true
+    };
   }
   function applyPalette() {
     const root = document.documentElement;
@@ -7155,6 +7538,9 @@
   function applyMobileMenu() {
     document.documentElement.dataset.mobileMenu = state.mobileMenu;
     if (state.mobileMenu !== "v2") document.documentElement.classList.remove("is-menu-cover");
+  }
+  function applyListingHero() {
+    document.documentElement.toggleAttribute("data-listing-center", state.listingCenter);
   }
   function applyMobileCarousel() {
     document.documentElement.dataset.mobileCarousel = state.mobileCarousel;
@@ -7189,7 +7575,7 @@
   <div class="theme-panel-body">
     ${groups.map((group, index) => `<fieldset class="theme-group">
       <legend><span class="theme-group-num" aria-hidden="true">${index + 1}</span><span class="theme-legend-icon">${groupIcons[group.name]}</span>${group.title}</legend>
-      ${group.options.map(([value, label, text, swatches]) => `<label class="theme-option">
+      ${(group.options || []).map(([value, label, text, swatches]) => `<label class="theme-option">
         <input type="radio" name="${group.name}" value="${value}" ${state[group.name] === value ? "checked" : ""} data-theme-option>
         <span><strong>${label}</strong><small>${text}</small>${swatches ? `<span class="theme-swatches" aria-hidden="true">${swatches.map((color) => `<span style="background:${color}"></span>`).join("")}</span>` : ""}</span>
       </label>`).join("")}
@@ -7197,6 +7583,11 @@
         <input type="checkbox" name="${group.checkbox[0]}" ${state[group.checkbox[0]] ? "checked" : ""} data-theme-toggle>
         <span><strong class="theme-option-title"><span class="theme-legend-icon">${groupIcons[group.checkbox[0]]}</span>${group.checkbox[1]}</strong><small>${group.checkbox[2]}</small></span>
       </label>` : ""}
+      ${(group.toggles || []).map(([name, label, text]) => `<label class="theme-option">
+        <input type="checkbox" name="${name}" ${state[name] ? "checked" : ""} data-theme-toggle>
+        <span><strong>${label}</strong><small>${text}</small></span>
+      </label>`).join("")}
+      ${group.action ? `<button class="btn btn-line theme-action" type="button" ${group.action[0]}>${group.action[1]}</button>` : ""}
       ${group.note ? `<p class="theme-note">${group.note}</p>` : ""}
     </fieldset>`).join("")}
     <button class="btn btn-line theme-reset" type="button" data-theme-reset>\u05D0\u05D9\u05E4\u05D5\u05E1 \u05DC\u05D1\u05E8\u05D9\u05E8\u05EA \u05DE\u05D7\u05D3\u05DC</button>
@@ -7225,10 +7616,14 @@
     if (name === "suppliers") onSuppliersChange();
     if (name === "palette") applyPalette();
     if (name === "logo") applyLogo();
+    if (name === "listingCenter") applyListingHero();
+    if (name in adDefaults) onAdsChange();
   }
-  function bindThemeOptions({ heroChange, suppliersChange } = {}) {
+  function bindThemeOptions({ heroChange, suppliersChange, adsChange, adsReplay } = {}) {
     onHeroChange = heroChange || onHeroChange;
     onSuppliersChange = suppliersChange || onSuppliersChange;
+    onAdsChange = adsChange || onAdsChange;
+    onAdsReplay = adsReplay || onAdsReplay;
     const gear = document.createElement("button");
     gear.type = "button";
     gear.className = "theme-gear";
@@ -7255,7 +7650,9 @@
     gear.addEventListener("click", () => toggle(!panel.classList.contains("is-open")));
     panel.addEventListener("click", (event) => {
       if (event.target.closest("[data-theme-close]")) toggle(false);
+      if (event.target.closest("[data-ads-replay]")) onAdsReplay();
       if (event.target.closest("[data-theme-reset]")) {
+        Object.keys(adDefaults).forEach((key) => setOption(key, adDefaults[key], panel));
         setOption("header", defaults.header, panel);
         setOption("hero", defaults.hero, panel);
         setOption("heroEffect", defaults.heroEffect, panel);
@@ -7268,6 +7665,7 @@
         setOption("palette", defaults.palette, panel);
         setOption("logo", defaults.logo, panel);
         setOption("wideHeader", defaults.wideHeader, panel);
+        setOption("listingCenter", defaults.listingCenter, panel);
       }
     });
     panel.addEventListener("change", (event) => {
@@ -7290,6 +7688,7 @@
     applyHeader();
     applyMobileMenu();
     applyMobileCarousel();
+    applyListingHero();
     applyPalette();
     applyLogo();
   }
@@ -7382,7 +7781,7 @@
     "check-circle": check_circle_default
   };
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-  var live = [];
+  var live2 = [];
   function mountIcon(icon3) {
     const animationData = animations[icon3.dataset.lottie];
     if (!animationData) return;
@@ -7399,7 +7798,7 @@
       autoplay: (loop || once) && !reduceMotion.matches,
       animationData: structuredClone(animationData)
     });
-    live.push(animation);
+    live2.push(animation);
     if (loop || once) return;
     const play = () => {
       if (!reduceMotion.matches && animation.isPaused) animation.goToAndPlay(0, true);
@@ -7409,7 +7808,7 @@
     trigger.addEventListener("focus", play);
   }
   function mountLottieIcons(root = document) {
-    live = live.filter((animation) => {
+    live2 = live2.filter((animation) => {
       if (animation.wrapper?.isConnected) return true;
       animation.destroy();
       return false;
@@ -7712,7 +8111,7 @@
     const slides2 = [...root.querySelectorAll(".promo-slide")];
     const listeners3 = [];
     let current = 0;
-    const show = (index) => {
+    const show2 = (index) => {
       current = (index + slides2.length) % slides2.length;
       slides2.forEach((slide, n) => slide.classList.toggle("is-active", n === current));
       listeners3.forEach((listener) => listener());
@@ -7737,7 +8136,7 @@
       const dx = x - startX;
       if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(y - startY)) return;
       swiped = true;
-      show(dx > 0 ? current + 1 : current - 1);
+      show2(dx > 0 ? current + 1 : current - 1);
     };
     const onDown = (event) => {
       if (event.pointerType === "touch" || event.button > 0) return;
@@ -7784,9 +8183,9 @@
     track.addEventListener("click", onClick, true);
     track.addEventListener("dragstart", onDragStart);
     return {
-      scrollNext: () => show(current + 1),
-      scrollPrev: () => show(current - 1),
-      scrollTo: show,
+      scrollNext: () => show2(current + 1),
+      scrollPrev: () => show2(current - 1),
+      scrollTo: show2,
       selectedScrollSnap: () => current,
       on: (event, listener) => {
         if (event === "select") listeners3.push(listener);
@@ -8071,22 +8470,21 @@
     });
     return items;
   }
-  function listingControls({ categories: categories2, query }) {
+  function listingControls({ categories: categories2, query, count }) {
     const categoryOptions = categories2 ? [`<option value="">\u05DB\u05DC \u05D4\u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D5\u05EA</option>`].concat(categories2.map((category) => `<option value="${esc(category.slug)}"${query.category === category.slug ? " selected" : ""}>${esc(category.name)}</option>`)).join("") : "";
     const sorts = [
       ["name", "\u05E9\u05DD"],
       ["price-asc", "\u05DE\u05D7\u05D9\u05E8, \u05DE\u05D4\u05E0\u05DE\u05D5\u05DA"],
-      ["price-desc", "\u05DE\u05D7\u05D9\u05E8, \u05DE\u05D4\u05D2\u05D1\u05D5\u05D4"]
+      ["price-desc", "\u05DE\u05D7\u05D9\u05E8, \u05DE\u05D4\u05D2\u05D1\u05D5\u05D4"],
+      ["offers", "\u05DE\u05D1\u05E6\u05E2\u05D9\u05DD \u05D1\u05DC\u05D1\u05D3"]
     ];
+    const current = query.offers === "1" ? "offers" : query.sort || "name";
     return `<form class="listing-bar" data-listing-form>
     <div class="listing-filters">
       ${categories2 ? `<label class="listing-select"><span>\u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D4</span><select name="category">${categoryOptions}</select></label>` : ""}
-      <label class="listing-check">
-        <input type="checkbox" name="offers" value="1"${query.offers === "1" ? " checked" : ""}>
-        \u05DE\u05D1\u05E6\u05E2\u05D9\u05DD \u05D1\u05DC\u05D1\u05D3
-      </label>
+      ${count ? `<p class="listing-count"><span class="listing-count-num">(${count.total})</span> ${count.total === 1 ? "\u05DE\u05D5\u05E6\u05E8" : "\u05DE\u05D5\u05E6\u05E8\u05D9\u05DD"} ${count.where}</p>` : ""}
     </div>
-    <label class="listing-select listing-sort"><span>\u05DE\u05D9\u05D5\u05DF</span><select name="sort">${sorts.map(([value, label]) => `<option value="${value}"${(query.sort || "name") === value ? " selected" : ""}>${label}</option>`).join("")}</select></label>
+    <label class="listing-select listing-sort"><span>\u05DE\u05D9\u05D5\u05DF</span><select name="sort">${sorts.map(([value, label]) => `<option value="${value}"${current === value ? " selected" : ""}>${label}</option>`).join("")}</select></label>
   </form>`;
   }
   function pageSize() {
@@ -8140,12 +8538,11 @@
       ...department ? [{ href: `#/d/${department.id}`, label: department.name }] : [],
       { label: category.name }
     ])}
-      <h1 class="text-3xl font-extrabold">${esc(category.name)}</h1>
-      <p class="mt-2 text-muted">${items.length} \u05DE\u05D5\u05E6\u05E8\u05D9\u05DD \u05D1\u05E7\u05D8\u05DC\u05D5\u05D2 \u05EA\u05D5\u05E6\u05E8\u05EA</p>
+      <h1 class="flex items-center gap-3 text-3xl font-extrabold">${department ? `<span class="nav-icon is-${esc(department.id)} h-8" aria-hidden="true"></span>` : ""}${esc(category.name)}</h1>
       ${department ? departmentChips(department, slug) : ""}
     `)}
     <div class="wrap pt-6 pb-8">
-      ${listingControls({ categories: null, query })}
+      ${listingControls({ categories: null, query, count: { total: items.length, where: "\u05D1\u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D4" } })}
       ${productGrid(view2.shown)}
       ${moreButton(view2.more)}
     </div>
@@ -8209,11 +8606,10 @@
     ${listingHero(`
       ${crumbs([{ href: "#/", label: "\u05D3\u05E3 \u05D4\u05D1\u05D9\u05EA" }, { label: department.name }])}
       <h1 class="flex items-center gap-3 text-3xl font-extrabold"><span class="nav-icon is-${esc(department.id)} h-8" aria-hidden="true"></span>${esc(department.name)}</h1>
-      <p class="mt-2 text-muted">${items.length} \u05DE\u05D5\u05E6\u05E8\u05D9\u05DD \u05D1\u05DE\u05D7\u05DC\u05E7\u05D4</p>
       ${chips}
     `)}
     <div class="wrap pt-6 pb-8">
-      ${listingControls({ categories: null, query })}
+      ${listingControls({ categories: null, query, count: { total: items.length, where: "\u05D1\u05DE\u05D7\u05DC\u05E7\u05D4" } })}
       ${productGrid(view2.shown)}
       ${moreButton(view2.more)}
     </div>
@@ -9840,14 +10236,14 @@
     const nav = document.querySelector("[data-main-nav]");
     const multi = nav?.querySelector("[data-nav-multi]");
     const single = nav?.querySelector("[data-nav-single]");
-    const mobile = document.getElementById("mobile-nav");
-    if (!nav || !multi || !single || !mobile) return;
+    const mobile2 = document.getElementById("mobile-nav");
+    if (!nav || !multi || !single || !mobile2) return;
     nav.megaClose?.();
     const solo = isSingleSupplier();
     multi.hidden = solo;
     single.hidden = !solo;
     single.innerHTML = solo ? supplierCategories().map(categoryLink).join("") : "";
-    mobile.innerHTML = solo ? supplierCategories().map((category) => `<div class="mobile-nav-item"><div class="mega-mobile-head">${categoryLink(category)}</div></div>`).join("") : menus.map((item) => `<div class="mobile-nav-item">
+    mobile2.innerHTML = solo ? supplierCategories().map((category) => `<div class="mobile-nav-item"><div class="mega-mobile-head">${categoryLink(category)}</div></div>`).join("") : menus.map((item) => `<div class="mobile-nav-item">
       <div class="mega-mobile-head">
         <a class="mega-trigger" href="#/d/${esc(item.id)}"><span class="nav-icon is-${esc(item.id)}" aria-hidden="true"></span>${esc(item.label)}</a>
         <button type="button" class="mega-trigger mobile-nav-toggle" data-mega-mobile="${esc(item.id)}" aria-expanded="false" aria-label="\u05E4\u05EA\u05D9\u05D7\u05EA ${esc(item.label)}">${chevron}${plus}</button>
@@ -9855,12 +10251,26 @@
       <div class="mega-mobile" hidden data-mega-mobile-panel="${esc(item.id)}"></div>
     </div>`).join("");
   }
+  function revealBlockPhotos(root) {
+    const gsap = window.gsap;
+    const photos = root.querySelectorAll(".mega-block-photo");
+    if (!gsap || !photos.length || prefersReducedMotion()) return;
+    gsap.fromTo(photos, { yPercent: 100, opacity: 0 }, {
+      yPercent: 0,
+      opacity: 1,
+      duration: 0.45,
+      ease: "back.out(1.6)",
+      stagger: 0.08,
+      delay: 0.05,
+      clearProps: "transform,opacity"
+    });
+  }
   function mountMega() {
     const nav = document.querySelector("[data-main-nav]");
     const mega = document.getElementById("mega");
     const body = document.getElementById("mega-body");
-    const mobile = document.getElementById("mobile-nav");
-    if (!nav || !mega || !body || !mobile) return;
+    const mobile2 = document.getElementById("mobile-nav");
+    if (!nav || !mega || !body || !mobile2) return;
     renderSupplierNav();
     const triggers = [...nav.querySelectorAll("[data-mega-open]")];
     let closeTimer = 0;
@@ -9876,15 +10286,16 @@
       if (mega.dataset.open !== id) {
         body.innerHTML = megaPanel(id);
         mega.dataset.open = id;
+        revealBlockPhotos(body);
       }
       mega.hidden = false;
       mega.setAttribute("aria-labelledby", link.id);
       triggers.forEach((item) => item.setAttribute("aria-expanded", String(item === link)));
     };
     const closeMobile = () => {
-      mobile.querySelectorAll("[data-mega-mobile]").forEach((button) => {
+      mobile2.querySelectorAll("[data-mega-mobile]").forEach((button) => {
         button.setAttribute("aria-expanded", "false");
-        const panel = mobile.querySelector(`[data-mega-mobile-panel="${button.dataset.megaMobile}"]`);
+        const panel = mobile2.querySelector(`[data-mega-mobile-panel="${button.dataset.megaMobile}"]`);
         if (panel) panel.hidden = true;
       });
     };
@@ -9927,11 +10338,11 @@
     nav.addEventListener("focusout", (event) => {
       if (!nav.contains(event.relatedTarget)) closeDesktop();
     });
-    mobile.addEventListener("click", (event) => {
+    mobile2.addEventListener("click", (event) => {
       const button = event.target.closest("[data-mega-mobile]");
       if (!button) return;
       const id = button.dataset.megaMobile;
-      const panel = mobile.querySelector(`[data-mega-mobile-panel="${id}"]`);
+      const panel = mobile2.querySelector(`[data-mega-mobile-panel="${id}"]`);
       const open3 = button.getAttribute("aria-expanded") === "true";
       closeMobile();
       if (!open3 && panel) {
@@ -9953,10 +10364,10 @@
   }
 
   // js/components/shell.js
-  var bound = false;
+  var bound2 = false;
   function bindShell(navigate3) {
-    if (bound) return;
-    bound = true;
+    if (bound2) return;
+    bound2 = true;
     const header = document.querySelector(".site-header");
     const markScrolled = () => header?.classList.toggle("is-scrolled", window.scrollY > 0);
     window.addEventListener("scroll", markScrolled, { passive: true });
@@ -10233,13 +10644,13 @@
     if (hiddenFor(routeName)) open = false;
     const items = rows();
     const count = countItems();
-    const show = !hiddenFor(routeName);
+    const show2 = !hiddenFor(routeName);
     root.hidden = false;
-    root.inert = !show;
-    root.classList.toggle("is-away", !show);
+    root.inert = !show2;
+    root.classList.toggle("is-away", !show2);
     if (!open) root.querySelector(".cart-dock-body")?.remove();
-    root.classList.toggle("is-open", open && show);
-    if (!show && root.childElementCount) return;
+    root.classList.toggle("is-open", open && show2);
+    if (!show2 && root.childElementCount) return;
     const totals = cartTotals();
     const list = items.length ? `<ul class="cart-dock-list">${items.map((item) => `<li class="cart-dock-item">
         <a class="cart-dock-thumb${productPhoto(item.product) ? " has-photo" : ""}" href="#/p/${esc(item.product.id)}" tabindex="-1" aria-hidden="true">${photoImg(item.product)}</a>
@@ -10684,7 +11095,7 @@
       if (!kind) return;
       event.preventDefault();
       const root = form.closest("[data-service-root]");
-      const live2 = () => root.isConnected && (root.dataset.serviceMode === "page" || root.open);
+      const live3 = () => root.isConnected && (root.dataset.serviceMode === "page" || root.open);
       if (kind === "delivery") {
         const delivery2 = state2.delivery;
         if (delivery2.pending) return;
@@ -10701,7 +11112,7 @@
         delivery2.pending = true;
         paint2(root, "button[type='submit']");
         await wait(LOAD_MS2);
-        if (!live2()) return;
+        if (!live3()) return;
         delivery2.pending = false;
         const place = delivery2.street ? `${delivery2.street}, ${delivery2.city}` : delivery2.city;
         delivery2.result = `\u05DE\u05D2\u05D9\u05E2\u05D9\u05DD \u05D0\u05DC\u05D9\u05DA! \u05D4\u05DE\u05E9\u05DC\u05D5\u05D7 \u05DC\u05BE${place} \u05D6\u05DE\u05D9\u05DF. \u05D1\u05D4\u05D3\u05D2\u05DE\u05D4 \u05DB\u05DC \u05DB\u05EA\u05D5\u05D1\u05EA \u05DE\u05E7\u05D1\u05DC\u05EA \u05EA\u05E9\u05D5\u05D1\u05D4 \u05D7\u05D9\u05D5\u05D1\u05D9\u05EA.`;
@@ -10720,7 +11131,7 @@
       service.pending = true;
       paint2(root, "button[type='submit']");
       await wait(LOAD_MS2);
-      if (!live2()) return;
+      if (!live3()) return;
       state2.service = { ...fresh.service(), topic: service.topic, sent: true };
       paint2(root, "[data-service-focus]");
     });
@@ -10836,7 +11247,7 @@
   // js/components/newsletter-popup.js
   var HIDE_KEY = "ashmoret-newsletter-hide";
   var COUPON = "ASH50";
-  var closeIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg>`;
+  var closeIcon2 = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg>`;
   var arrowIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"></path></svg>`;
   var scissorsIcon = `<svg class="news-scissors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="6" cy="6" r="3"></circle><circle cx="6" cy="18" r="3"></circle><path d="M20 4 8.1 15.9M14.5 14.5 20 20M8.1 8.1 12 12"></path></svg>`;
   function hidden() {
@@ -10873,7 +11284,7 @@
       <p id="news-terms-error" class="news-error" hidden>\u05E0\u05D0 \u05DC\u05D0\u05E9\u05E8 \u05D0\u05EA \u05EA\u05E0\u05D0\u05D9 \u05D4\u05E9\u05D9\u05DE\u05D5\u05E9 \u05DB\u05D3\u05D9 \u05DC\u05D4\u05D9\u05E8\u05E9\u05DD.</p>
     </form>
   </div>
-  <button class="news-close" type="button" data-news-close aria-label="\u05E1\u05D2\u05D9\u05E8\u05D4">${closeIcon}</button>`;
+  <button class="news-close" type="button" data-news-close aria-label="\u05E1\u05D2\u05D9\u05E8\u05D4">${closeIcon2}</button>`;
   }
   function ensureDialog3() {
     let dialog = document.getElementById("newsletter-dialog");
@@ -10936,7 +11347,7 @@
   // js/components/cookie-notice.js
   var KEY4 = "ashmoret-cookies";
   var MAX_AGE = 60 * 60 * 24 * 365;
-  var closeIcon2 = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg>`;
+  var closeIcon3 = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg>`;
   function accepted() {
     if (document.cookie.split("; ").includes(`${KEY4}=1`)) return true;
     try {
@@ -10957,7 +11368,7 @@
     const notice = document.createElement("section");
     notice.className = "cookie-notice";
     notice.setAttribute("aria-labelledby", "cookie-title");
-    notice.innerHTML = `<button class="cookie-close" type="button" data-cookie-close aria-label="\u05E1\u05D2\u05D9\u05E8\u05EA \u05D4\u05D5\u05D3\u05E2\u05EA \u05D4\u05E2\u05D5\u05D2\u05D9\u05D5\u05EA">${closeIcon2}</button>
+    notice.innerHTML = `<button class="cookie-close" type="button" data-cookie-close aria-label="\u05E1\u05D2\u05D9\u05E8\u05EA \u05D4\u05D5\u05D3\u05E2\u05EA \u05D4\u05E2\u05D5\u05D2\u05D9\u05D5\u05EA">${closeIcon3}</button>
     <h2 id="cookie-title" class="cookie-title"><span aria-hidden="true">\u{1F36A}</span> \u05D0\u05D5\u05D4\u05D1\u05D9\u05DD \u05E2\u05D5\u05D2\u05D9\u05D5\u05EA? \u05D2\u05DD \u05D0\u05E0\u05D7\u05E0\u05D5</h2>
     <p class="cookie-text">\u05D0\u05E0\u05D7\u05E0\u05D5 \u05DE\u05E9\u05EA\u05DE\u05E9\u05D9\u05DD \u05D1\u05E2\u05D5\u05D2\u05D9\u05D5\u05EA (cookies) \u05DC\u05E9\u05D9\u05E4\u05D5\u05E8 \u05D7\u05D5\u05D5\u05D9\u05D9\u05EA \u05D4\u05D2\u05DC\u05D9\u05E9\u05D4 \u05E9\u05DC\u05DA, \u05D4\u05E6\u05D2\u05EA \u05D4\u05E6\u05E2\u05D5\u05EA \u05DE\u05D5\u05EA\u05D0\u05DE\u05D5\u05EA \u05D5\u05E2\u05D5\u05D3.<br>\u05DB\u05DE\u05E4\u05D5\u05E8\u05D8 <a href="#/privacy">\u05D1\u05DE\u05D3\u05D9\u05E0\u05D9\u05D5\u05EA \u05D4\u05E4\u05E8\u05D8\u05D9\u05D5\u05EA</a> \u05E9\u05DC\u05E0\u05D5.</p>
     <button class="btn cookie-accept" type="button" data-cookie-accept>\u05D4\u05D1\u05E0\u05EA\u05D9</button>`;
@@ -11274,6 +11685,7 @@
     updateAccountSlot();
     updateCartDock(route.name);
     playHero(heroOnTop() ? document.getElementById("hero-top") : app);
+    updateAdSlots(route, adSettings());
     if (scrollTop) window.scrollTo({ top: 0, left: 0, behavior: "instant" });
     if (accountJump) jumpToAccountMain();
     const input = document.getElementById("search-input");
@@ -11408,11 +11820,14 @@
     const route = parseHash();
     const params = new URLSearchParams();
     if (route.query.q) params.set("q", route.query.q);
-    ["category", "brand", "sort"].forEach((key) => {
-      const value = String(new FormData(form).get(key) || "");
+    const data = new FormData(form);
+    ["category", "brand"].forEach((key) => {
+      const value = String(data.get(key) || "");
       if (value) params.set(key, value);
     });
-    if (new FormData(form).get("offers")) params.set("offers", "1");
+    const sort = String(data.get("sort") || "");
+    if (sort === "offers") params.set("offers", "1");
+    else if (sort) params.set("sort", sort);
     const query = params.toString();
     navigate2(`#${pathFor(route)}${query ? `?${query}` : ""}`);
   });
@@ -11488,7 +11903,9 @@
     suppliersChange: () => {
       renderSupplierNav();
       render({ focus: false });
-    }
+    },
+    adsChange: () => updateAdSlots(parseHash(), adSettings()),
+    adsReplay: () => replayAdSlots(parseHash(), adSettings())
   });
   bindLogin(navigate2);
   bindServiceDialogs();

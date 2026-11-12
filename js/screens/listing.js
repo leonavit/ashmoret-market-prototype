@@ -56,12 +56,11 @@ export function renderCategory(slug, query) {
         ...(department ? [{ href: `#/d/${department.id}`, label: department.name }] : []),
         { label: category.name },
       ])}
-      <h1 class="text-3xl font-extrabold">${esc(category.name)}</h1>
-      <p class="mt-2 text-muted">${items.length} מוצרים בקטלוג תוצרת</p>
+      <h1 class="flex items-center gap-3 text-3xl font-extrabold">${department ? `<span class="nav-icon is-${esc(department.id)} h-8" aria-hidden="true"></span>` : ""}${esc(category.name)}</h1>
       ${department ? departmentChips(department, slug) : ""}
     `)}
     <div class="wrap pt-6 pb-8">
-      ${listingControls({ categories: null, query })}
+      ${listingControls({ categories: null, query, count: { total: items.length, where: "בקטגוריה" } })}
       ${productGrid(view.shown)}
       ${moreButton(view.more)}
     </div>
@@ -131,11 +130,10 @@ export function renderDepartment(id, query) {
     ${listingHero(`
       ${crumbs([{ href: "#/", label: "דף הבית" }, { label: department.name }])}
       <h1 class="flex items-center gap-3 text-3xl font-extrabold"><span class="nav-icon is-${esc(department.id)} h-8" aria-hidden="true"></span>${esc(department.name)}</h1>
-      <p class="mt-2 text-muted">${items.length} מוצרים במחלקה</p>
       ${chips}
     `)}
     <div class="wrap pt-6 pb-8">
-      ${listingControls({ categories: null, query })}
+      ${listingControls({ categories: null, query, count: { total: items.length, where: "במחלקה" } })}
       ${productGrid(view.shown)}
       ${moreButton(view.more)}
     </div>
