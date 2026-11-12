@@ -247,7 +247,7 @@ export function renderCategoryNav(activeSlug) {
         : item.image
         ? `<span class="thumb has-photo"><img src="${esc(item.image)}" alt="" decoding="async"></span>`
         : `<span class="thumb"></span>`;
-      return `<li class="cat-slide"><a class="cat-link" href="${esc(item.href)}"${current}${clone}>${thumb}<span>${esc(item.name)}</span></a></li>`;
+      return `<li class="cat-slide"><a class="cat-link" href="${esc(item.href)}"${current}${clone}>${thumb}<span class="cat-label">${esc(item.name)}</span></a></li>`;
     })
     .join("")).join("");
   stopCategoryAutoplay();

@@ -141,7 +141,9 @@ export function flyToCart(button) {
       ghost.remove();
       if (layer.matches(".fly-layer")) layer.remove();
       const mark = visibleCartIcon()?.closest(".cart-dock-mark");
-      if (mark) gsap.fromTo(mark, { scale: 1 }, { scale: 1.3, duration: 0.14, ease: "power2.out", yoyo: true, repeat: 1, transformOrigin: "50% 50%", clearProps: "transform" });
+      if (!mark) return;
+      sparkAt({ detail: 0 }, mark);
+      gsap.fromTo(mark, { scale: 1 }, { scale: 1.3, duration: 0.14, delay: 0.08, ease: "power2.out", yoyo: true, repeat: 1, transformOrigin: "50% 50%", clearProps: "transform" });
     },
   })
     .to(ghost, { scale: 1.12, duration: 0.18, ease: "power2.out" })
