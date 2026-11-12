@@ -6970,8 +6970,8 @@
 
   // js/components/theme-options.js
   var KEY2 = "ashmoret-theme";
-  var REV = 8;
-  var defaults = { header: "v2", hero: "v4", heroEffect: "v2", categories: "v2", featured: "v2", banners: "v2", mobileMenu: "v2", mobileCarousel: "v2", suppliers: "v1", palette: "v1", logo: "v1", wideHeader: true };
+  var REV = 9;
+  var defaults = { header: "v2", hero: "v4", heroEffect: "v2", categories: "v2", featured: "v1", banners: "v2", mobileMenu: "v2", mobileCarousel: "v2", suppliers: "v1", palette: "v1", logo: "v1", wideHeader: true };
   var logos = {
     v1: { src: "assets/images/brand/logo-market-cart.png?v=2", width: 300, height: 80 },
     v2: { src: "assets/images/brand/logo-market.png", width: 1024, height: 344 }
@@ -7035,8 +7035,8 @@
       name: "featured",
       title: "\u05D4\u05D2\u05D3\u05E8\u05D5\u05EA \u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D5\u05EA \u05E0\u05D1\u05D7\u05E8\u05D5\u05EA",
       options: [
-        ["v1", "V1", "\u05EA\u05DE\u05D5\u05E0\u05D5\u05EA \u05DE\u05D5\u05E6\u05E8\u05D9\u05DD \u05DC\u05DB\u05DC \u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D4."],
-        ["v2", "V2 \xB7 \u05D1\u05E8\u05D9\u05E8\u05EA \u05DE\u05D7\u05D3\u05DC", "\u05D0\u05D9\u05D9\u05E7\u05D5\u05DF \u05DC\u05DB\u05DC \u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D4."]
+        ["v1", "V1 \xB7 \u05D1\u05E8\u05D9\u05E8\u05EA \u05DE\u05D7\u05D3\u05DC", "\u05EA\u05DE\u05D5\u05E0\u05D5\u05EA \u05DE\u05D5\u05E6\u05E8\u05D9\u05DD \u05DC\u05DB\u05DC \u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D4."],
+        ["v2", "V2", "\u05D0\u05D9\u05D9\u05E7\u05D5\u05DF \u05DC\u05DB\u05DC \u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D4."]
       ]
     },
     {
@@ -7108,7 +7108,7 @@
         hero: saved.rev >= 6 && ["v1", "v2", "v3", "v4"].includes(saved.hero) ? saved.hero : defaults.hero,
         heroEffect: saved.rev >= 8 && saved.heroEffect === "v1" ? "v1" : defaults.heroEffect,
         categories: ["v1", "v2"].includes(saved.categories) ? saved.categories : defaults.categories,
-        featured: saved.rev >= 4 && saved.featured === "v1" ? "v1" : defaults.featured,
+        featured: saved.rev >= 9 && ["v1", "v2"].includes(saved.featured) ? saved.featured : defaults.featured,
         banners: saved.rev >= 5 && saved.banners === "v1" ? "v1" : defaults.banners,
         mobileMenu: current && saved.mobileMenu === "v1" ? "v1" : defaults.mobileMenu,
         mobileCarousel: saved.rev >= 7 && saved.mobileCarousel === "v1" ? "v1" : defaults.mobileCarousel,
