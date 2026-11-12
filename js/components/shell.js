@@ -15,8 +15,27 @@ export function bindShell(navigate) {
   bound = true;
 
   const header = document.querySelector(".site-header");
-  const markScrolled = () => header?.classList.toggle("is-scrolled", window.scrollY > 0);
+  const topbar = header?.querySelector(".topbar");
+  const mobileHeader = window.matchMedia("(max-width: 1023px)");
+  let lastY = window.scrollY;
+  const syncTopbar = () => {
+    if (!header || !topbar) return;
+    const y = Math.max(0, window.scrollY);
+    const delta = y - lastY;
+    if (!mobileHeader.matches || y <= 50) header.classList.remove("is-topbar-hidden");
+    else if (delta > 4) {
+      header.style.setProperty("--topbar-h", `${topbar.offsetHeight}px`);
+      header.classList.add("is-topbar-hidden");
+    } else if (delta < -4) header.classList.remove("is-topbar-hidden");
+    else return;
+    lastY = y;
+  };
+  const markScrolled = () => {
+    header?.classList.toggle("is-scrolled", window.scrollY > 0);
+    syncTopbar();
+  };
   window.addEventListener("scroll", markScrolled, { passive: true });
+  mobileHeader.addEventListener("change", syncTopbar);
   markScrolled();
 
   const form = document.getElementById("search-form");

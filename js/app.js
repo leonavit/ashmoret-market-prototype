@@ -16,7 +16,7 @@ import { bindServiceDialogs, renderServicePage, serviceTitle } from "./component
 import { adSettings, bindThemeOptions, getTheme } from "./components/theme-options.js";
 import { replayAdSlots, updateAdSlots } from "./components/ad-slots.js";
 import { setHeroSlider } from "./components/hero-slider.js";
-import { renderSupplierNav, syncNavCurrent } from "./components/mega-menu.js";
+import { renderSupplierNav } from "./components/mega-menu.js";
 import { mountPromoCarousels } from "./components/promo-carousel.js";
 import { bindNewsletter } from "./components/newsletter-popup.js";
 import { bindCookieNotice } from "./components/cookie-notice.js";
@@ -134,7 +134,6 @@ function render({ focus = true, scrollTop = false } = {}) {
   updateCartDock(route.name);
   playHero(heroOnTop() ? document.getElementById("hero-top") : app);
   updateAdSlots(route, adSettings());
-  syncNavCurrent(route);
   if (scrollTop) window.scrollTo({ top: 0, left: 0, behavior: "instant" });
   if (accountJump) jumpToAccountMain();
   const input = document.getElementById("search-input");
@@ -368,7 +367,6 @@ bindThemeOptions({
   suppliersChange: () => {
     renderSupplierNav();
     render({ focus: false });
-    syncNavCurrent(parseHash());
   },
   adsChange: () => updateAdSlots(parseHash(), adSettings()),
   adsReplay: () => replayAdSlots(parseHash(), adSettings()),

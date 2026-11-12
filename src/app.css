@@ -3899,25 +3899,7 @@
     width: 0.8em;
     height: 0.8em;
     flex: 0 0 auto;
-    transition: transform 0.16s ease, color 0.16s ease;
-  }
-
-  .mega-trigger.is-nav-current .mega-chevron {
-    color: #7ecf72;
-    animation: nav-chevron-pulse 1.8s ease-in-out infinite;
-  }
-
-  @keyframes nav-chevron-pulse {
-    0%, 100% { color: #7ecf72; opacity: 1; }
-    50% { color: #5cb94f; opacity: 0.45; }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .mega-trigger.is-nav-current .mega-chevron {
-      animation: none;
-      color: #7ecf72;
-      opacity: 1;
-    }
+    transition: transform 0.16s ease;
   }
 
   .mega-trigger[aria-expanded="true"] .mega-chevron {
@@ -6988,6 +6970,22 @@
     .checkout-summary .order-lines.is-scroll {
       max-height: min(16rem, max(6rem, calc(100vh - var(--header-h, 0px) - 22rem)));
     }
+  }
+}
+
+@media (max-width: 1023px) {
+  .site-header {
+    transition: box-shadow 0.2s ease, top 0.25s ease;
+  }
+
+  html:not(.is-menu-cover) .site-header.is-topbar-hidden {
+    top: calc(-1 * var(--topbar-h, 0px));
+  }
+}
+
+@media (max-width: 1023px) and (prefers-reduced-motion: reduce) {
+  .site-header {
+    transition: none;
   }
 }
 
