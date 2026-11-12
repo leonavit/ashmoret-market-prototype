@@ -1,6 +1,6 @@
 const KEY = "ashmoret-theme";
-const REV = 8;
-const defaults = { header: "v2", hero: "v4", heroEffect: "v2", categories: "v2", featured: "v2", banners: "v2", mobileMenu: "v2", mobileCarousel: "v2", suppliers: "v1", palette: "v1", logo: "v1", wideHeader: true };
+const REV = 9;
+const defaults = { header: "v2", hero: "v4", heroEffect: "v2", categories: "v2", featured: "v1", banners: "v2", mobileMenu: "v2", mobileCarousel: "v2", suppliers: "v1", palette: "v1", logo: "v1", wideHeader: true };
 const logos = {
   v1: { src: "assets/images/brand/logo-market-cart.png?v=2", width: 300, height: 80 },
   v2: { src: "assets/images/brand/logo-market.png", width: 1024, height: 344 },
@@ -67,8 +67,8 @@ const groups = [
     name: "featured",
     title: "הגדרות קטגוריות נבחרות",
     options: [
-      ["v1", "V1", "תמונות מוצרים לכל קטגוריה."],
-      ["v2", "V2 · ברירת מחדל", "אייקון לכל קטגוריה."],
+      ["v1", "V1 · ברירת מחדל", "תמונות מוצרים לכל קטגוריה."],
+      ["v2", "V2", "אייקון לכל קטגוריה."],
     ],
   },
   {
@@ -140,7 +140,7 @@ function load() {
       hero: saved.rev >= 6 && ["v1", "v2", "v3", "v4"].includes(saved.hero) ? saved.hero : defaults.hero,
       heroEffect: saved.rev >= 8 && saved.heroEffect === "v1" ? "v1" : defaults.heroEffect,
       categories: ["v1", "v2"].includes(saved.categories) ? saved.categories : defaults.categories,
-      featured: saved.rev >= 4 && saved.featured === "v1" ? "v1" : defaults.featured,
+      featured: saved.rev >= 9 && ["v1", "v2"].includes(saved.featured) ? saved.featured : defaults.featured,
       banners: saved.rev >= 5 && saved.banners === "v1" ? "v1" : defaults.banners,
       mobileMenu: current && saved.mobileMenu === "v1" ? "v1" : defaults.mobileMenu,
       mobileCarousel: saved.rev >= 7 && saved.mobileCarousel === "v1" ? "v1" : defaults.mobileCarousel,
