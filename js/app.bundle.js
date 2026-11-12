@@ -11032,6 +11032,18 @@
     if (!gsap || !copy || prefersReducedMotion()) return;
     gsap.fromTo(copy, { y: 22, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.7, ease: "power2.out" });
   }
+  function shimmerLogo(link) {
+    const gsap = window.gsap;
+    if (!gsap || !link || prefersReducedMotion()) return;
+    link.classList.add("has-shimmer", "logo-shimmer");
+    gsap.fromTo(link, { "--shimmer-x": "260%" }, {
+      "--shimmer-x": "-130%",
+      duration: 1.1,
+      ease: "power2.inOut",
+      repeat: -1,
+      repeatDelay: 3.9
+    });
+  }
   function revealLogo() {
     const root = document.documentElement;
     if (!root.classList.contains("is-logo-curtain")) return;
@@ -11049,7 +11061,13 @@
     link.append(curtain);
     gsap.set(img, { opacity: 0 });
     root.classList.remove("is-logo-curtain");
-    gsap.timeline({ delay: 0.15, onComplete: () => curtain.remove() }).to(curtain.querySelector(".is-left"), { xPercent: -100, duration: 1, ease: "power3.inOut" }, 0).to(curtain.querySelector(".is-right"), { xPercent: 100, duration: 1, ease: "power3.inOut" }, 0).fromTo(img, { scale: 0.5, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.6, ease: "back.out(1.7)", clearProps: "opacity,transform" }, 0.5);
+    gsap.timeline({
+      delay: 0.15,
+      onComplete: () => {
+        curtain.remove();
+        shimmerLogo(link);
+      }
+    }).to(curtain.querySelector(".is-left"), { xPercent: -100, duration: 1, ease: "power3.inOut" }, 0).to(curtain.querySelector(".is-right"), { xPercent: 100, duration: 1, ease: "power3.inOut" }, 0).fromTo(img, { scale: 0.5, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.6, ease: "back.out(1.7)", clearProps: "opacity,transform" }, 0.5);
   }
   var shimmers = [];
   function shimmerButtons(root) {

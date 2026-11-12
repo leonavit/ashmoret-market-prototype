@@ -1541,8 +1541,8 @@
     }
 
     #category-band.is-auto .cat-slide.is-center span.thumb {
-      border-color: #c9230d;
-      box-shadow: 0 0 0 1px #c9230d;
+      border-color: var(--color-ink);
+      box-shadow: 0 0 0 1px var(--color-ink);
       transform: scale(1.1);
     }
   }
@@ -1911,6 +1911,10 @@
     background: linear-gradient(100deg, transparent 0%, rgb(255 255 255 / 0.38) 50%, transparent 100%);
     pointer-events: none;
     transform: translateX(var(--shimmer-x, 260%)) skewX(-18deg);
+  }
+
+  .logo-shimmer::after {
+    background: linear-gradient(100deg, transparent 0%, rgb(255 255 255 / 0.65) 50%, transparent 100%);
   }
 
   .promo-hero-cta:hover {
