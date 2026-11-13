@@ -122,6 +122,12 @@ export function bindShell(navigate) {
     const wasOpen = menu.classList.contains("is-open");
     const open = typeof force === "boolean" ? force : !wasOpen;
     const cover = document.documentElement.dataset.mobileMenu === "v2";
+    if (open && header?.classList.contains("is-topbar-hidden")) {
+      header.style.transition = "none";
+      header.classList.remove("is-topbar-hidden");
+      void header.offsetHeight;
+      header.style.transition = "";
+    }
     if (open && cover) {
       const topbar = document.querySelector(".site-header .topbar");
       const top = topbar?.getBoundingClientRect().bottom || 0;

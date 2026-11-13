@@ -10462,6 +10462,12 @@
       const wasOpen = menu.classList.contains("is-open");
       const open3 = typeof force === "boolean" ? force : !wasOpen;
       const cover = document.documentElement.dataset.mobileMenu === "v2";
+      if (open3 && header?.classList.contains("is-topbar-hidden")) {
+        header.style.transition = "none";
+        header.classList.remove("is-topbar-hidden");
+        void header.offsetHeight;
+        header.style.transition = "";
+      }
       if (open3 && cover) {
         const topbar2 = document.querySelector(".site-header .topbar");
         const top = topbar2?.getBoundingClientRect().bottom || 0;
