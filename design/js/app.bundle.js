@@ -10473,7 +10473,7 @@
         const top = topbar2?.getBoundingClientRect().bottom || 0;
         const button = menuOpen.getBoundingClientRect();
         const rowCenter = button.top + button.height / 2 - top;
-        document.documentElement.style.setProperty("--menu-cover-top", `${top}px`);
+        document.documentElement.style.setProperty("--menu-cover-top", `${topbar2?.offsetHeight || 0}px`);
         document.documentElement.style.setProperty("--menu-head-h", `${rowCenter * 2 + 1}px`);
       }
       menu.classList.toggle("is-open", open3);
