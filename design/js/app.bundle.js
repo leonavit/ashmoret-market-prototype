@@ -7324,7 +7324,7 @@
   var REV = 10;
   var adKey = (id) => `ad-${id}`;
   var adDefaults = { ...Object.fromEntries(adSlots.map((slot) => [adKey(slot.id), slot.enabled])), adTimers: true };
-  var defaults = { header: "v2", hero: "v4", heroEffect: "v2", categories: "v2", featured: "v1", banners: "v2", mobileMenu: "v2", mobileCarousel: "v2", suppliers: "v1", palette: "v1", logo: "v1", wideHeader: true, listingCenter: true, ...adDefaults };
+  var defaults = { header: "v2", hero: "v4", heroEffect: "v2", categories: "v2", featured: "v1", banners: "v2", mobileMenu: "v2", mobileCarousel: "v2", railCols: "5", suppliers: "v1", palette: "v1", logo: "v1", wideHeader: true, listingCenter: true, ...adDefaults };
   var logos = {
     v1: { src: "assets/images/brand/logo-market-cart.png?v=2", width: 300, height: 80 },
     v2: { src: "assets/images/brand/logo-market.png", width: 1024, height: 344 }
@@ -7341,6 +7341,7 @@
     banners: groupIcon(`<rect x="3" y="5" width="8" height="14" rx="1.5"></rect><rect x="13" y="5" width="8" height="14" rx="1.5"></rect><path d="m9 2-2 2 2 2M15 18l2 2-2 2"></path>`),
     mobileMenu: groupIcon(`<rect x="6.5" y="2.5" width="11" height="19" rx="2.5"></rect><path d="M9.5 8h5M9.5 11h5M9.5 14h5"></path>`),
     mobileCarousel: groupIcon(`<rect x="7" y="5" width="10" height="14" rx="1.5"></rect><path d="M4 7v10M20 7v10"></path>`),
+    railCols: groupIcon(`<rect x="2.5" y="6" width="4" height="12" rx="1"></rect><rect x="8.5" y="6" width="4" height="12" rx="1"></rect><rect x="14.5" y="6" width="4" height="12" rx="1"></rect><path d="M21 8v8"></path>`),
     suppliers: groupIcon(`<path d="M3 9 4.5 4h15L21 9"></path><path d="M4 9v11h16V9"></path><path d="M3 9h18"></path><path d="M9.5 20v-5.5h5V20"></path>`),
     palette: groupIcon(`<path d="M12 3a9 9 0 1 0 0 18c1.1 0 1.8-.9 1.8-1.9 0-.5-.2-.9-.5-1.3-.3-.3-.5-.8-.5-1.2 0-1 .8-1.8 1.8-1.8H16a5 5 0 0 0 5-5c0-3.9-4-6.8-9-6.8z"></path><circle cx="7.5" cy="11" r="1.2"></circle><circle cx="10.5" cy="7" r="1.2"></circle><circle cx="15" cy="7.5" r="1.2"></circle>`),
     logo: groupIcon(`<path d="M3 4h2l2.4 10.2a1.5 1.5 0 0 0 1.5 1.1h8.6a1.5 1.5 0 0 0 1.4-1.1L21 8H6.2"></path><circle cx="9.5" cy="19.5" r="1.3"></circle><circle cx="17" cy="19.5" r="1.3"></circle>`),
@@ -7422,6 +7423,15 @@
       note: "\u05D7\u05DC \u05E2\u05DC \u05E7\u05E8\u05D5\u05E1\u05DC\u05D5\u05EA \u05D4\u05DE\u05D5\u05E6\u05E8\u05D9\u05DD \u05D1\u05DE\u05E1\u05DB\u05D9\u05DD \u05E6\u05E8\u05D9\u05DD \u05DE\u05BE768 \u05E4\u05D9\u05E7\u05E1\u05DC\u05D9\u05DD. \u05D1\u05D8\u05D0\u05D1\u05DC\u05D8 \u05D5\u05D1\u05DE\u05D7\u05E9\u05D1 \u05D4\u05EA\u05E6\u05D5\u05D2\u05D4 \u05E0\u05E9\u05D0\u05E8\u05EA \u05DB\u05DE\u05D5 \u05E9\u05D4\u05D9\u05D0."
     },
     {
+      name: "railCols",
+      title: "\u05DE\u05D5\u05E6\u05E8\u05D9\u05DD \u05D1\u05E1\u05DC\u05D9\u05D9\u05D3 \u05E7\u05E8\u05D5\u05E1\u05DC\u05D4",
+      options: [
+        ["5", "5 \xB7 \u05D1\u05E8\u05D9\u05E8\u05EA \u05DE\u05D7\u05D3\u05DC", "\u05D7\u05DE\u05D9\u05E9\u05D4 \u05DE\u05D5\u05E6\u05E8\u05D9\u05DD \u05D1\u05DB\u05DC \u05E1\u05DC\u05D9\u05D9\u05D3."],
+        ["6", "6", "\u05E9\u05D9\u05E9\u05D4 \u05DE\u05D5\u05E6\u05E8\u05D9\u05DD \u05D1\u05DB\u05DC \u05E1\u05DC\u05D9\u05D9\u05D3."]
+      ],
+      note: "\u05D7\u05DC \u05E2\u05DC \u05E7\u05E8\u05D5\u05E1\u05DC\u05D5\u05EA \u05D4\u05DE\u05D5\u05E6\u05E8\u05D9\u05DD \u05D1\u05DE\u05E1\u05DB\u05D9\u05DD \u05DE\u05BE1280 \u05E4\u05D9\u05E7\u05E1\u05DC\u05D9\u05DD. \u05E7\u05E8\u05D5\u05E1\u05DC\u05EA \xAB\u05DE\u05D5\u05E6\u05E8\u05D9\u05DD \u05D3\u05D5\u05DE\u05D9\u05DD\xBB \u05D1\u05E2\u05DE\u05D5\u05D3 \u05DE\u05D5\u05E6\u05E8 \u05E0\u05E9\u05D0\u05E8\u05EA \u05E2\u05DD 4."
+    },
+    {
       name: "suppliers",
       title: "\u05D4\u05D2\u05D3\u05E8\u05D5\u05EA \u05E1\u05E4\u05E7\u05D9\u05DD",
       options: [
@@ -7492,6 +7502,7 @@
         banners: saved.rev >= 5 && saved.banners === "v1" ? "v1" : defaults.banners,
         mobileMenu: current && saved.mobileMenu === "v1" ? "v1" : defaults.mobileMenu,
         mobileCarousel: saved.rev >= 7 && saved.mobileCarousel === "v1" ? "v1" : defaults.mobileCarousel,
+        railCols: saved.railCols === "6" ? "6" : defaults.railCols,
         suppliers: saved.suppliers === "v2" ? "v2" : defaults.suppliers,
         palette: current && saved.palette === "grey" ? "grey" : defaults.palette,
         logo: saved.logo === "v2" ? "v2" : defaults.logo,
@@ -7544,6 +7555,9 @@
   }
   function applyMobileCarousel() {
     document.documentElement.dataset.mobileCarousel = state.mobileCarousel;
+  }
+  function applyRailCols() {
+    document.documentElement.dataset.railCols = state.railCols;
   }
   function applyHeader() {
     const search = document.getElementById("search-slot");
@@ -7613,6 +7627,10 @@
       applyMobileCarousel();
       onHeroChange();
     }
+    if (name === "railCols") {
+      applyRailCols();
+      onHeroChange();
+    }
     if (name === "suppliers") onSuppliersChange();
     if (name === "palette") applyPalette();
     if (name === "logo") applyLogo();
@@ -7661,6 +7679,7 @@
         setOption("banners", defaults.banners, panel);
         setOption("mobileMenu", defaults.mobileMenu, panel);
         setOption("mobileCarousel", defaults.mobileCarousel, panel);
+        setOption("railCols", defaults.railCols, panel);
         setOption("suppliers", defaults.suppliers, panel);
         setOption("palette", defaults.palette, panel);
         setOption("logo", defaults.logo, panel);
@@ -7688,6 +7707,7 @@
     applyHeader();
     applyMobileMenu();
     applyMobileCarousel();
+    applyRailCols();
     applyListingHero();
     applyPalette();
     applyLogo();
@@ -8056,6 +8076,16 @@
   var sideSlides = () => getTheme().banners === "v2" ? offerBanners : sideBanners;
   var pauseIcon = `<svg class="autoplay-pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"></rect><rect x="14" y="5" width="4" height="14" rx="1"></rect></svg>`;
   var playIcon = `<svg class="autoplay-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"></path></svg>`;
+  var dotFill = `<span class="dot-fill" aria-hidden="true"></span>`;
+  function syncDotFill(root, running, ms = AUTOPLAY_MS) {
+    const dots = root.querySelector(".hero-dots");
+    if (!dots) return;
+    dots.classList.remove("is-running");
+    if (!running) return;
+    dots.style.setProperty("--autoplay-ms", `${ms}ms`);
+    void dots.offsetWidth;
+    dots.classList.add("is-running");
+  }
   function autoplayToggle() {
     return `<button type="button" class="autoplay-toggle" data-autoplay-toggle aria-pressed="false" aria-label="\u05E2\u05E6\u05D9\u05E8\u05EA \u05D4\u05D4\u05D7\u05DC\u05E4\u05D4 \u05D4\u05D0\u05D5\u05D8\u05D5\u05DE\u05D8\u05D9\u05EA">${pauseIcon}${playIcon}</button>`;
   }
@@ -8074,7 +8104,7 @@
     });
   }
   function carouselControls(count) {
-    const dots = Array.from({ length: count }, (_, index) => `<button type="button" class="hero-dot" data-promo-dot="${index}" aria-label="\u05E9\u05E7\u05D5\u05E4\u05D9\u05EA ${index + 1} \u05DE\u05EA\u05D5\u05DA ${count}" ${index === 0 ? 'aria-current="true"' : ""}></button>`).join("");
+    const dots = Array.from({ length: count }, (_, index) => `<button type="button" class="hero-dot" data-promo-dot="${index}" aria-label="\u05E9\u05E7\u05D5\u05E4\u05D9\u05EA ${index + 1} \u05DE\u05EA\u05D5\u05DA ${count}" ${index === 0 ? 'aria-current="true"' : ""}>${dotFill}</button>`).join("");
     return `<button type="button" class="cat-arrow promo-arrow is-prev" data-promo-prev aria-label="\u05D4\u05E9\u05E7\u05D5\u05E4\u05D9\u05EA \u05D4\u05E7\u05D5\u05D3\u05DE\u05EA">
       <svg viewBox="0 0 24 24" class="size-5" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg>
     </button>
@@ -8215,11 +8245,13 @@
     const stop2 = () => {
       window.clearInterval(entry.timer);
       entry.timer = 0;
+      syncDotFill(root, false);
     };
     const start2 = () => {
       stop2();
       if (entry.paused || entry.stopped || prefersReducedMotion()) return;
       entry.timer = window.setInterval(() => embla2.scrollNext(), AUTOPLAY_MS);
+      syncDotFill(root, true);
     };
     entry.stop = stop2;
     embla2.on("select", () => {
@@ -11194,7 +11226,7 @@
         </div>
       </div>
       <div class="hero-dots" role="group" aria-label="\u05D3\u05E4\u05D3\u05D5\u05E3 \u05D1\u05D9\u05DF \u05D4\u05E9\u05E7\u05D5\u05E4\u05D9\u05D5\u05EA">
-        ${slides.map((_, index) => `<button type="button" class="hero-dot" data-hero-dot="${index}" aria-label="\u05E9\u05E7\u05D5\u05E4\u05D9\u05EA ${index + 1} \u05DE\u05EA\u05D5\u05DA ${slides.length}" ${index === 0 ? 'aria-current="true"' : ""}></button>`).join("")}
+        ${slides.map((_, index) => `<button type="button" class="hero-dot" data-hero-dot="${index}" aria-label="\u05E9\u05E7\u05D5\u05E4\u05D9\u05EA ${index + 1} \u05DE\u05EA\u05D5\u05DA ${slides.length}" ${index === 0 ? 'aria-current="true"' : ""}>${dotFill}</button>`).join("")}
         ${autoplayToggle()}
       </div>
     </div>
@@ -11203,11 +11235,14 @@
   function stop() {
     window.clearInterval(timer2);
     timer2 = 0;
+    const root = document.querySelector("[data-hero-slider]");
+    if (root) syncDotFill(root, false);
   }
   function start() {
     stop();
     if (!embla || paused || stopped || prefersReducedMotion()) return;
     timer2 = window.setInterval(() => embla?.scrollNext(), AUTOPLAY_MS2);
+    syncDotFill(document.querySelector("[data-hero-slider]"), true, AUTOPLAY_MS2);
   }
   function syncSlides(root) {
     const current = embla.selectedScrollSnap();
