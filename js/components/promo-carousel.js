@@ -63,6 +63,18 @@ const sideSlides = () => (getTheme().banners === "v2" ? offerBanners : sideBanne
 const pauseIcon = `<svg class="autoplay-pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"></rect><rect x="14" y="5" width="4" height="14" rx="1"></rect></svg>`;
 const playIcon = `<svg class="autoplay-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"></path></svg>`;
 
+export const dotFill = `<span class="dot-fill" aria-hidden="true"></span>`;
+
+export function syncDotFill(root, running, ms = AUTOPLAY_MS) {
+  const dots = root.querySelector(".hero-dots");
+  if (!dots) return;
+  dots.classList.remove("is-running");
+  if (!running) return;
+  dots.style.setProperty("--autoplay-ms", `${ms}ms`);
+  void dots.offsetWidth;
+  dots.classList.add("is-running");
+}
+
 export function autoplayToggle() {
   return `<button type="button" class="autoplay-toggle" data-autoplay-toggle aria-pressed="false" aria-label="עצירת ההחלפה האוטומטית">${pauseIcon}${playIcon}</button>`;
 }
@@ -83,7 +95,7 @@ export function bindAutoplayToggle(root, onChange) {
 }
 
 function carouselControls(count) {
-  const dots = Array.from({ length: count }, (_, index) => `<button type="button" class="hero-dot" data-promo-dot="${index}" aria-label="שקופית ${index + 1} מתוך ${count}" ${index === 0 ? 'aria-current="true"' : ""}></button>`).join("");
+  const dots = Array.from({ length: count }, (_, index) => `<button type="button" class="hero-dot" data-promo-dot="${index}" aria-label="שקופית ${index + 1} מתוך ${count}" ${index === 0 ? 'aria-current="true"' : ""}>${dotFill}</button>`).join("");
   return `<button type="button" class="cat-arrow promo-arrow is-prev" data-promo-prev aria-label="השקופית הקודמת">
       <svg viewBox="0 0 24 24" class="size-5" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg>
     </button>
@@ -235,11 +247,13 @@ function mountOne(root) {
   const stop = () => {
     window.clearInterval(entry.timer);
     entry.timer = 0;
+    syncDotFill(root, false);
   };
   const start = () => {
     stop();
     if (entry.paused || entry.stopped || prefersReducedMotion()) return;
     entry.timer = window.setInterval(() => embla.scrollNext(), AUTOPLAY_MS);
+    syncDotFill(root, true);
   };
   entry.stop = stop;
   embla.on("select", () => {

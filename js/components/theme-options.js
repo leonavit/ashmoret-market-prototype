@@ -4,7 +4,7 @@ const KEY = "ashmoret-theme";
 const REV = 10;
 const adKey = (id) => `ad-${id}`;
 const adDefaults = { ...Object.fromEntries(adSlots.map((slot) => [adKey(slot.id), slot.enabled])), adTimers: true };
-const defaults = { header: "v2", hero: "v4", heroEffect: "v2", categories: "v2", featured: "v1", banners: "v2", mobileMenu: "v2", mobileCarousel: "v2", suppliers: "v1", palette: "v1", logo: "v1", wideHeader: true, listingCenter: true, ...adDefaults };
+const defaults = { header: "v2", hero: "v4", heroEffect: "v2", categories: "v2", featured: "v1", banners: "v2", mobileMenu: "v2", mobileCarousel: "v2", railCols: "5", suppliers: "v1", palette: "v1", logo: "v1", wideHeader: true, listingCenter: true, ...adDefaults };
 const logos = {
   v1: { src: "assets/images/brand/logo-market-cart.png?v=2", width: 300, height: 80 },
   v2: { src: "assets/images/brand/logo-market.png", width: 1024, height: 344 },
@@ -23,6 +23,7 @@ const groupIcons = {
   banners: groupIcon(`<rect x="3" y="5" width="8" height="14" rx="1.5"></rect><rect x="13" y="5" width="8" height="14" rx="1.5"></rect><path d="m9 2-2 2 2 2M15 18l2 2-2 2"></path>`),
   mobileMenu: groupIcon(`<rect x="6.5" y="2.5" width="11" height="19" rx="2.5"></rect><path d="M9.5 8h5M9.5 11h5M9.5 14h5"></path>`),
   mobileCarousel: groupIcon(`<rect x="7" y="5" width="10" height="14" rx="1.5"></rect><path d="M4 7v10M20 7v10"></path>`),
+  railCols: groupIcon(`<rect x="2.5" y="6" width="4" height="12" rx="1"></rect><rect x="8.5" y="6" width="4" height="12" rx="1"></rect><rect x="14.5" y="6" width="4" height="12" rx="1"></rect><path d="M21 8v8"></path>`),
   suppliers: groupIcon(`<path d="M3 9 4.5 4h15L21 9"></path><path d="M4 9v11h16V9"></path><path d="M3 9h18"></path><path d="M9.5 20v-5.5h5V20"></path>`),
   palette: groupIcon(`<path d="M12 3a9 9 0 1 0 0 18c1.1 0 1.8-.9 1.8-1.9 0-.5-.2-.9-.5-1.3-.3-.3-.5-.8-.5-1.2 0-1 .8-1.8 1.8-1.8H16a5 5 0 0 0 5-5c0-3.9-4-6.8-9-6.8z"></path><circle cx="7.5" cy="11" r="1.2"></circle><circle cx="10.5" cy="7" r="1.2"></circle><circle cx="15" cy="7.5" r="1.2"></circle>`),
   logo: groupIcon(`<path d="M3 4h2l2.4 10.2a1.5 1.5 0 0 0 1.5 1.1h8.6a1.5 1.5 0 0 0 1.4-1.1L21 8H6.2"></path><circle cx="9.5" cy="19.5" r="1.3"></circle><circle cx="17" cy="19.5" r="1.3"></circle>`),
@@ -105,6 +106,15 @@ const groups = [
     note: "חל על קרוסלות המוצרים במסכים צרים מ־768 פיקסלים. בטאבלט ובמחשב התצוגה נשארת כמו שהיא.",
   },
   {
+    name: "railCols",
+    title: "מוצרים בסלייד קרוסלה",
+    options: [
+      ["5", "5 · ברירת מחדל", "חמישה מוצרים בכל סלייד."],
+      ["6", "6", "שישה מוצרים בכל סלייד."],
+    ],
+    note: "חל על קרוסלות המוצרים במסכים מ־1280 פיקסלים. קרוסלת «מוצרים דומים» בעמוד מוצר נשארת עם 4.",
+  },
+  {
     name: "suppliers",
     title: "הגדרות ספקים",
     options: [
@@ -173,6 +183,7 @@ function load() {
       banners: saved.rev >= 5 && saved.banners === "v1" ? "v1" : defaults.banners,
       mobileMenu: current && saved.mobileMenu === "v1" ? "v1" : defaults.mobileMenu,
       mobileCarousel: saved.rev >= 7 && saved.mobileCarousel === "v1" ? "v1" : defaults.mobileCarousel,
+      railCols: saved.railCols === "6" ? "6" : defaults.railCols,
       suppliers: saved.suppliers === "v2" ? "v2" : defaults.suppliers,
       palette: current && saved.palette === "grey" ? "grey" : defaults.palette,
       logo: saved.logo === "v2" ? "v2" : defaults.logo,
@@ -234,6 +245,10 @@ function applyListingHero() {
 
 function applyMobileCarousel() {
   document.documentElement.dataset.mobileCarousel = state.mobileCarousel;
+}
+
+function applyRailCols() {
+  document.documentElement.dataset.railCols = state.railCols;
 }
 
 function applyHeader() {
@@ -307,6 +322,10 @@ function setOption(name, value, panel) {
     applyMobileCarousel();
     onHeroChange();
   }
+  if (name === "railCols") {
+    applyRailCols();
+    onHeroChange();
+  }
   if (name === "suppliers") onSuppliersChange();
   if (name === "palette") applyPalette();
   if (name === "logo") applyLogo();
@@ -361,6 +380,7 @@ export function bindThemeOptions({ heroChange, suppliersChange, adsChange, adsRe
       setOption("banners", defaults.banners, panel);
       setOption("mobileMenu", defaults.mobileMenu, panel);
       setOption("mobileCarousel", defaults.mobileCarousel, panel);
+      setOption("railCols", defaults.railCols, panel);
       setOption("suppliers", defaults.suppliers, panel);
       setOption("palette", defaults.palette, panel);
       setOption("logo", defaults.logo, panel);
@@ -389,6 +409,7 @@ export function bindThemeOptions({ heroChange, suppliersChange, adsChange, adsRe
   applyHeader();
   applyMobileMenu();
   applyMobileCarousel();
+  applyRailCols();
   applyListingHero();
   applyPalette();
   applyLogo();

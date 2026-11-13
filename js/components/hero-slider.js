@@ -1,5 +1,5 @@
 import { prefersReducedMotion } from "../lib/format.js";
-import { autoplayToggle, bindAutoplayToggle } from "./promo-carousel.js";
+import { autoplayToggle, bindAutoplayToggle, dotFill, syncDotFill } from "./promo-carousel.js";
 
 const AUTOPLAY_MS = 5000;
 
@@ -35,7 +35,7 @@ function markup() {
         </div>
       </div>
       <div class="hero-dots" role="group" aria-label="דפדוף בין השקופיות">
-        ${slides.map((_, index) => `<button type="button" class="hero-dot" data-hero-dot="${index}" aria-label="שקופית ${index + 1} מתוך ${slides.length}" ${index === 0 ? 'aria-current="true"' : ""}></button>`).join("")}
+        ${slides.map((_, index) => `<button type="button" class="hero-dot" data-hero-dot="${index}" aria-label="שקופית ${index + 1} מתוך ${slides.length}" ${index === 0 ? 'aria-current="true"' : ""}>${dotFill}</button>`).join("")}
         ${autoplayToggle()}
       </div>
     </div>
@@ -45,12 +45,15 @@ function markup() {
 function stop() {
   window.clearInterval(timer);
   timer = 0;
+  const root = document.querySelector("[data-hero-slider]");
+  if (root) syncDotFill(root, false);
 }
 
 function start() {
   stop();
   if (!embla || paused || stopped || prefersReducedMotion()) return;
   timer = window.setInterval(() => embla?.scrollNext(), AUTOPLAY_MS);
+  syncDotFill(document.querySelector("[data-hero-slider]"), true, AUTOPLAY_MS);
 }
 
 function syncSlides(root) {

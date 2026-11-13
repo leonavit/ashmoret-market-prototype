@@ -753,15 +753,46 @@
 
   .deal-all {
     display: inline-flex;
+    flex: 0 0 auto;
     align-items: center;
-    gap: 0.15rem;
-    color: var(--color-muted);
-    font-size: 0.9rem;
-    font-weight: 600;
+    gap: 0.35rem;
+    width: fit-content;
+    min-height: 40px;
+    border: 1.5px solid var(--color-ink);
+    border-radius: 999px;
+    background: var(--color-white);
+    padding: 0.4rem 0.95rem;
+    color: var(--color-ink);
+    font-size: 0.95rem;
+    font-weight: 700;
+    white-space: nowrap;
+    transition: background-color 0.2s ease, color 0.2s ease;
   }
 
-  .deal-all:hover {
-    color: var(--color-ink);
+  .catalog-head:has(> .deal-all) {
+    padding-bottom: 0.65rem;
+  }
+
+  .deal-all svg {
+    transition: transform 0.2s ease;
+  }
+
+  .deal-all:hover,
+  .deal-all:focus-visible {
+    background: var(--color-ink);
+    color: var(--color-white);
+  }
+
+  .deal-all:hover svg,
+  .deal-all:focus-visible svg {
+    transform: translateX(-3px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .deal-all,
+    .deal-all svg {
+      transition: none;
+    }
   }
 
   @media (min-width: 768px) {
@@ -1124,6 +1155,16 @@
   @media (min-width: 1024px) {
     .catalog-rail {
       --catalog-cols: 5;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    html[data-rail-cols="6"] .catalog-rail {
+      --catalog-cols: 6;
+    }
+
+    html[data-rail-cols="6"] .product-related .catalog-rail {
+      --catalog-cols: 4;
     }
   }
 
@@ -2537,6 +2578,46 @@
   .hero-dot[aria-current="true"] {
     width: 1.6rem;
     background: var(--color-ink);
+  }
+
+  .dot-fill {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    border-radius: inherit;
+    pointer-events: none;
+  }
+
+  .dot-fill::before {
+    content: "";
+    position: absolute;
+    top: 110%;
+    left: -50%;
+    width: 200%;
+    aspect-ratio: 1;
+    border-radius: 38%;
+    background: var(--color-ink);
+    opacity: 0;
+  }
+
+  .hero-dots.is-running .hero-dot[aria-current="true"] {
+    background: var(--color-subtle);
+  }
+
+  .hero-dots.is-running .hero-dot[aria-current="true"] .dot-fill::before {
+    opacity: 1;
+    animation:
+      dot-fill-rise var(--autoplay-ms, 5s) linear forwards,
+      dot-fill-wave 2.4s linear infinite;
+  }
+
+  @keyframes dot-fill-rise {
+    from { top: 110%; }
+    to { top: -35%; }
+  }
+
+  @keyframes dot-fill-wave {
+    to { transform: rotate(360deg); }
   }
 
   .order-card {
