@@ -207,7 +207,11 @@ document.addEventListener("click", async (event) => {
     const route = parseHash();
     const params = new URLSearchParams(route.query);
     params.set("all", "1");
-    navigate(`#${pathFor(route)}?${params.toString()}`);
+    const next = `#${pathFor(route)}?${params.toString()}`;
+    const y = window.scrollY;
+    if (location.hash !== next) history.replaceState(null, "", next);
+    render({ focus: false, scrollTop: false });
+    window.scrollTo({ top: y, left: 0, behavior: "instant" });
     return;
   }
 
@@ -300,7 +304,7 @@ document.addEventListener("submit", (event) => {
     const input = form.elements.code;
     if (applyCoupon(input.value)) return;
     const message = form.querySelector("[data-coupon-message]");
-    message.textContent = input.value.trim() ? "הקוד לא תקין. כדאי לבדוק ולנסות שוב." : "יש להזין קוד קופון.";
+    message.textContent = "יש להזין קוד קופון.";
     message.classList.add("is-error");
     input.setAttribute("aria-invalid", "true");
     input.focus();
@@ -385,7 +389,7 @@ subscribe(() => {
   updateCartDock();
   syncCartChecks();
   const route = parseHash();
-  if (route.name === "cart") render({ focus: false });
+  if (route.name === "cart" || route.name === "checkout") render({ focus: false });
 });
 window.addEventListener("hashchange", () => render({ scrollTop: true }));
 if ("scrollRestoration" in history) history.scrollRestoration = "manual";

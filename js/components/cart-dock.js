@@ -75,8 +75,8 @@ export function updateCartDock(routeName = parseHash().name) {
       <div class="cart-dock-foot">
         <dl>
           <div><dt>סה״כ:</dt><dd>${money(totals.goods)}</dd></div>
-          ${totals.discount ? `<div class="cart-discount"><dt>קופון ${esc(totals.coupon.code)}</dt><dd>−${money(totals.discount)}</dd></div>` : ""}
-          <div><dt>עלות משלוח:</dt><dd>${money(totals.delivery)}</dd></div>
+          ${totals.freeShipping ? `<div class="cart-discount"><dt>קופון ${esc(totals.coupon.code)}</dt><dd>משלוח חינם</dd></div>` : ""}
+          <div><dt>עלות משלוח:</dt><dd>${totals.freeShipping ? `<s>${money(totals.discount)}</s> <span class="cart-free-ship">חינם</span>` : money(totals.delivery)}</dd></div>
           <div class="is-total"><dt>סה״כ לתשלום:</dt><dd>${money(totals.total)}</dd></div>
         </dl>
         ${savedNote(totals.saved)}

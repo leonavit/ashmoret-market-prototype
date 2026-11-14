@@ -178,8 +178,8 @@ export function renderOrderDetail(id) {
       <ul class="mt-3 grid gap-2 text-sm">${items}</ul>
       <dl class="mt-4 grid gap-2 border-t border-line pt-3 text-sm">
         <div class="flex justify-between"><dt>מוצרים</dt><dd>${money(order.subtotal)}</dd></div>
-        ${order.discount ? `<div class="flex justify-between cart-discount"><dt>קופון ${esc(order.coupon || "")}</dt><dd>−${money(order.discount)}</dd></div>` : ""}
-        <div class="flex justify-between"><dt>עלות משלוח</dt><dd>${money(order.delivery)}</dd></div>
+        ${order.coupon ? `<div class="flex justify-between cart-discount"><dt>קופון ${esc(order.coupon)}</dt><dd>משלוח חינם</dd></div>` : ""}
+        <div class="flex justify-between"><dt>עלות משלוח</dt><dd>${order.coupon && !order.delivery ? `<s>${money(order.discount)}</s> <span class="cart-free-ship">חינם</span>` : money(order.delivery)}</dd></div>
         <div class="flex justify-between font-extrabold"><dt>סה״כ</dt><dd>${money(order.total)}</dd></div>
       </dl>
     </section>

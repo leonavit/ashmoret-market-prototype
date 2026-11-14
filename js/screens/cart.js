@@ -11,18 +11,27 @@ export function savedNote(saved) {
   return saved > 0 ? `<p class="cart-saved">${icon}<span>חסכת <strong>${money(saved)}</strong> בקנייה הזו</span></p>` : "";
 }
 
-export function couponForm(coupon, message = "") {
+export function deliveryAmount(totals) {
+  if (totals.freeShipping) {
+    return `<s>${money(totals.discount)}</s> <span class="cart-free-ship">חינם</span>`;
+  }
+  return money(totals.delivery);
+}
+
+export function couponForm(coupon, message = "", { id = "coupon-code" } = {}) {
   if (coupon) {
     return `<div class="coupon-applied">
       <span>${tagIcon}קופון <strong>${esc(coupon.code)}</strong> · ${esc(coupon.label)}</span>
       <button type="button" class="coupon-remove" data-coupon-remove>הסרה</button>
     </div>`;
   }
+  const hintId = `${id}-hint`;
+  const hint = message ? esc(message) : "";
   return `<form class="coupon-form" data-coupon-form novalidate>
-      <label class="sr-only" for="coupon-code">קוד קופון</label>
-      <input id="coupon-code" name="code" autocomplete="off" placeholder="קוד קופון" aria-describedby="coupon-hint">
+      <label class="sr-only" for="${esc(id)}">קוד קופון</label>
+      <input id="${esc(id)}" name="code" autocomplete="off" placeholder="קוד קופון" aria-describedby="${esc(hintId)}">
       <button type="submit" class="btn btn-line">הפעלה</button>
-      <p id="coupon-hint" class="coupon-hint" data-coupon-message aria-live="polite">${esc(message || "להדגמה: ASHMORET10")}</p>
+      <p id="${esc(hintId)}" class="coupon-hint" data-coupon-message aria-live="polite">${hint}</p>
     </form>`;
 }
 
@@ -65,13 +74,13 @@ export function renderCart() {
           </div>
         </li>`).join("")}
       </ul>
-      <aside class="rounded-2xl bg-paper p-5">
-        <h2 class="text-lg font-extrabold">סיכום</h2>
+      <aside class="cart-summary rounded-2xl bg-paper p-4">
+        <h2 class="text-base font-extrabold">סיכום</h2>
         ${couponForm(totals.coupon)}
-        <dl class="mt-4 grid gap-2 text-sm">
+        <dl class="mt-3 grid gap-1.5 text-sm">
           <div class="flex justify-between"><dt>סה״כ:</dt><dd>${money(totals.goods)}</dd></div>
-          ${totals.discount ? `<div class="flex justify-between cart-discount"><dt>קופון ${esc(totals.coupon.code)}</dt><dd>−${money(totals.discount)}</dd></div>` : ""}
-          <div class="flex justify-between"><dt>עלות משלוח:</dt><dd>${money(totals.delivery)}</dd></div>
+          ${totals.freeShipping ? `<div class="flex justify-between cart-discount"><dt>קופון ${esc(totals.coupon.code)}</dt><dd>משלוח חינם</dd></div>` : ""}
+          <div class="flex justify-between"><dt>עלות משלוח:</dt><dd>${deliveryAmount(totals)}</dd></div>
           <div class="flex justify-between border-t border-line pt-2 text-base font-extrabold"><dt>סה״כ לתשלום:</dt><dd>${money(totals.total)}</dd></div>
         </dl>
         ${savedNote(totals.saved)}

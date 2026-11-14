@@ -204,6 +204,8 @@ export const prices = {
   "p249": { "price": 10.00, "compareAt": 12.50 },
   "p250": { "price": 10.00, "compareAt": 12.50 },
   "p251": { "price": 24.90, "compareAt": null },
+  "p252": { "price": 899.00, "compareAt": 1099.00 },
+  "p253": { "price": 1899.00, "compareAt": 2199.00 },
 };
 
 export function getCommerce(id) {

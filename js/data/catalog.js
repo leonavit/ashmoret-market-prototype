@@ -2874,6 +2874,34 @@ export const products = [
     "brand": "תוצרת",
     "image": "assets/images/products/p-sesame-1kg.jpg",
     "placeholder": false
+  },
+  {
+    "id": "p252",
+    "manufacturerId": "sample-a",
+    "name": "נינג׳ה גריל חשמלי",
+    "categoryName": "מכשירי חשמל",
+    "categorySlug": "appliances",
+    "weight": "יחידה",
+    "unitsPerPack": 1,
+    "barcode": "להדגמה",
+    "catalogPage": "להדגמה",
+    "brand": "Ninja",
+    "image": null,
+    "placeholder": true
+  },
+  {
+    "id": "p253",
+    "manufacturerId": "sample-a",
+    "name": "מערכת עיבוד מזון Ninja Detect",
+    "categoryName": "מכשירי חשמל",
+    "categorySlug": "appliances",
+    "weight": "יחידה",
+    "unitsPerPack": 1,
+    "barcode": "להדגמה",
+    "catalogPage": "להדגמה",
+    "brand": "Ninja",
+    "image": null,
+    "placeholder": true
   }
 ];
 

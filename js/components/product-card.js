@@ -106,7 +106,7 @@ export function productGrid(items) {
   if (!items.length) {
     return `<p class="rounded-2xl bg-paper px-5 py-10 text-center font-semibold">לא נמצאו מוצרים להצגה.</p>`;
   }
-  return `<ul class="grid grid-cols-2 product-grid md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">${items
+  return `<ul class="product-grid">${items
     .map((product) => `<li>${shelfCard(product)}</li>`)
     .join("")}</ul>`;
 }

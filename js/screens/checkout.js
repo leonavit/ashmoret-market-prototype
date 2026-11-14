@@ -1,7 +1,7 @@
 import { getProduct } from "../data/catalog.js";
 import { getCommerce } from "../data/commerce.js";
 import { cartTotals, getCart } from "../state/cart.js";
-import { savedNote } from "./cart.js";
+import { couponForm, deliveryAmount, savedNote } from "./cart.js";
 import { esc, money } from "../lib/format.js";
 import { itemCountLabel, orderLines } from "../components/order-lines.js";
 
@@ -67,8 +67,8 @@ export function renderCheckout(errors = {}, values = {}) {
 
   return `<article class="wrap checkout-page py-8">
     <h1 class="text-3xl font-extrabold">תשלום</h1>
-    <form id="checkout-form" class="checkout-layout mt-6" novalidate>
-      <div class="checkout-main">
+    <div class="checkout-layout mt-6">
+      <form id="checkout-form" class="checkout-main" novalidate>
         <section class="checkout-card" aria-labelledby="checkout-delivery-title">
           <h2 id="checkout-delivery-title" class="checkout-card-title">פרטי משלוח</h2>
           <div class="form-row">
@@ -114,23 +114,24 @@ export function renderCheckout(errors = {}, values = {}) {
           </div>
           <p class="text-sm text-muted">הדגמה בלבד: לא מתבצע חיוב, ופרטי הכרטיס לא נשמרים. אפשר להקליד כל ערך.</p>
         </section>
-      </div>
+      </form>
       <aside class="checkout-card checkout-summary" aria-labelledby="checkout-summary-title">
         <div class="checkout-summary-head">
           <h2 id="checkout-summary-title" class="checkout-card-title">ההזמנה</h2>
           <span>${itemCountLabel(lines)}</span>
         </div>
         ${orderLines(lines, { scroll: true })}
+        ${couponForm(totals.coupon, "", { id: "checkout-coupon-code" })}
         <dl class="summary-totals">
           <div><dt>מוצרים</dt><dd>${money(totals.goods)}</dd></div>
-          ${totals.discount ? `<div class="cart-discount"><dt>קופון ${esc(totals.coupon.code)}</dt><dd>−${money(totals.discount)}</dd></div>` : ""}
-          <div><dt>עלות משלוח</dt><dd>${money(totals.delivery)}</dd></div>
+          ${totals.freeShipping ? `<div class="cart-discount"><dt>קופון ${esc(totals.coupon.code)}</dt><dd>משלוח חינם</dd></div>` : ""}
+          <div><dt>עלות משלוח</dt><dd>${deliveryAmount(totals)}</dd></div>
           <div class="is-total"><dt>לתשלום</dt><dd>${money(totals.total)}</dd></div>
         </dl>
         ${savedNote(totals.saved)}
-        <button class="btn checkout-submit" type="submit">${lockIcon}תשלום ${money(totals.total)} · הדגמה</button>
+        <button class="btn checkout-submit" type="submit" form="checkout-form">${lockIcon}תשלום ${money(totals.total)} · הדגמה</button>
       </aside>
-    </form>
+    </div>
   </article>`;
 }
 

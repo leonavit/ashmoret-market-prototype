@@ -2,9 +2,7 @@ import { deliveryFee, getCommerce } from "../data/commerce.js";
 
 const KEY = "ashmoret-cart";
 const COUPON_KEY = "ashmoret-coupon";
-const coupons = {
-  ASHMORET10: { rate: 0.1, label: "10% הנחה על המוצרים" },
-};
+const FREE_SHIPPING_LABEL = "משלוח חינם";
 const listeners = new Set();
 
 function notify() {
@@ -69,12 +67,13 @@ export function clearCart() {
 
 export function getCoupon() {
   const code = localStorage.getItem(COUPON_KEY);
-  return code && coupons[code] ? { code, ...coupons[code] } : null;
+  if (!code) return null;
+  return { code, freeShipping: true, label: FREE_SHIPPING_LABEL };
 }
 
 export function applyCoupon(input) {
   const code = String(input || "").trim().toUpperCase();
-  if (!coupons[code]) return false;
+  if (!code) return false;
   localStorage.setItem(COUPON_KEY, code);
   notify();
   return true;
@@ -96,15 +95,18 @@ export function cartTotals(state = read()) {
     return commerce?.compareAt ? sum + (commerce.compareAt - commerce.price) * item.qty : sum;
   }, 0);
   const coupon = state.items.length ? getCoupon() : null;
-  const discount = coupon ? roundMoney(goods * coupon.rate) : 0;
-  const delivery = state.items.length ? deliveryFee : 0;
+  const baseDelivery = state.items.length ? deliveryFee : 0;
+  const freeShipping = Boolean(coupon?.freeShipping);
+  const delivery = freeShipping ? 0 : baseDelivery;
+  const discount = freeShipping ? baseDelivery : 0;
   return {
     goods,
     coupon,
     discount,
     delivery,
+    freeShipping,
     saved: roundMoney(sale + discount),
-    total: roundMoney(goods - discount + delivery),
+    total: roundMoney(goods + delivery),
   };
 }
 
