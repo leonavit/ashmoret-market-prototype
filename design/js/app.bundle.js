@@ -6442,6 +6442,34 @@
       "brand": "\u05EA\u05D5\u05E6\u05E8\u05EA",
       "image": "assets/images/products/p-sesame-1kg.jpg",
       "placeholder": false
+    },
+    {
+      "id": "p252",
+      "manufacturerId": "sample-a",
+      "name": "\u05E0\u05D9\u05E0\u05D2\u05F3\u05D4 \u05D2\u05E8\u05D9\u05DC \u05D7\u05E9\u05DE\u05DC\u05D9",
+      "categoryName": "\u05DE\u05DB\u05E9\u05D9\u05E8\u05D9 \u05D7\u05E9\u05DE\u05DC",
+      "categorySlug": "appliances",
+      "weight": "\u05D9\u05D7\u05D9\u05D3\u05D4",
+      "unitsPerPack": 1,
+      "barcode": "\u05DC\u05D4\u05D3\u05D2\u05DE\u05D4",
+      "catalogPage": "\u05DC\u05D4\u05D3\u05D2\u05DE\u05D4",
+      "brand": "Ninja",
+      "image": null,
+      "placeholder": true
+    },
+    {
+      "id": "p253",
+      "manufacturerId": "sample-a",
+      "name": "\u05DE\u05E2\u05E8\u05DB\u05EA \u05E2\u05D9\u05D1\u05D5\u05D3 \u05DE\u05D6\u05D5\u05DF Ninja Detect",
+      "categoryName": "\u05DE\u05DB\u05E9\u05D9\u05E8\u05D9 \u05D7\u05E9\u05DE\u05DC",
+      "categorySlug": "appliances",
+      "weight": "\u05D9\u05D7\u05D9\u05D3\u05D4",
+      "unitsPerPack": 1,
+      "barcode": "\u05DC\u05D4\u05D3\u05D2\u05DE\u05D4",
+      "catalogPage": "\u05DC\u05D4\u05D3\u05D2\u05DE\u05D4",
+      "brand": "Ninja",
+      "image": null,
+      "placeholder": true
     }
   ];
   function getProduct(id) {
@@ -6696,7 +6724,9 @@
     "p248": { "price": 14, "compareAt": 14.9 },
     "p249": { "price": 10, "compareAt": 12.5 },
     "p250": { "price": 10, "compareAt": 12.5 },
-    "p251": { "price": 24.9, "compareAt": null }
+    "p251": { "price": 24.9, "compareAt": null },
+    "p252": { "price": 899, "compareAt": 1099 },
+    "p253": { "price": 1899, "compareAt": 2199 }
   };
   function getCommerce(id) {
     return prices[id] || null;
@@ -6799,9 +6829,7 @@
   // js/state/cart.js
   var KEY = "ashmoret-cart";
   var COUPON_KEY = "ashmoret-coupon";
-  var coupons = {
-    ASHMORET10: { rate: 0.1, label: "10% \u05D4\u05E0\u05D7\u05D4 \u05E2\u05DC \u05D4\u05DE\u05D5\u05E6\u05E8\u05D9\u05DD" }
-  };
+  var FREE_SHIPPING_LABEL = "\u05DE\u05E9\u05DC\u05D5\u05D7 \u05D7\u05D9\u05E0\u05DD";
   var listeners = /* @__PURE__ */ new Set();
   function notify() {
     const state3 = read();
@@ -6854,11 +6882,12 @@
   }
   function getCoupon() {
     const code = localStorage.getItem(COUPON_KEY);
-    return code && coupons[code] ? { code, ...coupons[code] } : null;
+    if (!code) return null;
+    return { code, freeShipping: true, label: FREE_SHIPPING_LABEL };
   }
   function applyCoupon(input) {
     const code = String(input || "").trim().toUpperCase();
-    if (!coupons[code]) return false;
+    if (!code) return false;
     localStorage.setItem(COUPON_KEY, code);
     notify();
     return true;
@@ -6877,15 +6906,18 @@
       return commerce?.compareAt ? sum + (commerce.compareAt - commerce.price) * item.qty : sum;
     }, 0);
     const coupon = state3.items.length ? getCoupon() : null;
-    const discount = coupon ? roundMoney(goods * coupon.rate) : 0;
-    const delivery2 = state3.items.length ? deliveryFee : 0;
+    const baseDelivery = state3.items.length ? deliveryFee : 0;
+    const freeShipping = Boolean(coupon?.freeShipping);
+    const delivery2 = freeShipping ? 0 : baseDelivery;
+    const discount = freeShipping ? baseDelivery : 0;
     return {
       goods,
       coupon,
       discount,
       delivery: delivery2,
+      freeShipping,
       saved: roundMoney(sale + discount),
-      total: roundMoney(goods - discount + delivery2)
+      total: roundMoney(goods + delivery2)
     };
   }
   function countItems(state3 = read()) {
@@ -6970,7 +7002,7 @@
     if (!items.length) {
       return `<p class="rounded-2xl bg-paper px-5 py-10 text-center font-semibold">\u05DC\u05D0 \u05E0\u05DE\u05E6\u05D0\u05D5 \u05DE\u05D5\u05E6\u05E8\u05D9\u05DD \u05DC\u05D4\u05E6\u05D2\u05D4.</p>`;
     }
-    return `<ul class="grid grid-cols-2 product-grid md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">${items.map((product) => `<li>${shelfCard(product)}</li>`).join("")}</ul>`;
+    return `<ul class="product-grid">${items.map((product) => `<li>${shelfCard(product)}</li>`).join("")}</ul>`;
   }
 
   // js/components/ad-slots.js
@@ -7321,10 +7353,10 @@
 
   // js/components/theme-options.js
   var KEY2 = "ashmoret-theme";
-  var REV = 12;
+  var REV = 13;
   var adKey = (id) => `ad-${id}`;
   var adDefaults = { ...Object.fromEntries(adSlots.map((slot) => [adKey(slot.id), slot.enabled])), adTimers: false };
-  var defaults = { header: "v2", hero: "v4", heroEffect: "v2", categories: "v2", featured: "v1", banners: "v2", mobileMenu: "v2", mobileCarousel: "v2", railCols: "6", suppliers: "v1", palette: "v1", logo: "v1", wideHeader: true, listingCenter: true, ...adDefaults };
+  var defaults = { header: "v2", hero: "v4", heroEffect: "v2", categories: "v2", featured: "v1", banners: "v2", mobileMenu: "v2", mobileCarousel: "v2", railCols: "6", listingCols: "5", suppliers: "v1", palette: "v1", logo: "v1", wideHeader: true, listingCenter: true, ...adDefaults };
   var logos = {
     v1: { src: "assets/images/brand/logo-market-cart.png?v=2", width: 300, height: 80 },
     v2: { src: "assets/images/brand/logo-market.png", width: 1024, height: 344 }
@@ -7342,6 +7374,7 @@
     mobileMenu: groupIcon(`<rect x="6.5" y="2.5" width="11" height="19" rx="2.5"></rect><path d="M9.5 8h5M9.5 11h5M9.5 14h5"></path>`),
     mobileCarousel: groupIcon(`<rect x="7" y="5" width="10" height="14" rx="1.5"></rect><path d="M4 7v10M20 7v10"></path>`),
     railCols: groupIcon(`<rect x="2.5" y="6" width="4" height="12" rx="1"></rect><rect x="8.5" y="6" width="4" height="12" rx="1"></rect><rect x="14.5" y="6" width="4" height="12" rx="1"></rect><path d="M21 8v8"></path>`),
+    listingCols: groupIcon(`<rect x="3" y="5" width="4" height="14" rx="1"></rect><rect x="8" y="5" width="4" height="14" rx="1"></rect><rect x="13" y="5" width="4" height="14" rx="1"></rect><rect x="18" y="5" width="3" height="14" rx="1"></rect>`),
     suppliers: groupIcon(`<path d="M3 9 4.5 4h15L21 9"></path><path d="M4 9v11h16V9"></path><path d="M3 9h18"></path><path d="M9.5 20v-5.5h5V20"></path>`),
     palette: groupIcon(`<path d="M12 3a9 9 0 1 0 0 18c1.1 0 1.8-.9 1.8-1.9 0-.5-.2-.9-.5-1.3-.3-.3-.5-.8-.5-1.2 0-1 .8-1.8 1.8-1.8H16a5 5 0 0 0 5-5c0-3.9-4-6.8-9-6.8z"></path><circle cx="7.5" cy="11" r="1.2"></circle><circle cx="10.5" cy="7" r="1.2"></circle><circle cx="15" cy="7.5" r="1.2"></circle>`),
     logo: groupIcon(`<path d="M3 4h2l2.4 10.2a1.5 1.5 0 0 0 1.5 1.1h8.6a1.5 1.5 0 0 0 1.4-1.1L21 8H6.2"></path><circle cx="9.5" cy="19.5" r="1.3"></circle><circle cx="17" cy="19.5" r="1.3"></circle>`),
@@ -7432,6 +7465,15 @@
       note: "\u05D7\u05DC \u05E2\u05DC \u05E7\u05E8\u05D5\u05E1\u05DC\u05D5\u05EA \u05D4\u05DE\u05D5\u05E6\u05E8\u05D9\u05DD \u05D1\u05DE\u05E1\u05DB\u05D9\u05DD \u05DE\u05BE1280 \u05E4\u05D9\u05E7\u05E1\u05DC\u05D9\u05DD. \u05E7\u05E8\u05D5\u05E1\u05DC\u05EA \xAB\u05DE\u05D5\u05E6\u05E8\u05D9\u05DD \u05D3\u05D5\u05DE\u05D9\u05DD\xBB \u05D1\u05E2\u05DE\u05D5\u05D3 \u05DE\u05D5\u05E6\u05E8 \u05E0\u05E9\u05D0\u05E8\u05EA \u05E2\u05DD 4."
     },
     {
+      name: "listingCols",
+      title: "\u05DE\u05D5\u05E6\u05E8\u05D9\u05DD \u05D1\u05E9\u05D5\u05E8\u05D4 \u05D1\u05E2\u05DE\u05D5\u05D3 \u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D4",
+      options: [
+        ["5", "5 \xB7 \u05D1\u05E8\u05D9\u05E8\u05EA \u05DE\u05D7\u05D3\u05DC", "\u05D7\u05DE\u05D9\u05E9\u05D4 \u05DE\u05D5\u05E6\u05E8\u05D9\u05DD \u05D1\u05DB\u05DC \u05E9\u05D5\u05E8\u05D4."],
+        ["6", "6", "\u05E9\u05D9\u05E9\u05D4 \u05DE\u05D5\u05E6\u05E8\u05D9\u05DD \u05D1\u05DB\u05DC \u05E9\u05D5\u05E8\u05D4."]
+      ],
+      note: "\u05D7\u05DC \u05E2\u05DC \u05E8\u05E9\u05EA \u05D4\u05DE\u05D5\u05E6\u05E8\u05D9\u05DD \u05D1\u05E2\u05DE\u05D5\u05D3\u05D9 \u05E7\u05D8\u05D2\u05D5\u05E8\u05D9\u05D4, \u05DE\u05D7\u05DC\u05E7\u05D4 \u05D5\u05D7\u05D9\u05E4\u05D5\u05E9 \u05D1\u05DE\u05E1\u05DB\u05D9\u05DD \u05DE\u05BE1280 \u05E4\u05D9\u05E7\u05E1\u05DC\u05D9\u05DD."
+    },
+    {
       name: "suppliers",
       title: "\u05D4\u05D2\u05D3\u05E8\u05D5\u05EA \u05E1\u05E4\u05E7\u05D9\u05DD",
       options: [
@@ -7503,6 +7545,7 @@
         mobileMenu: current && saved.mobileMenu === "v1" ? "v1" : defaults.mobileMenu,
         mobileCarousel: saved.rev >= 7 && saved.mobileCarousel === "v1" ? "v1" : defaults.mobileCarousel,
         railCols: saved.rev >= 12 && ["5", "6"].includes(saved.railCols) ? saved.railCols : defaults.railCols,
+        listingCols: saved.rev >= 13 && ["5", "6"].includes(saved.listingCols) ? saved.listingCols : defaults.listingCols,
         suppliers: saved.suppliers === "v2" ? "v2" : defaults.suppliers,
         palette: current && saved.palette === "grey" ? "grey" : defaults.palette,
         logo: saved.logo === "v2" ? "v2" : defaults.logo,
@@ -7558,6 +7601,9 @@
   }
   function applyRailCols() {
     document.documentElement.dataset.railCols = state.railCols;
+  }
+  function applyListingCols() {
+    document.documentElement.dataset.listingCols = state.listingCols;
   }
   function applyHeader() {
     const search = document.getElementById("search-slot");
@@ -7631,6 +7677,7 @@
       applyRailCols();
       onHeroChange();
     }
+    if (name === "listingCols") applyListingCols();
     if (name === "suppliers") onSuppliersChange();
     if (name === "palette") applyPalette();
     if (name === "logo") applyLogo();
@@ -7680,6 +7727,7 @@
         setOption("mobileMenu", defaults.mobileMenu, panel);
         setOption("mobileCarousel", defaults.mobileCarousel, panel);
         setOption("railCols", defaults.railCols, panel);
+        setOption("listingCols", defaults.listingCols, panel);
         setOption("suppliers", defaults.suppliers, panel);
         setOption("palette", defaults.palette, panel);
         setOption("logo", defaults.logo, panel);
@@ -7708,6 +7756,7 @@
     applyMobileMenu();
     applyMobileCarousel();
     applyRailCols();
+    applyListingCols();
     applyListingHero();
     applyPalette();
     applyLogo();
@@ -8924,18 +8973,26 @@
     const icon3 = tagIcon.replace("<svg ", `<svg class="cart-saved-icon" data-lottie="calculator-coins" data-lottie-play="loop" `);
     return saved > 0 ? `<p class="cart-saved">${icon3}<span>\u05D7\u05E1\u05DB\u05EA <strong>${money(saved)}</strong> \u05D1\u05E7\u05E0\u05D9\u05D9\u05D4 \u05D4\u05D6\u05D5</span></p>` : "";
   }
-  function couponForm(coupon, message = "") {
+  function deliveryAmount(totals) {
+    if (totals.freeShipping) {
+      return `<s>${money(totals.discount)}</s> <span class="cart-free-ship">\u05D7\u05D9\u05E0\u05DD</span>`;
+    }
+    return money(totals.delivery);
+  }
+  function couponForm(coupon, message = "", { id = "coupon-code" } = {}) {
     if (coupon) {
       return `<div class="coupon-applied">
       <span>${tagIcon}\u05E7\u05D5\u05E4\u05D5\u05DF <strong>${esc(coupon.code)}</strong> \xB7 ${esc(coupon.label)}</span>
       <button type="button" class="coupon-remove" data-coupon-remove>\u05D4\u05E1\u05E8\u05D4</button>
     </div>`;
     }
+    const hintId = `${id}-hint`;
+    const hint = message ? esc(message) : "";
     return `<form class="coupon-form" data-coupon-form novalidate>
-      <label class="sr-only" for="coupon-code">\u05E7\u05D5\u05D3 \u05E7\u05D5\u05E4\u05D5\u05DF</label>
-      <input id="coupon-code" name="code" autocomplete="off" placeholder="\u05E7\u05D5\u05D3 \u05E7\u05D5\u05E4\u05D5\u05DF" aria-describedby="coupon-hint">
+      <label class="sr-only" for="${esc(id)}">\u05E7\u05D5\u05D3 \u05E7\u05D5\u05E4\u05D5\u05DF</label>
+      <input id="${esc(id)}" name="code" autocomplete="off" placeholder="\u05E7\u05D5\u05D3 \u05E7\u05D5\u05E4\u05D5\u05DF" aria-describedby="${esc(hintId)}">
       <button type="submit" class="btn btn-line">\u05D4\u05E4\u05E2\u05DC\u05D4</button>
-      <p id="coupon-hint" class="coupon-hint" data-coupon-message aria-live="polite">${esc(message || "\u05DC\u05D4\u05D3\u05D2\u05DE\u05D4: ASHMORET10")}</p>
+      <p id="${esc(hintId)}" class="coupon-hint" data-coupon-message aria-live="polite">${hint}</p>
     </form>`;
   }
   function renderCart() {
@@ -8972,13 +9029,13 @@
           </div>
         </li>`).join("")}
       </ul>
-      <aside class="rounded-2xl bg-paper p-5">
-        <h2 class="text-lg font-extrabold">\u05E1\u05D9\u05DB\u05D5\u05DD</h2>
+      <aside class="cart-summary rounded-2xl bg-paper p-4">
+        <h2 class="text-base font-extrabold">\u05E1\u05D9\u05DB\u05D5\u05DD</h2>
         ${couponForm(totals.coupon)}
-        <dl class="mt-4 grid gap-2 text-sm">
+        <dl class="mt-3 grid gap-1.5 text-sm">
           <div class="flex justify-between"><dt>\u05E1\u05D4\u05F4\u05DB:</dt><dd>${money(totals.goods)}</dd></div>
-          ${totals.discount ? `<div class="flex justify-between cart-discount"><dt>\u05E7\u05D5\u05E4\u05D5\u05DF ${esc(totals.coupon.code)}</dt><dd>\u2212${money(totals.discount)}</dd></div>` : ""}
-          <div class="flex justify-between"><dt>\u05E2\u05DC\u05D5\u05EA \u05DE\u05E9\u05DC\u05D5\u05D7:</dt><dd>${money(totals.delivery)}</dd></div>
+          ${totals.freeShipping ? `<div class="flex justify-between cart-discount"><dt>\u05E7\u05D5\u05E4\u05D5\u05DF ${esc(totals.coupon.code)}</dt><dd>\u05DE\u05E9\u05DC\u05D5\u05D7 \u05D7\u05D9\u05E0\u05DD</dd></div>` : ""}
+          <div class="flex justify-between"><dt>\u05E2\u05DC\u05D5\u05EA \u05DE\u05E9\u05DC\u05D5\u05D7:</dt><dd>${deliveryAmount(totals)}</dd></div>
           <div class="flex justify-between border-t border-line pt-2 text-base font-extrabold"><dt>\u05E1\u05D4\u05F4\u05DB \u05DC\u05EA\u05E9\u05DC\u05D5\u05DD:</dt><dd>${money(totals.total)}</dd></div>
         </dl>
         ${savedNote(totals.saved)}
@@ -9063,8 +9120,8 @@
   </label>`;
     return `<article class="wrap checkout-page py-8">
     <h1 class="text-3xl font-extrabold">\u05EA\u05E9\u05DC\u05D5\u05DD</h1>
-    <form id="checkout-form" class="checkout-layout mt-6" novalidate>
-      <div class="checkout-main">
+    <div class="checkout-layout mt-6">
+      <form id="checkout-form" class="checkout-main" novalidate>
         <section class="checkout-card" aria-labelledby="checkout-delivery-title">
           <h2 id="checkout-delivery-title" class="checkout-card-title">\u05E4\u05E8\u05D8\u05D9 \u05DE\u05E9\u05DC\u05D5\u05D7</h2>
           <div class="form-row">
@@ -9110,23 +9167,24 @@
           </div>
           <p class="text-sm text-muted">\u05D4\u05D3\u05D2\u05DE\u05D4 \u05D1\u05DC\u05D1\u05D3: \u05DC\u05D0 \u05DE\u05EA\u05D1\u05E6\u05E2 \u05D7\u05D9\u05D5\u05D1, \u05D5\u05E4\u05E8\u05D8\u05D9 \u05D4\u05DB\u05E8\u05D8\u05D9\u05E1 \u05DC\u05D0 \u05E0\u05E9\u05DE\u05E8\u05D9\u05DD. \u05D0\u05E4\u05E9\u05E8 \u05DC\u05D4\u05E7\u05DC\u05D9\u05D3 \u05DB\u05DC \u05E2\u05E8\u05DA.</p>
         </section>
-      </div>
+      </form>
       <aside class="checkout-card checkout-summary" aria-labelledby="checkout-summary-title">
         <div class="checkout-summary-head">
           <h2 id="checkout-summary-title" class="checkout-card-title">\u05D4\u05D4\u05D6\u05DE\u05E0\u05D4</h2>
           <span>${itemCountLabel(lines)}</span>
         </div>
         ${orderLines(lines, { scroll: true })}
+        ${couponForm(totals.coupon, "", { id: "checkout-coupon-code" })}
         <dl class="summary-totals">
           <div><dt>\u05DE\u05D5\u05E6\u05E8\u05D9\u05DD</dt><dd>${money(totals.goods)}</dd></div>
-          ${totals.discount ? `<div class="cart-discount"><dt>\u05E7\u05D5\u05E4\u05D5\u05DF ${esc(totals.coupon.code)}</dt><dd>\u2212${money(totals.discount)}</dd></div>` : ""}
-          <div><dt>\u05E2\u05DC\u05D5\u05EA \u05DE\u05E9\u05DC\u05D5\u05D7</dt><dd>${money(totals.delivery)}</dd></div>
+          ${totals.freeShipping ? `<div class="cart-discount"><dt>\u05E7\u05D5\u05E4\u05D5\u05DF ${esc(totals.coupon.code)}</dt><dd>\u05DE\u05E9\u05DC\u05D5\u05D7 \u05D7\u05D9\u05E0\u05DD</dd></div>` : ""}
+          <div><dt>\u05E2\u05DC\u05D5\u05EA \u05DE\u05E9\u05DC\u05D5\u05D7</dt><dd>${deliveryAmount(totals)}</dd></div>
           <div class="is-total"><dt>\u05DC\u05EA\u05E9\u05DC\u05D5\u05DD</dt><dd>${money(totals.total)}</dd></div>
         </dl>
         ${savedNote(totals.saved)}
-        <button class="btn checkout-submit" type="submit">${lockIcon}\u05EA\u05E9\u05DC\u05D5\u05DD ${money(totals.total)} \xB7 \u05D4\u05D3\u05D2\u05DE\u05D4</button>
+        <button class="btn checkout-submit" type="submit" form="checkout-form">${lockIcon}\u05EA\u05E9\u05DC\u05D5\u05DD ${money(totals.total)} \xB7 \u05D4\u05D3\u05D2\u05DE\u05D4</button>
       </aside>
-    </form>
+    </div>
   </article>`;
   }
   var required = {
@@ -9206,8 +9264,8 @@
       ${orderLines(lines)}
       <dl class="summary-totals">
         <div><dt>\u05DE\u05D5\u05E6\u05E8\u05D9\u05DD</dt><dd>${money(order.subtotal)}</dd></div>
-        ${order.discount ? `<div class="cart-discount"><dt>\u05E7\u05D5\u05E4\u05D5\u05DF ${esc(order.coupon || "")}</dt><dd>\u2212${money(order.discount)}</dd></div>` : ""}
-        <div><dt>\u05E2\u05DC\u05D5\u05EA \u05DE\u05E9\u05DC\u05D5\u05D7</dt><dd>${money(order.delivery)}</dd></div>
+        ${order.coupon ? `<div class="cart-discount"><dt>\u05E7\u05D5\u05E4\u05D5\u05DF ${esc(order.coupon)}</dt><dd>\u05DE\u05E9\u05DC\u05D5\u05D7 \u05D7\u05D9\u05E0\u05DD</dd></div>` : ""}
+        <div><dt>\u05E2\u05DC\u05D5\u05EA \u05DE\u05E9\u05DC\u05D5\u05D7</dt><dd>${order.coupon && !order.delivery ? `<s>${money(order.discount)}</s> <span class="cart-free-ship">\u05D7\u05D9\u05E0\u05DD</span>` : money(order.delivery)}</dd></div>
         <div class="is-total"><dt>\u05E1\u05D4\u05F4\u05DB</dt><dd>${money(order.total)}</dd></div>
       </dl>
       <p class="mt-4 text-sm text-muted">\u05DE\u05E9\u05DC\u05D5\u05D7 \u05D0\u05DC ${esc(order.customer.street)} ${esc(order.customer.house)}, ${esc(order.customer.city)}</p>
@@ -10078,8 +10136,8 @@
       <ul class="mt-3 grid gap-2 text-sm">${items}</ul>
       <dl class="mt-4 grid gap-2 border-t border-line pt-3 text-sm">
         <div class="flex justify-between"><dt>\u05DE\u05D5\u05E6\u05E8\u05D9\u05DD</dt><dd>${money(order.subtotal)}</dd></div>
-        ${order.discount ? `<div class="flex justify-between cart-discount"><dt>\u05E7\u05D5\u05E4\u05D5\u05DF ${esc(order.coupon || "")}</dt><dd>\u2212${money(order.discount)}</dd></div>` : ""}
-        <div class="flex justify-between"><dt>\u05E2\u05DC\u05D5\u05EA \u05DE\u05E9\u05DC\u05D5\u05D7</dt><dd>${money(order.delivery)}</dd></div>
+        ${order.coupon ? `<div class="flex justify-between cart-discount"><dt>\u05E7\u05D5\u05E4\u05D5\u05DF ${esc(order.coupon)}</dt><dd>\u05DE\u05E9\u05DC\u05D5\u05D7 \u05D7\u05D9\u05E0\u05DD</dd></div>` : ""}
+        <div class="flex justify-between"><dt>\u05E2\u05DC\u05D5\u05EA \u05DE\u05E9\u05DC\u05D5\u05D7</dt><dd>${order.coupon && !order.delivery ? `<s>${money(order.discount)}</s> <span class="cart-free-ship">\u05D7\u05D9\u05E0\u05DD</span>` : money(order.delivery)}</dd></div>
         <div class="flex justify-between font-extrabold"><dt>\u05E1\u05D4\u05F4\u05DB</dt><dd>${money(order.total)}</dd></div>
       </dl>
     </section>
@@ -10742,8 +10800,8 @@
       <div class="cart-dock-foot">
         <dl>
           <div><dt>\u05E1\u05D4\u05F4\u05DB:</dt><dd>${money(totals.goods)}</dd></div>
-          ${totals.discount ? `<div class="cart-discount"><dt>\u05E7\u05D5\u05E4\u05D5\u05DF ${esc(totals.coupon.code)}</dt><dd>\u2212${money(totals.discount)}</dd></div>` : ""}
-          <div><dt>\u05E2\u05DC\u05D5\u05EA \u05DE\u05E9\u05DC\u05D5\u05D7:</dt><dd>${money(totals.delivery)}</dd></div>
+          ${totals.freeShipping ? `<div class="cart-discount"><dt>\u05E7\u05D5\u05E4\u05D5\u05DF ${esc(totals.coupon.code)}</dt><dd>\u05DE\u05E9\u05DC\u05D5\u05D7 \u05D7\u05D9\u05E0\u05DD</dd></div>` : ""}
+          <div><dt>\u05E2\u05DC\u05D5\u05EA \u05DE\u05E9\u05DC\u05D5\u05D7:</dt><dd>${totals.freeShipping ? `<s>${money(totals.discount)}</s> <span class="cart-free-ship">\u05D7\u05D9\u05E0\u05DD</span>` : money(totals.delivery)}</dd></div>
           <div class="is-total"><dt>\u05E1\u05D4\u05F4\u05DB \u05DC\u05EA\u05E9\u05DC\u05D5\u05DD:</dt><dd>${money(totals.total)}</dd></div>
         </dl>
         ${savedNote(totals.saved)}
@@ -11852,7 +11910,11 @@
       const route = parseHash();
       const params = new URLSearchParams(route.query);
       params.set("all", "1");
-      navigate2(`#${pathFor(route)}?${params.toString()}`);
+      const next = `#${pathFor(route)}?${params.toString()}`;
+      const y = window.scrollY;
+      if (location.hash !== next) history.replaceState(null, "", next);
+      render({ focus: false, scrollTop: false });
+      window.scrollTo({ top: y, left: 0, behavior: "instant" });
       return;
     }
     const qtyBtn = event.target.closest("[data-qty]");
@@ -11938,7 +12000,7 @@
       const input = form.elements.code;
       if (applyCoupon(input.value)) return;
       const message = form.querySelector("[data-coupon-message]");
-      message.textContent = input.value.trim() ? "\u05D4\u05E7\u05D5\u05D3 \u05DC\u05D0 \u05EA\u05E7\u05D9\u05DF. \u05DB\u05D3\u05D0\u05D9 \u05DC\u05D1\u05D3\u05D5\u05E7 \u05D5\u05DC\u05E0\u05E1\u05D5\u05EA \u05E9\u05D5\u05D1." : "\u05D9\u05E9 \u05DC\u05D4\u05D6\u05D9\u05DF \u05E7\u05D5\u05D3 \u05E7\u05D5\u05E4\u05D5\u05DF.";
+      message.textContent = "\u05D9\u05E9 \u05DC\u05D4\u05D6\u05D9\u05DF \u05E7\u05D5\u05D3 \u05E7\u05D5\u05E4\u05D5\u05DF.";
       message.classList.add("is-error");
       input.setAttribute("aria-invalid", "true");
       input.focus();
@@ -12020,7 +12082,7 @@
     updateCartDock();
     syncCartChecks();
     const route = parseHash();
-    if (route.name === "cart") render({ focus: false });
+    if (route.name === "cart" || route.name === "checkout") render({ focus: false });
   });
   window.addEventListener("hashchange", () => render({ scrollTop: true }));
   if ("scrollRestoration" in history) history.scrollRestoration = "manual";
