@@ -7,11 +7,11 @@ const INTRUSIVE = `${STORE}-intrusive`;
 const mobile = window.matchMedia("(max-width: 767px)");
 
 export const adSlots = [
-  { id: "top-strip", type: "strip", label: "באנר עליון 1/1", enabled: true, delayMs: 400, autoCloseSec: 0, frequency: "session", excludeRoutes: [] },
-  { id: "corner-peek", type: "peek", label: "באנר פינה 1/1", enabled: true, delayMs: 3000, autoCloseSec: 5, frequency: "session", excludeRoutes: FLOATING_EXCLUDE, intrusive: true },
+  { id: "top-strip", type: "strip", label: "באנר עליון 1/1", enabled: false, delayMs: 400, autoCloseSec: 0, frequency: "session", excludeRoutes: [] },
+  { id: "corner-peek", type: "peek", label: "באנר פינה 1/1", enabled: false, delayMs: 3000, autoCloseSec: 5, frequency: "session", excludeRoutes: FLOATING_EXCLUDE, intrusive: true },
   { id: "bottom-center", type: "bottom", label: "באנר תחתון 1/1", enabled: false, delayMs: 1500, autoCloseSec: 5, frequency: "session", excludeRoutes: FLOATING_EXCLUDE },
-  { id: "interstitial", type: "modal", label: "באנר מסך מלא 1/1", enabled: true, delayMs: 4000, autoCloseSec: 5, frequency: "day", excludeRoutes: FLOATING_EXCLUDE, intrusive: true, onMobile: false, skipFirstView: true },
-  { id: "pre-footer", type: "inline", label: "באנר לפני הפוטר 1/1", enabled: true, delayMs: 0, autoCloseSec: 0, frequency: "always", excludeRoutes: [] },
+  { id: "interstitial", type: "modal", label: "באנר מסך מלא 1/1", enabled: false, delayMs: 4000, autoCloseSec: 5, frequency: "day", excludeRoutes: FLOATING_EXCLUDE, intrusive: true, onMobile: false, skipFirstView: true },
+  { id: "pre-footer", type: "inline", label: "באנר לפני הפוטר 1/1", enabled: false, delayMs: 0, autoCloseSec: 0, frequency: "always", excludeRoutes: [] },
 ];
 
 const closeIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg>`;

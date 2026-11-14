@@ -1,10 +1,10 @@
 import { adSlots } from "./ad-slots.js";
 
 const KEY = "ashmoret-theme";
-const REV = 10;
+const REV = 12;
 const adKey = (id) => `ad-${id}`;
-const adDefaults = { ...Object.fromEntries(adSlots.map((slot) => [adKey(slot.id), slot.enabled])), adTimers: true };
-const defaults = { header: "v2", hero: "v4", heroEffect: "v2", categories: "v2", featured: "v1", banners: "v2", mobileMenu: "v2", mobileCarousel: "v2", railCols: "5", suppliers: "v1", palette: "v1", logo: "v1", wideHeader: true, listingCenter: true, ...adDefaults };
+const adDefaults = { ...Object.fromEntries(adSlots.map((slot) => [adKey(slot.id), slot.enabled])), adTimers: false };
+const defaults = { header: "v2", hero: "v4", heroEffect: "v2", categories: "v2", featured: "v1", banners: "v2", mobileMenu: "v2", mobileCarousel: "v2", railCols: "6", suppliers: "v1", palette: "v1", logo: "v1", wideHeader: true, listingCenter: true, ...adDefaults };
 const logos = {
   v1: { src: "assets/images/brand/logo-market-cart.png?v=2", width: 300, height: 80 },
   v2: { src: "assets/images/brand/logo-market.png", width: 1024, height: 344 },
@@ -109,8 +109,8 @@ const groups = [
     name: "railCols",
     title: "מוצרים בסלייד קרוסלה",
     options: [
-      ["5", "5 · ברירת מחדל", "חמישה מוצרים בכל סלייד."],
-      ["6", "6", "שישה מוצרים בכל סלייד."],
+      ["5", "5", "חמישה מוצרים בכל סלייד."],
+      ["6", "6 · ברירת מחדל", "שישה מוצרים בכל סלייד."],
     ],
     note: "חל על קרוסלות המוצרים במסכים מ־1280 פיקסלים. קרוסלת «מוצרים דומים» בעמוד מוצר נשארת עם 4.",
   },
@@ -183,13 +183,13 @@ function load() {
       banners: saved.rev >= 5 && saved.banners === "v1" ? "v1" : defaults.banners,
       mobileMenu: current && saved.mobileMenu === "v1" ? "v1" : defaults.mobileMenu,
       mobileCarousel: saved.rev >= 7 && saved.mobileCarousel === "v1" ? "v1" : defaults.mobileCarousel,
-      railCols: saved.railCols === "6" ? "6" : defaults.railCols,
+      railCols: saved.rev >= 12 && ["5", "6"].includes(saved.railCols) ? saved.railCols : defaults.railCols,
       suppliers: saved.suppliers === "v2" ? "v2" : defaults.suppliers,
       palette: current && saved.palette === "grey" ? "grey" : defaults.palette,
       logo: saved.logo === "v2" ? "v2" : defaults.logo,
       wideHeader: typeof saved.wideHeader === "boolean" ? saved.wideHeader : defaults.wideHeader,
       listingCenter: saved.rev >= 10 && saved.listingCenter === false ? false : defaults.listingCenter,
-      ...Object.fromEntries(Object.keys(adDefaults).map((key) => [key, typeof saved[key] === "boolean" ? saved[key] : adDefaults[key]])),
+      ...Object.fromEntries(Object.keys(adDefaults).map((key) => [key, saved.rev >= 11 && typeof saved[key] === "boolean" ? saved[key] : adDefaults[key]])),
     };
   } catch {
     return { rev: REV, ...defaults };
