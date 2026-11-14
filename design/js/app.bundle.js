@@ -6980,11 +6980,11 @@
   var INTRUSIVE = `${STORE}-intrusive`;
   var mobile = window.matchMedia("(max-width: 767px)");
   var adSlots = [
-    { id: "top-strip", type: "strip", label: "\u05D1\u05D0\u05E0\u05E8 \u05E2\u05DC\u05D9\u05D5\u05DF 1/1", enabled: true, delayMs: 400, autoCloseSec: 0, frequency: "session", excludeRoutes: [] },
-    { id: "corner-peek", type: "peek", label: "\u05D1\u05D0\u05E0\u05E8 \u05E4\u05D9\u05E0\u05D4 1/1", enabled: true, delayMs: 3e3, autoCloseSec: 5, frequency: "session", excludeRoutes: FLOATING_EXCLUDE, intrusive: true },
+    { id: "top-strip", type: "strip", label: "\u05D1\u05D0\u05E0\u05E8 \u05E2\u05DC\u05D9\u05D5\u05DF 1/1", enabled: false, delayMs: 400, autoCloseSec: 0, frequency: "session", excludeRoutes: [] },
+    { id: "corner-peek", type: "peek", label: "\u05D1\u05D0\u05E0\u05E8 \u05E4\u05D9\u05E0\u05D4 1/1", enabled: false, delayMs: 3e3, autoCloseSec: 5, frequency: "session", excludeRoutes: FLOATING_EXCLUDE, intrusive: true },
     { id: "bottom-center", type: "bottom", label: "\u05D1\u05D0\u05E0\u05E8 \u05EA\u05D7\u05EA\u05D5\u05DF 1/1", enabled: false, delayMs: 1500, autoCloseSec: 5, frequency: "session", excludeRoutes: FLOATING_EXCLUDE },
-    { id: "interstitial", type: "modal", label: "\u05D1\u05D0\u05E0\u05E8 \u05DE\u05E1\u05DA \u05DE\u05DC\u05D0 1/1", enabled: true, delayMs: 4e3, autoCloseSec: 5, frequency: "day", excludeRoutes: FLOATING_EXCLUDE, intrusive: true, onMobile: false, skipFirstView: true },
-    { id: "pre-footer", type: "inline", label: "\u05D1\u05D0\u05E0\u05E8 \u05DC\u05E4\u05E0\u05D9 \u05D4\u05E4\u05D5\u05D8\u05E8 1/1", enabled: true, delayMs: 0, autoCloseSec: 0, frequency: "always", excludeRoutes: [] }
+    { id: "interstitial", type: "modal", label: "\u05D1\u05D0\u05E0\u05E8 \u05DE\u05E1\u05DA \u05DE\u05DC\u05D0 1/1", enabled: false, delayMs: 4e3, autoCloseSec: 5, frequency: "day", excludeRoutes: FLOATING_EXCLUDE, intrusive: true, onMobile: false, skipFirstView: true },
+    { id: "pre-footer", type: "inline", label: "\u05D1\u05D0\u05E0\u05E8 \u05DC\u05E4\u05E0\u05D9 \u05D4\u05E4\u05D5\u05D8\u05E8 1/1", enabled: false, delayMs: 0, autoCloseSec: 0, frequency: "always", excludeRoutes: [] }
   ];
   var closeIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg>`;
   var tabIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg>`;
@@ -7321,10 +7321,10 @@
 
   // js/components/theme-options.js
   var KEY2 = "ashmoret-theme";
-  var REV = 10;
+  var REV = 12;
   var adKey = (id) => `ad-${id}`;
-  var adDefaults = { ...Object.fromEntries(adSlots.map((slot) => [adKey(slot.id), slot.enabled])), adTimers: true };
-  var defaults = { header: "v2", hero: "v4", heroEffect: "v2", categories: "v2", featured: "v1", banners: "v2", mobileMenu: "v2", mobileCarousel: "v2", railCols: "5", suppliers: "v1", palette: "v1", logo: "v1", wideHeader: true, listingCenter: true, ...adDefaults };
+  var adDefaults = { ...Object.fromEntries(adSlots.map((slot) => [adKey(slot.id), slot.enabled])), adTimers: false };
+  var defaults = { header: "v2", hero: "v4", heroEffect: "v2", categories: "v2", featured: "v1", banners: "v2", mobileMenu: "v2", mobileCarousel: "v2", railCols: "6", suppliers: "v1", palette: "v1", logo: "v1", wideHeader: true, listingCenter: true, ...adDefaults };
   var logos = {
     v1: { src: "assets/images/brand/logo-market-cart.png?v=2", width: 300, height: 80 },
     v2: { src: "assets/images/brand/logo-market.png", width: 1024, height: 344 }
@@ -7426,8 +7426,8 @@
       name: "railCols",
       title: "\u05DE\u05D5\u05E6\u05E8\u05D9\u05DD \u05D1\u05E1\u05DC\u05D9\u05D9\u05D3 \u05E7\u05E8\u05D5\u05E1\u05DC\u05D4",
       options: [
-        ["5", "5 \xB7 \u05D1\u05E8\u05D9\u05E8\u05EA \u05DE\u05D7\u05D3\u05DC", "\u05D7\u05DE\u05D9\u05E9\u05D4 \u05DE\u05D5\u05E6\u05E8\u05D9\u05DD \u05D1\u05DB\u05DC \u05E1\u05DC\u05D9\u05D9\u05D3."],
-        ["6", "6", "\u05E9\u05D9\u05E9\u05D4 \u05DE\u05D5\u05E6\u05E8\u05D9\u05DD \u05D1\u05DB\u05DC \u05E1\u05DC\u05D9\u05D9\u05D3."]
+        ["5", "5", "\u05D7\u05DE\u05D9\u05E9\u05D4 \u05DE\u05D5\u05E6\u05E8\u05D9\u05DD \u05D1\u05DB\u05DC \u05E1\u05DC\u05D9\u05D9\u05D3."],
+        ["6", "6 \xB7 \u05D1\u05E8\u05D9\u05E8\u05EA \u05DE\u05D7\u05D3\u05DC", "\u05E9\u05D9\u05E9\u05D4 \u05DE\u05D5\u05E6\u05E8\u05D9\u05DD \u05D1\u05DB\u05DC \u05E1\u05DC\u05D9\u05D9\u05D3."]
       ],
       note: "\u05D7\u05DC \u05E2\u05DC \u05E7\u05E8\u05D5\u05E1\u05DC\u05D5\u05EA \u05D4\u05DE\u05D5\u05E6\u05E8\u05D9\u05DD \u05D1\u05DE\u05E1\u05DB\u05D9\u05DD \u05DE\u05BE1280 \u05E4\u05D9\u05E7\u05E1\u05DC\u05D9\u05DD. \u05E7\u05E8\u05D5\u05E1\u05DC\u05EA \xAB\u05DE\u05D5\u05E6\u05E8\u05D9\u05DD \u05D3\u05D5\u05DE\u05D9\u05DD\xBB \u05D1\u05E2\u05DE\u05D5\u05D3 \u05DE\u05D5\u05E6\u05E8 \u05E0\u05E9\u05D0\u05E8\u05EA \u05E2\u05DD 4."
     },
@@ -7502,13 +7502,13 @@
         banners: saved.rev >= 5 && saved.banners === "v1" ? "v1" : defaults.banners,
         mobileMenu: current && saved.mobileMenu === "v1" ? "v1" : defaults.mobileMenu,
         mobileCarousel: saved.rev >= 7 && saved.mobileCarousel === "v1" ? "v1" : defaults.mobileCarousel,
-        railCols: saved.railCols === "6" ? "6" : defaults.railCols,
+        railCols: saved.rev >= 12 && ["5", "6"].includes(saved.railCols) ? saved.railCols : defaults.railCols,
         suppliers: saved.suppliers === "v2" ? "v2" : defaults.suppliers,
         palette: current && saved.palette === "grey" ? "grey" : defaults.palette,
         logo: saved.logo === "v2" ? "v2" : defaults.logo,
         wideHeader: typeof saved.wideHeader === "boolean" ? saved.wideHeader : defaults.wideHeader,
         listingCenter: saved.rev >= 10 && saved.listingCenter === false ? false : defaults.listingCenter,
-        ...Object.fromEntries(Object.keys(adDefaults).map((key) => [key, typeof saved[key] === "boolean" ? saved[key] : adDefaults[key]]))
+        ...Object.fromEntries(Object.keys(adDefaults).map((key) => [key, saved.rev >= 11 && typeof saved[key] === "boolean" ? saved[key] : adDefaults[key]]))
       };
     } catch {
       return { rev: REV, ...defaults };
