@@ -6216,8 +6216,8 @@
       "barcode": "\u05DC\u05D4\u05D3\u05D2\u05DE\u05D4",
       "catalogPage": "\u05DC\u05D4\u05D3\u05D2\u05DE\u05D4",
       "brand": "\u05D8\u05D5\u05E1\u05D8\u05E8",
-      "image": null,
-      "placeholder": true
+      "image": "assets/images/products/p-sandwich-triangles.webp",
+      "placeholder": false
     },
     {
       "id": "p236",
@@ -6454,8 +6454,8 @@
       "barcode": "\u05DC\u05D4\u05D3\u05D2\u05DE\u05D4",
       "catalogPage": "\u05DC\u05D4\u05D3\u05D2\u05DE\u05D4",
       "brand": "Ninja",
-      "image": null,
-      "placeholder": true
+      "image": "assets/images/products/p-ninja-grill.webp",
+      "placeholder": false
     },
     {
       "id": "p253",
@@ -6468,8 +6468,8 @@
       "barcode": "\u05DC\u05D4\u05D3\u05D2\u05DE\u05D4",
       "catalogPage": "\u05DC\u05D4\u05D3\u05D2\u05DE\u05D4",
       "brand": "Ninja",
-      "image": null,
-      "placeholder": true
+      "image": "assets/images/products/p-ninja-detect.webp",
+      "placeholder": false
     }
   ];
   function getProduct(id) {

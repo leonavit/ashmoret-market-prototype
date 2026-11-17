@@ -2648,8 +2648,8 @@ export const products = [
     "barcode": "להדגמה",
     "catalogPage": "להדגמה",
     "brand": "טוסטר",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-sandwich-triangles.webp",
+    "placeholder": false
   },
   {
     "id": "p236",
@@ -2886,8 +2886,8 @@ export const products = [
     "barcode": "להדגמה",
     "catalogPage": "להדגמה",
     "brand": "Ninja",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-ninja-grill.webp",
+    "placeholder": false
   },
   {
     "id": "p253",
@@ -2900,8 +2900,8 @@ export const products = [
     "barcode": "להדגמה",
     "catalogPage": "להדגמה",
     "brand": "Ninja",
-    "image": null,
-    "placeholder": true
+    "image": "assets/images/products/p-ninja-detect.webp",
+    "placeholder": false
   }
 ];
 
