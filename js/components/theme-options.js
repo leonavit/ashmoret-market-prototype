@@ -1,13 +1,15 @@
 import { adSlots } from "./ad-slots.js";
 
 const KEY = "ashmoret-theme";
-const REV = 13;
+const REV = 16;
 const adKey = (id) => `ad-${id}`;
 const adDefaults = { ...Object.fromEntries(adSlots.map((slot) => [adKey(slot.id), slot.enabled])), adTimers: false };
 const defaults = { header: "v2", hero: "v4", heroEffect: "v2", categories: "v2", featured: "v1", banners: "v2", mobileMenu: "v2", mobileCarousel: "v2", railCols: "6", listingCols: "5", suppliers: "v1", palette: "v1", logo: "v1", wideHeader: true, listingCenter: true, ...adDefaults };
 const logos = {
   v1: { src: "assets/images/brand/logo-market-cart.png?v=2", width: 300, height: 80 },
   v2: { src: "assets/images/brand/logo-market.png", width: 1024, height: 344 },
+  v3: { src: "assets/images/brand/logo-market-heb.png?v=2", width: 1024, height: 281 },
+  v4: { src: "assets/images/brand/logo-market-en.png?v=1", width: 1024, height: 274 },
 };
 const desktop = window.matchMedia("(min-width: 1024px)");
 
@@ -138,6 +140,7 @@ const groups = [
     options: [
       ["grey", "אפורים", "גווני האפור של ה־Grey box.", ["#1f1f1f", "#e9e9e9", "#fff"]],
       ["v1", "V1 · ברירת מחדל", `כהה <bdi dir="ltr">#282B4A</bdi>, בהיר <bdi dir="ltr">#EEEBDA</bdi> ולבן.`, ["#282B4A", "#EEEBDA", "#fff"]],
+      ["v2", "V2", `כהה <bdi dir="ltr">#00357B</bdi>, בהיר <bdi dir="ltr">#EEEBDA</bdi> ולבן.`, ["#00357B", "#EEEBDA", "#fff"]],
     ],
   },
   {
@@ -146,6 +149,8 @@ const groups = [
     options: [
       ["v1", "V1 · ברירת מחדל", "MARKET מבית אשמורת, עם עגלת קניות."],
       ["v2", "V2", "אשמורת MARKET עם הלב."],
+      ["v3", "V3 · עברית", "מרקט מבית אשמורת, עם עגלת קניות בעברית."],
+      ["v4", "V4 · אנגלית", "MARKET מבית אשמורת, עם עגלת קניות באנגלית."],
     ],
     note: "הלוגו מתחלף בהדר, בתפריט המובייל ובפוטר.",
   },
@@ -196,8 +201,8 @@ function load() {
       railCols: saved.rev >= 12 && ["5", "6"].includes(saved.railCols) ? saved.railCols : defaults.railCols,
       listingCols: saved.rev >= 13 && ["5", "6"].includes(saved.listingCols) ? saved.listingCols : defaults.listingCols,
       suppliers: saved.suppliers === "v2" ? "v2" : defaults.suppliers,
-      palette: current && saved.palette === "grey" ? "grey" : defaults.palette,
-      logo: saved.logo === "v2" ? "v2" : defaults.logo,
+      palette: ["grey", "v1", "v2"].includes(saved.palette) ? saved.palette : defaults.palette,
+      logo: ["v1", "v2", "v3", "v4"].includes(saved.logo) ? saved.logo : defaults.logo,
       wideHeader: typeof saved.wideHeader === "boolean" ? saved.wideHeader : defaults.wideHeader,
       listingCenter: saved.rev >= 10 && saved.listingCenter === false ? false : defaults.listingCenter,
       ...Object.fromEntries(Object.keys(adDefaults).map((key) => [key, saved.rev >= 11 && typeof saved[key] === "boolean" ? saved[key] : adDefaults[key]])),
