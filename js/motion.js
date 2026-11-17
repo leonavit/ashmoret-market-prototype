@@ -35,18 +35,31 @@ export function revealLogo() {
   curtain.setAttribute("aria-hidden", "true");
   curtain.innerHTML = `<span class="logo-curtain-half is-left"></span><span class="logo-curtain-half is-right"></span>`;
   link.append(curtain);
-  gsap.set(img, { opacity: 0 });
+  gsap.set(img, { opacity: 0, force3D: false });
   root.classList.remove("is-logo-curtain");
   gsap.timeline({
     delay: 0.15,
     onComplete: () => {
       curtain.remove();
+      // Chrome can keep a soft GPU bitmap after scale; drop the layer and redraw crisp.
+      gsap.set(img, { clearProps: "all", force3D: false });
+      img.style.removeProperty("transform");
+      img.style.removeProperty("opacity");
+      img.style.removeProperty("filter");
+      const { parentNode, nextSibling } = img;
+      parentNode.removeChild(img);
+      parentNode.insertBefore(img, nextSibling);
       shimmerLogo(link);
     },
   })
     .to(curtain.querySelector(".is-left"), { xPercent: -100, duration: 1, ease: "power3.inOut" }, 0)
     .to(curtain.querySelector(".is-right"), { xPercent: 100, duration: 1, ease: "power3.inOut" }, 0)
-    .fromTo(img, { scale: 0.5, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.6, ease: "back.out(1.7)", clearProps: "opacity,transform" }, 0.5);
+    .fromTo(
+      img,
+      { scale: 0.5, opacity: 0, force3D: false },
+      { scale: 1, opacity: 1, duration: 0.6, ease: "back.out(1.7)", force3D: false, clearProps: "opacity,transform" },
+      0.5,
+    );
 }
 
 let shimmers = [];

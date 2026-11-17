@@ -3123,6 +3123,15 @@
     background: var(--color-fill);
   }
 
+  .theme-option.is-legacy-logo {
+    background: #fff1f0;
+  }
+
+  .theme-option.is-legacy-logo:has(input:checked) {
+    border-color: #c9230d;
+    background: #ffe6e3;
+  }
+
   .theme-option input {
     width: 1.1rem;
     height: 1.1rem;

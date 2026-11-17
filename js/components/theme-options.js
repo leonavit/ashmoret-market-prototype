@@ -1,15 +1,15 @@
 import { adSlots } from "./ad-slots.js";
 
 const KEY = "ashmoret-theme";
-const REV = 16;
+const REV = 17;
 const adKey = (id) => `ad-${id}`;
 const adDefaults = { ...Object.fromEntries(adSlots.map((slot) => [adKey(slot.id), slot.enabled])), adTimers: false };
 const defaults = { header: "v2", hero: "v4", heroEffect: "v2", categories: "v2", featured: "v1", banners: "v2", mobileMenu: "v2", mobileCarousel: "v2", railCols: "6", listingCols: "5", suppliers: "v1", palette: "v1", logo: "v1", wideHeader: true, listingCenter: true, ...adDefaults };
 const logos = {
   v1: { src: "assets/images/brand/logo-market-cart.png?v=2", width: 300, height: 80 },
   v2: { src: "assets/images/brand/logo-market.png", width: 1024, height: 344 },
-  v3: { src: "assets/images/brand/logo-market-heb.png?v=2", width: 1024, height: 281 },
-  v4: { src: "assets/images/brand/logo-market-en.png?v=1", width: 1024, height: 274 },
+  v3: { src: "assets/images/brand/logo-market-heb.png?v=3", width: 1024, height: 326 },
+  v5: { src: "assets/images/brand/logo-market-en-v5.png?v=2", width: 1024, height: 307 },
 };
 const desktop = window.matchMedia("(min-width: 1024px)");
 
@@ -148,9 +148,9 @@ const groups = [
     title: "לוגו",
     options: [
       ["v1", "V1 · ברירת מחדל", "MARKET מבית אשמורת, עם עגלת קניות."],
-      ["v2", "V2", "אשמורת MARKET עם הלב."],
       ["v3", "V3 · עברית", "מרקט מבית אשמורת, עם עגלת קניות בעברית."],
-      ["v4", "V4 · אנגלית", "MARKET מבית אשמורת, עם עגלת קניות באנגלית."],
+      ["v5", "V5 · אנגלית", "MARKET מבית אשמורת, עם עגלת קניות באנגלית."],
+      ["v2", "לוגו ישן", "אשמורת MARKET עם הלב."],
     ],
     note: "הלוגו מתחלף בהדר, בתפריט המובייל ובפוטר.",
   },
@@ -202,7 +202,7 @@ function load() {
       listingCols: saved.rev >= 13 && ["5", "6"].includes(saved.listingCols) ? saved.listingCols : defaults.listingCols,
       suppliers: saved.suppliers === "v2" ? "v2" : defaults.suppliers,
       palette: ["grey", "v1", "v2"].includes(saved.palette) ? saved.palette : defaults.palette,
-      logo: ["v1", "v2", "v3", "v4"].includes(saved.logo) ? saved.logo : defaults.logo,
+      logo: ["v1", "v2", "v3", "v5"].includes(saved.logo) ? saved.logo : defaults.logo,
       wideHeader: typeof saved.wideHeader === "boolean" ? saved.wideHeader : defaults.wideHeader,
       listingCenter: saved.rev >= 10 && saved.listingCenter === false ? false : defaults.listingCenter,
       ...Object.fromEntries(Object.keys(adDefaults).map((key) => [key, saved.rev >= 11 && typeof saved[key] === "boolean" ? saved[key] : adDefaults[key]])),
@@ -302,7 +302,7 @@ function panelMarkup() {
   <div class="theme-panel-body">
     ${groups.map((group, index) => `<fieldset class="theme-group">
       <legend><span class="theme-group-num" aria-hidden="true">${index + 1}</span><span class="theme-legend-icon">${groupIcons[group.name]}</span>${group.title}</legend>
-      ${(group.options || []).map(([value, label, text, swatches]) => `<label class="theme-option">
+      ${(group.options || []).map(([value, label, text, swatches]) => `<label class="theme-option${group.name === "logo" && value === "v2" ? " is-legacy-logo" : ""}">
         <input type="radio" name="${group.name}" value="${value}" ${state[group.name] === value ? "checked" : ""} data-theme-option>
         <span><strong>${label}</strong><small>${text}</small>${swatches ? `<span class="theme-swatches" aria-hidden="true">${swatches.map((color) => `<span style="background:${color}"></span>`).join("")}</span>` : ""}</span>
       </label>`).join("")}
