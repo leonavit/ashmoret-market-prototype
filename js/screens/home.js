@@ -74,7 +74,7 @@ export function setHeroTop(visible) {
 function heroBlock() {
   return `<section class="grid gap-4 lg:grid-cols-3 lg:grid-rows-2" aria-label="מבצעי כניסה">
       ${promoCarousel()}
-      ${getTheme().hero === "v4" ? sideCarousel() : sideBanners()}
+      ${["v1", "v4"].includes(getTheme().hero) ? sideCarousel() : sideBanners()}
     </section>`;
 }
 

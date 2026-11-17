@@ -2692,6 +2692,21 @@
     opacity: 0;
   }
 
+  html[data-palette="v3"] .dot-fill::before {
+    background: #237dff;
+  }
+
+  html[data-palette="v3"] .hero-dot {
+    background: #237dff;
+  }
+
+  html[data-palette="v3"] .hero-dot[aria-current="true"],
+  html[data-palette="v3"] .hero-dots.is-running .hero-dot[aria-current="true"] {
+    border: 1.5px solid #237dff;
+    background: var(--color-white);
+    box-sizing: border-box;
+  }
+
   .hero-dots.is-running .hero-dot[aria-current="true"] {
     background: var(--color-subtle);
   }
@@ -2853,7 +2868,7 @@
   }
 
   html[data-palette="v3"] .particle {
-    background: var(--color-white);
+    background: rgb(35 125 255 / 0.5);
   }
 
   .listing-chips {

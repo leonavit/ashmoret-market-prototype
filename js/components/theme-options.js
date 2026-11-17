@@ -1,7 +1,7 @@
 import { adSlots } from "./ad-slots.js";
 
 const KEY = "ashmoret-theme";
-const REV = 20;
+const REV = 22;
 const adKey = (id) => `ad-${id}`;
 const adDefaults = { ...Object.fromEntries(adSlots.map((slot) => [adKey(slot.id), slot.enabled])), adTimers: false };
 const defaults = { header: "v2", hero: "v4", heroEffect: "v2", categories: "v2", featured: "v1", banners: "v2", mobileMenu: "v2", mobileCarousel: "v2", railCols: "6", listingCols: "5", suppliers: "v1", palette: "v3", logo: "v6", wideHeader: true, listingCenter: true, ...adDefaults };
@@ -38,20 +38,10 @@ const groupIcons = {
 
 const groups = [
   {
-    name: "header",
-    title: "הגדרות Header",
-    options: [
-      ["v1", "V1", "חיפוש בין הלוגו לסל, ותפריט הקטגוריות בפס נפרד מתחת."],
-      ["v2", "V2 · ברירת מחדל", "חיפוש בפס העליון, ותפריט הקטגוריות עם המגה־מניו בין הלוגו לסל."],
-    ],
-    checkbox: ["wideHeader", "Fullwidth", "הדר, פוטר, עמוד הבית, קטגוריות וכל שאר הראפרים הראשיים ברוחב 90% מהמסך. עמודים צרים בכוונה, כמו עמוד מוצר ותשלום, נשארים כמו שהם."],
-    note: "V2 מוצג במסכים רחבים. במובייל נשאר התפריט הרגיל. עם ספק אחד, תפריט הקטגוריות נשאר בפס נפרד מתחת.",
-  },
-  {
     name: "hero",
     title: "הגדרות Hero",
     options: [
-      ["v1", "V1", "קרוסלת קטגוריות, אייטם מקודם ושני מקודמים קטנים בצד."],
+      ["v1", "V1", "אייטם מקודם, ובצד סליידר באנר אחד עם תמונות מתחלפות וקישור."],
       ["v2", "V2", "סליידר תמונות מתחלפות עם נקודות דפדוף, ומתחתיו קרוסלת הקטגוריות."],
       ["v3", "V3", "שלושת הבאנרים למעלה, ומתחתיהם קרוסלת הקטגוריות עם הכותרת «קטגוריות נבחרות»."],
       ["v4", "V4 · ברירת מחדל", "כמו V3, ובצד במקום שני באנרים משניים, באנר אחד עם תמונות מתחלפות וקישור."],
@@ -64,41 +54,7 @@ const groups = [
       ["v1", "V1", "החלקה אופקית בין השקופיות."],
       ["v2", "V2 · Fade · ברירת מחדל", "מעבר עמעום רך בין השקופיות, במקום החלקה."],
     ],
-    note: "חל על הסליידר הגדול ב־Hero V3 ו־V4.",
-  },
-  {
-    name: "categories",
-    title: "הגדרות קטגוריות בעמוד הבית",
-    options: [
-      ["v1", "V1", "בלוק לכל מחלקה עם טאבים ושתי שורות של מוצרים."],
-      ["v2", "V2 · ברירת מחדל", "קרוסלת מוצרים כמו קרוסלת המבצעים. הטאבים מחליפים את המוצרים בקרוסלה."],
-    ],
-  },
-  {
-    name: "featured",
-    title: "הגדרות קטגוריות נבחרות",
-    options: [
-      ["v1", "V1 · ברירת מחדל", "תמונות מוצרים לכל קטגוריה."],
-      ["v2", "V2", "אייקון לכל קטגוריה."],
-    ],
-  },
-  {
-    name: "banners",
-    title: "הגדרות באנרים",
-    options: [
-      ["v1", "V1", "בסליידר הצדדי בעמוד הבית שלושת הבאנרים של המחלקות."],
-      ["v2", "V2 · ברירת מחדל", "בסליידר הצדדי בעמוד הבית ארבעת באנרי המבצעים."],
-    ],
-    note: "הסליידר הצדדי מוצג ב־Hero V4.",
-  },
-  {
-    name: "mobileMenu",
-    title: "הגדרות תפריט מובייל",
-    options: [
-      ["v1", "V1", "התפריט נפתח מתחת להדר."],
-      ["v2", "V2 · ברירת מחדל", "התפריט נפתח על כל המסך, עם הלוגו במרכז למעלה וכפתור סגירה מימין, במקום ההמבורגר."],
-    ],
-    note: "התפריט מוצג במסכים צרים מ־1024 פיקסלים.",
+    note: "חל על הסליידר הגדול ב־Hero V1, V3 ו־V4.",
   },
   {
     name: "mobileCarousel",
@@ -126,14 +82,6 @@ const groups = [
       ["6", "6", "שישה מוצרים בכל שורה."],
     ],
     note: "חל על רשת המוצרים בעמודי קטגוריה, מחלקה וחיפוש במסכים מ־1280 פיקסלים.",
-  },
-  {
-    name: "suppliers",
-    title: "הגדרות ספקים",
-    options: [
-      ["v1", "V1 · ברירת מחדל", "ריבוי ספקים: סופר אשמורת, חד פעמי וכלי בית, קניון אשמורת ומבצעים."],
-      ["v2", "V2", "ספק אחד, תוצרת. התפריט, קרוסלת הקטגוריות ועמוד הבית לפי הקטגוריות בקטלוג תוצרת."],
-    ],
   },
   {
     name: "palette",
@@ -190,23 +138,22 @@ let onAdsReplay = () => {};
 function load() {
   try {
     const saved = JSON.parse(localStorage.getItem(KEY) || "{}");
-    const current = saved.rev >= 3;
     return {
       rev: REV,
-      header: current && saved.header === "v1" ? "v1" : defaults.header,
-      hero: saved.rev >= 6 && ["v1", "v2", "v3", "v4"].includes(saved.hero) ? saved.hero : defaults.hero,
+      header: defaults.header,
+      hero: saved.rev >= 22 && ["v1", "v2", "v3", "v4"].includes(saved.hero) ? saved.hero : defaults.hero,
       heroEffect: saved.rev >= 8 && saved.heroEffect === "v1" ? "v1" : defaults.heroEffect,
-      categories: ["v1", "v2"].includes(saved.categories) ? saved.categories : defaults.categories,
-      featured: saved.rev >= 9 && ["v1", "v2"].includes(saved.featured) ? saved.featured : defaults.featured,
-      banners: saved.rev >= 5 && saved.banners === "v1" ? "v1" : defaults.banners,
-      mobileMenu: current && saved.mobileMenu === "v1" ? "v1" : defaults.mobileMenu,
+      categories: defaults.categories,
+      featured: defaults.featured,
+      banners: defaults.banners,
+      mobileMenu: defaults.mobileMenu,
       mobileCarousel: saved.rev >= 7 && saved.mobileCarousel === "v1" ? "v1" : defaults.mobileCarousel,
       railCols: saved.rev >= 12 && ["5", "6"].includes(saved.railCols) ? saved.railCols : defaults.railCols,
       listingCols: saved.rev >= 13 && ["5", "6"].includes(saved.listingCols) ? saved.listingCols : defaults.listingCols,
-      suppliers: saved.suppliers === "v2" ? "v2" : defaults.suppliers,
+      suppliers: defaults.suppliers,
       palette: saved.rev >= 20 && ["grey", "v1", "v2", "v3"].includes(saved.palette) ? saved.palette : defaults.palette,
       logo: saved.rev >= 20 && ["v1", "v2", "v3", "v5", "v6"].includes(saved.logo) ? saved.logo : defaults.logo,
-      wideHeader: typeof saved.wideHeader === "boolean" ? saved.wideHeader : defaults.wideHeader,
+      wideHeader: defaults.wideHeader,
       listingCenter: saved.rev >= 10 && saved.listingCenter === false ? false : defaults.listingCenter,
       ...Object.fromEntries(Object.keys(adDefaults).map((key) => [key, saved.rev >= 11 && typeof saved[key] === "boolean" ? saved[key] : adDefaults[key]])),
     };
