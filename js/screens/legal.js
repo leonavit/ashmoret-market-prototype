@@ -62,8 +62,12 @@ const pages = {
 
 export const legalSlugs = Object.keys(pages);
 
+export function legalCopy(slug) {
+  return pages[slug] || pages.terms;
+}
+
 export function renderLegal(slug) {
-  const page = pages[slug] || pages.terms;
+  const page = legalCopy(slug);
   return `<article class="wrap max-w-2xl py-12">
     <h1 class="text-3xl font-extrabold">${page.title}</h1>
     <p class="mt-2 text-muted">${page.lead}</p>
@@ -75,5 +79,5 @@ export function renderLegal(slug) {
 }
 
 export function legalTitle(slug) {
-  return pages[slug]?.title || pages.terms.title;
+  return legalCopy(slug).title;
 }

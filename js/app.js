@@ -9,7 +9,7 @@ import { renderConfirmation } from "./screens/confirmation.js";
 import { bindLogin, openAuth } from "./screens/login.js";
 import { renderContact, validateContact } from "./screens/contact.js";
 import { legalTitle, renderLegal } from "./screens/legal.js";
-import { bindAccount, renderAccount, renderAccountDetails, renderOrderDetail, renderOrders } from "./screens/account.js";
+import { bindAccount, renderAccount, renderAccountClub, renderAccountDetails, renderAccountService, renderOrderDetail, renderOrders } from "./screens/account.js";
 import { bindShell, closePanels, renderCategoryNav, setCategoryBand, updateAccountSlot, updateCartBadge } from "./components/shell.js";
 import { mountCartDock, updateCartDock } from "./components/cart-dock.js";
 import { bindServiceDialogs, renderServicePage, serviceTitle } from "./components/service-dialogs.js";
@@ -161,6 +161,8 @@ function view(route) {
   if (route.name === "order") return renderConfirmation(route.id);
   if (route.name === "account") return renderAccount();
   if (route.name === "account-details") return renderAccountDetails();
+  if (route.name === "account-club") return renderAccountClub();
+  if (route.name === "account-service") return renderAccountService();
   if (route.name === "orders") return renderOrders();
   if (route.name === "account-order") return renderOrderDetail(route.id);
   if (route.name === "contact") return renderContact(contactDraft || {});
@@ -180,7 +182,7 @@ function titleFor(route) {
   if (route.name === "cart") return `סל הקניות · ${suffix}`;
   if (route.name === "checkout") return `תשלום · ${suffix}`;
   if (route.name === "order") return `אישור הזמנה · ${suffix}`;
-  if (route.name === "account" || route.name === "account-details") return `האזור האישי · ${suffix}`;
+  if (route.name === "account" || route.name === "account-details" || route.name === "account-club" || route.name === "account-service") return `האזור האישי · ${suffix}`;
   if (route.name === "orders" || route.name === "account-order") return `הזמנות · ${suffix}`;
   if (route.name === "contact") return `יצירת קשר · ${suffix}`;
   if (route.name === "legal") return `${legalTitle(route.slug)} · ${suffix}`;

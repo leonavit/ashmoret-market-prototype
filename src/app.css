@@ -5189,14 +5189,6 @@
     font-size: 15px;
   }
 
-  .account-banner-art {
-    display: none;
-    width: 14rem;
-    height: 8.5rem;
-    border-radius: var(--radius-md);
-    background: var(--color-white) url("../images/brand/placeholder-cart.png") center / auto var(--ph-mark-sm) no-repeat;
-  }
-
   .account-tiles {
     display: grid;
     gap: var(--grid-gap);
@@ -5301,12 +5293,7 @@
 
   @media (min-width: 768px) {
     .account-banner {
-      grid-template-columns: minmax(0, 1fr) auto;
       padding: 2rem;
-    }
-
-    .account-banner-art {
-      display: block;
     }
 
     .account-tiles {

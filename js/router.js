@@ -24,13 +24,15 @@ export function parseHash() {
   if (parts[0] === "service") return { name: "service", query };
   if (legalSlugs.includes(parts[0])) return { name: "legal", slug: parts[0], query };
   if (parts[0] === "account" && parts[1] === "details") return { name: "account-details", query };
+  if (parts[0] === "account" && parts[1] === "club") return { name: "account-club", query };
+  if (parts[0] === "account" && parts[1] === "service") return { name: "account-service", query };
   if (parts[0] === "account") return { name: "account", query };
   if (parts[0] === "orders" && parts[1]) return { name: "account-order", id: decodeURIComponent(parts[1]), query };
   if (parts[0] === "orders") return { name: "orders", query };
   return { name: "home", query };
 }
 
-const privateNames = new Set(["account", "account-details", "orders", "account-order"]);
+const privateNames = new Set(["account", "account-details", "account-club", "account-service", "orders", "account-order"]);
 
 export function isPrivateRoute(name) {
   return privateNames.has(name);
@@ -39,7 +41,7 @@ export function isPrivateRoute(name) {
 export function safeNext(value) {
   if (!value || /[?#]/.test(value)) return "";
   const path = value.startsWith("/") ? value : `/${value}`;
-  if (/^\/account(\/details)?$/.test(path)) return `#${path}`;
+  if (/^\/account(\/(details|club|service))?$/.test(path)) return `#${path}`;
   if (/^\/orders(\/[A-Za-z0-9-]+)?$/.test(path)) return `#${path}`;
   return "";
 }
@@ -53,6 +55,8 @@ export function pathFor(route) {
   if (route.name === "order") return `/order/${encodeURIComponent(route.id)}`;
   if (route.name === "account-order") return `/orders/${encodeURIComponent(route.id)}`;
   if (route.name === "account-details") return "/account/details";
+  if (route.name === "account-club") return "/account/club";
+  if (route.name === "account-service") return "/account/service";
   if (route.name === "legal") return `/${route.slug || "terms"}`;
   if (route.name === "reserved") return `/${route.page}`;
   if (route.name === "market") return "/market";

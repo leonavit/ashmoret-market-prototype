@@ -1,6 +1,8 @@
 import { demoOrders, getDemoOrder } from "../data/demo-account.js";
 import { esc, money } from "../lib/format.js";
 import { orderStatus } from "../components/order-status.js";
+import { renderServiceEmbed } from "../components/service-dialogs.js";
+import { legalCopy } from "./legal.js";
 import { getProfile, getSession, saveProfile } from "../state/session.js";
 
 let savedNotice = false;
@@ -43,8 +45,8 @@ function frame(active, crumb, content) {
           ${link("overview", "#/account", "סקירה")}
           ${link("orders", "#/orders", "ההזמנות שלי")}
           ${link("details", "#/account/details", "עדכון פרטים", "פרטים אישיים, טלפון וכתובת למשלוח")}
-          ${link("club", "#/rules-club", "מועדון לקוחות")}
-          ${link("service", "#/service", "שירות לקוחות")}
+          ${link("club", "#/account/club", "מועדון לקוחות")}
+          ${link("service", "#/account/service", "שירות לקוחות")}
           <button class="account-menu-link" type="button" data-logout>${icons.logout}<span>התנתקות</span></button>
         </nav>
         ${until ? `<p class="account-session">הדגמה בלבד. ההתחברות פעילה עד ${esc(until)}.</p>` : ""}
@@ -81,7 +83,6 @@ export function renderAccount() {
         <h1 id="account-title" class="account-banner-title">שלום ${esc(profile.displayName)}</h1>
         <p class="account-banner-text">${demoOrders.length} הזמנות באזור האישי · ההזמנה האחרונה ${esc(when(latest.createdAt))}</p>
       </div>
-      <span class="account-banner-art" aria-hidden="true"></span>
     </section>
     <div class="account-tiles">
       <section class="account-tile" aria-labelledby="tile-order">
@@ -92,7 +93,7 @@ export function renderAccount() {
       </section>
       <section class="account-tile" aria-labelledby="tile-details">
         <span class="account-tile-art" aria-hidden="true">${icons.details}</span>
-        <h2 id="tile-details">פרטים למשלוח</h2>
+        <h2 id="tile-details">כתובת למשלוח</h2>
         <p>${esc(profile.street)} ${esc(profile.house)}, ${esc(profile.city)} · <span dir="ltr">${esc(profile.phone)}</span></p>
         <a class="btn btn-line" href="#/account/details">עדכון פרטים</a>
       </section>
@@ -100,7 +101,7 @@ export function renderAccount() {
         <span class="account-tile-art" aria-hidden="true">${icons.service}</span>
         <h2 id="tile-service">שירות לקוחות</h2>
         <p>שאלה על הזמנה או משלוח? אפשר לפנות אלינו.</p>
-        <a class="btn btn-line" href="#/service">לפנייה</a>
+        <a class="btn btn-line" href="#/account/service">לפנייה</a>
       </section>
     </div>
     <section class="account-card" aria-labelledby="recent-orders">
@@ -111,6 +112,22 @@ export function renderAccount() {
       <ul>${recent}</ul>
     </section>
   `);
+}
+
+export function renderAccountClub() {
+  const pageCopy = legalCopy("rules-club");
+  return frame("club", "מועדון לקוחות", page("מועדון לקוחות", `
+    <p class="mt-3 text-muted">${esc(pageCopy.lead)}</p>
+    <div class="mt-6 grid gap-4 text-base leading-7">
+      ${pageCopy.body.map((paragraph) => `<p>${esc(paragraph)}</p>`).join("")}
+    </div>
+  `));
+}
+
+export function renderAccountService() {
+  return frame("service", "שירות לקוחות", page("שירות לקוחות", `
+    <div class="mt-6">${renderServiceEmbed("service")}</div>
+  `));
 }
 
 export function renderAccountDetails() {

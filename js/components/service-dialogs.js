@@ -245,8 +245,12 @@ export function openService() {
   open("service");
 }
 
-export function renderServicePage(kind) {
+export function renderServiceEmbed(kind) {
   state[kind] = fresh[kind]();
+  return `<div class="service-page-body" data-service-root="${kind}" data-service-mode="page">${markup(kind, true)}</div>`;
+}
+
+export function renderServicePage(kind) {
   return `<article class="wrap service-page py-10">
     <div class="service-page-head">
       <div>
@@ -254,7 +258,7 @@ export function renderServicePage(kind) {
       </div>
       <div class="service-dialog-actions">${callButton(kind)}${shareButton(kind)}</div>
     </div>
-    <div class="service-page-body" data-service-root="${kind}" data-service-mode="page">${markup(kind, true)}</div>
+    ${renderServiceEmbed(kind)}
   </article>`;
 }
 

@@ -10,7 +10,7 @@ const logos = {
   v2: { src: "assets/images/brand/logo-market.png", width: 1024, height: 344 },
   v3: { src: "assets/images/brand/logo-market-heb.png?v=3", width: 1024, height: 326 },
   v5: { src: "assets/images/brand/logo-market-en-v5.png?v=2", width: 1024, height: 307 },
-  v6: { src: "assets/images/brand/logo-market-en-v6.png?v=6", width: 1024, height: 217 },
+  v6: { src: "assets/images/brand/logo-market-en-v6.png?v=7", width: 1024, height: 217 },
 };
 const desktop = window.matchMedia("(min-width: 1024px)");
 
