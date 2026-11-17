@@ -1,15 +1,16 @@
 import { adSlots } from "./ad-slots.js";
 
 const KEY = "ashmoret-theme";
-const REV = 17;
+const REV = 20;
 const adKey = (id) => `ad-${id}`;
 const adDefaults = { ...Object.fromEntries(adSlots.map((slot) => [adKey(slot.id), slot.enabled])), adTimers: false };
-const defaults = { header: "v2", hero: "v4", heroEffect: "v2", categories: "v2", featured: "v1", banners: "v2", mobileMenu: "v2", mobileCarousel: "v2", railCols: "6", listingCols: "5", suppliers: "v1", palette: "v1", logo: "v1", wideHeader: true, listingCenter: true, ...adDefaults };
+const defaults = { header: "v2", hero: "v4", heroEffect: "v2", categories: "v2", featured: "v1", banners: "v2", mobileMenu: "v2", mobileCarousel: "v2", railCols: "6", listingCols: "5", suppliers: "v1", palette: "v3", logo: "v6", wideHeader: true, listingCenter: true, ...adDefaults };
 const logos = {
   v1: { src: "assets/images/brand/logo-market-cart.png?v=2", width: 300, height: 80 },
   v2: { src: "assets/images/brand/logo-market.png", width: 1024, height: 344 },
   v3: { src: "assets/images/brand/logo-market-heb.png?v=3", width: 1024, height: 326 },
   v5: { src: "assets/images/brand/logo-market-en-v5.png?v=2", width: 1024, height: 307 },
+  v6: { src: "assets/images/brand/logo-market-en-v6.png", width: 1024, height: 210 },
 };
 const desktop = window.matchMedia("(min-width: 1024px)");
 
@@ -139,15 +140,17 @@ const groups = [
     title: "פלטת צבעים",
     options: [
       ["grey", "אפורים", "גווני האפור של ה־Grey box.", ["#1f1f1f", "#e9e9e9", "#fff"]],
-      ["v1", "V1 · ברירת מחדל", `כהה <bdi dir="ltr">#282B4A</bdi>, בהיר <bdi dir="ltr">#EEEBDA</bdi> ולבן.`, ["#282B4A", "#EEEBDA", "#fff"]],
+      ["v1", "V1", `כהה <bdi dir="ltr">#282B4A</bdi>, בהיר <bdi dir="ltr">#EEEBDA</bdi> ולבן.`, ["#282B4A", "#EEEBDA", "#fff"]],
       ["v2", "V2", `כהה <bdi dir="ltr">#00357B</bdi>, בהיר <bdi dir="ltr">#EEEBDA</bdi> ולבן.`, ["#00357B", "#EEEBDA", "#fff"]],
+      ["v3", "V3 · ספר מותג · ברירת מחדל", `כחול <bdi dir="ltr">#237DFF</bdi>, מנטה <bdi dir="ltr">#78F5C8</bdi>, ורוד <bdi dir="ltr">#FF9BC8</bdi>, צהוב <bdi dir="ltr">#FFF055</bdi> ואפור <bdi dir="ltr">#23233A</bdi>.`, ["#237DFF", "#78F5C8", "#FF9BC8", "#FFF055", "#23233A"]],
     ],
   },
   {
     name: "logo",
     title: "לוגו",
     options: [
-      ["v1", "V1 · ברירת מחדל", "MARKET מבית אשמורת, עם עגלת קניות."],
+      ["v6", "V6 · אנגלית · ברירת מחדל", "MARKET מקבוצת אשמורת, עם קופסה וסמן."],
+      ["v1", "V1", "MARKET מבית אשמורת, עם עגלת קניות."],
       ["v3", "V3 · עברית", "מרקט מבית אשמורת, עם עגלת קניות בעברית."],
       ["v5", "V5 · אנגלית", "MARKET מבית אשמורת, עם עגלת קניות באנגלית."],
       ["v2", "לוגו ישן", "אשמורת MARKET עם הלב."],
@@ -201,8 +204,8 @@ function load() {
       railCols: saved.rev >= 12 && ["5", "6"].includes(saved.railCols) ? saved.railCols : defaults.railCols,
       listingCols: saved.rev >= 13 && ["5", "6"].includes(saved.listingCols) ? saved.listingCols : defaults.listingCols,
       suppliers: saved.suppliers === "v2" ? "v2" : defaults.suppliers,
-      palette: ["grey", "v1", "v2"].includes(saved.palette) ? saved.palette : defaults.palette,
-      logo: ["v1", "v2", "v3", "v5"].includes(saved.logo) ? saved.logo : defaults.logo,
+      palette: saved.rev >= 20 && ["grey", "v1", "v2", "v3"].includes(saved.palette) ? saved.palette : defaults.palette,
+      logo: saved.rev >= 20 && ["v1", "v2", "v3", "v5", "v6"].includes(saved.logo) ? saved.logo : defaults.logo,
       wideHeader: typeof saved.wideHeader === "boolean" ? saved.wideHeader : defaults.wideHeader,
       listingCenter: saved.rev >= 10 && saved.listingCenter === false ? false : defaults.listingCenter,
       ...Object.fromEntries(Object.keys(adDefaults).map((key) => [key, saved.rev >= 11 && typeof saved[key] === "boolean" ? saved[key] : adDefaults[key]])),
