@@ -7353,15 +7353,16 @@
 
   // js/components/theme-options.js
   var KEY2 = "ashmoret-theme";
-  var REV = 17;
+  var REV = 20;
   var adKey = (id) => `ad-${id}`;
   var adDefaults = { ...Object.fromEntries(adSlots.map((slot) => [adKey(slot.id), slot.enabled])), adTimers: false };
-  var defaults = { header: "v2", hero: "v4", heroEffect: "v2", categories: "v2", featured: "v1", banners: "v2", mobileMenu: "v2", mobileCarousel: "v2", railCols: "6", listingCols: "5", suppliers: "v1", palette: "v1", logo: "v1", wideHeader: true, listingCenter: true, ...adDefaults };
+  var defaults = { header: "v2", hero: "v4", heroEffect: "v2", categories: "v2", featured: "v1", banners: "v2", mobileMenu: "v2", mobileCarousel: "v2", railCols: "6", listingCols: "5", suppliers: "v1", palette: "v3", logo: "v6", wideHeader: true, listingCenter: true, ...adDefaults };
   var logos = {
     v1: { src: "assets/images/brand/logo-market-cart.png?v=2", width: 300, height: 80 },
     v2: { src: "assets/images/brand/logo-market.png", width: 1024, height: 344 },
     v3: { src: "assets/images/brand/logo-market-heb.png?v=3", width: 1024, height: 326 },
-    v5: { src: "assets/images/brand/logo-market-en-v5.png?v=2", width: 1024, height: 307 }
+    v5: { src: "assets/images/brand/logo-market-en-v5.png?v=2", width: 1024, height: 307 },
+    v6: { src: "assets/images/brand/logo-market-en-v6.png", width: 1024, height: 210 }
   };
   var desktop = window.matchMedia("(min-width: 1024px)");
   var gearIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle cx="12" cy="12" r="3"></circle></svg>`;
@@ -7488,15 +7489,17 @@
       title: "\u05E4\u05DC\u05D8\u05EA \u05E6\u05D1\u05E2\u05D9\u05DD",
       options: [
         ["grey", "\u05D0\u05E4\u05D5\u05E8\u05D9\u05DD", "\u05D2\u05D5\u05D5\u05E0\u05D9 \u05D4\u05D0\u05E4\u05D5\u05E8 \u05E9\u05DC \u05D4\u05BEGrey box.", ["#1f1f1f", "#e9e9e9", "#fff"]],
-        ["v1", "V1 \xB7 \u05D1\u05E8\u05D9\u05E8\u05EA \u05DE\u05D7\u05D3\u05DC", `\u05DB\u05D4\u05D4 <bdi dir="ltr">#282B4A</bdi>, \u05D1\u05D4\u05D9\u05E8 <bdi dir="ltr">#EEEBDA</bdi> \u05D5\u05DC\u05D1\u05DF.`, ["#282B4A", "#EEEBDA", "#fff"]],
-        ["v2", "V2", `\u05DB\u05D4\u05D4 <bdi dir="ltr">#00357B</bdi>, \u05D1\u05D4\u05D9\u05E8 <bdi dir="ltr">#EEEBDA</bdi> \u05D5\u05DC\u05D1\u05DF.`, ["#00357B", "#EEEBDA", "#fff"]]
+        ["v1", "V1", `\u05DB\u05D4\u05D4 <bdi dir="ltr">#282B4A</bdi>, \u05D1\u05D4\u05D9\u05E8 <bdi dir="ltr">#EEEBDA</bdi> \u05D5\u05DC\u05D1\u05DF.`, ["#282B4A", "#EEEBDA", "#fff"]],
+        ["v2", "V2", `\u05DB\u05D4\u05D4 <bdi dir="ltr">#00357B</bdi>, \u05D1\u05D4\u05D9\u05E8 <bdi dir="ltr">#EEEBDA</bdi> \u05D5\u05DC\u05D1\u05DF.`, ["#00357B", "#EEEBDA", "#fff"]],
+        ["v3", "V3 \xB7 \u05E1\u05E4\u05E8 \u05DE\u05D5\u05EA\u05D2 \xB7 \u05D1\u05E8\u05D9\u05E8\u05EA \u05DE\u05D7\u05D3\u05DC", `\u05DB\u05D7\u05D5\u05DC <bdi dir="ltr">#237DFF</bdi>, \u05DE\u05E0\u05D8\u05D4 <bdi dir="ltr">#78F5C8</bdi>, \u05D5\u05E8\u05D5\u05D3 <bdi dir="ltr">#FF9BC8</bdi>, \u05E6\u05D4\u05D5\u05D1 <bdi dir="ltr">#FFF055</bdi> \u05D5\u05D0\u05E4\u05D5\u05E8 <bdi dir="ltr">#23233A</bdi>.`, ["#237DFF", "#78F5C8", "#FF9BC8", "#FFF055", "#23233A"]]
       ]
     },
     {
       name: "logo",
       title: "\u05DC\u05D5\u05D2\u05D5",
       options: [
-        ["v1", "V1 \xB7 \u05D1\u05E8\u05D9\u05E8\u05EA \u05DE\u05D7\u05D3\u05DC", "MARKET \u05DE\u05D1\u05D9\u05EA \u05D0\u05E9\u05DE\u05D5\u05E8\u05EA, \u05E2\u05DD \u05E2\u05D2\u05DC\u05EA \u05E7\u05E0\u05D9\u05D5\u05EA."],
+        ["v6", "V6 \xB7 \u05D0\u05E0\u05D2\u05DC\u05D9\u05EA \xB7 \u05D1\u05E8\u05D9\u05E8\u05EA \u05DE\u05D7\u05D3\u05DC", "MARKET \u05DE\u05E7\u05D1\u05D5\u05E6\u05EA \u05D0\u05E9\u05DE\u05D5\u05E8\u05EA, \u05E2\u05DD \u05E7\u05D5\u05E4\u05E1\u05D4 \u05D5\u05E1\u05DE\u05DF."],
+        ["v1", "V1", "MARKET \u05DE\u05D1\u05D9\u05EA \u05D0\u05E9\u05DE\u05D5\u05E8\u05EA, \u05E2\u05DD \u05E2\u05D2\u05DC\u05EA \u05E7\u05E0\u05D9\u05D5\u05EA."],
         ["v3", "V3 \xB7 \u05E2\u05D1\u05E8\u05D9\u05EA", "\u05DE\u05E8\u05E7\u05D8 \u05DE\u05D1\u05D9\u05EA \u05D0\u05E9\u05DE\u05D5\u05E8\u05EA, \u05E2\u05DD \u05E2\u05D2\u05DC\u05EA \u05E7\u05E0\u05D9\u05D5\u05EA \u05D1\u05E2\u05D1\u05E8\u05D9\u05EA."],
         ["v5", "V5 \xB7 \u05D0\u05E0\u05D2\u05DC\u05D9\u05EA", "MARKET \u05DE\u05D1\u05D9\u05EA \u05D0\u05E9\u05DE\u05D5\u05E8\u05EA, \u05E2\u05DD \u05E2\u05D2\u05DC\u05EA \u05E7\u05E0\u05D9\u05D5\u05EA \u05D1\u05D0\u05E0\u05D2\u05DC\u05D9\u05EA."],
         ["v2", "\u05DC\u05D5\u05D2\u05D5 \u05D9\u05E9\u05DF", "\u05D0\u05E9\u05DE\u05D5\u05E8\u05EA MARKET \u05E2\u05DD \u05D4\u05DC\u05D1."]
@@ -7552,8 +7555,8 @@
         railCols: saved.rev >= 12 && ["5", "6"].includes(saved.railCols) ? saved.railCols : defaults.railCols,
         listingCols: saved.rev >= 13 && ["5", "6"].includes(saved.listingCols) ? saved.listingCols : defaults.listingCols,
         suppliers: saved.suppliers === "v2" ? "v2" : defaults.suppliers,
-        palette: ["grey", "v1", "v2"].includes(saved.palette) ? saved.palette : defaults.palette,
-        logo: ["v1", "v2", "v3", "v5"].includes(saved.logo) ? saved.logo : defaults.logo,
+        palette: saved.rev >= 20 && ["grey", "v1", "v2", "v3"].includes(saved.palette) ? saved.palette : defaults.palette,
+        logo: saved.rev >= 20 && ["v1", "v2", "v3", "v5", "v6"].includes(saved.logo) ? saved.logo : defaults.logo,
         wideHeader: typeof saved.wideHeader === "boolean" ? saved.wideHeader : defaults.wideHeader,
         listingCenter: saved.rev >= 10 && saved.listingCenter === false ? false : defaults.listingCenter,
         ...Object.fromEntries(Object.keys(adDefaults).map((key) => [key, saved.rev >= 11 && typeof saved[key] === "boolean" ? saved[key] : adDefaults[key]]))
@@ -8922,15 +8925,20 @@
 
   // js/components/kosher-mark.js
   var nonFood = new Set(["home", "electronics"].flatMap((id) => getDepartment(id)?.slugs || []));
+  var mahfud = {
+    src: "assets/images/kosher/mahfud.png",
+    alt: "\u05DB\u05E9\u05E8\u05D5\u05EA: \u05D1\u05D4\u05E9\u05D2\u05D7\u05EA \u05D9\u05D5\u05E8\u05D4 \u05D3\u05E2\u05D4, \u05D1\u05E4\u05D9\u05E7\u05D5\u05D7 \u05D4\u05D2\u05D0\u05D5\u05DF \u05E8\u05F3 \u05E9\u05DC\u05DE\u05D4 \u05DE\u05D7\u05E4\u05D5\u05D3 \u05E9\u05DC\u05D9\u05D8\u05F4\u05D0",
+    width: 353,
+    height: 222
+  };
   var marks = [
-    { src: "assets/images/kosher/badatz-yerushalayim.png", alt: "\u05DB\u05E9\u05E8\u05D5\u05EA: \u05D1\u05D4\u05E9\u05D2\u05D7\u05EA \u05D4\u05D1\u05D3\u05F4\u05E5 \u05D4\u05E2\u05D3\u05D4 \u05D4\u05D7\u05E8\u05D3\u05D9\u05EA \u05D9\u05E8\u05D5\u05E9\u05DC\u05D9\u05DD" },
-    { src: "assets/images/kosher/beit-yosef.png", alt: "\u05DB\u05E9\u05E8\u05D5\u05EA: \u05D1\u05D3\u05F4\u05E5 \u05D1\u05D9\u05EA \u05D9\u05D5\u05E1\u05E3" }
+    { src: "assets/images/kosher/badatz-yerushalayim.png", alt: "\u05DB\u05E9\u05E8\u05D5\u05EA: \u05D1\u05D4\u05E9\u05D2\u05D7\u05EA \u05D4\u05D1\u05D3\u05F4\u05E5 \u05D4\u05E2\u05D3\u05D4 \u05D4\u05D7\u05E8\u05D3\u05D9\u05EA \u05D9\u05E8\u05D5\u05E9\u05DC\u05D9\u05DD", width: 164, height: 83 },
+    { src: "assets/images/kosher/beit-yosef.png", alt: "\u05DB\u05E9\u05E8\u05D5\u05EA: \u05D1\u05D3\u05F4\u05E5 \u05D1\u05D9\u05EA \u05D9\u05D5\u05E1\u05E3", width: 164, height: 83 }
   ];
   function kosherMark(product) {
     if (nonFood.has(product.categorySlug)) return "";
-    const hash = [...product.id].reduce((sum, char) => sum + char.charCodeAt(0), 0);
-    const mark2 = marks[hash % marks.length];
-    return `<img class="kosher-mark" src="${mark2.src}" alt="${mark2.alt}" width="164" height="83" decoding="async">`;
+    const mark2 = product.manufacturerId === "tozeret" ? mahfud : marks[[...product.id].reduce((sum, char) => sum + char.charCodeAt(0), 0) % marks.length];
+    return `<img class="kosher-mark" src="${mark2.src}" alt="${mark2.alt}" width="${mark2.width}" height="${mark2.height}" decoding="async">`;
   }
 
   // js/screens/product.js
