@@ -3499,8 +3499,11 @@
     }
   };
   var legalSlugs = Object.keys(pages);
+  function legalCopy(slug) {
+    return pages[slug] || pages.terms;
+  }
   function renderLegal(slug) {
-    const page2 = pages[slug] || pages.terms;
+    const page2 = legalCopy(slug);
     return `<article class="wrap max-w-2xl py-12">
     <h1 class="text-3xl font-extrabold">${page2.title}</h1>
     <p class="mt-2 text-muted">${page2.lead}</p>
@@ -3511,7 +3514,7 @@
   </article>`;
   }
   function legalTitle(slug) {
-    return pages[slug]?.title || pages.terms.title;
+    return legalCopy(slug).title;
   }
 
   // js/router.js
@@ -3538,19 +3541,21 @@
     if (parts[0] === "service") return { name: "service", query };
     if (legalSlugs.includes(parts[0])) return { name: "legal", slug: parts[0], query };
     if (parts[0] === "account" && parts[1] === "details") return { name: "account-details", query };
+    if (parts[0] === "account" && parts[1] === "club") return { name: "account-club", query };
+    if (parts[0] === "account" && parts[1] === "service") return { name: "account-service", query };
     if (parts[0] === "account") return { name: "account", query };
     if (parts[0] === "orders" && parts[1]) return { name: "account-order", id: decodeURIComponent(parts[1]), query };
     if (parts[0] === "orders") return { name: "orders", query };
     return { name: "home", query };
   }
-  var privateNames = /* @__PURE__ */ new Set(["account", "account-details", "orders", "account-order"]);
+  var privateNames = /* @__PURE__ */ new Set(["account", "account-details", "account-club", "account-service", "orders", "account-order"]);
   function isPrivateRoute(name) {
     return privateNames.has(name);
   }
   function safeNext(value) {
     if (!value || /[?#]/.test(value)) return "";
     const path = value.startsWith("/") ? value : `/${value}`;
-    if (/^\/account(\/details)?$/.test(path)) return `#${path}`;
+    if (/^\/account(\/(details|club|service))?$/.test(path)) return `#${path}`;
     if (/^\/orders(\/[A-Za-z0-9-]+)?$/.test(path)) return `#${path}`;
     return "";
   }
@@ -3563,6 +3568,8 @@
     if (route.name === "order") return `/order/${encodeURIComponent(route.id)}`;
     if (route.name === "account-order") return `/orders/${encodeURIComponent(route.id)}`;
     if (route.name === "account-details") return "/account/details";
+    if (route.name === "account-club") return "/account/club";
+    if (route.name === "account-service") return "/account/service";
     if (route.name === "legal") return `/${route.slug || "terms"}`;
     if (route.name === "reserved") return `/${route.page}`;
     if (route.name === "market") return "/market";
@@ -7362,7 +7369,7 @@
     v2: { src: "assets/images/brand/logo-market.png", width: 1024, height: 344 },
     v3: { src: "assets/images/brand/logo-market-heb.png?v=3", width: 1024, height: 326 },
     v5: { src: "assets/images/brand/logo-market-en-v5.png?v=2", width: 1024, height: 307 },
-    v6: { src: "assets/images/brand/logo-market-en-v6.png?v=6", width: 1024, height: 217 }
+    v6: { src: "assets/images/brand/logo-market-en-v6.png?v=7", width: 1024, height: 217 }
   };
   var desktop = window.matchMedia("(min-width: 1024px)");
   var gearIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle cx="12" cy="12" r="3"></circle></svg>`;
@@ -9930,6 +9937,403 @@
   </div>`;
   }
 
+  // js/components/toast.js
+  function showToast(message, href) {
+    const region = document.getElementById("toast");
+    const item = document.createElement("div");
+    item.className = "toast pointer-events-auto";
+    item.innerHTML = `<p class="font-semibold">${esc(message)}</p>${href ? `<a class="mt-1 inline-block text-sm font-bold underline underline-offset-2" href="${esc(href)}">\u05DC\u05E1\u05DC \u05D4\u05E7\u05E0\u05D9\u05D5\u05EA</a>` : ""}`;
+    region.appendChild(item);
+    const gsap = window.gsap;
+    if (gsap && !prefersReducedMotion()) {
+      gsap.fromTo(item, { y: 16, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.35, ease: "power2.out" });
+    }
+    window.setTimeout(() => {
+      item.remove();
+    }, 3200);
+  }
+  function announce(message) {
+    const region = document.getElementById("toast");
+    if (!region) return;
+    const item = document.createElement("p");
+    item.className = "sr-only";
+    item.textContent = message;
+    region.appendChild(item);
+    window.setTimeout(() => item.remove(), 3200);
+  }
+  function titleHtml(message, highlight) {
+    const text = esc(message);
+    if (!highlight) return text;
+    const name = esc(highlight);
+    return text.replace(name, `<strong class="font-extrabold">${name}</strong>`);
+  }
+  function confirmWithin(container, message, highlight) {
+    container.querySelector(".inline-confirm")?.remove();
+    const layer = document.createElement("div");
+    layer.className = "inline-confirm";
+    layer.setAttribute("role", "alertdialog");
+    layer.setAttribute("aria-modal", "true");
+    layer.setAttribute("aria-labelledby", "inline-confirm-title");
+    layer.innerHTML = `<div class="inline-confirm-card">
+    <h2 id="inline-confirm-title" class="text-lg font-normal">${titleHtml(message, highlight)}</h2>
+    <div class="inline-confirm-actions">
+      <button type="button" class="btn" data-confirm="yes">\u05D4\u05E1\u05E8\u05D4</button>
+      <button type="button" class="btn btn-line" data-confirm="cancel">\u05D1\u05D9\u05D8\u05D5\u05DC</button>
+    </div>
+  </div>`;
+    container.appendChild(layer);
+    const buttons = [...layer.querySelectorAll("[data-confirm]")];
+    buttons[0].focus();
+    return new Promise((resolve) => {
+      const done = (answer) => {
+        layer.remove();
+        resolve(answer);
+      };
+      layer.addEventListener("click", (event) => {
+        const button = event.target.closest("[data-confirm]");
+        if (button) done(button.dataset.confirm === "yes");
+        else if (event.target === layer) done(false);
+      });
+      layer.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") {
+          event.stopPropagation();
+          done(false);
+        } else if (event.key === "Tab") {
+          event.preventDefault();
+          const next = buttons[(buttons.indexOf(document.activeElement) + 1) % buttons.length];
+          next.focus();
+        }
+      });
+    });
+  }
+  function confirmAction(message, { within, highlight } = {}) {
+    if (within) return confirmWithin(within, message, highlight);
+    const root = document.getElementById("modal-root");
+    root.innerHTML = `<dialog class="confirm-dialog" aria-labelledby="confirm-title">
+    <h2 id="confirm-title" class="text-lg font-normal">${titleHtml(message, highlight)}</h2>
+    <form method="dialog" class="inline-confirm-actions mt-5">
+      <button class="btn" value="yes">\u05D4\u05E1\u05E8\u05D4</button>
+      <button class="btn btn-line" value="cancel">\u05D1\u05D9\u05D8\u05D5\u05DC</button>
+    </form>
+  </dialog>`;
+    const dialog = root.querySelector("dialog");
+    dialog.showModal();
+    return new Promise((resolve) => {
+      dialog.addEventListener("close", () => {
+        resolve(dialog.returnValue === "yes");
+        root.innerHTML = "";
+      }, { once: true });
+    });
+  }
+
+  // js/components/service-dialogs.js
+  var LOAD_MS2 = 700;
+  var kinds = {
+    delivery: { title: "\u05DE\u05E9\u05DC\u05D5\u05D7 \u05E2\u05D3 \u05D4\u05D1\u05D9\u05EA", path: "#/delivery", dialogId: "delivery-dialog", focus: "[data-service-focus]" },
+    service: { title: "\u05E9\u05D9\u05E8\u05D5\u05EA \u05DC\u05E7\u05D5\u05D7\u05D5\u05EA", path: "#/service", dialogId: "service-dialog", focus: "[data-service-focus]" }
+  };
+  var topicIcon = (name) => `<span class="service-lottie" data-lottie="${name}" aria-hidden="true"></span>`;
+  var chevron = `<svg class="service-topic-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg>`;
+  var backIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg>`;
+  var topics = {
+    status: {
+      title: "\u05D1\u05D9\u05E8\u05D5\u05E8 \u05E1\u05D8\u05D8\u05D5\u05E1 \u05D4\u05D6\u05DE\u05E0\u05D4",
+      text: "\u05D0\u05D9\u05E4\u05D4 \u05D4\u05D4\u05D6\u05DE\u05E0\u05D4 \u05E9\u05DC\u05D9? \u05DE\u05EA\u05D9 \u05D4\u05D9\u05D0 \u05DE\u05D2\u05D9\u05E2\u05D4?",
+      icon: topicIcon("box-magnifier"),
+      fields: ["order", "phone"],
+      submit: "\u05D1\u05D3\u05D9\u05E7\u05EA \u05E1\u05D8\u05D8\u05D5\u05E1",
+      done: "\u05D4\u05D1\u05E7\u05E9\u05D4 \u05E0\u05E9\u05DE\u05E8\u05D4 \u05D1\u05D4\u05D3\u05D2\u05DE\u05D4. \u05D1\u05D2\u05E8\u05E1\u05D4 \u05D4\u05E4\u05E2\u05D9\u05DC\u05D4 \u05D9\u05D5\u05E6\u05D2 \u05DB\u05D0\u05DF \u05DE\u05E6\u05D1 \u05D4\u05D4\u05D6\u05DE\u05E0\u05D4, \u05D5\u05E0\u05E6\u05D9\u05D2 \u05D9\u05D7\u05D6\u05D5\u05E8 \u05D0\u05DC\u05D9\u05DA \u05D1\u05D8\u05DC\u05E4\u05D5\u05DF \u05DC\u05E4\u05D9 \u05D4\u05E6\u05D5\u05E8\u05DA."
+    },
+    problem: {
+      title: "\u05D1\u05E2\u05D9\u05D4 \u05D1\u05D4\u05D6\u05DE\u05E0\u05D4 \u05E9\u05D4\u05EA\u05E7\u05D1\u05DC\u05D4",
+      text: "\u05DE\u05D5\u05E6\u05E8 \u05D7\u05E1\u05E8, \u05E4\u05D2\u05D5\u05DD, \u05E9\u05D2\u05D5\u05D9 \u05D0\u05D5 \u05EA\u05DC\u05D5\u05E0\u05D4 \u05E2\u05DC \u05DE\u05E9\u05DC\u05D5\u05D7",
+      icon: topicIcon("box-damage"),
+      fields: ["order", "issue", "name", "phone", "message"],
+      submit: "\u05E9\u05DC\u05D9\u05D7\u05EA \u05E4\u05E0\u05D9\u05D9\u05D4",
+      done: "\u05D4\u05E4\u05E0\u05D9\u05D9\u05D4 \u05E0\u05E9\u05DE\u05E8\u05D4 \u05D1\u05D4\u05D3\u05D2\u05DE\u05D4. \u05DC\u05D0 \u05E0\u05E9\u05DC\u05D7 \u05DE\u05D9\u05D9\u05DC \u05D0\u05DE\u05D9\u05EA\u05D9."
+    },
+    return: {
+      title: "\u05D4\u05D7\u05D6\u05E8\u05D4 \u05D0\u05D5 \u05D4\u05D7\u05DC\u05E4\u05EA \u05DE\u05D5\u05E6\u05E8",
+      text: "\u05D1\u05E7\u05E9\u05EA \u05D4\u05D7\u05D6\u05E8\u05D4, \u05D4\u05D7\u05DC\u05E4\u05D4 \u05D0\u05D5 \u05D4\u05D7\u05D6\u05E8 \u05DB\u05E1\u05E4\u05D9",
+      icon: topicIcon("box-recycle"),
+      fields: ["order", "request", "product", "name", "phone", "message"],
+      submit: "\u05E9\u05DC\u05D9\u05D7\u05EA \u05D1\u05E7\u05E9\u05D4",
+      done: "\u05D4\u05D1\u05E7\u05E9\u05D4 \u05E0\u05E9\u05DE\u05E8\u05D4 \u05D1\u05D4\u05D3\u05D2\u05DE\u05D4. \u05DC\u05D0 \u05E0\u05E9\u05DC\u05D7 \u05DE\u05D9\u05D9\u05DC \u05D0\u05DE\u05D9\u05EA\u05D9."
+    },
+    other: {
+      title: "\u05E4\u05E0\u05D9\u05D9\u05D4 \u05D1\u05E0\u05D5\u05E9\u05D0 \u05D0\u05D7\u05E8",
+      text: "\u05E9\u05D0\u05DC\u05D4 \u05E2\u05DC \u05DE\u05D5\u05E6\u05E8, \u05EA\u05E9\u05DC\u05D5\u05DD \u05D0\u05D5 \u05E9\u05D9\u05E8\u05D5\u05EA \u05DB\u05DC\u05DC\u05D9",
+      icon: topicIcon("chat-question"),
+      fields: ["subject", "name", "phone", "email", "message"],
+      submit: "\u05E9\u05DC\u05D9\u05D7\u05EA \u05E4\u05E0\u05D9\u05D9\u05D4",
+      done: "\u05D4\u05E4\u05E0\u05D9\u05D9\u05D4 \u05E0\u05E9\u05DE\u05E8\u05D4 \u05D1\u05D4\u05D3\u05D2\u05DE\u05D4. \u05DC\u05D0 \u05E0\u05E9\u05DC\u05D7 \u05DE\u05D9\u05D9\u05DC \u05D0\u05DE\u05D9\u05EA\u05D9."
+    }
+  };
+  var fieldDefs = {
+    order: { label: "\u05DE\u05E1\u05E4\u05E8 \u05D4\u05D6\u05DE\u05E0\u05D4", attrs: `dir="ltr" autocomplete="off" placeholder="AM-1234"`, check: (value) => value.length >= 3 || "\u05E0\u05D0 \u05DC\u05DE\u05DC\u05D0 \u05DE\u05E1\u05E4\u05E8 \u05D4\u05D6\u05DE\u05E0\u05D4." },
+    phone: { label: "\u05D8\u05DC\u05E4\u05D5\u05DF", type: "tel", attrs: `dir="ltr" autocomplete="tel"`, check: (value) => /^0\d{8,9}$/.test(value.replace(/[^\d]/g, "")) || "\u05E0\u05D0 \u05DC\u05DE\u05DC\u05D0 \u05D8\u05DC\u05E4\u05D5\u05DF \u05D9\u05E9\u05E8\u05D0\u05DC\u05D9." },
+    name: { label: "\u05E9\u05DD \u05DE\u05DC\u05D0", attrs: `autocomplete="name"`, check: (value) => value.length >= 2 || "\u05E0\u05D0 \u05DC\u05DE\u05DC\u05D0 \u05E9\u05DD \u05DE\u05DC\u05D0." },
+    email: { label: "\u05D0\u05D9\u05DE\u05D9\u05D9\u05DC (\u05DC\u05D0 \u05D7\u05D5\u05D1\u05D4)", type: "email", attrs: `dir="ltr" autocomplete="email"`, check: (value) => !value || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) || "\u05E0\u05D0 \u05DC\u05DE\u05DC\u05D0 \u05D0\u05D9\u05DE\u05D9\u05D9\u05DC \u05EA\u05E7\u05D9\u05DF." },
+    issue: { label: "\u05DE\u05D4 \u05E7\u05E8\u05D4?", options: ["\u05DE\u05D5\u05E6\u05E8 \u05D7\u05E1\u05E8", "\u05DE\u05D5\u05E6\u05E8 \u05E4\u05D2\u05D5\u05DD", "\u05DE\u05D5\u05E6\u05E8 \u05E9\u05D2\u05D5\u05D9", "\u05EA\u05DC\u05D5\u05E0\u05D4 \u05E2\u05DC \u05D4\u05DE\u05E9\u05DC\u05D5\u05D7"] },
+    request: { label: "\u05E1\u05D5\u05D2 \u05D4\u05D1\u05E7\u05E9\u05D4", options: ["\u05D4\u05D7\u05D6\u05E8\u05D4", "\u05D4\u05D7\u05DC\u05E4\u05D4", "\u05D4\u05D7\u05D6\u05E8 \u05DB\u05E1\u05E4\u05D9"] },
+    product: { label: "\u05E9\u05DD \u05D4\u05DE\u05D5\u05E6\u05E8", check: (value) => value.length >= 2 || "\u05E0\u05D0 \u05DC\u05DE\u05DC\u05D0 \u05E9\u05DD \u05DE\u05D5\u05E6\u05E8." },
+    subject: { label: "\u05E0\u05D5\u05E9\u05D0", options: ["\u05E9\u05D0\u05DC\u05D4 \u05E2\u05DC \u05DE\u05D5\u05E6\u05E8", "\u05EA\u05E9\u05DC\u05D5\u05DD", "\u05E9\u05D9\u05E8\u05D5\u05EA \u05DB\u05DC\u05DC\u05D9"] },
+    message: { label: "\u05E4\u05D9\u05E8\u05D5\u05D8", textarea: true, check: (value) => value.length >= 5 || "\u05E0\u05D0 \u05DC\u05DB\u05EA\u05D5\u05D1 \u05DB\u05DE\u05D4 \u05DE\u05D9\u05DC\u05D9\u05DD." }
+  };
+  function serviceField(name, { values, errors }, prefix, first) {
+    const def = fieldDefs[name];
+    const id = `${prefix}${name}`;
+    const error = errors[name];
+    const aria = `aria-invalid="${error ? "true" : "false"}" ${error ? `aria-describedby="${id}-error"` : ""} ${first ? "data-service-focus" : ""}`;
+    const value = values[name] || "";
+    const control = def.options ? `<select id="${id}" name="${name}" ${aria}><option value="">\u05D1\u05D7\u05D9\u05E8\u05D4</option>${def.options.map((option) => `<option ${value === option ? "selected" : ""}>${esc(option)}</option>`).join("")}</select>` : def.textarea ? `<textarea id="${id}" name="${name}" rows="3" ${aria}>${esc(value)}</textarea>` : `<input id="${id}" name="${name}" type="${def.type || "text"}" value="${esc(value)}" ${def.attrs || ""} ${aria}>`;
+    return `<label class="field" for="${id}">
+    <span class="text-sm font-semibold">${def.label}</span>
+    ${control}
+    ${error ? `<span id="${id}-error" class="field-error">${esc(error)}</span>` : ""}
+  </label>`;
+  }
+  function validateTopic(topic, form) {
+    const data = new FormData(form);
+    const values = {};
+    const errors = {};
+    topics[topic].fields.forEach((name) => {
+      const def = fieldDefs[name];
+      const value = String(data.get(name) || "").trim();
+      values[name] = value;
+      const result = def.options ? def.options.includes(value) || "\u05E0\u05D0 \u05DC\u05D1\u05D7\u05D5\u05E8 \u05D0\u05E4\u05E9\u05E8\u05D5\u05EA." : def.check(value);
+      if (result !== true) errors[name] = result;
+    });
+    return { values, errors };
+  }
+  var phoneIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3h2.5l1.2 3.2-1.7 1a12 12 0 0 0 6.8 6.8l1-1.7 3.2 1.2V16a2 2 0 0 1-2.2 2A16 16 0 0 1 6 6.2 2 2 0 0 1 8 4z"></path></svg>`;
+  var shareIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"></path><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"></path></svg>`;
+  var pageIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg>`;
+  var fresh = {
+    delivery: () => ({ city: "", street: "", error: "", result: "", pending: false }),
+    service: () => ({ topic: null, values: {}, errors: {}, sent: false, pending: false })
+  };
+  var state2 = { delivery: fresh.delivery(), service: fresh.service() };
+  function serviceTitle(kind) {
+    return kinds[kind]?.title || "";
+  }
+  function callButton(kind) {
+    return kind === "service" ? `<a class="service-call" href="tel:097448038" aria-label="\u05D7\u05D9\u05D5\u05D2 \u05DC\u05E9\u05D9\u05E8\u05D5\u05EA \u05D4\u05DC\u05E7\u05D5\u05D7\u05D5\u05EA 09-7448038">${phoneIcon}</a>` : "";
+  }
+  function shareButton(kind) {
+    return `<button type="button" class="share-link" data-share-link="${kind}">${shareIcon}<span>\u05E9\u05DC\u05D9\u05D7\u05EA \u05E7\u05D9\u05E9\u05D5\u05E8</span></button>`;
+  }
+  function dialogHead(kind) {
+    const { title, path, dialogId } = kinds[kind];
+    return `<div class="auth-dialog-bar">
+    <div>
+      <h2 id="${dialogId}-title" class="service-dialog-title font-extrabold"><a class="service-title-link" href="${path}">${title}${pageIcon}</a></h2>
+    </div>
+    <div class="service-dialog-actions">
+      ${kind === "service" ? "" : shareButton(kind)}
+      <button class="auth-close" type="button" data-service-close aria-label="\u05E1\u05D2\u05D9\u05E8\u05D4">\xD7</button>
+    </div>
+  </div>`;
+  }
+  function deliveryBody() {
+    const delivery2 = state2.delivery;
+    const bad = Boolean(delivery2.error);
+    return `<section class="service-block" aria-labelledby="delivery-terms-title">
+    <h3 id="delivery-terms-title" class="font-extrabold">\u05EA\u05E0\u05D0\u05D9 \u05E9\u05D9\u05DC\u05D5\u05D7</h3>
+    <ul class="service-list">
+      <li>\u05D4\u05D4\u05D6\u05DE\u05E0\u05D4 \u05DE\u05D2\u05D9\u05E2\u05D4 \u05E2\u05D3 \u05D4\u05D3\u05DC\u05EA.</li>
+      <li>\u05D3\u05DE\u05D9 \u05DE\u05E9\u05DC\u05D5\u05D7: ${money(deliveryFee)} \u05DC\u05D4\u05D6\u05DE\u05E0\u05D4.</li>
+      <li>\u05DE\u05D5\u05E2\u05D3 \u05D4\u05D0\u05E1\u05E4\u05E7\u05D4 \u05E0\u05E7\u05D1\u05E2 \u05D1\u05EA\u05D9\u05D0\u05D5\u05DD \u05D8\u05DC\u05E4\u05D5\u05E0\u05D9 \u05DC\u05D0\u05D7\u05E8 \u05D4\u05D4\u05D6\u05DE\u05E0\u05D4.</li>
+      <li>\u05D0\u05D6\u05D5\u05E8\u05D9 \u05D4\u05D7\u05DC\u05D5\u05E7\u05D4 \u05D5\u05DE\u05D5\u05E2\u05D3\u05D9 \u05D4\u05D0\u05E1\u05E4\u05E7\u05D4 \u05D9\u05E4\u05D5\u05E8\u05E1\u05DE\u05D5 \u05D1\u05D2\u05E8\u05E1\u05D4 \u05D4\u05E4\u05E2\u05D9\u05DC\u05D4.</li>
+    </ul>
+  </section>
+  <form class="mt-5 grid gap-4" data-service-form="delivery" novalidate>
+    <h3 class="font-extrabold">\u05D4\u05D0\u05DD \u05DE\u05D2\u05D9\u05E2\u05D9\u05DD \u05D0\u05DC\u05D9\u05DA?</h3>
+    <label class="field">
+      <span class="text-sm font-semibold">\u05E2\u05D9\u05E8 \u05D0\u05D5 \u05D9\u05D9\u05E9\u05D5\u05D1</span>
+      <input name="city" value="${esc(delivery2.city)}" autocomplete="address-level2" required aria-invalid="${bad ? "true" : "false"}" ${bad ? `aria-describedby="delivery-city-error"` : ""} data-service-focus>
+      ${bad ? `<span id="delivery-city-error" class="field-error">${esc(delivery2.error)}</span>` : ""}
+    </label>
+    <label class="field">
+      <span class="text-sm font-semibold">\u05E8\u05D7\u05D5\u05D1 \u05D5\u05DE\u05E1\u05E4\u05E8 \u05D1\u05D9\u05EA</span>
+      <input name="street" value="${esc(delivery2.street)}" autocomplete="street-address">
+    </label>
+    <button class="btn" type="submit" ${delivery2.pending ? "disabled" : ""}>${delivery2.pending ? "\u05D1\u05D5\u05D3\u05E7\u05D9\u05DD\u2026" : "\u05D1\u05D3\u05D9\u05E7\u05EA \u05DB\u05EA\u05D5\u05D1\u05EA"}</button>
+    ${delivery2.result ? `<p class="service-result" role="status">${esc(delivery2.result)}</p>` : ""}
+  </form>`;
+  }
+  function serviceBody(inPage) {
+    const service = state2.service;
+    const topic = topics[service.topic];
+    if (!topic) {
+      return `<h3 class="service-topics-title">\u05D1\u05DE\u05D4 \u05D0\u05E4\u05E9\u05E8 \u05DC\u05E2\u05D6\u05D5\u05E8?</h3>
+    <ul class="service-topics">
+      ${Object.entries(topics).map(([key, item], index) => `<li><button type="button" class="service-topic" data-service-topic="${key}" ${index === 0 ? "data-service-focus" : ""}>
+        <span class="service-topic-icon">${item.icon}</span>
+        <span class="service-topic-text"><strong>${item.title}</strong><small>${item.text}</small></span>
+        ${chevron}
+      </button></li>`).join("")}
+    </ul>`;
+    }
+    const back = `<button type="button" class="service-back" data-service-back>${backIcon}\u05DB\u05DC \u05D4\u05E0\u05D5\u05E9\u05D0\u05D9\u05DD</button>`;
+    const head = `<div class="service-topic-head">${back}<h3 class="service-topic-heading"><span class="service-topic-icon">${topic.icon}</span>${topic.title}</h3></div>`;
+    if (service.sent) {
+      const done = inPage ? `<a class="btn" href="#/">\u05D7\u05D6\u05E8\u05D4 \u05DC\u05D3\u05E3 \u05D4\u05D1\u05D9\u05EA</a>` : `<button class="btn" type="button" data-service-close>\u05E1\u05D2\u05D9\u05E8\u05D4</button>`;
+      return `${head}
+    <p class="service-result mt-4" role="status">${topic.done}</p>
+    <div class="mt-5 flex flex-wrap gap-3">${done}<button class="btn btn-line" type="button" data-service-back data-service-focus>\u05E4\u05E0\u05D9\u05D9\u05D4 \u05E0\u05D5\u05E1\u05E4\u05EA</button></div>`;
+    }
+    const prefix = inPage ? "service-page-" : "service-";
+    return `${head}
+  <form class="mt-4 grid gap-4" data-service-form="service" novalidate>
+    ${topic.fields.map((name, index) => serviceField(name, service, prefix, index === 0)).join("")}
+    <button class="btn" type="submit" ${service.pending ? "disabled" : ""}>${service.pending ? "\u05E9\u05D5\u05DC\u05D7\u05D9\u05DD\u2026" : topic.submit}</button>
+  </form>`;
+  }
+  function markup2(kind, inPage) {
+    const body = kind === "delivery" ? deliveryBody() : serviceBody(inPage);
+    return inPage ? body : `${dialogHead(kind)}${body}`;
+  }
+  function paint2(root, focus) {
+    root.innerHTML = markup2(root.dataset.serviceRoot, root.dataset.serviceMode === "page");
+    mountLottieIcons(root);
+    if (focus) root.querySelector(focus)?.focus();
+  }
+  function ensureDialog2(kind) {
+    const { dialogId } = kinds[kind];
+    let dialog = document.getElementById(dialogId);
+    if (dialog) return dialog;
+    dialog = document.createElement("dialog");
+    dialog.id = dialogId;
+    dialog.className = "auth-dialog service-dialog";
+    dialog.dataset.serviceRoot = kind;
+    dialog.dataset.serviceMode = "dialog";
+    dialog.setAttribute("aria-labelledby", `${dialogId}-title`);
+    dialog.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        dialog.close();
+      }
+    });
+    dialog.addEventListener("click", (event) => {
+      if (event.target === dialog || event.target.closest("[data-service-close], a[href^='#/']")) dialog.close();
+    });
+    document.body.appendChild(dialog);
+    return dialog;
+  }
+  function open(kind) {
+    const page2 = document.querySelector(`[data-service-root="${kind}"][data-service-mode="page"]`);
+    if (page2 && parseHash().name === kind) {
+      page2.querySelector(kinds[kind].focus)?.focus();
+      return;
+    }
+    state2[kind] = fresh[kind]();
+    const dialog = ensureDialog2(kind);
+    paint2(dialog);
+    if (!dialog.open) dialog.showModal();
+    dialog.querySelector(kinds[kind].focus)?.focus();
+  }
+  function openDelivery() {
+    open("delivery");
+  }
+  function openService() {
+    open("service");
+  }
+  function renderServiceEmbed(kind) {
+    state2[kind] = fresh[kind]();
+    return `<div class="service-page-body" data-service-root="${kind}" data-service-mode="page">${markup2(kind, true)}</div>`;
+  }
+  function renderServicePage(kind) {
+    return `<article class="wrap service-page py-10">
+    <div class="service-page-head">
+      <div>
+        <h1 class="text-3xl font-extrabold">${kinds[kind].title}</h1>
+      </div>
+      <div class="service-dialog-actions">${callButton(kind)}${shareButton(kind)}</div>
+    </div>
+    ${renderServiceEmbed(kind)}
+  </article>`;
+  }
+  async function shareLink(kind) {
+    const { title, path } = kinds[kind];
+    const url = `${location.origin}${location.pathname}${path}`;
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: `${title} \xB7 \u05D0\u05E9\u05DE\u05D5\u05E8\u05EA MARKET`, url });
+      } catch {
+      }
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(url);
+      showToast("\u05D4\u05E7\u05D9\u05E9\u05D5\u05E8 \u05D4\u05D5\u05E2\u05EA\u05E7. \u05D0\u05E4\u05E9\u05E8 \u05DC\u05D4\u05D3\u05D1\u05D9\u05E7 \u05D5\u05DC\u05E9\u05DC\u05D5\u05D7 \u05D0\u05D5\u05EA\u05D5.");
+    } catch {
+      window.prompt("\u05D4\u05E2\u05EA\u05E7\u05EA \u05D4\u05E7\u05D9\u05E9\u05D5\u05E8:", url);
+    }
+  }
+  function bindServiceDialogs() {
+    document.addEventListener("click", (event) => {
+      if (event.target.closest("[data-open-delivery]")) openDelivery();
+      else if (event.target.closest("[data-open-service]")) openService();
+      const share = event.target.closest("[data-share-link]");
+      if (share) shareLink(share.dataset.shareLink);
+      const pick = event.target.closest("[data-service-topic]");
+      const back = event.target.closest("[data-service-back]");
+      if (pick || back) {
+        const root = (pick || back).closest("[data-service-root]");
+        const previous = state2.service.topic;
+        state2.service = { ...fresh.service(), topic: pick ? pick.dataset.serviceTopic : null };
+        paint2(root, pick ? "[data-service-focus]" : `[data-service-topic="${previous}"]`);
+      }
+    });
+    document.addEventListener("submit", async (event) => {
+      const form = event.target;
+      const kind = form.dataset?.serviceForm;
+      if (!kind) return;
+      event.preventDefault();
+      const root = form.closest("[data-service-root]");
+      const live3 = () => root.isConnected && (root.dataset.serviceMode === "page" || root.open);
+      if (kind === "delivery") {
+        const delivery2 = state2.delivery;
+        if (delivery2.pending) return;
+        const data = new FormData(form);
+        delivery2.city = String(data.get("city") || "").trim();
+        delivery2.street = String(data.get("street") || "").trim();
+        delivery2.result = "";
+        if (delivery2.city.length < 2) {
+          delivery2.error = "\u05E0\u05D0 \u05DC\u05DE\u05DC\u05D0 \u05E2\u05D9\u05E8 \u05D0\u05D5 \u05D9\u05D9\u05E9\u05D5\u05D1.";
+          paint2(root, "input[name='city']");
+          return;
+        }
+        delivery2.error = "";
+        delivery2.pending = true;
+        paint2(root, "button[type='submit']");
+        await wait(LOAD_MS2);
+        if (!live3()) return;
+        delivery2.pending = false;
+        const place = delivery2.street ? `${delivery2.street}, ${delivery2.city}` : delivery2.city;
+        delivery2.result = `\u05DE\u05D2\u05D9\u05E2\u05D9\u05DD \u05D0\u05DC\u05D9\u05DA! \u05D4\u05DE\u05E9\u05DC\u05D5\u05D7 \u05DC\u05BE${place} \u05D6\u05DE\u05D9\u05DF. \u05D1\u05D4\u05D3\u05D2\u05DE\u05D4 \u05DB\u05DC \u05DB\u05EA\u05D5\u05D1\u05EA \u05DE\u05E7\u05D1\u05DC\u05EA \u05EA\u05E9\u05D5\u05D1\u05D4 \u05D7\u05D9\u05D5\u05D1\u05D9\u05EA.`;
+        paint2(root, "button[type='submit']");
+        return;
+      }
+      const service = state2.service;
+      if (service.pending || !topics[service.topic]) return;
+      const { values, errors } = validateTopic(service.topic, form);
+      service.values = values;
+      service.errors = errors;
+      if (Object.keys(errors).length) {
+        paint2(root, "[aria-invalid='true']");
+        return;
+      }
+      service.pending = true;
+      paint2(root, "button[type='submit']");
+      await wait(LOAD_MS2);
+      if (!live3()) return;
+      state2.service = { ...fresh.service(), topic: service.topic, sent: true };
+      paint2(root, "[data-service-focus]");
+    });
+  }
+
   // js/screens/account.js
   var savedNotice = false;
   var icon2 = (paths) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths}</svg>`;
@@ -9969,8 +10373,8 @@
           ${link("overview", "#/account", "\u05E1\u05E7\u05D9\u05E8\u05D4")}
           ${link("orders", "#/orders", "\u05D4\u05D4\u05D6\u05DE\u05E0\u05D5\u05EA \u05E9\u05DC\u05D9")}
           ${link("details", "#/account/details", "\u05E2\u05D3\u05DB\u05D5\u05DF \u05E4\u05E8\u05D8\u05D9\u05DD", "\u05E4\u05E8\u05D8\u05D9\u05DD \u05D0\u05D9\u05E9\u05D9\u05D9\u05DD, \u05D8\u05DC\u05E4\u05D5\u05DF \u05D5\u05DB\u05EA\u05D5\u05D1\u05EA \u05DC\u05DE\u05E9\u05DC\u05D5\u05D7")}
-          ${link("club", "#/rules-club", "\u05DE\u05D5\u05E2\u05D3\u05D5\u05DF \u05DC\u05E7\u05D5\u05D7\u05D5\u05EA")}
-          ${link("service", "#/service", "\u05E9\u05D9\u05E8\u05D5\u05EA \u05DC\u05E7\u05D5\u05D7\u05D5\u05EA")}
+          ${link("club", "#/account/club", "\u05DE\u05D5\u05E2\u05D3\u05D5\u05DF \u05DC\u05E7\u05D5\u05D7\u05D5\u05EA")}
+          ${link("service", "#/account/service", "\u05E9\u05D9\u05E8\u05D5\u05EA \u05DC\u05E7\u05D5\u05D7\u05D5\u05EA")}
           <button class="account-menu-link" type="button" data-logout>${icons.logout}<span>\u05D4\u05EA\u05E0\u05EA\u05E7\u05D5\u05EA</span></button>
         </nav>
         ${until ? `<p class="account-session">\u05D4\u05D3\u05D2\u05DE\u05D4 \u05D1\u05DC\u05D1\u05D3. \u05D4\u05D4\u05EA\u05D7\u05D1\u05E8\u05D5\u05EA \u05E4\u05E2\u05D9\u05DC\u05D4 \u05E2\u05D3 ${esc(until)}.</p>` : ""}
@@ -10004,7 +10408,6 @@
         <h1 id="account-title" class="account-banner-title">\u05E9\u05DC\u05D5\u05DD ${esc(profile.displayName)}</h1>
         <p class="account-banner-text">${demoOrders.length} \u05D4\u05D6\u05DE\u05E0\u05D5\u05EA \u05D1\u05D0\u05D6\u05D5\u05E8 \u05D4\u05D0\u05D9\u05E9\u05D9 \xB7 \u05D4\u05D4\u05D6\u05DE\u05E0\u05D4 \u05D4\u05D0\u05D7\u05E8\u05D5\u05E0\u05D4 ${esc(when(latest.createdAt))}</p>
       </div>
-      <span class="account-banner-art" aria-hidden="true"></span>
     </section>
     <div class="account-tiles">
       <section class="account-tile" aria-labelledby="tile-order">
@@ -10015,7 +10418,7 @@
       </section>
       <section class="account-tile" aria-labelledby="tile-details">
         <span class="account-tile-art" aria-hidden="true">${icons.details}</span>
-        <h2 id="tile-details">\u05E4\u05E8\u05D8\u05D9\u05DD \u05DC\u05DE\u05E9\u05DC\u05D5\u05D7</h2>
+        <h2 id="tile-details">\u05DB\u05EA\u05D5\u05D1\u05EA \u05DC\u05DE\u05E9\u05DC\u05D5\u05D7</h2>
         <p>${esc(profile.street)} ${esc(profile.house)}, ${esc(profile.city)} \xB7 <span dir="ltr">${esc(profile.phone)}</span></p>
         <a class="btn btn-line" href="#/account/details">\u05E2\u05D3\u05DB\u05D5\u05DF \u05E4\u05E8\u05D8\u05D9\u05DD</a>
       </section>
@@ -10023,7 +10426,7 @@
         <span class="account-tile-art" aria-hidden="true">${icons.service}</span>
         <h2 id="tile-service">\u05E9\u05D9\u05E8\u05D5\u05EA \u05DC\u05E7\u05D5\u05D7\u05D5\u05EA</h2>
         <p>\u05E9\u05D0\u05DC\u05D4 \u05E2\u05DC \u05D4\u05D6\u05DE\u05E0\u05D4 \u05D0\u05D5 \u05DE\u05E9\u05DC\u05D5\u05D7? \u05D0\u05E4\u05E9\u05E8 \u05DC\u05E4\u05E0\u05D5\u05EA \u05D0\u05DC\u05D9\u05E0\u05D5.</p>
-        <a class="btn btn-line" href="#/service">\u05DC\u05E4\u05E0\u05D9\u05D9\u05D4</a>
+        <a class="btn btn-line" href="#/account/service">\u05DC\u05E4\u05E0\u05D9\u05D9\u05D4</a>
       </section>
     </div>
     <section class="account-card" aria-labelledby="recent-orders">
@@ -10034,6 +10437,20 @@
       <ul>${recent}</ul>
     </section>
   `);
+  }
+  function renderAccountClub() {
+    const pageCopy = legalCopy("rules-club");
+    return frame("club", "\u05DE\u05D5\u05E2\u05D3\u05D5\u05DF \u05DC\u05E7\u05D5\u05D7\u05D5\u05EA", page("\u05DE\u05D5\u05E2\u05D3\u05D5\u05DF \u05DC\u05E7\u05D5\u05D7\u05D5\u05EA", `
+    <p class="mt-3 text-muted">${esc(pageCopy.lead)}</p>
+    <div class="mt-6 grid gap-4 text-base leading-7">
+      ${pageCopy.body.map((paragraph) => `<p>${esc(paragraph)}</p>`).join("")}
+    </div>
+  `));
+  }
+  function renderAccountService() {
+    return frame("service", "\u05E9\u05D9\u05E8\u05D5\u05EA \u05DC\u05E7\u05D5\u05D7\u05D5\u05EA", page("\u05E9\u05D9\u05E8\u05D5\u05EA \u05DC\u05E7\u05D5\u05D7\u05D5\u05EA", `
+    <div class="mt-6">${renderServiceEmbed("service")}</div>
+  `));
   }
   function renderAccountDetails() {
     const profile = getProfile();
@@ -10127,7 +10544,7 @@
 
   // js/components/mega-menu.js
   var mark = "assets/images/brand/placeholder-cart.png";
-  var chevron = `<svg class="mega-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg>`;
+  var chevron2 = `<svg class="mega-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg>`;
   var plus = `<svg class="mobile-nav-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"></path><path class="mobile-nav-plus-v" d="M12 5v14"></path></svg>`;
   var arrow = `<svg class="mega-all-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M19 12H6M12 6l-6 6 6 6"></path></svg>`;
   var menus = [
@@ -10296,7 +10713,7 @@
     mobile2.innerHTML = solo ? supplierCategories().map((category) => `<div class="mobile-nav-item"><div class="mega-mobile-head">${categoryLink(category)}</div></div>`).join("") : menus.map((item) => `<div class="mobile-nav-item">
       <div class="mega-mobile-head">
         <a class="mega-trigger" href="#/d/${esc(item.id)}"><span class="nav-icon is-${esc(item.id)}" aria-hidden="true"></span>${esc(item.label)}</a>
-        <button type="button" class="mega-trigger mobile-nav-toggle" data-mega-mobile="${esc(item.id)}" aria-expanded="false" aria-label="\u05E4\u05EA\u05D9\u05D7\u05EA ${esc(item.label)}">${chevron}${plus}</button>
+        <button type="button" class="mega-trigger mobile-nav-toggle" data-mega-mobile="${esc(item.id)}" aria-expanded="false" aria-label="\u05E4\u05EA\u05D9\u05D7\u05EA ${esc(item.label)}">${chevron2}${plus}</button>
       </div>
       <div class="mega-mobile" hidden data-mega-mobile-panel="${esc(item.id)}"></div>
     </div>`).join("");
@@ -10705,7 +11122,7 @@
   var arrow2 = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg>`;
   var cartIcon = `<svg class="cart-dock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 7h15l-1.6 8.2a2 2 0 0 1-2 1.6H9.2a2 2 0 0 1-2-1.5L5.2 4.8H3"></path><circle cx="9" cy="20" r="1.2" fill="currentColor"></circle><circle cx="18" cy="20" r="1.2" fill="currentColor"></circle></svg>`;
   var trashIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7h16"></path><path d="M9 7V5h6v2"></path><path d="M7 7l1 13h8l1-13"></path><path d="M10 11v5M14 11v5"></path></svg>`;
-  var open = false;
+  var open2 = false;
   var turnTimer = 0;
   function rows() {
     return getCart().items.map((item) => ({ ...item, product: getProduct(item.id), commerce: getCommerce(item.id) })).filter((item) => item.product && item.commerce);
@@ -10716,15 +11133,15 @@
   function updateCartDock(routeName = parseHash().name) {
     const root = document.getElementById("cart-dock");
     if (!root) return;
-    if (hiddenFor(routeName)) open = false;
+    if (hiddenFor(routeName)) open2 = false;
     const items = rows();
     const count = countItems();
     const show2 = !hiddenFor(routeName);
     root.hidden = false;
     root.inert = !show2;
     root.classList.toggle("is-away", !show2);
-    if (!open) root.querySelector(".cart-dock-body")?.remove();
-    root.classList.toggle("is-open", open && show2);
+    if (!open2) root.querySelector(".cart-dock-body")?.remove();
+    root.classList.toggle("is-open", open2 && show2);
     if (!show2 && root.childElementCount) return;
     const totals = cartTotals();
     const list = items.length ? `<ul class="cart-dock-list">${items.map((item) => `<li class="cart-dock-item">
@@ -10745,9 +11162,9 @@
       </li>`).join("")}</ul>` : `<p class="cart-dock-empty">\u05D4\u05E1\u05DC \u05E8\u05D9\u05E7. \u05D0\u05E4\u05E9\u05E8 \u05DC\u05D4\u05D5\u05E1\u05D9\u05E3 \u05DE\u05D5\u05E6\u05E8\u05D9\u05DD \u05DE\u05D4\u05E7\u05D8\u05DC\u05D5\u05D2.</p>`;
     const listScroll = root.querySelector(".cart-dock-list")?.scrollTop || 0;
     root.innerHTML = `<div class="cart-dock-bar">
-      <button type="button" class="cart-dock-arrow" data-cart-toggle aria-expanded="${open}" aria-controls="cart-dock-body">
+      <button type="button" class="cart-dock-arrow" data-cart-toggle aria-expanded="${open2}" aria-controls="cart-dock-body">
         ${arrow2}
-        <span class="sr-only">${open ? "\u05E1\u05D2\u05D9\u05E8\u05EA \u05D4\u05E1\u05DC" : "\u05E4\u05EA\u05D9\u05D7\u05EA \u05D4\u05E1\u05DC"}</span>
+        <span class="sr-only">${open2 ? "\u05E1\u05D2\u05D9\u05E8\u05EA \u05D4\u05E1\u05DC" : "\u05E4\u05EA\u05D9\u05D7\u05EA \u05D4\u05E1\u05DC"}</span>
       </button>
       <div class="min-w-0">
         <p class="cart-dock-title"><span class="cart-dock-mark">${cartIcon}${count ? `<span class="cart-dock-badge">${count}</span>` : ""}</span><span>\u05D4\u05E2\u05D2\u05DC\u05D4 \u05E9\u05DC\u05D9</span></p>
@@ -10755,7 +11172,7 @@
       </div>
       ${count ? `<a class="cart-dock-pay" href="#/checkout"><span>\u05DC\u05EA\u05E9\u05DC\u05D5\u05DD:</span><strong>${money(totals.total)}</strong></a>` : `<span class="cart-dock-pay is-disabled" aria-disabled="true"><span>\u05DC\u05EA\u05E9\u05DC\u05D5\u05DD:</span><strong>${money(0)}</strong></span>`}
     </div>
-    ${open ? `<div id="cart-dock-body" class="cart-dock-body">
+    ${open2 ? `<div id="cart-dock-body" class="cart-dock-body">
       ${list}
       <div class="cart-dock-foot">
         <dl>
@@ -10775,13 +11192,13 @@
   }
   function toggleCartDock(force) {
     const y = window.scrollY;
-    open = typeof force === "boolean" ? force : !open;
+    open2 = typeof force === "boolean" ? force : !open2;
     const root = document.getElementById("cart-dock");
     root?.classList.add("is-turning");
     window.clearTimeout(turnTimer);
     turnTimer = window.setTimeout(() => root?.classList.remove("is-turning"), 320);
     updateCartDock();
-    if (open) document.querySelector(".cart-dock-arrow")?.focus({ preventScroll: true });
+    if (open2) document.querySelector(".cart-dock-arrow")?.focus({ preventScroll: true });
     if (window.scrollY !== y) window.scrollTo({ top: y, behavior: "instant" });
   }
   function placeDock() {
@@ -10809,407 +11226,13 @@
         return;
       }
       const inside = event.target.closest?.("#cart-dock, #modal-root, #auth-dialog, #product-pop");
-      if (open && event.target.isConnected && !inside) toggleCartDock(false);
+      if (open2 && event.target.isConnected && !inside) toggleCartDock(false);
     });
     document.addEventListener("keydown", (event) => {
-      if (event.key === "Escape" && open) toggleCartDock(false);
+      if (event.key === "Escape" && open2) toggleCartDock(false);
     });
     updateCartDock();
     placeDock();
-  }
-
-  // js/components/toast.js
-  function showToast(message, href) {
-    const region = document.getElementById("toast");
-    const item = document.createElement("div");
-    item.className = "toast pointer-events-auto";
-    item.innerHTML = `<p class="font-semibold">${esc(message)}</p>${href ? `<a class="mt-1 inline-block text-sm font-bold underline underline-offset-2" href="${esc(href)}">\u05DC\u05E1\u05DC \u05D4\u05E7\u05E0\u05D9\u05D5\u05EA</a>` : ""}`;
-    region.appendChild(item);
-    const gsap = window.gsap;
-    if (gsap && !prefersReducedMotion()) {
-      gsap.fromTo(item, { y: 16, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.35, ease: "power2.out" });
-    }
-    window.setTimeout(() => {
-      item.remove();
-    }, 3200);
-  }
-  function announce(message) {
-    const region = document.getElementById("toast");
-    if (!region) return;
-    const item = document.createElement("p");
-    item.className = "sr-only";
-    item.textContent = message;
-    region.appendChild(item);
-    window.setTimeout(() => item.remove(), 3200);
-  }
-  function titleHtml(message, highlight) {
-    const text = esc(message);
-    if (!highlight) return text;
-    const name = esc(highlight);
-    return text.replace(name, `<strong class="font-extrabold">${name}</strong>`);
-  }
-  function confirmWithin(container, message, highlight) {
-    container.querySelector(".inline-confirm")?.remove();
-    const layer = document.createElement("div");
-    layer.className = "inline-confirm";
-    layer.setAttribute("role", "alertdialog");
-    layer.setAttribute("aria-modal", "true");
-    layer.setAttribute("aria-labelledby", "inline-confirm-title");
-    layer.innerHTML = `<div class="inline-confirm-card">
-    <h2 id="inline-confirm-title" class="text-lg font-normal">${titleHtml(message, highlight)}</h2>
-    <div class="inline-confirm-actions">
-      <button type="button" class="btn" data-confirm="yes">\u05D4\u05E1\u05E8\u05D4</button>
-      <button type="button" class="btn btn-line" data-confirm="cancel">\u05D1\u05D9\u05D8\u05D5\u05DC</button>
-    </div>
-  </div>`;
-    container.appendChild(layer);
-    const buttons = [...layer.querySelectorAll("[data-confirm]")];
-    buttons[0].focus();
-    return new Promise((resolve) => {
-      const done = (answer) => {
-        layer.remove();
-        resolve(answer);
-      };
-      layer.addEventListener("click", (event) => {
-        const button = event.target.closest("[data-confirm]");
-        if (button) done(button.dataset.confirm === "yes");
-        else if (event.target === layer) done(false);
-      });
-      layer.addEventListener("keydown", (event) => {
-        if (event.key === "Escape") {
-          event.stopPropagation();
-          done(false);
-        } else if (event.key === "Tab") {
-          event.preventDefault();
-          const next = buttons[(buttons.indexOf(document.activeElement) + 1) % buttons.length];
-          next.focus();
-        }
-      });
-    });
-  }
-  function confirmAction(message, { within, highlight } = {}) {
-    if (within) return confirmWithin(within, message, highlight);
-    const root = document.getElementById("modal-root");
-    root.innerHTML = `<dialog class="confirm-dialog" aria-labelledby="confirm-title">
-    <h2 id="confirm-title" class="text-lg font-normal">${titleHtml(message, highlight)}</h2>
-    <form method="dialog" class="inline-confirm-actions mt-5">
-      <button class="btn" value="yes">\u05D4\u05E1\u05E8\u05D4</button>
-      <button class="btn btn-line" value="cancel">\u05D1\u05D9\u05D8\u05D5\u05DC</button>
-    </form>
-  </dialog>`;
-    const dialog = root.querySelector("dialog");
-    dialog.showModal();
-    return new Promise((resolve) => {
-      dialog.addEventListener("close", () => {
-        resolve(dialog.returnValue === "yes");
-        root.innerHTML = "";
-      }, { once: true });
-    });
-  }
-
-  // js/components/service-dialogs.js
-  var LOAD_MS2 = 700;
-  var kinds = {
-    delivery: { title: "\u05DE\u05E9\u05DC\u05D5\u05D7 \u05E2\u05D3 \u05D4\u05D1\u05D9\u05EA", path: "#/delivery", dialogId: "delivery-dialog", focus: "[data-service-focus]" },
-    service: { title: "\u05E9\u05D9\u05E8\u05D5\u05EA \u05DC\u05E7\u05D5\u05D7\u05D5\u05EA", path: "#/service", dialogId: "service-dialog", focus: "[data-service-focus]" }
-  };
-  var topicIcon = (name) => `<span class="service-lottie" data-lottie="${name}" aria-hidden="true"></span>`;
-  var chevron2 = `<svg class="service-topic-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg>`;
-  var backIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg>`;
-  var topics = {
-    status: {
-      title: "\u05D1\u05D9\u05E8\u05D5\u05E8 \u05E1\u05D8\u05D8\u05D5\u05E1 \u05D4\u05D6\u05DE\u05E0\u05D4",
-      text: "\u05D0\u05D9\u05E4\u05D4 \u05D4\u05D4\u05D6\u05DE\u05E0\u05D4 \u05E9\u05DC\u05D9? \u05DE\u05EA\u05D9 \u05D4\u05D9\u05D0 \u05DE\u05D2\u05D9\u05E2\u05D4?",
-      icon: topicIcon("box-magnifier"),
-      fields: ["order", "phone"],
-      submit: "\u05D1\u05D3\u05D9\u05E7\u05EA \u05E1\u05D8\u05D8\u05D5\u05E1",
-      done: "\u05D4\u05D1\u05E7\u05E9\u05D4 \u05E0\u05E9\u05DE\u05E8\u05D4 \u05D1\u05D4\u05D3\u05D2\u05DE\u05D4. \u05D1\u05D2\u05E8\u05E1\u05D4 \u05D4\u05E4\u05E2\u05D9\u05DC\u05D4 \u05D9\u05D5\u05E6\u05D2 \u05DB\u05D0\u05DF \u05DE\u05E6\u05D1 \u05D4\u05D4\u05D6\u05DE\u05E0\u05D4, \u05D5\u05E0\u05E6\u05D9\u05D2 \u05D9\u05D7\u05D6\u05D5\u05E8 \u05D0\u05DC\u05D9\u05DA \u05D1\u05D8\u05DC\u05E4\u05D5\u05DF \u05DC\u05E4\u05D9 \u05D4\u05E6\u05D5\u05E8\u05DA."
-    },
-    problem: {
-      title: "\u05D1\u05E2\u05D9\u05D4 \u05D1\u05D4\u05D6\u05DE\u05E0\u05D4 \u05E9\u05D4\u05EA\u05E7\u05D1\u05DC\u05D4",
-      text: "\u05DE\u05D5\u05E6\u05E8 \u05D7\u05E1\u05E8, \u05E4\u05D2\u05D5\u05DD, \u05E9\u05D2\u05D5\u05D9 \u05D0\u05D5 \u05EA\u05DC\u05D5\u05E0\u05D4 \u05E2\u05DC \u05DE\u05E9\u05DC\u05D5\u05D7",
-      icon: topicIcon("box-damage"),
-      fields: ["order", "issue", "name", "phone", "message"],
-      submit: "\u05E9\u05DC\u05D9\u05D7\u05EA \u05E4\u05E0\u05D9\u05D9\u05D4",
-      done: "\u05D4\u05E4\u05E0\u05D9\u05D9\u05D4 \u05E0\u05E9\u05DE\u05E8\u05D4 \u05D1\u05D4\u05D3\u05D2\u05DE\u05D4. \u05DC\u05D0 \u05E0\u05E9\u05DC\u05D7 \u05DE\u05D9\u05D9\u05DC \u05D0\u05DE\u05D9\u05EA\u05D9."
-    },
-    return: {
-      title: "\u05D4\u05D7\u05D6\u05E8\u05D4 \u05D0\u05D5 \u05D4\u05D7\u05DC\u05E4\u05EA \u05DE\u05D5\u05E6\u05E8",
-      text: "\u05D1\u05E7\u05E9\u05EA \u05D4\u05D7\u05D6\u05E8\u05D4, \u05D4\u05D7\u05DC\u05E4\u05D4 \u05D0\u05D5 \u05D4\u05D7\u05D6\u05E8 \u05DB\u05E1\u05E4\u05D9",
-      icon: topicIcon("box-recycle"),
-      fields: ["order", "request", "product", "name", "phone", "message"],
-      submit: "\u05E9\u05DC\u05D9\u05D7\u05EA \u05D1\u05E7\u05E9\u05D4",
-      done: "\u05D4\u05D1\u05E7\u05E9\u05D4 \u05E0\u05E9\u05DE\u05E8\u05D4 \u05D1\u05D4\u05D3\u05D2\u05DE\u05D4. \u05DC\u05D0 \u05E0\u05E9\u05DC\u05D7 \u05DE\u05D9\u05D9\u05DC \u05D0\u05DE\u05D9\u05EA\u05D9."
-    },
-    other: {
-      title: "\u05E4\u05E0\u05D9\u05D9\u05D4 \u05D1\u05E0\u05D5\u05E9\u05D0 \u05D0\u05D7\u05E8",
-      text: "\u05E9\u05D0\u05DC\u05D4 \u05E2\u05DC \u05DE\u05D5\u05E6\u05E8, \u05EA\u05E9\u05DC\u05D5\u05DD \u05D0\u05D5 \u05E9\u05D9\u05E8\u05D5\u05EA \u05DB\u05DC\u05DC\u05D9",
-      icon: topicIcon("chat-question"),
-      fields: ["subject", "name", "phone", "email", "message"],
-      submit: "\u05E9\u05DC\u05D9\u05D7\u05EA \u05E4\u05E0\u05D9\u05D9\u05D4",
-      done: "\u05D4\u05E4\u05E0\u05D9\u05D9\u05D4 \u05E0\u05E9\u05DE\u05E8\u05D4 \u05D1\u05D4\u05D3\u05D2\u05DE\u05D4. \u05DC\u05D0 \u05E0\u05E9\u05DC\u05D7 \u05DE\u05D9\u05D9\u05DC \u05D0\u05DE\u05D9\u05EA\u05D9."
-    }
-  };
-  var fieldDefs = {
-    order: { label: "\u05DE\u05E1\u05E4\u05E8 \u05D4\u05D6\u05DE\u05E0\u05D4", attrs: `dir="ltr" autocomplete="off" placeholder="AM-1234"`, check: (value) => value.length >= 3 || "\u05E0\u05D0 \u05DC\u05DE\u05DC\u05D0 \u05DE\u05E1\u05E4\u05E8 \u05D4\u05D6\u05DE\u05E0\u05D4." },
-    phone: { label: "\u05D8\u05DC\u05E4\u05D5\u05DF", type: "tel", attrs: `dir="ltr" autocomplete="tel"`, check: (value) => /^0\d{8,9}$/.test(value.replace(/[^\d]/g, "")) || "\u05E0\u05D0 \u05DC\u05DE\u05DC\u05D0 \u05D8\u05DC\u05E4\u05D5\u05DF \u05D9\u05E9\u05E8\u05D0\u05DC\u05D9." },
-    name: { label: "\u05E9\u05DD \u05DE\u05DC\u05D0", attrs: `autocomplete="name"`, check: (value) => value.length >= 2 || "\u05E0\u05D0 \u05DC\u05DE\u05DC\u05D0 \u05E9\u05DD \u05DE\u05DC\u05D0." },
-    email: { label: "\u05D0\u05D9\u05DE\u05D9\u05D9\u05DC (\u05DC\u05D0 \u05D7\u05D5\u05D1\u05D4)", type: "email", attrs: `dir="ltr" autocomplete="email"`, check: (value) => !value || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) || "\u05E0\u05D0 \u05DC\u05DE\u05DC\u05D0 \u05D0\u05D9\u05DE\u05D9\u05D9\u05DC \u05EA\u05E7\u05D9\u05DF." },
-    issue: { label: "\u05DE\u05D4 \u05E7\u05E8\u05D4?", options: ["\u05DE\u05D5\u05E6\u05E8 \u05D7\u05E1\u05E8", "\u05DE\u05D5\u05E6\u05E8 \u05E4\u05D2\u05D5\u05DD", "\u05DE\u05D5\u05E6\u05E8 \u05E9\u05D2\u05D5\u05D9", "\u05EA\u05DC\u05D5\u05E0\u05D4 \u05E2\u05DC \u05D4\u05DE\u05E9\u05DC\u05D5\u05D7"] },
-    request: { label: "\u05E1\u05D5\u05D2 \u05D4\u05D1\u05E7\u05E9\u05D4", options: ["\u05D4\u05D7\u05D6\u05E8\u05D4", "\u05D4\u05D7\u05DC\u05E4\u05D4", "\u05D4\u05D7\u05D6\u05E8 \u05DB\u05E1\u05E4\u05D9"] },
-    product: { label: "\u05E9\u05DD \u05D4\u05DE\u05D5\u05E6\u05E8", check: (value) => value.length >= 2 || "\u05E0\u05D0 \u05DC\u05DE\u05DC\u05D0 \u05E9\u05DD \u05DE\u05D5\u05E6\u05E8." },
-    subject: { label: "\u05E0\u05D5\u05E9\u05D0", options: ["\u05E9\u05D0\u05DC\u05D4 \u05E2\u05DC \u05DE\u05D5\u05E6\u05E8", "\u05EA\u05E9\u05DC\u05D5\u05DD", "\u05E9\u05D9\u05E8\u05D5\u05EA \u05DB\u05DC\u05DC\u05D9"] },
-    message: { label: "\u05E4\u05D9\u05E8\u05D5\u05D8", textarea: true, check: (value) => value.length >= 5 || "\u05E0\u05D0 \u05DC\u05DB\u05EA\u05D5\u05D1 \u05DB\u05DE\u05D4 \u05DE\u05D9\u05DC\u05D9\u05DD." }
-  };
-  function serviceField(name, { values, errors }, prefix, first) {
-    const def = fieldDefs[name];
-    const id = `${prefix}${name}`;
-    const error = errors[name];
-    const aria = `aria-invalid="${error ? "true" : "false"}" ${error ? `aria-describedby="${id}-error"` : ""} ${first ? "data-service-focus" : ""}`;
-    const value = values[name] || "";
-    const control = def.options ? `<select id="${id}" name="${name}" ${aria}><option value="">\u05D1\u05D7\u05D9\u05E8\u05D4</option>${def.options.map((option) => `<option ${value === option ? "selected" : ""}>${esc(option)}</option>`).join("")}</select>` : def.textarea ? `<textarea id="${id}" name="${name}" rows="3" ${aria}>${esc(value)}</textarea>` : `<input id="${id}" name="${name}" type="${def.type || "text"}" value="${esc(value)}" ${def.attrs || ""} ${aria}>`;
-    return `<label class="field" for="${id}">
-    <span class="text-sm font-semibold">${def.label}</span>
-    ${control}
-    ${error ? `<span id="${id}-error" class="field-error">${esc(error)}</span>` : ""}
-  </label>`;
-  }
-  function validateTopic(topic, form) {
-    const data = new FormData(form);
-    const values = {};
-    const errors = {};
-    topics[topic].fields.forEach((name) => {
-      const def = fieldDefs[name];
-      const value = String(data.get(name) || "").trim();
-      values[name] = value;
-      const result = def.options ? def.options.includes(value) || "\u05E0\u05D0 \u05DC\u05D1\u05D7\u05D5\u05E8 \u05D0\u05E4\u05E9\u05E8\u05D5\u05EA." : def.check(value);
-      if (result !== true) errors[name] = result;
-    });
-    return { values, errors };
-  }
-  var phoneIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3h2.5l1.2 3.2-1.7 1a12 12 0 0 0 6.8 6.8l1-1.7 3.2 1.2V16a2 2 0 0 1-2.2 2A16 16 0 0 1 6 6.2 2 2 0 0 1 8 4z"></path></svg>`;
-  var shareIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"></path><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"></path></svg>`;
-  var pageIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg>`;
-  var fresh = {
-    delivery: () => ({ city: "", street: "", error: "", result: "", pending: false }),
-    service: () => ({ topic: null, values: {}, errors: {}, sent: false, pending: false })
-  };
-  var state2 = { delivery: fresh.delivery(), service: fresh.service() };
-  function serviceTitle(kind) {
-    return kinds[kind]?.title || "";
-  }
-  function callButton(kind) {
-    return kind === "service" ? `<a class="service-call" href="tel:097448038" aria-label="\u05D7\u05D9\u05D5\u05D2 \u05DC\u05E9\u05D9\u05E8\u05D5\u05EA \u05D4\u05DC\u05E7\u05D5\u05D7\u05D5\u05EA 09-7448038">${phoneIcon}</a>` : "";
-  }
-  function shareButton(kind) {
-    return `<button type="button" class="share-link" data-share-link="${kind}">${shareIcon}<span>\u05E9\u05DC\u05D9\u05D7\u05EA \u05E7\u05D9\u05E9\u05D5\u05E8</span></button>`;
-  }
-  function dialogHead(kind) {
-    const { title, path, dialogId } = kinds[kind];
-    return `<div class="auth-dialog-bar">
-    <div>
-      <h2 id="${dialogId}-title" class="service-dialog-title font-extrabold"><a class="service-title-link" href="${path}">${title}${pageIcon}</a></h2>
-    </div>
-    <div class="service-dialog-actions">
-      ${kind === "service" ? "" : shareButton(kind)}
-      <button class="auth-close" type="button" data-service-close aria-label="\u05E1\u05D2\u05D9\u05E8\u05D4">\xD7</button>
-    </div>
-  </div>`;
-  }
-  function deliveryBody() {
-    const delivery2 = state2.delivery;
-    const bad = Boolean(delivery2.error);
-    return `<section class="service-block" aria-labelledby="delivery-terms-title">
-    <h3 id="delivery-terms-title" class="font-extrabold">\u05EA\u05E0\u05D0\u05D9 \u05E9\u05D9\u05DC\u05D5\u05D7</h3>
-    <ul class="service-list">
-      <li>\u05D4\u05D4\u05D6\u05DE\u05E0\u05D4 \u05DE\u05D2\u05D9\u05E2\u05D4 \u05E2\u05D3 \u05D4\u05D3\u05DC\u05EA.</li>
-      <li>\u05D3\u05DE\u05D9 \u05DE\u05E9\u05DC\u05D5\u05D7: ${money(deliveryFee)} \u05DC\u05D4\u05D6\u05DE\u05E0\u05D4.</li>
-      <li>\u05DE\u05D5\u05E2\u05D3 \u05D4\u05D0\u05E1\u05E4\u05E7\u05D4 \u05E0\u05E7\u05D1\u05E2 \u05D1\u05EA\u05D9\u05D0\u05D5\u05DD \u05D8\u05DC\u05E4\u05D5\u05E0\u05D9 \u05DC\u05D0\u05D7\u05E8 \u05D4\u05D4\u05D6\u05DE\u05E0\u05D4.</li>
-      <li>\u05D0\u05D6\u05D5\u05E8\u05D9 \u05D4\u05D7\u05DC\u05D5\u05E7\u05D4 \u05D5\u05DE\u05D5\u05E2\u05D3\u05D9 \u05D4\u05D0\u05E1\u05E4\u05E7\u05D4 \u05D9\u05E4\u05D5\u05E8\u05E1\u05DE\u05D5 \u05D1\u05D2\u05E8\u05E1\u05D4 \u05D4\u05E4\u05E2\u05D9\u05DC\u05D4.</li>
-    </ul>
-  </section>
-  <form class="mt-5 grid gap-4" data-service-form="delivery" novalidate>
-    <h3 class="font-extrabold">\u05D4\u05D0\u05DD \u05DE\u05D2\u05D9\u05E2\u05D9\u05DD \u05D0\u05DC\u05D9\u05DA?</h3>
-    <label class="field">
-      <span class="text-sm font-semibold">\u05E2\u05D9\u05E8 \u05D0\u05D5 \u05D9\u05D9\u05E9\u05D5\u05D1</span>
-      <input name="city" value="${esc(delivery2.city)}" autocomplete="address-level2" required aria-invalid="${bad ? "true" : "false"}" ${bad ? `aria-describedby="delivery-city-error"` : ""} data-service-focus>
-      ${bad ? `<span id="delivery-city-error" class="field-error">${esc(delivery2.error)}</span>` : ""}
-    </label>
-    <label class="field">
-      <span class="text-sm font-semibold">\u05E8\u05D7\u05D5\u05D1 \u05D5\u05DE\u05E1\u05E4\u05E8 \u05D1\u05D9\u05EA</span>
-      <input name="street" value="${esc(delivery2.street)}" autocomplete="street-address">
-    </label>
-    <button class="btn" type="submit" ${delivery2.pending ? "disabled" : ""}>${delivery2.pending ? "\u05D1\u05D5\u05D3\u05E7\u05D9\u05DD\u2026" : "\u05D1\u05D3\u05D9\u05E7\u05EA \u05DB\u05EA\u05D5\u05D1\u05EA"}</button>
-    ${delivery2.result ? `<p class="service-result" role="status">${esc(delivery2.result)}</p>` : ""}
-  </form>`;
-  }
-  function serviceBody(inPage) {
-    const service = state2.service;
-    const topic = topics[service.topic];
-    if (!topic) {
-      return `<h3 class="service-topics-title">\u05D1\u05DE\u05D4 \u05D0\u05E4\u05E9\u05E8 \u05DC\u05E2\u05D6\u05D5\u05E8?</h3>
-    <ul class="service-topics">
-      ${Object.entries(topics).map(([key, item], index) => `<li><button type="button" class="service-topic" data-service-topic="${key}" ${index === 0 ? "data-service-focus" : ""}>
-        <span class="service-topic-icon">${item.icon}</span>
-        <span class="service-topic-text"><strong>${item.title}</strong><small>${item.text}</small></span>
-        ${chevron2}
-      </button></li>`).join("")}
-    </ul>`;
-    }
-    const back = `<button type="button" class="service-back" data-service-back>${backIcon}\u05DB\u05DC \u05D4\u05E0\u05D5\u05E9\u05D0\u05D9\u05DD</button>`;
-    const head = `<div class="service-topic-head">${back}<h3 class="service-topic-heading"><span class="service-topic-icon">${topic.icon}</span>${topic.title}</h3></div>`;
-    if (service.sent) {
-      const done = inPage ? `<a class="btn" href="#/">\u05D7\u05D6\u05E8\u05D4 \u05DC\u05D3\u05E3 \u05D4\u05D1\u05D9\u05EA</a>` : `<button class="btn" type="button" data-service-close>\u05E1\u05D2\u05D9\u05E8\u05D4</button>`;
-      return `${head}
-    <p class="service-result mt-4" role="status">${topic.done}</p>
-    <div class="mt-5 flex flex-wrap gap-3">${done}<button class="btn btn-line" type="button" data-service-back data-service-focus>\u05E4\u05E0\u05D9\u05D9\u05D4 \u05E0\u05D5\u05E1\u05E4\u05EA</button></div>`;
-    }
-    const prefix = inPage ? "service-page-" : "service-";
-    return `${head}
-  <form class="mt-4 grid gap-4" data-service-form="service" novalidate>
-    ${topic.fields.map((name, index) => serviceField(name, service, prefix, index === 0)).join("")}
-    <button class="btn" type="submit" ${service.pending ? "disabled" : ""}>${service.pending ? "\u05E9\u05D5\u05DC\u05D7\u05D9\u05DD\u2026" : topic.submit}</button>
-  </form>`;
-  }
-  function markup2(kind, inPage) {
-    const body = kind === "delivery" ? deliveryBody() : serviceBody(inPage);
-    return inPage ? body : `${dialogHead(kind)}${body}`;
-  }
-  function paint2(root, focus) {
-    root.innerHTML = markup2(root.dataset.serviceRoot, root.dataset.serviceMode === "page");
-    mountLottieIcons(root);
-    if (focus) root.querySelector(focus)?.focus();
-  }
-  function ensureDialog2(kind) {
-    const { dialogId } = kinds[kind];
-    let dialog = document.getElementById(dialogId);
-    if (dialog) return dialog;
-    dialog = document.createElement("dialog");
-    dialog.id = dialogId;
-    dialog.className = "auth-dialog service-dialog";
-    dialog.dataset.serviceRoot = kind;
-    dialog.dataset.serviceMode = "dialog";
-    dialog.setAttribute("aria-labelledby", `${dialogId}-title`);
-    dialog.addEventListener("keydown", (event) => {
-      if (event.key === "Escape") {
-        event.preventDefault();
-        dialog.close();
-      }
-    });
-    dialog.addEventListener("click", (event) => {
-      if (event.target === dialog || event.target.closest("[data-service-close], a[href^='#/']")) dialog.close();
-    });
-    document.body.appendChild(dialog);
-    return dialog;
-  }
-  function open2(kind) {
-    const page2 = document.querySelector(`[data-service-root="${kind}"][data-service-mode="page"]`);
-    if (page2 && parseHash().name === kind) {
-      page2.querySelector(kinds[kind].focus)?.focus();
-      return;
-    }
-    state2[kind] = fresh[kind]();
-    const dialog = ensureDialog2(kind);
-    paint2(dialog);
-    if (!dialog.open) dialog.showModal();
-    dialog.querySelector(kinds[kind].focus)?.focus();
-  }
-  function openDelivery() {
-    open2("delivery");
-  }
-  function openService() {
-    open2("service");
-  }
-  function renderServicePage(kind) {
-    state2[kind] = fresh[kind]();
-    return `<article class="wrap service-page py-10">
-    <div class="service-page-head">
-      <div>
-        <h1 class="text-3xl font-extrabold">${kinds[kind].title}</h1>
-      </div>
-      <div class="service-dialog-actions">${callButton(kind)}${shareButton(kind)}</div>
-    </div>
-    <div class="service-page-body" data-service-root="${kind}" data-service-mode="page">${markup2(kind, true)}</div>
-  </article>`;
-  }
-  async function shareLink(kind) {
-    const { title, path } = kinds[kind];
-    const url = `${location.origin}${location.pathname}${path}`;
-    if (navigator.share) {
-      try {
-        await navigator.share({ title: `${title} \xB7 \u05D0\u05E9\u05DE\u05D5\u05E8\u05EA MARKET`, url });
-      } catch {
-      }
-      return;
-    }
-    try {
-      await navigator.clipboard.writeText(url);
-      showToast("\u05D4\u05E7\u05D9\u05E9\u05D5\u05E8 \u05D4\u05D5\u05E2\u05EA\u05E7. \u05D0\u05E4\u05E9\u05E8 \u05DC\u05D4\u05D3\u05D1\u05D9\u05E7 \u05D5\u05DC\u05E9\u05DC\u05D5\u05D7 \u05D0\u05D5\u05EA\u05D5.");
-    } catch {
-      window.prompt("\u05D4\u05E2\u05EA\u05E7\u05EA \u05D4\u05E7\u05D9\u05E9\u05D5\u05E8:", url);
-    }
-  }
-  function bindServiceDialogs() {
-    document.addEventListener("click", (event) => {
-      if (event.target.closest("[data-open-delivery]")) openDelivery();
-      else if (event.target.closest("[data-open-service]")) openService();
-      const share = event.target.closest("[data-share-link]");
-      if (share) shareLink(share.dataset.shareLink);
-      const pick = event.target.closest("[data-service-topic]");
-      const back = event.target.closest("[data-service-back]");
-      if (pick || back) {
-        const root = (pick || back).closest("[data-service-root]");
-        const previous = state2.service.topic;
-        state2.service = { ...fresh.service(), topic: pick ? pick.dataset.serviceTopic : null };
-        paint2(root, pick ? "[data-service-focus]" : `[data-service-topic="${previous}"]`);
-      }
-    });
-    document.addEventListener("submit", async (event) => {
-      const form = event.target;
-      const kind = form.dataset?.serviceForm;
-      if (!kind) return;
-      event.preventDefault();
-      const root = form.closest("[data-service-root]");
-      const live3 = () => root.isConnected && (root.dataset.serviceMode === "page" || root.open);
-      if (kind === "delivery") {
-        const delivery2 = state2.delivery;
-        if (delivery2.pending) return;
-        const data = new FormData(form);
-        delivery2.city = String(data.get("city") || "").trim();
-        delivery2.street = String(data.get("street") || "").trim();
-        delivery2.result = "";
-        if (delivery2.city.length < 2) {
-          delivery2.error = "\u05E0\u05D0 \u05DC\u05DE\u05DC\u05D0 \u05E2\u05D9\u05E8 \u05D0\u05D5 \u05D9\u05D9\u05E9\u05D5\u05D1.";
-          paint2(root, "input[name='city']");
-          return;
-        }
-        delivery2.error = "";
-        delivery2.pending = true;
-        paint2(root, "button[type='submit']");
-        await wait(LOAD_MS2);
-        if (!live3()) return;
-        delivery2.pending = false;
-        const place = delivery2.street ? `${delivery2.street}, ${delivery2.city}` : delivery2.city;
-        delivery2.result = `\u05DE\u05D2\u05D9\u05E2\u05D9\u05DD \u05D0\u05DC\u05D9\u05DA! \u05D4\u05DE\u05E9\u05DC\u05D5\u05D7 \u05DC\u05BE${place} \u05D6\u05DE\u05D9\u05DF. \u05D1\u05D4\u05D3\u05D2\u05DE\u05D4 \u05DB\u05DC \u05DB\u05EA\u05D5\u05D1\u05EA \u05DE\u05E7\u05D1\u05DC\u05EA \u05EA\u05E9\u05D5\u05D1\u05D4 \u05D7\u05D9\u05D5\u05D1\u05D9\u05EA.`;
-        paint2(root, "button[type='submit']");
-        return;
-      }
-      const service = state2.service;
-      if (service.pending || !topics[service.topic]) return;
-      const { values, errors } = validateTopic(service.topic, form);
-      service.values = values;
-      service.errors = errors;
-      if (Object.keys(errors).length) {
-        paint2(root, "[aria-invalid='true']");
-        return;
-      }
-      service.pending = true;
-      paint2(root, "button[type='submit']");
-      await wait(LOAD_MS2);
-      if (!live3()) return;
-      state2.service = { ...fresh.service(), topic: service.topic, sent: true };
-      paint2(root, "[data-service-focus]");
-    });
   }
 
   // js/components/hero-slider.js
@@ -11840,6 +11863,8 @@
     if (route.name === "order") return renderConfirmation(route.id);
     if (route.name === "account") return renderAccount();
     if (route.name === "account-details") return renderAccountDetails();
+    if (route.name === "account-club") return renderAccountClub();
+    if (route.name === "account-service") return renderAccountService();
     if (route.name === "orders") return renderOrders();
     if (route.name === "account-order") return renderOrderDetail(route.id);
     if (route.name === "contact") return renderContact(contactDraft || {});
@@ -11858,7 +11883,7 @@
     if (route.name === "cart") return `\u05E1\u05DC \u05D4\u05E7\u05E0\u05D9\u05D5\u05EA \xB7 ${suffix}`;
     if (route.name === "checkout") return `\u05EA\u05E9\u05DC\u05D5\u05DD \xB7 ${suffix}`;
     if (route.name === "order") return `\u05D0\u05D9\u05E9\u05D5\u05E8 \u05D4\u05D6\u05DE\u05E0\u05D4 \xB7 ${suffix}`;
-    if (route.name === "account" || route.name === "account-details") return `\u05D4\u05D0\u05D6\u05D5\u05E8 \u05D4\u05D0\u05D9\u05E9\u05D9 \xB7 ${suffix}`;
+    if (route.name === "account" || route.name === "account-details" || route.name === "account-club" || route.name === "account-service") return `\u05D4\u05D0\u05D6\u05D5\u05E8 \u05D4\u05D0\u05D9\u05E9\u05D9 \xB7 ${suffix}`;
     if (route.name === "orders" || route.name === "account-order") return `\u05D4\u05D6\u05DE\u05E0\u05D5\u05EA \xB7 ${suffix}`;
     if (route.name === "contact") return `\u05D9\u05E6\u05D9\u05E8\u05EA \u05E7\u05E9\u05E8 \xB7 ${suffix}`;
     if (route.name === "legal") return `${legalTitle(route.slug)} \xB7 ${suffix}`;
