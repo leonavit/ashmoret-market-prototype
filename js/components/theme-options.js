@@ -296,6 +296,7 @@ function setOption(name, value, panel) {
   if (name === "logo") {
     applyLogo();
     if (value === "v1") setOption("palette", "v1", panel);
+    if (value === "v6") setOption("palette", "v3", panel);
   }
   if (name === "listingCenter") applyListingHero();
   if (name in adDefaults) onAdsChange();

@@ -7639,6 +7639,7 @@
     if (name === "logo") {
       applyLogo();
       if (value === "v1") setOption("palette", "v1", panel);
+      if (value === "v6") setOption("palette", "v3", panel);
     }
     if (name === "listingCenter") applyListingHero();
     if (name in adDefaults) onAdsChange();
@@ -10540,7 +10541,7 @@
   }
 
   // js/components/mega-menu.js
-  var mark = "assets/images/brand/placeholder-cart.png";
+  var mark = "assets/images/brand/placeholder-fav.png";
   var chevron2 = `<svg class="mega-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg>`;
   var plus = `<svg class="mobile-nav-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"></path><path class="mobile-nav-plus-v" d="M12 5v14"></path></svg>`;
   var arrow = `<svg class="mega-all-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M19 12H6M12 6l-6 6 6 6"></path></svg>`;
@@ -10667,10 +10668,8 @@
     const item = menuById(id);
     if (!item) return "";
     if (item.banners) {
-      if (mobile2) {
-        return `<div class="mega-layout is-mobile-all">${mobileAllButton("#/d/offers", "\u05DC\u05DB\u05DC \u05D4\u05DE\u05D1\u05E6\u05E2\u05D9\u05DD")}</div>`;
-      }
-      return `<div class="mega-layout mega-banners is-deals">${dealBanners.map((banner) => `<a class="mega-banner" href="${esc(banner.href)}" aria-label="${esc(banner.label)}">
+      const banners = mobile2 ? dealBanners.slice(0, 4) : dealBanners;
+      return `<div class="mega-layout mega-banners is-deals">${banners.map((banner) => `<a class="mega-banner" href="${esc(banner.href)}" aria-label="${esc(banner.label)}">
       <img src="${esc(banner.image)}" alt="" width="${banner.size[0]}" height="${banner.size[1]}" loading="lazy" decoding="async">
     </a>`).join("")}</div>`;
     }

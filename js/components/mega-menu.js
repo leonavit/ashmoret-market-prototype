@@ -2,7 +2,7 @@ import { esc, prefersReducedMotion } from "../lib/format.js";
 import { dealBanners } from "../data/banners.js";
 import { isSingleSupplier, supplierCategories } from "./suppliers.js";
 
-const mark = "assets/images/brand/placeholder-cart.png";
+const mark = "assets/images/brand/placeholder-fav.png";
 const chevron = `<svg class="mega-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg>`;
 const plus = `<svg class="mobile-nav-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"></path><path class="mobile-nav-plus-v" d="M12 5v14"></path></svg>`;
 const arrow = `<svg class="mega-all-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M19 12H6M12 6l-6 6 6 6"></path></svg>`;
@@ -137,10 +137,8 @@ export function megaPanel(id, { mobile = false } = {}) {
   const item = menuById(id);
   if (!item) return "";
   if (item.banners) {
-    if (mobile) {
-      return `<div class="mega-layout is-mobile-all">${mobileAllButton("#/d/offers", "לכל המבצעים")}</div>`;
-    }
-    return `<div class="mega-layout mega-banners is-deals">${dealBanners.map((banner) => `<a class="mega-banner" href="${esc(banner.href)}" aria-label="${esc(banner.label)}">
+    const banners = mobile ? dealBanners.slice(0, 4) : dealBanners;
+    return `<div class="mega-layout mega-banners is-deals">${banners.map((banner) => `<a class="mega-banner" href="${esc(banner.href)}" aria-label="${esc(banner.label)}">
       <img src="${esc(banner.image)}" alt="" width="${banner.size[0]}" height="${banner.size[1]}" loading="lazy" decoding="async">
     </a>`).join("")}</div>`;
   }
