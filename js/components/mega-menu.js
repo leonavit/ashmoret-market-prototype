@@ -129,10 +129,17 @@ function menuById(id) {
   return menus.find((item) => item.id === id);
 }
 
-export function megaPanel(id) {
+function mobileAllButton(href, title) {
+  return `<a class="btn btn-blue mega-mobile-all" href="${esc(href)}">${esc(title)}</a>`;
+}
+
+export function megaPanel(id, { mobile = false } = {}) {
   const item = menuById(id);
   if (!item) return "";
   if (item.banners) {
+    if (mobile) {
+      return `<div class="mega-layout is-mobile-all">${mobileAllButton("#/d/offers", "לכל המבצעים")}</div>`;
+    }
     return `<div class="mega-layout mega-banners is-deals">${dealBanners.map((banner) => `<a class="mega-banner" href="${esc(banner.href)}" aria-label="${esc(banner.label)}">
       <img src="${esc(banner.image)}" alt="" width="${banner.size[0]}" height="${banner.size[1]}" loading="lazy" decoding="async">
     </a>`).join("")}</div>`;
@@ -143,6 +150,12 @@ export function megaPanel(id) {
       <span class="mega-block-photo" style="background-image:url('${groupIcon(title) || mark}')"></span>
     </section>`).join("");
   const promo = item.promo;
+  if (mobile) {
+    return `<div class="mega-layout is-mobile-all">
+    ${mobileAllButton(promo.href, promo.title)}
+    ${groups}
+  </div>`;
+  }
   if (promo.image) {
     return `<div class="mega-layout">
     <a class="mega-all has-image" href="${esc(promo.href)}">
@@ -297,7 +310,7 @@ export function mountMega() {
     const open = button.getAttribute("aria-expanded") === "true";
     closeMobile();
     if (!open && panel) {
-      panel.innerHTML = megaPanel(id);
+      panel.innerHTML = megaPanel(id, { mobile: true });
       panel.hidden = false;
       button.setAttribute("aria-expanded", "true");
     }

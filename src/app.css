@@ -3199,15 +3199,6 @@
     background: var(--color-fill);
   }
 
-  .theme-option.is-legacy-logo {
-    background: #fff1f0;
-  }
-
-  .theme-option.is-legacy-logo:has(input:checked) {
-    border-color: #c9230d;
-    background: #ffe6e3;
-  }
-
   .theme-option input {
     width: 1.1rem;
     height: 1.1rem;
@@ -4237,6 +4228,15 @@
     aspect-ratio: 1024 / 682;
   }
 
+  .mega-mobile-all {
+    width: 100%;
+    text-align: center;
+  }
+
+  .mega-mobile .mega-layout.is-mobile-all {
+    gap: 0.85rem;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .mega-all-image {
       transition: none;
@@ -4474,11 +4474,14 @@
     height: 3.5rem;
   }
 
+  html[data-logo="v1"] .header-logo img,
+  html[data-logo="v1"] .mobile-menu-logo img,
   html[data-logo="v6"] .header-logo img,
   html[data-logo="v6"] .mobile-menu-logo img {
     height: 2.79rem;
   }
 
+  html[data-logo="v1"] .footer-logo,
   html[data-logo="v6"] .footer-logo {
     height: 2.79rem;
   }
@@ -4743,6 +4746,7 @@
       height: 3rem;
     }
 
+    html[data-logo="v1"] .header-logo img,
     html[data-logo="v6"] .header-logo img {
       height: 2.79rem;
     }
@@ -4753,6 +4757,7 @@
       height: 2.5rem;
     }
 
+    html[data-logo="v1"] .header-logo img,
     html[data-logo="v6"] .header-logo img {
       height: 2.4rem;
     }

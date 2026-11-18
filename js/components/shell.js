@@ -150,6 +150,18 @@ export function bindShell(navigate) {
     const gsap = window.gsap;
     if (open && gsap && !prefersReducedMotion()) {
       gsap.fromTo(menu, { y: cover ? 0 : -8, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: cover ? 0.2 : 0.28, ease: "power2.out" });
+      const rows = menu.querySelectorAll(".mobile-nav-item");
+      if (rows.length) {
+        gsap.fromTo(rows, { y: 14, autoAlpha: 0 }, {
+          y: 0,
+          autoAlpha: 1,
+          duration: 0.32,
+          ease: "power2.out",
+          stagger: 0.07,
+          delay: cover ? 0.06 : 0.04,
+          clearProps: "transform,opacity",
+        });
+      }
     }
   }
 }
