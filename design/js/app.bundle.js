@@ -7360,15 +7360,12 @@
 
   // js/components/theme-options.js
   var KEY2 = "ashmoret-theme";
-  var REV = 22;
+  var REV = 23;
   var adKey = (id) => `ad-${id}`;
   var adDefaults = { ...Object.fromEntries(adSlots.map((slot) => [adKey(slot.id), slot.enabled])), adTimers: false };
   var defaults = { header: "v2", hero: "v4", heroEffect: "v2", categories: "v2", featured: "v1", banners: "v2", mobileMenu: "v2", mobileCarousel: "v2", railCols: "6", listingCols: "5", suppliers: "v1", palette: "v3", logo: "v6", wideHeader: true, listingCenter: true, ...adDefaults };
   var logos = {
-    v1: { src: "assets/images/brand/logo-market-cart.png?v=2", width: 300, height: 80 },
-    v2: { src: "assets/images/brand/logo-market.png", width: 1024, height: 344 },
-    v3: { src: "assets/images/brand/logo-market-heb.png?v=3", width: 1024, height: 326 },
-    v5: { src: "assets/images/brand/logo-market-en-v5.png?v=2", width: 1024, height: 307 },
+    v1: { src: "assets/images/brand/logo-market-en-v1.png?v=1", width: 1024, height: 208 },
     v6: { src: "assets/images/brand/logo-market-en-v6.png?v=7", width: 1024, height: 217 }
   };
   var desktop = window.matchMedia("(min-width: 1024px)");
@@ -7454,10 +7451,7 @@
       title: "\u05DC\u05D5\u05D2\u05D5",
       options: [
         ["v6", "V6 \xB7 \u05D0\u05E0\u05D2\u05DC\u05D9\u05EA \xB7 \u05D1\u05E8\u05D9\u05E8\u05EA \u05DE\u05D7\u05D3\u05DC", "MARKET \u05DE\u05E7\u05D1\u05D5\u05E6\u05EA \u05D0\u05E9\u05DE\u05D5\u05E8\u05EA, \u05E2\u05DD \u05E7\u05D5\u05E4\u05E1\u05D4 \u05D5\u05E1\u05DE\u05DF."],
-        ["v1", "V1", "MARKET \u05DE\u05D1\u05D9\u05EA \u05D0\u05E9\u05DE\u05D5\u05E8\u05EA, \u05E2\u05DD \u05E2\u05D2\u05DC\u05EA \u05E7\u05E0\u05D9\u05D5\u05EA."],
-        ["v3", "V3 \xB7 \u05E2\u05D1\u05E8\u05D9\u05EA", "\u05DE\u05E8\u05E7\u05D8 \u05DE\u05D1\u05D9\u05EA \u05D0\u05E9\u05DE\u05D5\u05E8\u05EA, \u05E2\u05DD \u05E2\u05D2\u05DC\u05EA \u05E7\u05E0\u05D9\u05D5\u05EA \u05D1\u05E2\u05D1\u05E8\u05D9\u05EA."],
-        ["v5", "V5 \xB7 \u05D0\u05E0\u05D2\u05DC\u05D9\u05EA", "MARKET \u05DE\u05D1\u05D9\u05EA \u05D0\u05E9\u05DE\u05D5\u05E8\u05EA, \u05E2\u05DD \u05E2\u05D2\u05DC\u05EA \u05E7\u05E0\u05D9\u05D5\u05EA \u05D1\u05D0\u05E0\u05D2\u05DC\u05D9\u05EA."],
-        ["v2", "\u05DC\u05D5\u05D2\u05D5 \u05D9\u05E9\u05DF", "\u05D0\u05E9\u05DE\u05D5\u05E8\u05EA MARKET \u05E2\u05DD \u05D4\u05DC\u05D1."]
+        ["v1", "V1", "MARKET \u05DE\u05E7\u05D1\u05D5\u05E6\u05EA \u05D0\u05E9\u05DE\u05D5\u05E8\u05EA, \u05E2\u05DD \u05E7\u05D5\u05E4\u05E1\u05D4 \u05D5\u05E1\u05E8\u05D8 \u05D0\u05D3\u05D5\u05DD."]
       ],
       note: "\u05D4\u05DC\u05D5\u05D2\u05D5 \u05DE\u05EA\u05D7\u05DC\u05E3 \u05D1\u05D4\u05D3\u05E8, \u05D1\u05EA\u05E4\u05E8\u05D9\u05D8 \u05D4\u05DE\u05D5\u05D1\u05D9\u05D9\u05DC \u05D5\u05D1\u05E4\u05D5\u05D8\u05E8."
     },
@@ -7510,7 +7504,7 @@
         listingCols: saved.rev >= 13 && ["5", "6"].includes(saved.listingCols) ? saved.listingCols : defaults.listingCols,
         suppliers: defaults.suppliers,
         palette: saved.rev >= 20 && ["grey", "v1", "v2", "v3"].includes(saved.palette) ? saved.palette : defaults.palette,
-        logo: saved.rev >= 20 && ["v1", "v2", "v3", "v5", "v6"].includes(saved.logo) ? saved.logo : defaults.logo,
+        logo: saved.rev >= 23 && ["v1", "v6"].includes(saved.logo) ? saved.logo : defaults.logo,
         wideHeader: defaults.wideHeader,
         listingCenter: saved.rev >= 10 && saved.listingCenter === false ? false : defaults.listingCenter,
         ...Object.fromEntries(Object.keys(adDefaults).map((key) => [key, saved.rev >= 11 && typeof saved[key] === "boolean" ? saved[key] : adDefaults[key]]))
@@ -7597,7 +7591,7 @@
   <div class="theme-panel-body">
     ${groups.map((group, index) => `<fieldset class="theme-group">
       <legend><span class="theme-group-num" aria-hidden="true">${index + 1}</span><span class="theme-legend-icon">${groupIcons[group.name]}</span>${group.title}</legend>
-      ${(group.options || []).map(([value, label, text, swatches]) => `<label class="theme-option${group.name === "logo" && value === "v2" ? " is-legacy-logo" : ""}">
+      ${(group.options || []).map(([value, label, text, swatches]) => `<label class="theme-option">
         <input type="radio" name="${group.name}" value="${value}" ${state[group.name] === value ? "checked" : ""} data-theme-option>
         <span><strong>${label}</strong><small>${text}</small>${swatches ? `<span class="theme-swatches" aria-hidden="true">${swatches.map((color) => `<span style="background:${color}"></span>`).join("")}</span>` : ""}</span>
       </label>`).join("")}
@@ -7642,7 +7636,10 @@
     if (name === "listingCols") applyListingCols();
     if (name === "suppliers") onSuppliersChange();
     if (name === "palette") applyPalette();
-    if (name === "logo") applyLogo();
+    if (name === "logo") {
+      applyLogo();
+      if (value === "v1") setOption("palette", "v1", panel);
+    }
     if (name === "listingCenter") applyListingHero();
     if (name in adDefaults) onAdsChange();
   }
@@ -10663,10 +10660,16 @@
   function menuById(id) {
     return menus.find((item) => item.id === id);
   }
-  function megaPanel(id) {
+  function mobileAllButton(href, title) {
+    return `<a class="btn btn-blue mega-mobile-all" href="${esc(href)}">${esc(title)}</a>`;
+  }
+  function megaPanel(id, { mobile: mobile2 = false } = {}) {
     const item = menuById(id);
     if (!item) return "";
     if (item.banners) {
+      if (mobile2) {
+        return `<div class="mega-layout is-mobile-all">${mobileAllButton("#/d/offers", "\u05DC\u05DB\u05DC \u05D4\u05DE\u05D1\u05E6\u05E2\u05D9\u05DD")}</div>`;
+      }
       return `<div class="mega-layout mega-banners is-deals">${dealBanners.map((banner) => `<a class="mega-banner" href="${esc(banner.href)}" aria-label="${esc(banner.label)}">
       <img src="${esc(banner.image)}" alt="" width="${banner.size[0]}" height="${banner.size[1]}" loading="lazy" decoding="async">
     </a>`).join("")}</div>`;
@@ -10677,6 +10680,12 @@
       <span class="mega-block-photo" style="background-image:url('${groupIcon2(title) || mark}')"></span>
     </section>`).join("");
     const promo = item.promo;
+    if (mobile2) {
+      return `<div class="mega-layout is-mobile-all">
+    ${mobileAllButton(promo.href, promo.title)}
+    ${groups2}
+  </div>`;
+    }
     if (promo.image) {
       return `<div class="mega-layout">
     <a class="mega-all has-image" href="${esc(promo.href)}">
@@ -10813,7 +10822,7 @@
       const open3 = button.getAttribute("aria-expanded") === "true";
       closeMobile();
       if (!open3 && panel) {
-        panel.innerHTML = megaPanel(id);
+        panel.innerHTML = megaPanel(id, { mobile: true });
         panel.hidden = false;
         button.setAttribute("aria-expanded", "true");
       }
@@ -10957,6 +10966,18 @@
       const gsap = window.gsap;
       if (open3 && gsap && !prefersReducedMotion()) {
         gsap.fromTo(menu, { y: cover ? 0 : -8, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: cover ? 0.2 : 0.28, ease: "power2.out" });
+        const rows2 = menu.querySelectorAll(".mobile-nav-item");
+        if (rows2.length) {
+          gsap.fromTo(rows2, { y: 14, autoAlpha: 0 }, {
+            y: 0,
+            autoAlpha: 1,
+            duration: 0.32,
+            ease: "power2.out",
+            stagger: 0.07,
+            delay: cover ? 0.06 : 0.04,
+            clearProps: "transform,opacity"
+          });
+        }
       }
     }
   }
