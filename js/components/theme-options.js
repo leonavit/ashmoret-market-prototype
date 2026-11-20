@@ -1,13 +1,13 @@
 import { adSlots } from "./ad-slots.js";
 
 const KEY = "ashmoret-theme";
-const REV = 23;
+const REV = 25;
 const adKey = (id) => `ad-${id}`;
 const adDefaults = { ...Object.fromEntries(adSlots.map((slot) => [adKey(slot.id), slot.enabled])), adTimers: false };
-const defaults = { header: "v2", hero: "v4", heroEffect: "v2", categories: "v2", featured: "v1", banners: "v2", mobileMenu: "v2", mobileCarousel: "v2", railCols: "6", listingCols: "5", suppliers: "v1", palette: "v3", logo: "v6", wideHeader: true, listingCenter: true, ...adDefaults };
+const defaults = { header: "v2", hero: "v4", heroEffect: "v2", categories: "v2", featured: "v1", banners: "v2", mobileMenu: "v2", mobileCarousel: "v2", railCols: "6", listingCols: "5", suppliers: "v1", palette: "v3", logo: "v1", wideHeader: true, listingCenter: true, ...adDefaults };
 const logos = {
-  v1: { src: "assets/images/brand/logo-market-en-v1.png?v=1", width: 1024, height: 208 },
-  v6: { src: "assets/images/brand/logo-market-en-v6.png?v=7", width: 1024, height: 217 },
+  v1: { src: "assets/images/brand/logo-market-en-v1.png?v=2", width: 1024, height: 218 },
+  v6: { src: "assets/images/brand/logo-market-en-v6.png?v=8", width: 1024, height: 212 },
 };
 const desktop = window.matchMedia("(min-width: 1024px)");
 
@@ -94,10 +94,10 @@ const groups = [
     name: "logo",
     title: "לוגו",
     options: [
-      ["v6", "V6 · אנגלית · ברירת מחדל", "MARKET מקבוצת אשמורת, עם קופסה וסמן."],
-      ["v1", "V1", "MARKET מקבוצת אשמורת, עם קופסה וסרט אדום."],
+      ["v1", "V1 · ברירת מחדל", "MARKET מקבוצת אשמורת, עם קופסה חומה ולב."],
+      ["v6", "V6 · אנגלית", "MARKET מקבוצת אשמורת, עם קופסה, סרט ורוד וסמן."],
     ],
-    note: "הלוגו מתחלף בהדר, בתפריט המובייל ובפוטר.",
+    note: "הלוגו מתחלף בהדר, בתפריט המובייל ובפוטר. שני הלוגואים משויכים לפלטת צבעים V3.",
   },
   {
     name: "listingHero",
@@ -145,8 +145,8 @@ function load() {
       railCols: saved.rev >= 12 && ["5", "6"].includes(saved.railCols) ? saved.railCols : defaults.railCols,
       listingCols: saved.rev >= 13 && ["5", "6"].includes(saved.listingCols) ? saved.listingCols : defaults.listingCols,
       suppliers: defaults.suppliers,
-      palette: saved.rev >= 20 && ["grey", "v1", "v2", "v3"].includes(saved.palette) ? saved.palette : defaults.palette,
-      logo: saved.rev >= 23 && ["v1", "v6"].includes(saved.logo) ? saved.logo : defaults.logo,
+      palette: saved.rev >= 25 && ["grey", "v1", "v2", "v3"].includes(saved.palette) ? saved.palette : defaults.palette,
+      logo: saved.rev >= 25 && ["v1", "v6"].includes(saved.logo) ? saved.logo : defaults.logo,
       wideHeader: defaults.wideHeader,
       listingCenter: saved.rev >= 10 && saved.listingCenter === false ? false : defaults.listingCenter,
       ...Object.fromEntries(Object.keys(adDefaults).map((key) => [key, saved.rev >= 11 && typeof saved[key] === "boolean" ? saved[key] : adDefaults[key]])),
@@ -295,8 +295,7 @@ function setOption(name, value, panel) {
   if (name === "palette") applyPalette();
   if (name === "logo") {
     applyLogo();
-    if (value === "v1") setOption("palette", "v1", panel);
-    if (value === "v6") setOption("palette", "v3", panel);
+    setOption("palette", "v3", panel);
   }
   if (name === "listingCenter") applyListingHero();
   if (name in adDefaults) onAdsChange();

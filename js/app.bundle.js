@@ -7360,13 +7360,13 @@
 
   // js/components/theme-options.js
   var KEY2 = "ashmoret-theme";
-  var REV = 23;
+  var REV = 25;
   var adKey = (id) => `ad-${id}`;
   var adDefaults = { ...Object.fromEntries(adSlots.map((slot) => [adKey(slot.id), slot.enabled])), adTimers: false };
-  var defaults = { header: "v2", hero: "v4", heroEffect: "v2", categories: "v2", featured: "v1", banners: "v2", mobileMenu: "v2", mobileCarousel: "v2", railCols: "6", listingCols: "5", suppliers: "v1", palette: "v3", logo: "v6", wideHeader: true, listingCenter: true, ...adDefaults };
+  var defaults = { header: "v2", hero: "v4", heroEffect: "v2", categories: "v2", featured: "v1", banners: "v2", mobileMenu: "v2", mobileCarousel: "v2", railCols: "6", listingCols: "5", suppliers: "v1", palette: "v3", logo: "v1", wideHeader: true, listingCenter: true, ...adDefaults };
   var logos = {
-    v1: { src: "assets/images/brand/logo-market-en-v1.png?v=1", width: 1024, height: 208 },
-    v6: { src: "assets/images/brand/logo-market-en-v6.png?v=7", width: 1024, height: 217 }
+    v1: { src: "assets/images/brand/logo-market-en-v1.png?v=2", width: 1024, height: 218 },
+    v6: { src: "assets/images/brand/logo-market-en-v6.png?v=8", width: 1024, height: 212 }
   };
   var desktop = window.matchMedia("(min-width: 1024px)");
   var gearIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle cx="12" cy="12" r="3"></circle></svg>`;
@@ -7450,10 +7450,10 @@
       name: "logo",
       title: "\u05DC\u05D5\u05D2\u05D5",
       options: [
-        ["v6", "V6 \xB7 \u05D0\u05E0\u05D2\u05DC\u05D9\u05EA \xB7 \u05D1\u05E8\u05D9\u05E8\u05EA \u05DE\u05D7\u05D3\u05DC", "MARKET \u05DE\u05E7\u05D1\u05D5\u05E6\u05EA \u05D0\u05E9\u05DE\u05D5\u05E8\u05EA, \u05E2\u05DD \u05E7\u05D5\u05E4\u05E1\u05D4 \u05D5\u05E1\u05DE\u05DF."],
-        ["v1", "V1", "MARKET \u05DE\u05E7\u05D1\u05D5\u05E6\u05EA \u05D0\u05E9\u05DE\u05D5\u05E8\u05EA, \u05E2\u05DD \u05E7\u05D5\u05E4\u05E1\u05D4 \u05D5\u05E1\u05E8\u05D8 \u05D0\u05D3\u05D5\u05DD."]
+        ["v1", "V1 \xB7 \u05D1\u05E8\u05D9\u05E8\u05EA \u05DE\u05D7\u05D3\u05DC", "MARKET \u05DE\u05E7\u05D1\u05D5\u05E6\u05EA \u05D0\u05E9\u05DE\u05D5\u05E8\u05EA, \u05E2\u05DD \u05E7\u05D5\u05E4\u05E1\u05D4 \u05D7\u05D5\u05DE\u05D4 \u05D5\u05DC\u05D1."],
+        ["v6", "V6 \xB7 \u05D0\u05E0\u05D2\u05DC\u05D9\u05EA", "MARKET \u05DE\u05E7\u05D1\u05D5\u05E6\u05EA \u05D0\u05E9\u05DE\u05D5\u05E8\u05EA, \u05E2\u05DD \u05E7\u05D5\u05E4\u05E1\u05D4, \u05E1\u05E8\u05D8 \u05D5\u05E8\u05D5\u05D3 \u05D5\u05E1\u05DE\u05DF."]
       ],
-      note: "\u05D4\u05DC\u05D5\u05D2\u05D5 \u05DE\u05EA\u05D7\u05DC\u05E3 \u05D1\u05D4\u05D3\u05E8, \u05D1\u05EA\u05E4\u05E8\u05D9\u05D8 \u05D4\u05DE\u05D5\u05D1\u05D9\u05D9\u05DC \u05D5\u05D1\u05E4\u05D5\u05D8\u05E8."
+      note: "\u05D4\u05DC\u05D5\u05D2\u05D5 \u05DE\u05EA\u05D7\u05DC\u05E3 \u05D1\u05D4\u05D3\u05E8, \u05D1\u05EA\u05E4\u05E8\u05D9\u05D8 \u05D4\u05DE\u05D5\u05D1\u05D9\u05D9\u05DC \u05D5\u05D1\u05E4\u05D5\u05D8\u05E8. \u05E9\u05E0\u05D9 \u05D4\u05DC\u05D5\u05D2\u05D5\u05D0\u05D9\u05DD \u05DE\u05E9\u05D5\u05D9\u05DB\u05D9\u05DD \u05DC\u05E4\u05DC\u05D8\u05EA \u05E6\u05D1\u05E2\u05D9\u05DD V3."
     },
     {
       name: "listingHero",
@@ -7503,8 +7503,8 @@
         railCols: saved.rev >= 12 && ["5", "6"].includes(saved.railCols) ? saved.railCols : defaults.railCols,
         listingCols: saved.rev >= 13 && ["5", "6"].includes(saved.listingCols) ? saved.listingCols : defaults.listingCols,
         suppliers: defaults.suppliers,
-        palette: saved.rev >= 20 && ["grey", "v1", "v2", "v3"].includes(saved.palette) ? saved.palette : defaults.palette,
-        logo: saved.rev >= 23 && ["v1", "v6"].includes(saved.logo) ? saved.logo : defaults.logo,
+        palette: saved.rev >= 25 && ["grey", "v1", "v2", "v3"].includes(saved.palette) ? saved.palette : defaults.palette,
+        logo: saved.rev >= 25 && ["v1", "v6"].includes(saved.logo) ? saved.logo : defaults.logo,
         wideHeader: defaults.wideHeader,
         listingCenter: saved.rev >= 10 && saved.listingCenter === false ? false : defaults.listingCenter,
         ...Object.fromEntries(Object.keys(adDefaults).map((key) => [key, saved.rev >= 11 && typeof saved[key] === "boolean" ? saved[key] : adDefaults[key]]))
@@ -7638,8 +7638,7 @@
     if (name === "palette") applyPalette();
     if (name === "logo") {
       applyLogo();
-      if (value === "v1") setOption("palette", "v1", panel);
-      if (value === "v6") setOption("palette", "v3", panel);
+      setOption("palette", "v3", panel);
     }
     if (name === "listingCenter") applyListingHero();
     if (name in adDefaults) onAdsChange();
